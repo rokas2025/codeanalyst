@@ -288,7 +288,8 @@ export function AutoProgrammer() {
       const response = await fetch(`${baseUrl}/code-analysis/history`, {
         headers: {
           'Authorization': `Bearer ${token || 'dev-token-autoprogrammer'}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         }
       })
       
@@ -314,7 +315,8 @@ export function AutoProgrammer() {
       const response = await fetch(`${baseUrl}/code-analysis/${analysis.id}`, {
         headers: {
           'Authorization': `Bearer ${token || 'dev-token-autoprogrammer'}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         }
       })
 
@@ -360,7 +362,8 @@ export function AutoProgrammer() {
                     method: 'POST',
                     headers: {
                       'Authorization': `Bearer ${token || 'dev-token-autoprogrammer'}`,
-                      'Content-Type': 'application/json'
+                      'Content-Type': 'application/json',
+                      'ngrok-skip-browser-warning': 'true'
                     },
                     body: JSON.stringify({
                       owner,
@@ -450,7 +453,8 @@ The file structure isn't available for this analysis, but I can still help you w
     const token = localStorage.getItem('auth_token')
     return {
       'Authorization': `Bearer ${token || 'dev-token-autoprogrammer'}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true'
     }
   }
 
