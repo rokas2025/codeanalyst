@@ -14,11 +14,10 @@
       "NODE_ENV": "production"
     }
   },
-  "cleanUrls": true,
-  "trailingSlash": false,
+
   "rewrites": [
     {
-      "source": "/((?!assets/|favicon.ico|vite.svg).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
