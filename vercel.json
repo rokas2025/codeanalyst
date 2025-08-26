@@ -18,8 +18,19 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/((?!api/|assets/|vite\\.svg|favicon\\.ico|_next|_vercel).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
   ]
 } 
