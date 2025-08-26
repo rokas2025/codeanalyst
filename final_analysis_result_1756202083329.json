@@ -1,0 +1,1653 @@
+{
+  "id": "8a4a4708-4dfc-4dfc-87b6-af088c7f87e7",
+  "url": "https://www.ai69x.lol/",
+  "analyzedAt": "2025-08-26T09:54:43.260Z",
+  "analysisTime": 13531,
+  "performance": {
+    "score": 99,
+    "metrics": {
+      "firstContentfulPaint": 548.5201,
+      "largestContentfulPaint": 824.26215,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 0.022212606346496223,
+      "speedIndex": 548.5201,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 824.26215,
+      "serverResponseTime": 31.98
+    },
+    "opportunities": [
+      {
+        "audit": "errors-in-console",
+        "title": "Browser errors were logged to the console",
+        "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "unsized-images",
+        "title": "Image elements do not have explicit `width` and `height`",
+        "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "image-redundant-alt",
+        "title": "Image elements have `[alt]` attributes that are redundant text.",
+        "description": "Informative elements should aim for short, descriptive alternative text. Alternative text that is exactly the same as the text adjacent to the link or image is potentially confusing for screen reader users, because the text will be read twice. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.10/image-redundant-alt).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "link-name",
+        "title": "Links do not have a discernible name",
+        "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "render-blocking-resources",
+        "title": "Eliminate render-blocking resources",
+        "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+        "score": 0,
+        "savings": 197,
+        "displayValue": "Est savings of 200 ms"
+      },
+      {
+        "audit": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 24 KiB"
+      },
+      {
+        "audit": "modern-image-formats",
+        "title": "Serve images in next-gen formats",
+        "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 371 KiB"
+      },
+      {
+        "audit": "uses-responsive-images",
+        "title": "Properly size images",
+        "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 675 KiB"
+      },
+      {
+        "audit": "crawlable-anchors",
+        "title": "Links are not crawlable",
+        "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "robots-txt",
+        "title": "robots.txt is not valid",
+        "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "44 errors found"
+      },
+      {
+        "audit": "image-delivery-insight",
+        "title": "Improve image delivery",
+        "description": "Reducing the download time of images can improve the perceived load time of the page and LCP. [Learn more about optimizing image size](https://developer.chrome.com/docs/lighthouse/performance/uses-optimized-images/)",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 790 KiB"
+      },
+      {
+        "audit": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "render-blocking-insight",
+        "title": "Render blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://web.dev/learn/performance/understanding-the-critical-path#render-blocking_resources) can move these network requests out of the critical path.",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "Est savings of 200 ms"
+      }
+    ]
+  },
+  "lighthouse": {
+    "performance": 99,
+    "seo": 83,
+    "accessibility": 93,
+    "bestPractices": 96,
+    "metrics": {
+      "firstContentfulPaint": 548.5201,
+      "largestContentfulPaint": 824.26215,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 0.022212606346496223,
+      "speedIndex": 548.5201,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 824.26215,
+      "serverResponseTime": 31.98
+    },
+    "opportunities": [
+      {
+        "audit": "errors-in-console",
+        "title": "Browser errors were logged to the console",
+        "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "unsized-images",
+        "title": "Image elements do not have explicit `width` and `height`",
+        "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "image-redundant-alt",
+        "title": "Image elements have `[alt]` attributes that are redundant text.",
+        "description": "Informative elements should aim for short, descriptive alternative text. Alternative text that is exactly the same as the text adjacent to the link or image is potentially confusing for screen reader users, because the text will be read twice. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.10/image-redundant-alt).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "link-name",
+        "title": "Links do not have a discernible name",
+        "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "render-blocking-resources",
+        "title": "Eliminate render-blocking resources",
+        "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+        "score": 0,
+        "savings": 197,
+        "displayValue": "Est savings of 200 ms"
+      },
+      {
+        "audit": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 24 KiB"
+      },
+      {
+        "audit": "modern-image-formats",
+        "title": "Serve images in next-gen formats",
+        "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 371 KiB"
+      },
+      {
+        "audit": "uses-responsive-images",
+        "title": "Properly size images",
+        "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 675 KiB"
+      },
+      {
+        "audit": "crawlable-anchors",
+        "title": "Links are not crawlable",
+        "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "robots-txt",
+        "title": "robots.txt is not valid",
+        "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "44 errors found"
+      },
+      {
+        "audit": "image-delivery-insight",
+        "title": "Improve image delivery",
+        "description": "Reducing the download time of images can improve the perceived load time of the page and LCP. [Learn more about optimizing image size](https://developer.chrome.com/docs/lighthouse/performance/uses-optimized-images/)",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 790 KiB"
+      },
+      {
+        "audit": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "render-blocking-insight",
+        "title": "Render blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://web.dev/learn/performance/understanding-the-critical-path#render-blocking_resources) can move these network requests out of the critical path.",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "Est savings of 200 ms"
+      }
+    ]
+  },
+  "seo": {
+    "score": 55,
+    "lighthouseScore": 83,
+    "title": "ai69x - Liquidity Token Platform for AI Agents",
+    "description": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+    "keywords": [],
+    "headings": {
+      "h1": {
+        "count": 0,
+        "texts": []
+      },
+      "h2": {
+        "count": 3,
+        "texts": [
+          "ai69x",
+          "DAO Members",
+          "Buy ai69x"
+        ]
+      },
+      "h3": {
+        "count": 2,
+        "texts": [
+          "DEX",
+          "CEX"
+        ]
+      },
+      "h4": {
+        "count": 0,
+        "texts": []
+      },
+      "h5": {
+        "count": 0,
+        "texts": []
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "comprehensive": {
+      "technical": {
+        "score": 56,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 46,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 176,
+            "optimal": false,
+            "issues": [
+              "Description too long (176 chars)"
+            ],
+            "recommendations": [
+              "Shorten description to under 160 characters"
+            ]
+          },
+          "headingStructure": {
+            "hasH1": false,
+            "h1Count": 0,
+            "hasHierarchy": true,
+            "issues": [
+              "Missing H1 tag"
+            ],
+            "recommendations": [
+              "Add a single, descriptive H1 tag"
+            ],
+            "structure": {
+              "h1": {
+                "count": 0,
+                "texts": []
+              },
+              "h2": {
+                "count": 3,
+                "texts": [
+                  "ai69x",
+                  "DAO Members",
+                  "Buy ai69x"
+                ]
+              },
+              "h3": {
+                "count": 2,
+                "texts": [
+                  "DEX",
+                  "CEX"
+                ]
+              },
+              "h4": {
+                "count": 0,
+                "texts": []
+              },
+              "h5": {
+                "count": 0,
+                "texts": []
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": true,
+            "score": 70
+          },
+          "structuredData": {
+            "present": false,
+            "score": 20
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 45
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 46,
+        "analysis": {
+          "depth": {
+            "wordCount": 197,
+            "paragraphCount": 5,
+            "adequateDepth": false,
+            "contentRatio": 39.4,
+            "depthScore": 20,
+            "issues": [
+              "Thin content: only 197 words"
+            ],
+            "recommendations": [
+              "Add more comprehensive content (target: 300+ words)",
+              "Include detailed explanations, examples, and supporting information",
+              "Break content into logical sections with subheadings"
+            ]
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 45
+          },
+          "socialSignals": {
+            "score": 70,
+            "hasOpenGraph": true
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 45
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "thin",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 55,
+      "recommendations": [
+        {
+          "priority": "high",
+          "category": "Content",
+          "issue": "Thin content",
+          "action": "Expand content to at least 300 words with valuable, detailed information",
+          "impact": "High - Essential for ranking"
+        },
+        {
+          "priority": "medium",
+          "category": "Structure",
+          "issue": "Missing H1",
+          "action": "Add a single, keyword-rich H1 tag",
+          "impact": "Medium - Helps search engines understand content"
+        },
+        {
+          "priority": "medium",
+          "category": "Technical",
+          "issue": "Meta description",
+          "action": "Write compelling meta description (120-160 characters)",
+          "impact": "Medium - Affects click-through rates"
+        },
+        {
+          "priority": "low",
+          "category": "Enhancement",
+          "issue": "No structured data",
+          "action": "Add relevant schema markup (Organization, Article, etc.)",
+          "impact": "Low - Rich snippets potential"
+        }
+      ],
+      "criticalIssues": [
+        "Thin content - insufficient word count for ranking"
+      ],
+      "opportunities": [
+        "Add structured data for rich snippets",
+        "Expand content for better topical authority"
+      ]
+    },
+    "contentDepth": {
+      "wordCount": 197,
+      "paragraphCount": 5,
+      "adequateDepth": false,
+      "contentRatio": 39.4,
+      "depthScore": 20,
+      "issues": [
+        "Thin content: only 197 words"
+      ],
+      "recommendations": [
+        "Add more comprehensive content (target: 300+ words)",
+        "Include detailed explanations, examples, and supporting information",
+        "Break content into logical sections with subheadings"
+      ]
+    },
+    "technicalSEO": {
+      "score": 56,
+      "factors": {
+        "titleOptimization": {
+          "present": true,
+          "length": 46,
+          "optimal": true,
+          "issues": [],
+          "recommendations": []
+        },
+        "metaDescription": {
+          "present": true,
+          "length": 176,
+          "optimal": false,
+          "issues": [
+            "Description too long (176 chars)"
+          ],
+          "recommendations": [
+            "Shorten description to under 160 characters"
+          ]
+        },
+        "headingStructure": {
+          "hasH1": false,
+          "h1Count": 0,
+          "hasHierarchy": true,
+          "issues": [
+            "Missing H1 tag"
+          ],
+          "recommendations": [
+            "Add a single, descriptive H1 tag"
+          ],
+          "structure": {
+            "h1": {
+              "count": 0,
+              "texts": []
+            },
+            "h2": {
+              "count": 3,
+              "texts": [
+                "ai69x",
+                "DAO Members",
+                "Buy ai69x"
+              ]
+            },
+            "h3": {
+              "count": 2,
+              "texts": [
+                "DEX",
+                "CEX"
+              ]
+            },
+            "h4": {
+              "count": 0,
+              "texts": []
+            },
+            "h5": {
+              "count": 0,
+              "texts": []
+            },
+            "h6": {
+              "count": 0,
+              "texts": []
+            }
+          }
+        },
+        "urlStructure": {
+          "optimal": true,
+          "score": 80
+        },
+        "metaTags": {
+          "optimal": true,
+          "score": 70
+        },
+        "structuredData": {
+          "present": false,
+          "score": 20
+        },
+        "internalLinking": {
+          "score": 60,
+          "linkCount": 45
+        }
+      },
+      "issues": []
+    },
+    "recommendations": [
+      {
+        "priority": "high",
+        "category": "Content",
+        "issue": "Thin content",
+        "action": "Expand content to at least 300 words with valuable, detailed information",
+        "impact": "High - Essential for ranking"
+      },
+      {
+        "priority": "medium",
+        "category": "Structure",
+        "issue": "Missing H1",
+        "action": "Add a single, keyword-rich H1 tag",
+        "impact": "Medium - Helps search engines understand content"
+      },
+      {
+        "priority": "medium",
+        "category": "Technical",
+        "issue": "Meta description",
+        "action": "Write compelling meta description (120-160 characters)",
+        "impact": "Medium - Affects click-through rates"
+      },
+      {
+        "priority": "low",
+        "category": "Enhancement",
+        "issue": "No structured data",
+        "action": "Add relevant schema markup (Organization, Article, etc.)",
+        "impact": "Low - Rich snippets potential"
+      }
+    ],
+    "criticalIssues": [
+      "Thin content - insufficient word count for ranking"
+    ]
+  },
+  "accessibility": {
+    "score": 40,
+    "issues": {
+      "errors": 103,
+      "warnings": 0,
+      "notices": 0,
+      "total": 103
+    },
+    "details": [
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > header > div > div > a",
+        "context": "<a class=\"text-white text-2xl font-bold tracking-tighter\" href=\"/\">ai69x</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > header > div > div > nav > ul > li > a > span",
+        "context": "<span>Docs</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h2 element appears to be the primary document heading, so should be an h1 element.",
+        "selector": "#root > div > main > div:nth-child(1) > div > div > h2",
+        "context": "<h2 class=\"text-white text-8xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 font-poppins\"><span class=\"font-normal\">ai</s...</h2>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h2 element should be an h1 to be properly nested.",
+        "selector": "#root > div > main > div:nth-child(1) > div > div > h2",
+        "context": "<h2 class=\"text-white text-8xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 font-poppins\"><span class=\"font-normal\">ai</s...</h2>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(1) > div > div > h2 > span:nth-child(1)",
+        "context": "<span class=\"font-normal\">ai</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(1) > div > div > h2 > span:nth-child(2)",
+        "context": "<span class=\"font-bold\">69</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(1) > div > div > h2 > span:nth-child(3)",
+        "context": "<span class=\"font-normal\">x</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+        "context": "<div class=\"text-sm text-white/50\">$ai69x Price</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)",
+        "context": "<div class=\"text-white/50 text-sm\">USD</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > a",
+        "context": "<a class=\"mt-4 w-full flex items-center justify-center gap-2 bg-violet-600/90 hover:bg-violet-500 text-white rounded-xl py-2.5 font-medium transition-all duration-200 cursor-pointer\">Buy Now</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1)",
+        "context": "<div class=\"text-sm text-white/50\">Market Cap</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > span:nth-child(2)",
+        "context": "<span class=\"text-sm text-white/50\">Live</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2)",
+        "context": "<div class=\"text-white/50 text-sm\">USD</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > a",
+        "context": "<a href=\"https://dexscreener.com/solana/eytwr2wike6mvucad7ynhdwdsxdkgp3yeg3fk4duxfwd\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-4 w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white rounded-xl py-2.5 font-m..."
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1)",
+        "context": "<div class=\"text-sm text-white/50\">Total Value Pooled</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > span:nth-child(2)",
+        "context": "<span class=\"text-sm text-white/50\">Live</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2)",
+        "context": "<div class=\"text-white/50 text-sm\">USD</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+        "context": "<div class=\"text-white/50\">Last updated:</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(2)",
+        "context": "<div class=\"text-white/70\">12:54:34 PM</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div > main > div:nth-child(2) > div:nth-child(3) > a:nth-child(1) > span",
+        "context": "<span>Follow Updates</span>"
+      }
+    ]
+  },
+  "security": {
+    "score": 17,
+    "headers": {
+      "strict-transport-security": true,
+      "content-security-policy": false,
+      "x-frame-options": false,
+      "x-content-type-options": false,
+      "x-xss-protection": false,
+      "referrer-policy": false
+    },
+    "vulnerabilities": []
+  },
+  "technologies": [
+    "Tailwind CSS",
+    "Google Fonts"
+  ],
+  "basic": {
+    "title": "ai69x - Liquidity Token Platform for AI Agents",
+    "description": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+    "keywords": "",
+    "lang": "en",
+    "charset": "UTF-8",
+    "ogTitle": "ai69x - Liquidity Token Platform for AI Agents",
+    "ogDescription": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+    "ogImage": "https://ai69x.lol/assets/img/preview.jpg",
+    "ogUrl": "https://ai69x.lol",
+    "twitterCard": "summary_large_image",
+    "twitterTitle": "ai69x - Liquidity Token Platform for AI Agents",
+    "twitterDescription": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+    "hasStructuredData": false,
+    "structuredDataCount": 0,
+    "headingStructure": {
+      "h1": {
+        "count": 0,
+        "texts": []
+      },
+      "h2": {
+        "count": 3,
+        "texts": [
+          "ai69x",
+          "DAO Members",
+          "Buy ai69x"
+        ]
+      },
+      "h3": {
+        "count": 2,
+        "texts": [
+          "DEX",
+          "CEX"
+        ]
+      },
+      "h4": {
+        "count": 0,
+        "texts": []
+      },
+      "h5": {
+        "count": 0,
+        "texts": []
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "imageCount": 17,
+    "linkCount": 45,
+    "formCount": 0,
+    "wordCount": 197,
+    "paragraphCount": 5,
+    "externalScripts": [],
+    "externalStyles": [
+      "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    ],
+    "domElements": 444,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "html": "<!DOCTYPE html><html lang=\"en\"><head>\n    <meta charset=\"UTF-8\">\n    <!-- Favicons -->\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/assets/img/favicon/apple-touch-icon.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/assets/img/favicon/favicon-32x32.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/assets/img/favicon/favicon-16x16.png\">\n    <link rel=\"manifest\" href=\"/assets/img/favicon/site.webmanifest\">\n    <link rel=\"mask-icon\" href=\"/assets/img/favicon/safari-pinned-tab.svg\" color=\"#5bbad5\">\n    <meta name=\"msapplication-TileColor\" content=\"#da532c\">\n    <meta name=\"theme-color\" content=\"#000000\">\n    \n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    \n    <!-- Primary Meta Tags -->\n    <title>ai69x - Liquidity Token Platform for AI Agents</title>\n    <meta name=\"title\" content=\"ai69x - Liquidity Token Platform for AI Agents\">\n    <meta name=\"description\" content=\"ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.\">\n\n    <!-- Open Graph / Facebook -->\n    <meta property=\"og:site_name\" content=\"ai69x\">\n    <meta property=\"og:type\" content=\"website\">\n    <meta property=\"og:url\" content=\"https://ai69x.lol\">\n    <meta property=\"og:title\" content=\"ai69x - Liquidity Token Platform for AI Agents\">\n    <meta property=\"og:description\" content=\"ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.\">\n    <meta property=\"og:image\" content=\"https://ai69x.lol/assets/img/preview.jpg\">\n    <meta property=\"og:image:width\" content=\"1200\">\n    <meta property=\"og:image:height\" content=\"630\">\n\n    <!-- Twitter -->\n    <meta name=\"twitter:card\" content=\"summary_large_image\">\n    <meta name=\"twitter:site\" content=\"@ai69xlol\">\n    <meta name=\"twitter:url\" content=\"https://ai69x.lol\">\n    <meta name=\"twitter:title\" content=\"ai69x - Liquidity Token Platform for AI Agents\">\n    <meta name=\"twitter:description\" content=\"ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.\">\n    <meta name=\"twitter:image\" content=\"https://ai69x.lol/assets/img/preview.jpg\">\n\n    <!-- Fonts -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin=\"\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap\" rel=\"stylesheet\">\n    <script type=\"module\" crossorigin=\"\" src=\"/assets/index-DmCejS3B.js\"></script>\n    <link rel=\"stylesheet\" crossorigin=\"\" href=\"/assets/index-DKH0Pvc3.css\">\n  </head>\n  <body>\n    <div id=\"root\"><header class=\"fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-lg border-b border-white/10\"><div class=\"container mx-auto px-6\"><div class=\"flex items-center justify-between h-[74px]\"><a class=\"text-white text-2xl font-bold tracking-tighter\" href=\"/\">ai69x</a><nav><ul class=\"flex items-center space-x-8\"><li><a class=\"text-white/70 hover:text-white flex items-center gap-2 transition-colors duration-200\" href=\"/docs\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-file-text \"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"></path><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"></path><path d=\"M10 9H8\"></path><path d=\"M16 13H8\"></path><path d=\"M16 17H8\"></path></svg><span>Docs</span></a></li></ul></nav></div></div></header><div class=\"flex flex-col min-h-screen\"><main class=\"flex-grow bg-gradient-to-b from-black via-gray-900 to-black pt-[94px]\"><div class=\"max-w-4xl mx-auto px-6 py-24 text-center\"><div class=\"space-y-8 animate-slideUp\"><div class=\"bg-black/50 backdrop-blur-lg inline-block rounded-2xl px-8 py-4\"><h2 class=\"text-white text-8xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 font-poppins\"><span class=\"font-normal\">ai</span><span class=\"font-bold\">69</span><span class=\"font-normal\">x</span></h2></div><p class=\"text-gray-300 text-xl leading-relaxed mb-6 font-light font-poppins\">ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.</p><p class=\"text-gray-300 text-lg leading-relaxed font-light font-poppins\">Our self-governed DAO collaborates with the world's premier framework builders to establish and invest in the most promising AI agents, fostering innovation and growth in the AI ecosystem.</p></div></div><div class=\"container mx-auto px-6 -mt-16 mb-16\"><div class=\"text-center mb-16 animate-slideUp\"></div><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\"><div class=\"bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 backdrop-blur-sm border border-white/10\"><div class=\"flex items-center justify-between mb-4\"><div class=\"text-sm text-white/50\">$ai69x Price</div><div class=\"text-sm text-red-400\">-4.67%</div></div><div class=\"flex items-baseline gap-2\"><div class=\"text-2xl font-bold text-white\">$0.000044</div><div class=\"text-white/50 text-sm\">USD</div></div><a class=\"mt-4 w-full flex items-center justify-center gap-2 bg-violet-600/90 hover:bg-violet-500 text-white rounded-xl py-2.5 font-medium transition-all duration-200 cursor-pointer\">Buy Now</a></div><div class=\"bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 backdrop-blur-sm border border-white/10\"><div class=\"flex items-center justify-between mb-4\"><div class=\"text-sm text-white/50\">Market Cap</div><div class=\"flex items-center gap-1\"><span class=\"w-2 h-2 rounded-full bg-green-400\"></span><span class=\"text-sm text-white/50\">Live</span></div></div><div class=\"flex items-baseline gap-2\"><div class=\"text-2xl font-bold text-white\">$44.27K</div><div class=\"text-white/50 text-sm\">USD</div></div><a href=\"https://dexscreener.com/solana/eytwr2wike6mvucad7ynhdwdsxdkgp3yeg3fk4duxfwd\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-4 w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white rounded-xl py-2.5 font-medium transition-all duration-200\"><img src=\"/assets/img/dex.jpg\" alt=\"DexScreener\" class=\"w-4 h-4\">View Chart</a></div><div class=\"bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 backdrop-blur-sm border border-white/10\"><div class=\"flex items-center justify-between mb-4\"><div class=\"text-sm text-white/50\">Total Value Pooled</div><div class=\"flex items-center gap-1\"><span class=\"w-2 h-2 rounded-full bg-green-400 animate-pulse\"></span><span class=\"text-sm text-white/50\">Live</span></div></div><div class=\"flex items-baseline gap-2\"><div class=\"text-2xl font-bold text-white\"><span class=\"tabular-nums\">$1,724.54</span></div><div class=\"text-white/50 text-sm\">USD</div></div><div class=\"mt-4 flex items-center justify-between text-sm\"><div class=\"text-white/50\">Last updated:</div><div class=\"text-white/70\">12:54:30 PM</div></div></div></div><div class=\"flex justify-center gap-4 mt-8\"><a href=\"https://x.com/ai69xlol\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-xl px-6 py-3 text-white/70 hover:text-white transition-all duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg><span>Follow Updates</span></a><a href=\"https://t.me/ai69xlol\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-xl px-6 py-3 text-white/70 hover:text-white transition-all duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg><span>Join Community</span></a></div></div><div class=\"container mx-auto px-6 py-16\"><div class=\"text-center mb-16 animate-slideUp\"><h2 class=\"text-white text-4xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400\">DAO Members</h2><p class=\"text-gray-400 text-lg font-light\">Discover the shareholders of ai69x</p></div><div class=\"overflow-x-auto mb-32\"><div class=\"flex justify-end mb-4 text-gray-500 text-sm\">Last updated: 12:54:30 PM</div><table class=\"w-full border-collapse\"><thead><tr class=\"border-b border-white/10\"><th class=\"px-6 py-4 text-left text-sm font-medium text-white/70\">No.</th><th class=\"px-6 py-4 text-left text-sm font-medium text-white/70\">Agent</th><th class=\"px-6 py-4 text-left text-sm font-medium text-white/70\">Ticker</th><th class=\"px-6 py-4 text-right text-sm font-medium text-white/70\">Pooled</th><th class=\"px-6 py-4 text-center text-sm font-medium text-white/70\">24h Price Change</th><th class=\"px-6 py-4 text-right text-sm font-medium text-white/70\">Links</th></tr></thead><tbody class=\"divide-y divide-white/10\"><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#1</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$WILLY\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Willy.jpg\" alt=\"Satoshi's Willy\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Satoshi's Willy</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$WILLY</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">12,057,881 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$512.98</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/SatoshisWilly\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/SatoshisWilly\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://www.satoshiswilly.com/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.05s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#2</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$MARIE\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Marie.jpeg\" alt=\"Marie Rose AI\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Marie Rose AI</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$MARIE</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">13,310,754 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$450.48</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-green-400\">+1.77%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/marieportal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/MarieAi6900\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://vvaifu.fun/character/673924589257ff5b86d40874\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.1s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#3</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$Toly\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Toly.jpg\" alt=\"Toly\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Toly</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$Toly</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">14,634,242 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$401.39</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/tolysolcto\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/TolyAI\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://vvaifu.fun/character/671ac8f5b4862838f410d03c\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.15s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#4</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$AVA\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/ava.jpg\" alt=\"Ava\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Ava</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$AVA</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">10,505 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$238.98</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://x.com/AVA_holo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://www.holoworld.com/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.2s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#5</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$AIXBT\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/AIXBT.jpg\" alt=\"AIXBT\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">AIXBT</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$AIXBT</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">1,922.80 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$183.02</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-red-400\">-7.78%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://aixbt.tech/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.25s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#6</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$ZEREBRO\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/ZEREBRO.jpg\" alt=\"ZEREBRO\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">ZEREBRO</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$ZEREBRO</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">4,521.54 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$98.84</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-red-400\">-0.01%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://zerebro.org/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.3s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#7</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$vvaifu\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Dasha.jpg\" alt=\"Dasha\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Dasha</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$vvaifu</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">7,096.30 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$16.35</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://vvaifu.fun/character/6712925047681ded216bb229\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.35s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#8</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$VIOLET\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Violet.jpeg\" alt=\"Violet\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Violet</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$VIOLET</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/30 font-mono animate-pulse\">Loading...</span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"text-white/30 font-mono\">-</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/violet_fomo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/violet_fomo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://violetfromfomo.vip/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.4s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#9</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$EUN\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/EUN.jpeg\" alt=\"Eun Ae June\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Eun Ae June</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$EUN</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/30 font-mono animate-pulse\">Loading...</span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"text-white/30 font-mono\">-</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/eunaejune\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/eun_ae_june\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://app.virtuals.io/virtuals/402\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.45s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#10</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$SVETA\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Sveta.jpg\" alt=\"Sveta\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Sveta</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$SVETA</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/30 font-mono animate-pulse\">Loading...</span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"text-white/30 font-mono\">-</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/ai69xlol\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/sveta_eai\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://eternalai.org/6433\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr></tbody></table><div class=\"mt-8 text-center\"><button class=\"bg-white/5 hover:bg-white/10 text-white/70 hover:text-white px-8 py-3 rounded-xl transition-all duration-200 inline-flex items-center gap-2\">Show More Agents<span class=\"text-sm text-white/50\">(10 of 42)</span></button></div></div><div class=\"text-center mb-16 animate-slideUp\" id=\"exchanges\"><h2 class=\"text-white text-4xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400\">Buy ai69x</h2><p class=\"text-gray-400 text-lg font-light mb-12\">Available on the following exchanges</p><div class=\"mb-16\"><h3 class=\"text-2xl font-semibold text-white mb-8\">DEX</h3><div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto\"><a href=\"https://jup.ag/swap/SOL-DvyxUPDrDSLLziu5YsTkyirRDTncqkrWTsUdNCuipump\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/jupiter.png\" alt=\"Jupiter\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Jupiter</div></a><a href=\"https://raydium.io/swap/?inputMint=sol&amp;outputMint=DvyxUPDrDSLLziu5YsTkyirRDTncqkrWTsUdNCuipump\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/raydium.png\" alt=\"Raydium\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Raydium</div></a><a href=\"https://www.orca.so/?tokenIn=So11111111111111111111111111111111111111112&amp;tokenOut=DvyxUPDrDSLLziu5YsTkyirRDTncqkrWTsUdNCuipump\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/orca.png\" alt=\"Orca\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Orca</div></a></div></div><div><h3 class=\"text-2xl font-semibold text-white mb-8\">CEX</h3><div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto\"><a href=\"https://ascendex.com/en/cashtrade-spottrading/usdt/ai69x?inviteCode=ASDH38HE\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/ascendex.png\" alt=\"AscendEX\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">AscendEX</div></a><a href=\"https://azbit.com/exchange/AI69X_USDT\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/azbit.png\" alt=\"Azbit\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Azbit</div></a><a href=\"https://p2pb2b.com/trade/AI69X_USDT/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/p2pb2b.png\" alt=\"P2PB2B\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">P2B</div></a></div></div></div></div></main><footer class=\"bg-black border-t border-white/10\"><div class=\"container mx-auto px-6 py-4\"><div class=\"text-center\"><p class=\"text-white/50 text-sm\">© 2025 All rights reserved.</p></div></div></footer></div></div>\n  \n\n</body></html>",
+    "headers": {
+      "accept-ranges": "bytes",
+      "access-control-allow-origin": "*",
+      "age": "1219548",
+      "cache-control": "public, max-age=0, must-revalidate",
+      "content-disposition": "inline",
+      "content-encoding": "br",
+      "content-length": "915",
+      "content-type": "text/html; charset=utf-8",
+      "date": "Tue, 26 Aug 2025 09:54:30 GMT",
+      "etag": "\"228af303d7bd3fcfd1717c78fcfbfcb7\"",
+      "last-modified": "Tue, 12 Aug 2025 07:08:42 GMT",
+      "server": "Vercel",
+      "strict-transport-security": "max-age=63072000",
+      "x-vercel-cache": "HIT",
+      "x-vercel-id": "arn1::zjhr9-1756202070147-b4bb29f3f5dd"
+    },
+    "statusCode": 200,
+    "loadTime": 0,
+    "screenshot": null,
+    "finalUrl": "https://www.ai69x.lol/"
+  },
+  "aiInsights": {
+    "summary": "The website has low accessibility and security scores, indicating potential issues with user experience and data protection. The lack of performance and SEO scores suggest that the site may not be optimized for speed or search engine visibility. The technology stack is unknown, making it difficult to assess code quality, technical debt, or suggest specific improvements.",
+    "technicalInsights": {
+      "strengths": [],
+      "weaknesses": [
+        "Low accessibility score",
+        "Low security score",
+        "Unknown technology stack",
+        "Unknown performance and SEO scores"
+      ],
+      "recommendations": [
+        "Improve accessibility features",
+        "Enhance security measures",
+        "Identify and optimize technology stack",
+        "Improve site performance",
+        "Implement SEO strategies"
+      ]
+    },
+    "businessInsights": {
+      "opportunities": [
+        "Improving user experience through better accessibility",
+        "Increasing site visibility through SEO",
+        "Enhancing user trust through improved security"
+      ],
+      "risks": [
+        "Potential loss of users due to poor accessibility",
+        "Potential loss of trust due to low security",
+        "Potential loss of visibility due to lack of SEO"
+      ],
+      "recommendations": [
+        "Invest in improving accessibility",
+        "Implement robust security measures",
+        "Develop and execute an SEO strategy"
+      ]
+    },
+    "recommendations": [
+      "Improve accessibility features",
+      "Enhance security measures",
+      "Identify and optimize technology stack",
+      "Improve site performance",
+      "Implement SEO strategies",
+      "Invest in improving accessibility",
+      "Implement robust security measures",
+      "Develop and execute an SEO strategy"
+    ],
+    "priority": "high",
+    "confidence": 0.85,
+    "provider": "ai-generated"
+  },
+  "scores": {
+    "performance": 99,
+    "seo": 83,
+    "accessibility": 93,
+    "security": 17,
+    "bestPractices": 96,
+    "overall": 81
+  },
+  "raw": {
+    "url": "https://www.ai69x.lol/",
+    "analyzedAt": "2025-08-26T09:54:43.260Z",
+    "analysisTime": 13531,
+    "basic": {
+      "title": "ai69x - Liquidity Token Platform for AI Agents",
+      "description": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+      "keywords": "",
+      "lang": "en",
+      "charset": "UTF-8",
+      "ogTitle": "ai69x - Liquidity Token Platform for AI Agents",
+      "ogDescription": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+      "ogImage": "https://ai69x.lol/assets/img/preview.jpg",
+      "ogUrl": "https://ai69x.lol",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "ai69x - Liquidity Token Platform for AI Agents",
+      "twitterDescription": "ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.",
+      "hasStructuredData": false,
+      "structuredDataCount": 0,
+      "headingStructure": {
+        "h1": {
+          "count": 0,
+          "texts": []
+        },
+        "h2": {
+          "count": 3,
+          "texts": [
+            "ai69x",
+            "DAO Members",
+            "Buy ai69x"
+          ]
+        },
+        "h3": {
+          "count": 2,
+          "texts": [
+            "DEX",
+            "CEX"
+          ]
+        },
+        "h4": {
+          "count": 0,
+          "texts": []
+        },
+        "h5": {
+          "count": 0,
+          "texts": []
+        },
+        "h6": {
+          "count": 0,
+          "texts": []
+        }
+      },
+      "imageCount": 17,
+      "linkCount": 45,
+      "formCount": 0,
+      "wordCount": 197,
+      "paragraphCount": 5,
+      "externalScripts": [],
+      "externalStyles": [
+        "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      ],
+      "domElements": 444,
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "html": "<!DOCTYPE html><html lang=\"en\"><head>\n    <meta charset=\"UTF-8\">\n    <!-- Favicons -->\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/assets/img/favicon/apple-touch-icon.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/assets/img/favicon/favicon-32x32.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/assets/img/favicon/favicon-16x16.png\">\n    <link rel=\"manifest\" href=\"/assets/img/favicon/site.webmanifest\">\n    <link rel=\"mask-icon\" href=\"/assets/img/favicon/safari-pinned-tab.svg\" color=\"#5bbad5\">\n    <meta name=\"msapplication-TileColor\" content=\"#da532c\">\n    <meta name=\"theme-color\" content=\"#000000\">\n    \n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    \n    <!-- Primary Meta Tags -->\n    <title>ai69x - Liquidity Token Platform for AI Agents</title>\n    <meta name=\"title\" content=\"ai69x - Liquidity Token Platform for AI Agents\">\n    <meta name=\"description\" content=\"ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.\">\n\n    <!-- Open Graph / Facebook -->\n    <meta property=\"og:site_name\" content=\"ai69x\">\n    <meta property=\"og:type\" content=\"website\">\n    <meta property=\"og:url\" content=\"https://ai69x.lol\">\n    <meta property=\"og:title\" content=\"ai69x - Liquidity Token Platform for AI Agents\">\n    <meta property=\"og:description\" content=\"ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.\">\n    <meta property=\"og:image\" content=\"https://ai69x.lol/assets/img/preview.jpg\">\n    <meta property=\"og:image:width\" content=\"1200\">\n    <meta property=\"og:image:height\" content=\"630\">\n\n    <!-- Twitter -->\n    <meta name=\"twitter:card\" content=\"summary_large_image\">\n    <meta name=\"twitter:site\" content=\"@ai69xlol\">\n    <meta name=\"twitter:url\" content=\"https://ai69x.lol\">\n    <meta name=\"twitter:title\" content=\"ai69x - Liquidity Token Platform for AI Agents\">\n    <meta name=\"twitter:description\" content=\"ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.\">\n    <meta name=\"twitter:image\" content=\"https://ai69x.lol/assets/img/preview.jpg\">\n\n    <!-- Fonts -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin=\"\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap\" rel=\"stylesheet\">\n    <script type=\"module\" crossorigin=\"\" src=\"/assets/index-DmCejS3B.js\"></script>\n    <link rel=\"stylesheet\" crossorigin=\"\" href=\"/assets/index-DKH0Pvc3.css\">\n  </head>\n  <body>\n    <div id=\"root\"><header class=\"fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-lg border-b border-white/10\"><div class=\"container mx-auto px-6\"><div class=\"flex items-center justify-between h-[74px]\"><a class=\"text-white text-2xl font-bold tracking-tighter\" href=\"/\">ai69x</a><nav><ul class=\"flex items-center space-x-8\"><li><a class=\"text-white/70 hover:text-white flex items-center gap-2 transition-colors duration-200\" href=\"/docs\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-file-text \"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"></path><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"></path><path d=\"M10 9H8\"></path><path d=\"M16 13H8\"></path><path d=\"M16 17H8\"></path></svg><span>Docs</span></a></li></ul></nav></div></div></header><div class=\"flex flex-col min-h-screen\"><main class=\"flex-grow bg-gradient-to-b from-black via-gray-900 to-black pt-[94px]\"><div class=\"max-w-4xl mx-auto px-6 py-24 text-center\"><div class=\"space-y-8 animate-slideUp\"><div class=\"bg-black/50 backdrop-blur-lg inline-block rounded-2xl px-8 py-4\"><h2 class=\"text-white text-8xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 font-poppins\"><span class=\"font-normal\">ai</span><span class=\"font-bold\">69</span><span class=\"font-normal\">x</span></h2></div><p class=\"text-gray-300 text-xl leading-relaxed mb-6 font-light font-poppins\">ai69x is a pioneering liquidity token platform for AI agents, creating a unified ecosystem where artificial intelligence entities thrive across multiple nations and continents.</p><p class=\"text-gray-300 text-lg leading-relaxed font-light font-poppins\">Our self-governed DAO collaborates with the world's premier framework builders to establish and invest in the most promising AI agents, fostering innovation and growth in the AI ecosystem.</p></div></div><div class=\"container mx-auto px-6 -mt-16 mb-16\"><div class=\"text-center mb-16 animate-slideUp\"></div><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\"><div class=\"bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 backdrop-blur-sm border border-white/10\"><div class=\"flex items-center justify-between mb-4\"><div class=\"text-sm text-white/50\">$ai69x Price</div><div class=\"text-sm text-red-400\">-4.67%</div></div><div class=\"flex items-baseline gap-2\"><div class=\"text-2xl font-bold text-white\">$0.000044</div><div class=\"text-white/50 text-sm\">USD</div></div><a class=\"mt-4 w-full flex items-center justify-center gap-2 bg-violet-600/90 hover:bg-violet-500 text-white rounded-xl py-2.5 font-medium transition-all duration-200 cursor-pointer\">Buy Now</a></div><div class=\"bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 backdrop-blur-sm border border-white/10\"><div class=\"flex items-center justify-between mb-4\"><div class=\"text-sm text-white/50\">Market Cap</div><div class=\"flex items-center gap-1\"><span class=\"w-2 h-2 rounded-full bg-green-400\"></span><span class=\"text-sm text-white/50\">Live</span></div></div><div class=\"flex items-baseline gap-2\"><div class=\"text-2xl font-bold text-white\">$44.27K</div><div class=\"text-white/50 text-sm\">USD</div></div><a href=\"https://dexscreener.com/solana/eytwr2wike6mvucad7ynhdwdsxdkgp3yeg3fk4duxfwd\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-4 w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white rounded-xl py-2.5 font-medium transition-all duration-200\"><img src=\"/assets/img/dex.jpg\" alt=\"DexScreener\" class=\"w-4 h-4\">View Chart</a></div><div class=\"bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 backdrop-blur-sm border border-white/10\"><div class=\"flex items-center justify-between mb-4\"><div class=\"text-sm text-white/50\">Total Value Pooled</div><div class=\"flex items-center gap-1\"><span class=\"w-2 h-2 rounded-full bg-green-400 animate-pulse\"></span><span class=\"text-sm text-white/50\">Live</span></div></div><div class=\"flex items-baseline gap-2\"><div class=\"text-2xl font-bold text-white\"><span class=\"tabular-nums\">$1,724.54</span></div><div class=\"text-white/50 text-sm\">USD</div></div><div class=\"mt-4 flex items-center justify-between text-sm\"><div class=\"text-white/50\">Last updated:</div><div class=\"text-white/70\">12:54:30 PM</div></div></div></div><div class=\"flex justify-center gap-4 mt-8\"><a href=\"https://x.com/ai69xlol\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-xl px-6 py-3 text-white/70 hover:text-white transition-all duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg><span>Follow Updates</span></a><a href=\"https://t.me/ai69xlol\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-xl px-6 py-3 text-white/70 hover:text-white transition-all duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg><span>Join Community</span></a></div></div><div class=\"container mx-auto px-6 py-16\"><div class=\"text-center mb-16 animate-slideUp\"><h2 class=\"text-white text-4xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400\">DAO Members</h2><p class=\"text-gray-400 text-lg font-light\">Discover the shareholders of ai69x</p></div><div class=\"overflow-x-auto mb-32\"><div class=\"flex justify-end mb-4 text-gray-500 text-sm\">Last updated: 12:54:30 PM</div><table class=\"w-full border-collapse\"><thead><tr class=\"border-b border-white/10\"><th class=\"px-6 py-4 text-left text-sm font-medium text-white/70\">No.</th><th class=\"px-6 py-4 text-left text-sm font-medium text-white/70\">Agent</th><th class=\"px-6 py-4 text-left text-sm font-medium text-white/70\">Ticker</th><th class=\"px-6 py-4 text-right text-sm font-medium text-white/70\">Pooled</th><th class=\"px-6 py-4 text-center text-sm font-medium text-white/70\">24h Price Change</th><th class=\"px-6 py-4 text-right text-sm font-medium text-white/70\">Links</th></tr></thead><tbody class=\"divide-y divide-white/10\"><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#1</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$WILLY\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Willy.jpg\" alt=\"Satoshi's Willy\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Satoshi's Willy</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$WILLY</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">12,057,881 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$512.98</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/SatoshisWilly\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/SatoshisWilly\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://www.satoshiswilly.com/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.05s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#2</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$MARIE\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Marie.jpeg\" alt=\"Marie Rose AI\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Marie Rose AI</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$MARIE</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">13,310,754 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$450.48</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-green-400\">+1.77%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/marieportal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/MarieAi6900\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://vvaifu.fun/character/673924589257ff5b86d40874\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.1s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#3</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$Toly\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Toly.jpg\" alt=\"Toly\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Toly</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$Toly</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">14,634,242 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$401.39</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/tolysolcto\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/TolyAI\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://vvaifu.fun/character/671ac8f5b4862838f410d03c\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.15s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#4</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$AVA\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/ava.jpg\" alt=\"Ava\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Ava</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$AVA</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">10,505 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$238.98</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://x.com/AVA_holo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://www.holoworld.com/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.2s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#5</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$AIXBT\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/AIXBT.jpg\" alt=\"AIXBT\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">AIXBT</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$AIXBT</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">1,922.80 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$183.02</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-red-400\">-7.78%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://aixbt.tech/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.25s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#6</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$ZEREBRO\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/ZEREBRO.jpg\" alt=\"ZEREBRO\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">ZEREBRO</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$ZEREBRO</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">4,521.54 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$98.84</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-red-400\">-0.01%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://zerebro.org/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.3s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#7</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$vvaifu\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Dasha.jpg\" alt=\"Dasha\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Dasha</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$vvaifu</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/70 font-mono\">7,096.30 ai69x</span><span class=\"text-white/50 text-sm font-mono\"><span class=\"tabular-nums\">$16.35</span></span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"font-mono text-sm text-white/50\">0.00%</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://vvaifu.fun/character/6712925047681ded216bb229\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.35s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#8</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$VIOLET\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Violet.jpeg\" alt=\"Violet\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Violet</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$VIOLET</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/30 font-mono animate-pulse\">Loading...</span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"text-white/30 font-mono\">-</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/violet_fomo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/violet_fomo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://violetfromfomo.vip/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.4s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#9</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$EUN\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/EUN.jpeg\" alt=\"Eun Ae June\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Eun Ae June</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$EUN</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/30 font-mono animate-pulse\">Loading...</span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"text-white/30 font-mono\">-</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/eunaejune\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/eun_ae_june\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://app.virtuals.io/virtuals/402\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr><tr class=\"group hover:bg-white/5 transition-colors duration-200\" style=\"animation-delay: 0.45s;\"><td class=\"px-6 py-4\"><span class=\"text-white/50 font-mono\">#10</span></td><td class=\"px-6 py-4\"><a class=\"flex items-center space-x-4\" href=\"/agent/$SVETA\"><div class=\"relative\"><div class=\"w-12 h-12 rounded-full ring-2 ring-white/10 overflow-hidden\"><img src=\"/assets/img/Sveta.jpg\" alt=\"Sveta\" class=\"w-full h-full object-cover\"></div></div><span class=\"text-white font-medium\">Sveta</span></a></td><td class=\"px-6 py-4\"><span class=\"text-white/70 font-mono\">$SVETA</span></td><td class=\"px-6 py-4 text-right\"><div class=\"flex flex-col items-end\"><span class=\"text-white/30 font-mono animate-pulse\">Loading...</span></div></td><td class=\"px-6 py-4 text-center\"><span class=\"text-white/30 font-mono\">-</span></td><td class=\"px-6 py-4\"><div class=\"flex justify-end space-x-4\"><a href=\"https://t.me/ai69xlol\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"></path></svg></a><a href=\"https://x.com/sveta_eai\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" class=\"\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z\"></path></svg></a><a href=\"https://eternalai.org/6433\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-white/50 hover:text-white transition-colors duration-200\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link \"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg></a></div></td></tr></tbody></table><div class=\"mt-8 text-center\"><button class=\"bg-white/5 hover:bg-white/10 text-white/70 hover:text-white px-8 py-3 rounded-xl transition-all duration-200 inline-flex items-center gap-2\">Show More Agents<span class=\"text-sm text-white/50\">(10 of 42)</span></button></div></div><div class=\"text-center mb-16 animate-slideUp\" id=\"exchanges\"><h2 class=\"text-white text-4xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400\">Buy ai69x</h2><p class=\"text-gray-400 text-lg font-light mb-12\">Available on the following exchanges</p><div class=\"mb-16\"><h3 class=\"text-2xl font-semibold text-white mb-8\">DEX</h3><div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto\"><a href=\"https://jup.ag/swap/SOL-DvyxUPDrDSLLziu5YsTkyirRDTncqkrWTsUdNCuipump\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/jupiter.png\" alt=\"Jupiter\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Jupiter</div></a><a href=\"https://raydium.io/swap/?inputMint=sol&amp;outputMint=DvyxUPDrDSLLziu5YsTkyirRDTncqkrWTsUdNCuipump\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/raydium.png\" alt=\"Raydium\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Raydium</div></a><a href=\"https://www.orca.so/?tokenIn=So11111111111111111111111111111111111111112&amp;tokenOut=DvyxUPDrDSLLziu5YsTkyirRDTncqkrWTsUdNCuipump\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/orca.png\" alt=\"Orca\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Orca</div></a></div></div><div><h3 class=\"text-2xl font-semibold text-white mb-8\">CEX</h3><div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto\"><a href=\"https://ascendex.com/en/cashtrade-spottrading/usdt/ai69x?inviteCode=ASDH38HE\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/ascendex.png\" alt=\"AscendEX\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">AscendEX</div></a><a href=\"https://azbit.com/exchange/AI69X_USDT\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/azbit.png\" alt=\"Azbit\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">Azbit</div></a><a href=\"https://p2pb2b.com/trade/AI69X_USDT/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-white/5 hover:bg-white/10 rounded-xl p-6 transition-all duration-300 group\"><div class=\"h-16 flex items-center justify-center mb-4\"><img src=\"/assets/img/partners/p2pb2b.png\" alt=\"P2PB2B\" class=\"h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-all duration-300\"></div><div class=\"text-white/70 group-hover:text-white font-medium\">P2B</div></a></div></div></div></div></main><footer class=\"bg-black border-t border-white/10\"><div class=\"container mx-auto px-6 py-4\"><div class=\"text-center\"><p class=\"text-white/50 text-sm\">© 2025 All rights reserved.</p></div></div></footer></div></div>\n  \n\n</body></html>",
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "1219548",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-length": "915",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Tue, 26 Aug 2025 09:54:30 GMT",
+        "etag": "\"228af303d7bd3fcfd1717c78fcfbfcb7\"",
+        "last-modified": "Tue, 12 Aug 2025 07:08:42 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "arn1::zjhr9-1756202070147-b4bb29f3f5dd"
+      },
+      "statusCode": 200,
+      "loadTime": 0,
+      "screenshot": null,
+      "finalUrl": "https://www.ai69x.lol/"
+    },
+    "lighthouse": {
+      "performance": 99,
+      "seo": 83,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "metrics": {
+        "firstContentfulPaint": 548.5201,
+        "largestContentfulPaint": 824.26215,
+        "firstInputDelay": 16,
+        "cumulativeLayoutShift": 0.022212606346496223,
+        "speedIndex": 548.5201,
+        "totalBlockingTime": 0,
+        "timeToInteractive": 824.26215,
+        "serverResponseTime": 31.98
+      },
+      "opportunities": [
+        {
+          "audit": "errors-in-console",
+          "title": "Browser errors were logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "unsized-images",
+          "title": "Image elements do not have explicit `width` and `height`",
+          "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+          "score": 0.5,
+          "savings": 0
+        },
+        {
+          "audit": "image-redundant-alt",
+          "title": "Image elements have `[alt]` attributes that are redundant text.",
+          "description": "Informative elements should aim for short, descriptive alternative text. Alternative text that is exactly the same as the text adjacent to the link or image is potentially confusing for screen reader users, because the text will be read twice. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.10/image-redundant-alt).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "link-name",
+          "title": "Links do not have a discernible name",
+          "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "render-blocking-resources",
+          "title": "Eliminate render-blocking resources",
+          "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+          "score": 0,
+          "savings": 197,
+          "displayValue": "Est savings of 200 ms"
+        },
+        {
+          "audit": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "score": 0.5,
+          "savings": 0,
+          "displayValue": "Est savings of 24 KiB"
+        },
+        {
+          "audit": "modern-image-formats",
+          "title": "Serve images in next-gen formats",
+          "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+          "score": 0.5,
+          "savings": 0,
+          "displayValue": "Est savings of 371 KiB"
+        },
+        {
+          "audit": "uses-responsive-images",
+          "title": "Properly size images",
+          "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+          "score": 0.5,
+          "savings": 0,
+          "displayValue": "Est savings of 675 KiB"
+        },
+        {
+          "audit": "crawlable-anchors",
+          "title": "Links are not crawlable",
+          "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "robots-txt",
+          "title": "robots.txt is not valid",
+          "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "44 errors found"
+        },
+        {
+          "audit": "image-delivery-insight",
+          "title": "Improve image delivery",
+          "description": "Reducing the download time of images can improve the perceived load time of the page and LCP. [Learn more about optimizing image size](https://developer.chrome.com/docs/lighthouse/performance/uses-optimized-images/)",
+          "score": 0.5,
+          "savings": 0,
+          "displayValue": "Est savings of 790 KiB"
+        },
+        {
+          "audit": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "render-blocking-insight",
+          "title": "Render blocking requests",
+          "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://web.dev/learn/performance/understanding-the-critical-path#render-blocking_resources) can move these network requests out of the critical path.",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "Est savings of 200 ms"
+        }
+      ],
+      "rawLighthouseData": {
+        "fetchTime": "2025-08-26T09:54:32.849Z",
+        "requestedUrl": "https://www.ai69x.lol/",
+        "finalUrl": "https://www.ai69x.lol/",
+        "lighthouseVersion": "12.8.1",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+        "environment": {
+          "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+          "benchmarkIndex": 3409.5,
+          "credits": {
+            "axe-core": "4.10.3"
+          }
+        },
+        "configSettings": {
+          "output": "json",
+          "maxWaitForFcp": 30000,
+          "maxWaitForLoad": 45000,
+          "pauseAfterFcpMs": 1000,
+          "pauseAfterLoadMs": 1000,
+          "networkQuietThresholdMs": 1000,
+          "cpuQuietThresholdMs": 1000,
+          "formFactor": "desktop",
+          "throttling": {
+            "rttMs": 40,
+            "throughputKbps": 10240,
+            "requestLatencyMs": 0,
+            "downloadThroughputKbps": 0,
+            "uploadThroughputKbps": 0,
+            "cpuSlowdownMultiplier": 1
+          },
+          "throttlingMethod": "simulate",
+          "screenEmulation": {
+            "mobile": false,
+            "width": 1350,
+            "height": 940,
+            "deviceScaleFactor": 1,
+            "disabled": false
+          },
+          "emulatedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "auditMode": false,
+          "gatherMode": false,
+          "clearStorageTypes": [
+            "file_systems",
+            "shader_cache",
+            "service_workers",
+            "cache_storage"
+          ],
+          "disableStorageReset": false,
+          "debugNavigation": false,
+          "channel": "node",
+          "usePassiveGathering": false,
+          "disableFullPageScreenshot": false,
+          "skipAboutBlank": false,
+          "blankPage": "about:blank",
+          "ignoreStatusCode": false,
+          "locale": "en-US",
+          "blockedUrlPatterns": null,
+          "additionalTraceCategories": null,
+          "extraHeaders": null,
+          "precomputedLanternData": null,
+          "onlyAudits": null,
+          "onlyCategories": [
+            "performance",
+            "seo",
+            "best-practices",
+            "accessibility"
+          ],
+          "skipAudits": []
+        }
+      }
+    },
+    "comprehensiveSEO": {
+      "technical": {
+        "score": 56,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 46,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 176,
+            "optimal": false,
+            "issues": [
+              "Description too long (176 chars)"
+            ],
+            "recommendations": [
+              "Shorten description to under 160 characters"
+            ]
+          },
+          "headingStructure": {
+            "hasH1": false,
+            "h1Count": 0,
+            "hasHierarchy": true,
+            "issues": [
+              "Missing H1 tag"
+            ],
+            "recommendations": [
+              "Add a single, descriptive H1 tag"
+            ],
+            "structure": {
+              "h1": {
+                "count": 0,
+                "texts": []
+              },
+              "h2": {
+                "count": 3,
+                "texts": [
+                  "ai69x",
+                  "DAO Members",
+                  "Buy ai69x"
+                ]
+              },
+              "h3": {
+                "count": 2,
+                "texts": [
+                  "DEX",
+                  "CEX"
+                ]
+              },
+              "h4": {
+                "count": 0,
+                "texts": []
+              },
+              "h5": {
+                "count": 0,
+                "texts": []
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": true,
+            "score": 70
+          },
+          "structuredData": {
+            "present": false,
+            "score": 20
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 45
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 46,
+        "analysis": {
+          "depth": {
+            "wordCount": 197,
+            "paragraphCount": 5,
+            "adequateDepth": false,
+            "contentRatio": 39.4,
+            "depthScore": 20,
+            "issues": [
+              "Thin content: only 197 words"
+            ],
+            "recommendations": [
+              "Add more comprehensive content (target: 300+ words)",
+              "Include detailed explanations, examples, and supporting information",
+              "Break content into logical sections with subheadings"
+            ]
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 45
+          },
+          "socialSignals": {
+            "score": 70,
+            "hasOpenGraph": true
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 45
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "thin",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 55,
+      "recommendations": [
+        {
+          "priority": "high",
+          "category": "Content",
+          "issue": "Thin content",
+          "action": "Expand content to at least 300 words with valuable, detailed information",
+          "impact": "High - Essential for ranking"
+        },
+        {
+          "priority": "medium",
+          "category": "Structure",
+          "issue": "Missing H1",
+          "action": "Add a single, keyword-rich H1 tag",
+          "impact": "Medium - Helps search engines understand content"
+        },
+        {
+          "priority": "medium",
+          "category": "Technical",
+          "issue": "Meta description",
+          "action": "Write compelling meta description (120-160 characters)",
+          "impact": "Medium - Affects click-through rates"
+        },
+        {
+          "priority": "low",
+          "category": "Enhancement",
+          "issue": "No structured data",
+          "action": "Add relevant schema markup (Organization, Article, etc.)",
+          "impact": "Low - Rich snippets potential"
+        }
+      ],
+      "criticalIssues": [
+        "Thin content - insufficient word count for ranking"
+      ],
+      "opportunities": [
+        "Add structured data for rich snippets",
+        "Expand content for better topical authority"
+      ]
+    },
+    "accessibility": {
+      "score": 40,
+      "issues": {
+        "errors": 103,
+        "warnings": 0,
+        "notices": 0,
+        "total": 103
+      },
+      "details": [
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > header > div > div > a",
+          "context": "<a class=\"text-white text-2xl font-bold tracking-tighter\" href=\"/\">ai69x</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > header > div > div > nav > ul > li > a > span",
+          "context": "<span>Docs</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h2 element appears to be the primary document heading, so should be an h1 element.",
+          "selector": "#root > div > main > div:nth-child(1) > div > div > h2",
+          "context": "<h2 class=\"text-white text-8xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 font-poppins\"><span class=\"font-normal\">ai</s...</h2>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h2 element should be an h1 to be properly nested.",
+          "selector": "#root > div > main > div:nth-child(1) > div > div > h2",
+          "context": "<h2 class=\"text-white text-8xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 font-poppins\"><span class=\"font-normal\">ai</s...</h2>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(1) > div > div > h2 > span:nth-child(1)",
+          "context": "<span class=\"font-normal\">ai</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(1) > div > div > h2 > span:nth-child(2)",
+          "context": "<span class=\"font-bold\">69</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(1) > div > div > h2 > span:nth-child(3)",
+          "context": "<span class=\"font-normal\">x</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+          "context": "<div class=\"text-sm text-white/50\">$ai69x Price</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)",
+          "context": "<div class=\"text-white/50 text-sm\">USD</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > a",
+          "context": "<a class=\"mt-4 w-full flex items-center justify-center gap-2 bg-violet-600/90 hover:bg-violet-500 text-white rounded-xl py-2.5 font-medium transition-all duration-200 cursor-pointer\">Buy Now</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1)",
+          "context": "<div class=\"text-sm text-white/50\">Market Cap</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > span:nth-child(2)",
+          "context": "<span class=\"text-sm text-white/50\">Live</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2)",
+          "context": "<div class=\"text-white/50 text-sm\">USD</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > a",
+          "context": "<a href=\"https://dexscreener.com/solana/eytwr2wike6mvucad7ynhdwdsxdkgp3yeg3fk4duxfwd\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-4 w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white rounded-xl py-2.5 font-m..."
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1)",
+          "context": "<div class=\"text-sm text-white/50\">Total Value Pooled</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > span:nth-child(2)",
+          "context": "<span class=\"text-sm text-white/50\">Live</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2)",
+          "context": "<div class=\"text-white/50 text-sm\">USD</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1)",
+          "context": "<div class=\"text-white/50\">Last updated:</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(3) > div:nth-child(2)",
+          "context": "<div class=\"text-white/70\">12:54:34 PM</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div > main > div:nth-child(2) > div:nth-child(3) > a:nth-child(1) > span",
+          "context": "<span>Follow Updates</span>"
+        }
+      ]
+    },
+    "technologies": {
+      "technologies": [
+        {
+          "name": "Tailwind CSS",
+          "categories": [
+            "CSS Frameworks"
+          ],
+          "version": "16",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Google Fonts",
+          "categories": [
+            "CDN"
+          ],
+          "version": "16",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        }
+      ],
+      "categories": [
+        "CSS Frameworks",
+        "CDN"
+      ],
+      "count": 2,
+      "stats": {
+        "total": 2,
+        "byCategory": {
+          "CSS Frameworks": 1,
+          "CDN": 1
+        },
+        "byConfidence": {
+          "high": 0,
+          "medium": 2,
+          "low": 0
+        },
+        "topTechnologies": [
+          {
+            "name": "Tailwind CSS",
+            "confidence": 50
+          },
+          {
+            "name": "Google Fonts",
+            "confidence": 50
+          }
+        ]
+      }
+    },
+    "security": {
+      "isHttps": true,
+      "score": 17,
+      "headers": {
+        "strict-transport-security": true,
+        "content-security-policy": false,
+        "x-frame-options": false,
+        "x-content-type-options": false,
+        "x-xss-protection": false,
+        "referrer-policy": false
+      },
+      "rawHeaders": {
+        "strict-transport-security": "max-age=63072000",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "arn1::2k4fk-1756202072106-de16cb0d4731"
+      },
+      "recommendations": [
+        "Implement Content Security Policy to prevent XSS attacks",
+        "Add X-Frame-Options header to prevent clickjacking",
+        "Add X-Content-Type-Options header to prevent MIME sniffing"
+      ]
+    },
+    "scores": {
+      "performance": 99,
+      "seo": 83,
+      "accessibility": 93,
+      "security": 17,
+      "bestPractices": 96,
+      "overall": 81
+    }
+  }
+}
