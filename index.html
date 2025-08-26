@@ -2,33 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Website Support Tool - WORKING VERSION</title>
-    <style>
-      body { font-family: system-ui; padding: 20px; background: #f0f9ff; }
-      .success { background: #10b981; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
-    </style>
+    <title>AI Website Support Tool - SME Solutions</title>
+    <meta name="description" content="AI-powered website support tool for SMEs to analyze, improve, and maintain websites efficiently" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div class="success">
-      <h1>🎉 FINALLY WORKING!</h1>
-      <p>This proves React can load on Vercel!</p>
-      <p>The deployment configuration is now correct.</p>
-      <p>Environment: production</p>
-      <p>Time: <span id="time"></span></p>
-    </div>
     <div id="root"></div>
-    
-    <script>
-      document.getElementById('time').textContent = new Date().toLocaleString()
-      
-      // Load React directly
-      const script = document.createElement('script')
-      script.type = 'module'
-      script.src = '/assets/index-3cfb730f.js'
-      script.onload = () => console.log('✅ React loaded successfully')
-      script.onerror = (e) => console.error('❌ React failed to load:', e)
-      document.head.appendChild(script)
-    </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html> 
