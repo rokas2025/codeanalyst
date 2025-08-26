@@ -18,7 +18,7 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/((?!api|assets).*)",
+      "source": "/((?!api/|assets/|vite\\.svg|favicon\\.ico|_next|_vercel).*)",
       "destination": "/index.html"
     }
   ]
