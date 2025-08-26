@@ -9,7 +9,8 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 30000, // 30 second timeout
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true'
   }
 })
 
@@ -178,7 +179,8 @@ class BackendService {
 
     const response = await api.post('/code-analysis/zip', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        'ngrok-skip-browser-warning': 'true'
       },
       timeout: 120000 // 2 minutes for file upload
     })
