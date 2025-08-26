@@ -81,6 +81,7 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -110,6 +111,7 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -117,7 +119,7 @@ export class AnalysisService {
       throw new Error('Rate limit exceeded. Slowing down polling...')
     }
 
-        if (!response.ok) {
+    if (!response.ok) {
       // If specific analysis fails and we have a repo URL, try latest successful analysis
       if (repoUrl && (response.status === 404 || response.status === 400)) {
         console.warn(`Analysis ${analysisId} not found or invalid, trying latest for repo: ${repoUrl}`)
