@@ -6,26 +6,27 @@ import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/ou
 export function GitHubCallback() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { set_token } = useAuthStore()
+  const { handleGitHubCallback } = useAuthStore()
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing')
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
     const processCallback = async () => {
       try {
-        const token = searchParams.get('token')
+        const code = searchParams.get('code')
+        const state = searchParams.get('state')
         const oauthError = searchParams.get('error')
 
         if (oauthError) {
           throw new Error(`GitHub OAuth error: ${oauthError}`)
         }
 
-        if (!token) {
-          throw new Error('Missing token in callback URL')
+        if (!code || !state) {
+          throw new Error('Missing code or state in callback URL')
         }
 
-        // Store token in auth store
-        set_token(token)
+        // Use the auth store's handleGitHubCallback function
+        await handleGitHubCallback(code, state)
         setStatus('success')
 
         // Redirect to dashboard after success
@@ -46,7 +47,7 @@ export function GitHubCallback() {
     }
 
     processCallback()
-  }, [searchParams, set_token, navigate])
+  }, [searchParams, handleGitHubCallback, navigate])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
