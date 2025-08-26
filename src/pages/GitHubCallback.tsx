@@ -6,27 +6,41 @@ import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/ou
 export function GitHubCallback() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { handleGitHubCallback } = useAuthStore()
+  const { updateUser } = useAuthStore()
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing')
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
     const processCallback = async () => {
       try {
-        const code = searchParams.get('code')
-        const state = searchParams.get('state')
+        const token = searchParams.get('token')
         const oauthError = searchParams.get('error')
 
         if (oauthError) {
           throw new Error(`GitHub OAuth error: ${oauthError}`)
         }
 
-        if (!code || !state) {
-          throw new Error('Missing code or state in callback URL')
+        if (!token) {
+          throw new Error('Missing token in callback URL')
         }
 
-        // Use the auth store's handleGitHubCallback function
-        await handleGitHubCallback(code, state)
+        // Store the token and decode user info
+        localStorage.setItem('auth_token', token)
+        
+        // Decode the JWT to get user info (basic decode, server validates)
+        const base64Url = token.split('.')[1]
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+        const payload = JSON.parse(window.atob(base64))
+        
+        // Create user object from JWT payload
+        const user = {
+          id: payload.userId,
+          githubId: payload.githubId,
+          githubUsername: payload.githubUsername
+        }
+        
+        localStorage.setItem('user', JSON.stringify(user))
+        updateUser(user as any)
         setStatus('success')
 
         // Redirect to dashboard after success
@@ -47,7 +61,7 @@ export function GitHubCallback() {
     }
 
     processCallback()
-  }, [searchParams, handleGitHubCallback, navigate])
+  }, [searchParams, updateUser, navigate])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
