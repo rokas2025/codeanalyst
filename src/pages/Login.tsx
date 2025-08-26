@@ -32,12 +32,14 @@ export function Login() {
     
     try {
       await loginWithGitHub()
-      toast.success('GitHub login successful!')
+      // This line won't be reached because loginWithGitHub redirects the page
+      // toast.success('GitHub login successful!')
     } catch (error) {
+      console.error('GitHub login error:', error)
       toast.error('GitHub login failed. Please try again.')
-    } finally {
       setIsLoading(false)
     }
+    // Don't set loading false here because page will redirect
   }
 
   return (

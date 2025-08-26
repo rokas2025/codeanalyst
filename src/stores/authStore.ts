@@ -54,14 +54,21 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ loading: true })
     try {
       const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      console.log('GitHub login: calling', `${baseUrl}/auth/github`)
+      
       const response = await fetch(`${baseUrl}/auth/github`)
       const data = await response.json()
+      
+      console.log('GitHub login response:', data)
 
       if (!data.success) throw new Error(data.error || 'Failed to initiate GitHub OAuth')
 
       localStorage.setItem('github_oauth_state', data.state)
+      console.log('GitHub login: redirecting to', data.authUrl)
+      
       window.location.href = data.authUrl
     } catch (error) {
+      console.error('GitHub login error in auth store:', error)
       set({ loading: false })
       throw error
     }
