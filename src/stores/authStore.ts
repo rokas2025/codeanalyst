@@ -56,7 +56,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
       console.log('GitHub login: calling', `${baseUrl}/auth/github`)
       
-      const response = await fetch(`${baseUrl}/auth/github`)
+      const response = await fetch(`${baseUrl}/auth/github`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       const data = await response.json()
       
       console.log('GitHub login response:', data)
@@ -83,7 +87,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
       const response = await fetch(`${baseUrl}/auth/github/callback`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
         body: JSON.stringify({ code, state })
       })
 
