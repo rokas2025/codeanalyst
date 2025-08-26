@@ -31,6 +31,7 @@ export class GitHubService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -70,6 +71,7 @@ export class GitHubService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
       },
       body: JSON.stringify(requestData)
     })

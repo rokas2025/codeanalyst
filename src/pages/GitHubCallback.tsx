@@ -36,7 +36,9 @@ export function GitHubCallback() {
         const user = {
           id: payload.userId,
           githubId: payload.githubId,
-          githubUsername: payload.githubUsername
+          githubUsername: payload.githubUsername,
+          name: payload.githubUsername, // Use GitHub username as display name
+          email: `${payload.githubUsername}@github.local` // Placeholder email
         }
         
         localStorage.setItem('user', JSON.stringify(user))
