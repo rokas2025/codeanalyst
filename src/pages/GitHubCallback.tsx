@@ -37,8 +37,9 @@ export function GitHubCallback() {
           id: payload.userId,
           githubId: payload.githubId,
           githubUsername: payload.githubUsername,
-          name: payload.githubUsername, // Use GitHub username as display name
-          email: `${payload.githubUsername}@github.local` // Placeholder email
+          name: payload.name || payload.githubUsername, // Use real name or fallback to username
+          email: payload.email || `${payload.githubUsername}@github.local`, // Use real email or fallback
+          avatarUrl: payload.avatarUrl // GitHub avatar URL
         }
         
         localStorage.setItem('user', JSON.stringify(user))

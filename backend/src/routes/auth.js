@@ -110,7 +110,14 @@ async function handleGitHubCallback(code, state, res) {
     }
 
     // Generate JWT
-    const jwtToken = jwt.sign({ userId: user.id, githubId: githubUser.id, githubUsername: githubUser.login }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' })
+    const jwtToken = jwt.sign({ 
+      userId: user.id, 
+      githubId: githubUser.id, 
+      githubUsername: githubUser.login,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatar_url
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' })
 
     const redirectUrl = `${process.env.FRONTEND_URL}/auth/github/callback?token=${jwtToken}`
     res.redirect(redirectUrl)

@@ -28,7 +28,15 @@ export function Header() {
               onClick={logout}
               className="flex items-center space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
-              <UserCircleIcon className="h-8 w-8" />
+              {user?.avatarUrl ? (
+                <img 
+                  src={user.avatarUrl} 
+                  alt={user.name || 'User Avatar'} 
+                  className="h-8 w-8 rounded-full object-cover border border-gray-200"
+                />
+              ) : (
+                <UserCircleIcon className="h-8 w-8" />
+              )}
             </button>
           </div>
         </div>

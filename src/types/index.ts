@@ -4,6 +4,8 @@ export interface User {
   email: string
   name: string
   avatar?: string
+  avatarUrl?: string
+  githubId?: number
   githubUsername?: string
   plan: 'free' | 'pro' | 'enterprise'
   createdAt: string
