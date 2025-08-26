@@ -55,7 +55,6 @@ export class AnalysisService {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': 'true'
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -82,7 +81,6 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -112,7 +110,6 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -220,7 +217,6 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -251,7 +247,6 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -280,7 +275,6 @@ export class AnalysisService {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': 'true'
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -306,7 +300,6 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
@@ -338,7 +331,6 @@ export class AnalysisService {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
       },
     })
 
