@@ -1,0 +1,1890 @@
+{
+  "id": "0b756c77-2872-4a01-a8ce-b12851ff165c",
+  "url": "https://tipsnotricks.lt/",
+  "analyzedAt": "2025-08-27T08:38:17.937Z",
+  "analysisTime": 26040,
+  "performance": {
+    "score": 51,
+    "metrics": {
+      "firstContentfulPaint": 1388.1851500000002,
+      "largestContentfulPaint": 2355.4403,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 1.0071782360618597,
+      "speedIndex": 3726.1026354401956,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 2355.4403,
+      "serverResponseTime": 1743.069
+    },
+    "opportunities": [
+      {
+        "audit": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "score": 0.63,
+        "savings": 1388.1851500000002,
+        "displayValue": "1.4 s"
+      },
+      {
+        "audit": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0.51,
+        "savings": 2355.4403,
+        "displayValue": "2.4 s"
+      },
+      {
+        "audit": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "score": 0.13,
+        "savings": 3726.1026354401956,
+        "displayValue": "3.7 s"
+      },
+      {
+        "audit": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "score": 0.02,
+        "savings": 1.0071782360618597,
+        "displayValue": "1.007"
+      },
+      {
+        "audit": "errors-in-console",
+        "title": "Browser errors were logged to the console",
+        "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "server-response-time",
+        "title": "Reduce initial server response time",
+        "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+        "score": 0,
+        "savings": 1743.069,
+        "displayValue": "Root document took 1,740 ms"
+      },
+      {
+        "audit": "image-aspect-ratio",
+        "title": "Displays images with incorrect aspect ratio",
+        "description": "Image display dimensions should match natural aspect ratio. [Learn more about image aspect ratio](https://developer.chrome.com/docs/lighthouse/best-practices/image-aspect-ratio/).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "largest-contentful-paint-element",
+        "title": "Largest Contentful Paint element",
+        "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "2,360 ms"
+      },
+      {
+        "audit": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "4 layout shifts found"
+      },
+      {
+        "audit": "heading-order",
+        "title": "Heading elements are not in a sequentially-descending order",
+        "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.10/heading-order).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "link-name",
+        "title": "Links do not have a discernible name",
+        "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "target-size",
+        "title": "Touch targets do not have sufficient size or spacing.",
+        "description": "Touch targets with sufficient size and spacing help users who may have difficulty targeting small controls to activate the targets. [Learn more about touch targets](https://dequeuniversity.com/rules/axe/4.10/target-size).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "uses-long-cache-ttl",
+        "title": "Serve static assets with an efficient cache policy",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+        "score": 0.5,
+        "savings": 5805818.533333333,
+        "displayValue": "81 resources found"
+      },
+      {
+        "audit": "total-byte-weight",
+        "title": "Avoid enormous network payloads",
+        "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+        "score": 0.5,
+        "savings": 6006606,
+        "displayValue": "Total size was 5,866 KiB"
+      },
+      {
+        "audit": "render-blocking-resources",
+        "title": "Eliminate render-blocking resources",
+        "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+        "score": 0,
+        "savings": 261,
+        "displayValue": "Est savings of 260 ms"
+      }
+    ]
+  },
+  "lighthouse": {
+    "performance": 51,
+    "seo": 92,
+    "accessibility": 90,
+    "bestPractices": 93,
+    "metrics": {
+      "firstContentfulPaint": 1388.1851500000002,
+      "largestContentfulPaint": 2355.4403,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 1.0071782360618597,
+      "speedIndex": 3726.1026354401956,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 2355.4403,
+      "serverResponseTime": 1743.069
+    },
+    "opportunities": [
+      {
+        "audit": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "score": 0.63,
+        "savings": 1388.1851500000002,
+        "displayValue": "1.4 s"
+      },
+      {
+        "audit": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0.51,
+        "savings": 2355.4403,
+        "displayValue": "2.4 s"
+      },
+      {
+        "audit": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "score": 0.13,
+        "savings": 3726.1026354401956,
+        "displayValue": "3.7 s"
+      },
+      {
+        "audit": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "score": 0.02,
+        "savings": 1.0071782360618597,
+        "displayValue": "1.007"
+      },
+      {
+        "audit": "errors-in-console",
+        "title": "Browser errors were logged to the console",
+        "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "server-response-time",
+        "title": "Reduce initial server response time",
+        "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+        "score": 0,
+        "savings": 1743.069,
+        "displayValue": "Root document took 1,740 ms"
+      },
+      {
+        "audit": "image-aspect-ratio",
+        "title": "Displays images with incorrect aspect ratio",
+        "description": "Image display dimensions should match natural aspect ratio. [Learn more about image aspect ratio](https://developer.chrome.com/docs/lighthouse/best-practices/image-aspect-ratio/).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "largest-contentful-paint-element",
+        "title": "Largest Contentful Paint element",
+        "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "2,360 ms"
+      },
+      {
+        "audit": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "4 layout shifts found"
+      },
+      {
+        "audit": "heading-order",
+        "title": "Heading elements are not in a sequentially-descending order",
+        "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.10/heading-order).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "link-name",
+        "title": "Links do not have a discernible name",
+        "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "target-size",
+        "title": "Touch targets do not have sufficient size or spacing.",
+        "description": "Touch targets with sufficient size and spacing help users who may have difficulty targeting small controls to activate the targets. [Learn more about touch targets](https://dequeuniversity.com/rules/axe/4.10/target-size).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "uses-long-cache-ttl",
+        "title": "Serve static assets with an efficient cache policy",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+        "score": 0.5,
+        "savings": 5805818.533333333,
+        "displayValue": "81 resources found"
+      },
+      {
+        "audit": "total-byte-weight",
+        "title": "Avoid enormous network payloads",
+        "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+        "score": 0.5,
+        "savings": 6006606,
+        "displayValue": "Total size was 5,866 KiB"
+      },
+      {
+        "audit": "render-blocking-resources",
+        "title": "Eliminate render-blocking resources",
+        "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+        "score": 0,
+        "savings": 261,
+        "displayValue": "Est savings of 260 ms"
+      }
+    ]
+  },
+  "seo": {
+    "score": 55,
+    "lighthouseScore": 92,
+    "title": "Pagrindinis - Tips No Tricks",
+    "description": "",
+    "keywords": [],
+    "headings": {
+      "h1": {
+        "count": 0,
+        "texts": []
+      },
+      "h2": {
+        "count": 8,
+        "texts": [
+          "Mūsų tikslas – sklandus\nbendradarbiavimas ir\naukščiausios kokybės\nmokymai, kurie kuria realią\nvertę Jūsų komandai.",
+          "135",
+          "2009",
+          "61",
+          "34"
+        ]
+      },
+      "h3": {
+        "count": 9,
+        "texts": [
+          "Vadovavimas ir lyderystė:",
+          "Pardavimų, derybų ir klientų aptarnavimas:",
+          "Asmeninis efektyvumas:",
+          "Organizacijų vystymas:",
+          "Renginiai:"
+        ]
+      },
+      "h4": {
+        "count": 0,
+        "texts": []
+      },
+      "h5": {
+        "count": 4,
+        "texts": [
+          "Mokymų dienų",
+          "Dalyvių",
+          "Konsultacijų",
+          "Vebinarų"
+        ]
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "comprehensive": {
+      "technical": {
+        "score": 56,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 28,
+            "optimal": false,
+            "issues": [
+              "Title too short"
+            ],
+            "recommendations": [
+              "Expand title with more descriptive keywords"
+            ]
+          },
+          "metaDescription": {
+            "present": false,
+            "length": 0,
+            "optimal": false,
+            "issues": [
+              "Missing meta description"
+            ],
+            "recommendations": [
+              "Add a compelling meta description"
+            ]
+          },
+          "headingStructure": {
+            "hasH1": false,
+            "h1Count": 0,
+            "hasHierarchy": true,
+            "issues": [
+              "Missing H1 tag"
+            ],
+            "recommendations": [
+              "Add a single, descriptive H1 tag"
+            ],
+            "structure": {
+              "h1": {
+                "count": 0,
+                "texts": []
+              },
+              "h2": {
+                "count": 8,
+                "texts": [
+                  "Mūsų tikslas – sklandus\nbendradarbiavimas ir\naukščiausios kokybės\nmokymai, kurie kuria realią\nvertę Jūsų komandai.",
+                  "135",
+                  "2009",
+                  "61",
+                  "34"
+                ]
+              },
+              "h3": {
+                "count": 9,
+                "texts": [
+                  "Vadovavimas ir lyderystė:",
+                  "Pardavimų, derybų ir klientų aptarnavimas:",
+                  "Asmeninis efektyvumas:",
+                  "Organizacijų vystymas:",
+                  "Renginiai:"
+                ]
+              },
+              "h4": {
+                "count": 0,
+                "texts": []
+              },
+              "h5": {
+                "count": 4,
+                "texts": [
+                  "Mokymų dienų",
+                  "Dalyvių",
+                  "Konsultacijų",
+                  "Vebinarų"
+                ]
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": false,
+            "score": 70
+          },
+          "structuredData": {
+            "present": true,
+            "score": 90
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 53
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 46,
+        "analysis": {
+          "depth": {
+            "wordCount": 291,
+            "paragraphCount": 13,
+            "adequateDepth": false,
+            "contentRatio": 22.384615384615383,
+            "depthScore": 20,
+            "issues": [
+              "Thin content: only 291 words"
+            ],
+            "recommendations": [
+              "Add more comprehensive content (target: 300+ words)",
+              "Include detailed explanations, examples, and supporting information",
+              "Break content into logical sections with subheadings"
+            ]
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 53
+          },
+          "socialSignals": {
+            "score": 70,
+            "hasOpenGraph": true
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 53
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "thin",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 55,
+      "recommendations": [
+        {
+          "priority": "high",
+          "category": "Content",
+          "issue": "Thin content",
+          "action": "Expand content to at least 300 words with valuable, detailed information",
+          "impact": "High - Essential for ranking"
+        },
+        {
+          "priority": "high",
+          "category": "Technical",
+          "issue": "Title optimization",
+          "action": "Optimize title tag length and keyword placement",
+          "impact": "High - Direct ranking factor"
+        },
+        {
+          "priority": "medium",
+          "category": "Structure",
+          "issue": "Missing H1",
+          "action": "Add a single, keyword-rich H1 tag",
+          "impact": "Medium - Helps search engines understand content"
+        },
+        {
+          "priority": "medium",
+          "category": "Technical",
+          "issue": "Meta description",
+          "action": "Write compelling meta description (120-160 characters)",
+          "impact": "Medium - Affects click-through rates"
+        }
+      ],
+      "criticalIssues": [
+        "Thin content - insufficient word count for ranking"
+      ],
+      "opportunities": [
+        "Expand content for better topical authority"
+      ]
+    },
+    "contentDepth": {
+      "wordCount": 291,
+      "paragraphCount": 13,
+      "adequateDepth": false,
+      "contentRatio": 22.384615384615383,
+      "depthScore": 20,
+      "issues": [
+        "Thin content: only 291 words"
+      ],
+      "recommendations": [
+        "Add more comprehensive content (target: 300+ words)",
+        "Include detailed explanations, examples, and supporting information",
+        "Break content into logical sections with subheadings"
+      ]
+    },
+    "technicalSEO": {
+      "score": 56,
+      "factors": {
+        "titleOptimization": {
+          "present": true,
+          "length": 28,
+          "optimal": false,
+          "issues": [
+            "Title too short"
+          ],
+          "recommendations": [
+            "Expand title with more descriptive keywords"
+          ]
+        },
+        "metaDescription": {
+          "present": false,
+          "length": 0,
+          "optimal": false,
+          "issues": [
+            "Missing meta description"
+          ],
+          "recommendations": [
+            "Add a compelling meta description"
+          ]
+        },
+        "headingStructure": {
+          "hasH1": false,
+          "h1Count": 0,
+          "hasHierarchy": true,
+          "issues": [
+            "Missing H1 tag"
+          ],
+          "recommendations": [
+            "Add a single, descriptive H1 tag"
+          ],
+          "structure": {
+            "h1": {
+              "count": 0,
+              "texts": []
+            },
+            "h2": {
+              "count": 8,
+              "texts": [
+                "Mūsų tikslas – sklandus\nbendradarbiavimas ir\naukščiausios kokybės\nmokymai, kurie kuria realią\nvertę Jūsų komandai.",
+                "135",
+                "2009",
+                "61",
+                "34"
+              ]
+            },
+            "h3": {
+              "count": 9,
+              "texts": [
+                "Vadovavimas ir lyderystė:",
+                "Pardavimų, derybų ir klientų aptarnavimas:",
+                "Asmeninis efektyvumas:",
+                "Organizacijų vystymas:",
+                "Renginiai:"
+              ]
+            },
+            "h4": {
+              "count": 0,
+              "texts": []
+            },
+            "h5": {
+              "count": 4,
+              "texts": [
+                "Mokymų dienų",
+                "Dalyvių",
+                "Konsultacijų",
+                "Vebinarų"
+              ]
+            },
+            "h6": {
+              "count": 0,
+              "texts": []
+            }
+          }
+        },
+        "urlStructure": {
+          "optimal": true,
+          "score": 80
+        },
+        "metaTags": {
+          "optimal": false,
+          "score": 70
+        },
+        "structuredData": {
+          "present": true,
+          "score": 90
+        },
+        "internalLinking": {
+          "score": 60,
+          "linkCount": 53
+        }
+      },
+      "issues": []
+    },
+    "recommendations": [
+      {
+        "priority": "high",
+        "category": "Content",
+        "issue": "Thin content",
+        "action": "Expand content to at least 300 words with valuable, detailed information",
+        "impact": "High - Essential for ranking"
+      },
+      {
+        "priority": "high",
+        "category": "Technical",
+        "issue": "Title optimization",
+        "action": "Optimize title tag length and keyword placement",
+        "impact": "High - Direct ranking factor"
+      },
+      {
+        "priority": "medium",
+        "category": "Structure",
+        "issue": "Missing H1",
+        "action": "Add a single, keyword-rich H1 tag",
+        "impact": "Medium - Helps search engines understand content"
+      },
+      {
+        "priority": "medium",
+        "category": "Technical",
+        "issue": "Meta description",
+        "action": "Write compelling meta description (120-160 characters)",
+        "impact": "Medium - Affects click-through rates"
+      }
+    ],
+    "criticalIssues": [
+      "Thin content - insufficient word count for ranking"
+    ]
+  },
+  "accessibility": {
+    "score": 82,
+    "issues": {
+      "errors": 23,
+      "warnings": 0,
+      "notices": 0,
+      "total": 23
+    },
+    "details": [
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+        "selector": "html > body > header > div > div > span",
+        "context": "<span class=\"header__button-title\">MENIU</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > p",
+        "context": "<p>Mes jungiame laisvai samdomus u...</p>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h2 element appears to be the primary document heading, so should be an h1 element.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > h2",
+        "context": "<h2>Mūsų tikslas – sklandus<br>\nben...</h2>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h2 element should be an h1 to be properly nested.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > h2",
+        "context": "<h2>Mūsų tikslas – sklandus<br>\nben...</h2>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #757770.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > h2",
+        "context": "<h2>Mūsų tikslas – sklandus<br>\nben...</h2>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(2) > a",
+        "context": "<a class=\"white-button\" href=\"https://tipsnotricks.lt/kontaktai/\" target=\"_self\">\n\t\t\t\t                SUSISIEK  ...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > ul > li:nth-child(1) > a",
+        "context": "<a class=\"hero-links__link\" href=\"https://tipsnotricks.lt/mokymai/\" target=\"_self\">\n\t\t                            ...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > ul > li:nth-child(2) > a",
+        "context": "<a class=\"hero-links__link\" href=\"https://tipsnotricks.lt/organizacijoms/\" target=\"_self\">\n\t\t                            ...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+        "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > ul > li:nth-child(3) > a",
+        "context": "<a class=\"hero-links__link\" href=\"https://tipsnotricks.lt/konsultantams/\" target=\"_self\">\n\t\t                            ...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+        "selector": "#numbers > div > div > div:nth-child(1) > h5",
+        "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tMokymų dienų\t\t\t\t\t\t</h5>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+        "selector": "#numbers > div > div > div:nth-child(2) > h5",
+        "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tDalyvių\t\t\t\t\t\t</h5>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+        "selector": "#numbers > div > div > div:nth-child(3) > h5",
+        "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tKonsultacijų\t\t\t\t\t\t</h5>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+        "selector": "#numbers > div > div > div:nth-child(4) > h5",
+        "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tVebinarų\t\t\t\t\t\t</h5>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "html > body > footer > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(2) > a",
+        "context": "<a href=\"https://tipsnotricks.lt\">\n\t\t\t\t        <img width=\"431\" h...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_8.H59.1",
+        "message": "Link elements can only be located in the head section of the document.",
+        "selector": "#wc-stripe-blocks-checkout-style-css",
+        "context": "<link rel=\"stylesheet\" id=\"wc-stripe-blocks-checkout-style-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce-gateway-stripe/build/upe-blocks.css?ver=a7aab132721a0ef865695d5cfdc746fb\" type=\"text/css\" media=\"all\">"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_8.H59.1",
+        "message": "Link elements can only be located in the head section of the document.",
+        "selector": "#wc-blocks-style-css",
+        "context": "<link rel=\"stylesheet\" id=\"wc-blocks-style-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks.css?ver=wc-9.9.5\" type=\"text/css\" media=\"all\">"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "html > body > div:nth-child(30) > a:nth-child(1)",
+        "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/1.jpg\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "html > body > div:nth-child(30) > a:nth-child(2)",
+        "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/2.png\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "html > body > div:nth-child(30) > a:nth-child(3)",
+        "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/3.jpg\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "html > body > div:nth-child(30) > a:nth-child(4)",
+        "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/4.jpg\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+      }
+    ]
+  },
+  "security": {
+    "score": 75,
+    "headers": {
+      "strict-transport-security": false,
+      "content-security-policy": false,
+      "x-frame-options": false,
+      "x-content-type-options": false,
+      "x-xss-protection": false,
+      "referrer-policy": false
+    },
+    "vulnerabilities": []
+  },
+  "technologies": [
+    "WordPress",
+    "Apache",
+    "WooCommerce",
+    "Google Analytics",
+    "Facebook Pixel",
+    "PHP",
+    "jQuery",
+    "Bootstrap",
+    "Bulma",
+    "Google Tag Manager"
+  ],
+  "basic": {
+    "title": "Pagrindinis - Tips No Tricks",
+    "description": "",
+    "keywords": "",
+    "lang": "lt-LT",
+    "charset": "UTF-8",
+    "ogTitle": "Pagrindinis - Tips No Tricks",
+    "ogDescription": "",
+    "ogImage": "",
+    "ogUrl": "https://tipsnotricks.lt/",
+    "twitterCard": "summary_large_image",
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "hasStructuredData": true,
+    "structuredDataCount": 1,
+    "headingStructure": {
+      "h1": {
+        "count": 0,
+        "texts": []
+      },
+      "h2": {
+        "count": 8,
+        "texts": [
+          "Mūsų tikslas – sklandus\nbendradarbiavimas ir\naukščiausios kokybės\nmokymai, kurie kuria realią\nvertę Jūsų komandai.",
+          "135",
+          "2009",
+          "61",
+          "34"
+        ]
+      },
+      "h3": {
+        "count": 9,
+        "texts": [
+          "Vadovavimas ir lyderystė:",
+          "Pardavimų, derybų ir klientų aptarnavimas:",
+          "Asmeninis efektyvumas:",
+          "Organizacijų vystymas:",
+          "Renginiai:"
+        ]
+      },
+      "h4": {
+        "count": 0,
+        "texts": []
+      },
+      "h5": {
+        "count": 4,
+        "texts": [
+          "Mokymų dienų",
+          "Dalyvių",
+          "Konsultacijų",
+          "Vebinarų"
+        ]
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "imageCount": 39,
+    "linkCount": 53,
+    "formCount": 0,
+    "wordCount": 291,
+    "paragraphCount": 13,
+    "externalScripts": [
+      "https://connect.facebook.net/signals/config/3078154479014772?v=2.9.226&r=stable&domain=tipsnotricks.lt&hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138",
+      "https://connect.facebook.net/en_US/fbevents.js",
+      "https://www.googletagmanager.com/gtag/js?id=G-YYY0FC37MX",
+      "https://tools.luckyorange.com/core/lo.js?site-id=129472cb",
+      "https://www.googletagmanager.com/gtag/js?id=G-YYY0FC37MX"
+    ],
+    "externalStyles": [
+      "https://unpkg.com/webtour@1.1.0/dist/webtour.min.css"
+    ],
+    "domElements": 584,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "html": "<!DOCTYPE html><html lang=\"lt-LT\"><head>\n    <!-- Set up Meta -->\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta charset=\"UTF-8\">\n\n    <!-- Set the viewport width to device width for mobile -->\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes\">\n    <!-- Remove Microsoft Edge's & Safari phone-email styling -->\n    <meta name=\"format-detection\" content=\"telephone=no,email=no,url=no\">\n    <!-- Color mobile browser tab -->\n    <!--\t<meta name=\"theme-color\" content=\"#4285f4\" />-->\n\n    <!-- Add external fonts below (Typekit Only!) -->\n\n    <link rel=\"stylesheet\" href=\"https://unpkg.com/webtour@1.1.0/dist/webtour.min.css\">\n\n    <meta name=\"robots\" content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n\t<style>img:is([sizes=\"auto\" i], [sizes^=\"auto,\" i]) { contain-intrinsic-size: 3000px 1500px }</style>\n\t\n\t<!-- This site is optimized with the Yoast SEO plugin v25.5 - https://yoast.com/wordpress/plugins/seo/ -->\n\t<title>Pagrindinis - Tips No Tricks</title>\n\t<link rel=\"canonical\" href=\"https://tipsnotricks.lt/\">\n\t<meta property=\"og:locale\" content=\"lt_LT\">\n\t<meta property=\"og:type\" content=\"website\">\n\t<meta property=\"og:title\" content=\"Pagrindinis - Tips No Tricks\">\n\t<meta property=\"og:url\" content=\"https://tipsnotricks.lt/\">\n\t<meta property=\"og:site_name\" content=\"Tips No Tricks\">\n\t<meta property=\"article:modified_time\" content=\"2025-03-13T09:22:57+00:00\">\n\t<meta name=\"twitter:card\" content=\"summary_large_image\">\n\t<script src=\"https://connect.facebook.net/signals/config/3078154479014772?v=2.9.226&amp;r=stable&amp;domain=tipsnotricks.lt&amp;hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&amp;ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138\" async=\"\"></script><script async=\"\" src=\"https://connect.facebook.net/en_US/fbevents.js\"></script><script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https://tipsnotricks.lt/\",\"url\":\"https://tipsnotricks.lt/\",\"name\":\"Pagrindinis - Tips No Tricks\",\"isPartOf\":{\"@id\":\"https://tipsnotricks.lt/#website\"},\"about\":{\"@id\":\"https://tipsnotricks.lt/#organization\"},\"datePublished\":\"2025-02-19T14:21:27+00:00\",\"dateModified\":\"2025-03-13T09:22:57+00:00\",\"breadcrumb\":{\"@id\":\"https://tipsnotricks.lt/#breadcrumb\"},\"inLanguage\":\"lt-LT\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://tipsnotricks.lt/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://tipsnotricks.lt/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://tipsnotricks.lt/#website\",\"url\":\"https://tipsnotricks.lt/\",\"name\":\"Tips No Tricks\",\"description\":\"\",\"publisher\":{\"@id\":\"https://tipsnotricks.lt/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://tipsnotricks.lt/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"lt-LT\"},{\"@type\":\"Organization\",\"@id\":\"https://tipsnotricks.lt/#organization\",\"name\":\"Tips No Tricks\",\"url\":\"https://tipsnotricks.lt/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"lt-LT\",\"@id\":\"https://tipsnotricks.lt/#/schema/logo/image/\",\"url\":\"https://tipsnotricks.lt/wp-content/uploads/2025/02/cropped-Group-257.png\",\"contentUrl\":\"https://tipsnotricks.lt/wp-content/uploads/2025/02/cropped-Group-257.png\",\"width\":430,\"height\":81,\"caption\":\"Tips No Tricks\"},\"image\":{\"@id\":\"https://tipsnotricks.lt/#/schema/logo/image/\"}}]}</script>\n\t<!-- / Yoast SEO plugin. -->\n\n\n<link rel=\"dns-prefetch\" href=\"//www.googletagmanager.com\">\n<link rel=\"stylesheet\" id=\"acfwf-wc-cart-block-integration-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/assets/index-467dde24.css?ver=1751430610\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"acfwf-wc-checkout-block-integration-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/assets/index-2a7d8588.css?ver=1751430610\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"wp-block-library-css\" href=\"https://tipsnotricks.lt/wp-includes/css/dist/block-library/style.min.css?ver=6.8.2\" type=\"text/css\" media=\"all\">\n<style id=\"classic-theme-styles-inline-css\" type=\"text/css\">\n/*! This file is auto-generated */\n.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}\n</style>\n<link rel=\"stylesheet\" id=\"acfw-blocks-frontend-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/css/acfw-blocks-frontend.css?ver=4.6.7\" type=\"text/css\" media=\"all\">\n<style id=\"global-styles-inline-css\" type=\"text/css\">\n:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}\n:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}\n:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}\n:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}\n</style>\n<link rel=\"stylesheet\" id=\"contact-form-7-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"woocommerce-layout-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/woocommerce-layout.css?ver=9.9.5\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"woocommerce-smallscreen-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreen.css?ver=9.9.5\" type=\"text/css\" media=\"only screen and (max-width: 768px)\">\n<link rel=\"stylesheet\" id=\"woocommerce-general-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/woocommerce.css?ver=9.9.5\" type=\"text/css\" media=\"all\">\n<style id=\"woocommerce-inline-inline-css\" type=\"text/css\">\n.woocommerce form .form-row .required { visibility: visible; }\n</style>\n<link rel=\"stylesheet\" id=\"advance-ecommerce-tracking-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woo-ecommerce-tracking-for-google-and-facebook/public/css/advance-ecommerce-tracking-public.css?ver=3.8.1\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"brands-styles-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/brands.css?ver=9.9.5\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"bootstrap-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/bootstrap.min.css?ver=1.0.0\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"aos-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/aos.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"slick-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/slick.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"magnific-css-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/magnific-popup.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"owl-css-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/owl.carousel.min.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"owl-css-def-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/owl.theme.default.min.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"main-css-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/style.css?ver=1752584934\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"wqpmb-style-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/wc-quantity-plus-minus-button/assets/css/style.css?ver=1.0.0\" type=\"text/css\" media=\"all\">\n<script id=\"woocommerce-google-analytics-integration-gtag-js-after\">\n/* Google Analytics for WooCommerce (gtag.js) */\n\t\t\t\t\twindow.dataLayer = window.dataLayer || [];\n\t\t\t\t\tfunction gtag(){dataLayer.push(arguments);}\n\t\t\t\t\t// Set up default consent state.\n\t\t\t\t\tfor ( const mode of [{\"analytics_storage\":\"denied\",\"ad_storage\":\"denied\",\"ad_user_data\":\"denied\",\"ad_personalization\":\"denied\",\"region\":[\"AT\",\"BE\",\"BG\",\"HR\",\"CY\",\"CZ\",\"DK\",\"EE\",\"FI\",\"FR\",\"DE\",\"GR\",\"HU\",\"IS\",\"IE\",\"IT\",\"LV\",\"LI\",\"LT\",\"LU\",\"MT\",\"NL\",\"NO\",\"PL\",\"PT\",\"RO\",\"SK\",\"SI\",\"ES\",\"SE\",\"GB\",\"CH\"]}] || [] ) {\n\t\t\t\t\t\tgtag( \"consent\", \"default\", { \"wait_for_update\": 500, ...mode } );\n\t\t\t\t\t}\n\t\t\t\t\tgtag(\"js\", new Date());\n\t\t\t\t\tgtag(\"set\", \"developer_id.dOGY3NW\", true);\n\t\t\t\t\tgtag(\"config\", \"G-YYY0FC37MX\", {\"track_404\":true,\"allow_google_signals\":true,\"logged_in\":false,\"linker\":{\"domains\":[],\"allow_incoming\":false},\"custom_map\":{\"dimension1\":\"logged_in\"}});\n</script>\n<script src=\"https://tipsnotricks.lt/wp-includes/js/jquery/jquery.min.js?ver=3.7.1\" id=\"jquery-core-js\"></script>\n<script src=\"https://tipsnotricks.lt/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1\" id=\"jquery-migrate-js\"></script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.9.9.5\" id=\"jquery-blockui-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<script id=\"wc-add-to-cart-js-extra\">\nvar wc_add_to_cart_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"i18n_view_cart\":\"Krep\\u0161elis\",\"cart_url\":\"https:\\/\\/tipsnotricks.lt\\/krepselis\\/\",\"is_cart\":\"\",\"cart_redirect_after_add\":\"no\"};\n</script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=9.9.5\" id=\"wc-add-to-cart-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.9.9.5\" id=\"js-cookie-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<script id=\"woocommerce-js-extra\">\nvar woocommerce_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"i18n_password_show\":\"Rodyti slapta\\u017eod\\u012f\",\"i18n_password_hide\":\"Sl\\u0117pti slapta\\u017eod\\u012f\"};\n</script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=9.9.5\" id=\"woocommerce-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<link rel=\"https://api.w.org/\" href=\"https://tipsnotricks.lt/wp-json/\"><link rel=\"alternate\" title=\"JSON\" type=\"application/json\" href=\"https://tipsnotricks.lt/wp-json/wp/v2/pages/8\"><link rel=\"EditURI\" type=\"application/rsd+xml\" title=\"RSD\" href=\"https://tipsnotricks.lt/xmlrpc.php?rsd\">\n<meta name=\"generator\" content=\"WordPress 6.8.2\">\n<meta name=\"generator\" content=\"WooCommerce 9.9.5\">\n<link rel=\"shortlink\" href=\"https://tipsnotricks.lt/\">\n<link rel=\"alternate\" title=\"oEmbed (JSON)\" type=\"application/json+oembed\" href=\"https://tipsnotricks.lt/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftipsnotricks.lt%2F\">\n<link rel=\"alternate\" title=\"oEmbed (XML)\" type=\"text/xml+oembed\" href=\"https://tipsnotricks.lt/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftipsnotricks.lt%2F&amp;format=xml\">\n<meta name=\"wwp\" content=\"yes\">\t<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>\n\t<meta name=\"generator\" content=\"Elementor 3.30.0; features: e_font_icon_svg, additional_custom_breakpoints, e_element_cache; settings: css_print_method-external, google_font-enabled, font_display-swap\">\n\t\t\t<style>\n\t\t\t\t.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),\n\t\t\t\t.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {\n\t\t\t\t\tbackground-image: none !important;\n\t\t\t\t}\n\t\t\t\t@media screen and (max-height: 1024px) {\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {\n\t\t\t\t\t\tbackground-image: none !important;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t@media screen and (max-height: 640px) {\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {\n\t\t\t\t\t\tbackground-image: none !important;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t</style>\n\t\t\t<link rel=\"modulepreload\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/common/NoticesPlugin.4b31c3cc.js\"><link rel=\"modulepreload\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/common/NoticesPlugin.4b31c3cc.js\"><link rel=\"icon\" href=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-32x32.png\" sizes=\"32x32\">\n<link rel=\"icon\" href=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-192x192.png\" sizes=\"192x192\">\n<link rel=\"apple-touch-icon\" href=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-180x180.png\">\n<meta name=\"msapplication-TileImage\" content=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-270x270.png\">\n    <script src=\"/wp-content/themes/itbrolis/js/webtour.min.js\"></script>\n\n    <!-- Google tag (gtag.js) -->\n    <script async=\"\" src=\"https://www.googletagmanager.com/gtag/js?id=G-YYY0FC37MX\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-YYY0FC37MX');\n    </script>\n\n    <!-- Meta Pixel Code -->\n    <script>\n        !function(f,b,e,v,n,t,s)\n        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\n            n.callMethod.apply(n,arguments):n.queue.push(arguments)};\n            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\n            n.queue=[];t=b.createElement(e);t.async=!0;\n            t.src=v;s=b.getElementsByTagName(e)[0];\n            s.parentNode.insertBefore(t,s)}(window, document,'script',\n            'https://connect.facebook.net/en_US/fbevents.js');\n        fbq('init', '3078154479014772');\n        fbq('track', 'PageView');\n    </script>\n    <noscript><img height=\"1\" width=\"1\" style=\"display:none\"\n                   src=\"https://www.facebook.com/tr?id=3078154479014772&ev=PageView&noscript=1\"\n        /></noscript>\n    <!-- End Meta Pixel Code -->\n\n\n    <script async=\"\" defer=\"\" src=\"https://tools.luckyorange.com/core/lo.js?site-id=129472cb\"></script>\n<style>\n\t:root {\n\t\t--bg-color: #181815;\n\t\t--color: #fff;\n\t\t--color-hover: #7F815D;\n\t}\n</style></head>\n\n\n\n\n\n\n\n<body class=\"home wp-singular page-template page-template-templates page-template-template-home page-template-templatestemplate-home-php page page-id-8 wp-custom-logo wp-theme-itbrolis no-outline theme-itbrolis woocommerce-js elementor-default elementor-kit-367\" data-aos-easing=\"ease\" data-aos-duration=\"400\" data-aos-delay=\"0\">\n\n\n<!-- BEGIN of header -->\n<header class=\"header\">\n    <div class=\"header__container\">\n        <div class=\"header__button\">\n            <span class=\"header__button-title\">MENIU</span>\n            <div id=\"clickWrapper\" class=\"header__button-open\">\n                <span class=\"menu\"></span>\n            </div>\n        </div>\n    </div>\n</header>\n    <div class=\"mega-header\" id=\"menu\">\n        <div class=\"bg\"></div>\n        <div class=\"mega-header__container\">\n            <div class=\"mega-header__block\">\n                <nav class=\"header-menu-nav\" id=\"mainMenu\">\n\t\t\t\t\t<ul id=\"menu-header-menu\" class=\"header-menu w-100\"><li id=\"menu-item-83\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-8 current_page_item menu-item-83\"><a href=\"https://tipsnotricks.lt/\" aria-current=\"page\">Pagrindinis</a></li>\n<li id=\"menu-item-88\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-88\"><a href=\"https://tipsnotricks.lt/mokymai/\">MokymaI</a></li>\n<li id=\"menu-item-91\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-91\"><a href=\"https://tipsnotricks.lt/konsultantams/\">Konsultantams</a></li>\n<li id=\"menu-item-132\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-132\"><a href=\"https://tipsnotricks.lt/organizacijoms/\">Organizacijoms</a></li>\n<li id=\"menu-item-84\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-84\"><a href=\"https://tipsnotricks.lt/apie-mus/\">Apie mus</a></li>\n<li id=\"menu-item-85\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-85\"><a href=\"https://tipsnotricks.lt/shop/\">E-Shop</a></li>\n<li id=\"menu-item-87\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-87\"><a href=\"https://tipsnotricks.lt/kontaktai/\">Kontaktai</a></li>\n<li id=\"menu-item-86\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-86\"><a href=\"https://tipsnotricks.lt/es-parama/\">ES parama</a></li>\n</ul>                </nav>\n\t\t\t\t\t\t\t\t\t\t\t\t                    <div class=\"header-links\">\n\t\t\t\t\t\t                            <a class=\"contact-link\" href=\"mailto:hello@tipsnotricks.lt\" target=\"_self\" title=\"hello@tipsnotricks.lt\">\n                                <img class=\"email-icon\" src=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/images/mail.png\" width=\"24\" height=\"23\" alt=\"email\">\n\t\t\t\t\t\t\t\thello@tipsnotricks.lt                            </a>\n\t\t\t\t\t\t\t                                                <a class=\"contact-link\" href=\"tel:+37069534470\" target=\"_self\" title=\"+370 695 34 470\">\n                                <img class=\"phone-icon\" src=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/images/phone.png\" width=\"21\" height=\"20\" alt=\"phone\">\n\t\t\t                    +370 695 34 470                            </a>\n\t                                        </div>\n\t\t\t\t            </div>\n        </div>\n    </div>\n<!-- END of header -->\n\n\n\t<!-- BEGIN of main content -->\n\t<main class=\"main-content\">\n\t\t\t\t\t\t\t\t\t\n\n<section id=\"hero-section\" class=\"hero-section web-section hero-section-8\">\n    <div class=\"hero-section__container\">\n        <div class=\"hero-section__row\">\n            <div class=\"hero-section__block hero-section__block-slider\">\n\t            <div class=\"logo\">\n    <a class=\"link-no-hover\" href=\"https://tipsnotricks.lt\" title=\"Tips No Tricks\">\n        <div class=\"puzzle-animations\">\n            <div class=\"puzzle__container\">\n                <svg class=\"puzzle-icon puzzle-icon-1 puzzle-icon-hidden\" width=\"71\" height=\"88\" viewBox=\"0 0 71 88\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M2.18426 87.9161C1.56125 87.9161 0.938232 87.2936 0.938232 86.6712V59.2819C0.938232 58.8669 1.1459 58.6594 1.35358 58.4519C3.43029 56.5845 5.50701 57.8294 7.37606 58.8669C9.03743 59.9044 10.9065 60.9419 13.6062 60.9419C17.7596 60.9419 18.798 55.3395 18.798 53.2646C18.798 51.1896 17.7596 45.5873 12.7755 45.5873C10.9065 45.5873 9.03743 46.6247 7.58373 47.4547C5.50701 48.6997 3.22262 49.9447 1.35358 47.8697C1.1459 47.6622 0.938232 47.2472 0.938232 47.0397V20.0655C0.938232 19.443 1.56125 18.8205 2.18426 18.8205C2.80728 18.8205 3.43029 19.443 3.43029 20.0655V46.4173C3.84564 46.6247 4.67632 46.2098 6.3377 45.3798C7.99907 44.3423 10.2835 43.0973 12.7755 43.0973C18.798 43.0973 21.0824 49.1147 21.0824 53.0571C21.0824 57.207 19.0057 63.2243 13.6062 63.2243C10.2835 63.2243 7.99907 61.7718 6.13003 60.7344C4.46865 59.6969 3.84564 59.4894 3.43029 59.6969V86.6712C3.43029 87.5011 2.80728 87.9161 2.18426 87.9161Z\" fill=\"black\"></path>\n                    <path class=\"puzzle-icon-hide\" d=\"M68.8471 87.9161C68.2241 87.9161 67.6011 87.2936 67.6011 86.6711V59.9044C67.1857 59.6969 66.5627 59.9044 64.9013 60.9418C63.24 61.9793 60.7479 63.4318 57.4252 63.4318C51.818 63.4318 49.949 57.4144 49.949 53.2645C49.949 49.3221 52.2334 43.3048 58.2558 43.3048C60.7479 43.3048 63.0323 44.5498 64.6937 45.5872C66.355 46.6247 67.1857 46.8322 67.6011 46.6247V20.2729C67.6011 19.6504 68.2241 19.028 68.8471 19.028C69.4701 19.028 70.0931 19.6504 70.0931 20.2729V47.2472C70.0931 47.4547 69.8855 47.8697 69.6778 48.0772C67.8088 49.9446 65.5244 48.6997 63.4476 47.6622C61.9939 46.8322 60.1249 45.7947 58.2558 45.7947C53.4794 45.7947 52.2334 51.1896 52.2334 53.472C52.2334 55.547 53.0641 61.1493 57.4252 61.1493C60.1249 61.1493 61.9939 60.1119 63.6553 59.0744C65.5244 58.0369 67.6011 56.7919 69.6778 58.6594C69.8855 58.8669 70.0931 59.2819 70.0931 59.4894V86.8786C70.0931 87.5011 69.4701 87.9161 68.8471 87.9161Z\" fill=\"black\"></path>\n                    <path d=\"M43.0957 23.8003C42.888 23.8003 42.4727 23.5928 42.265 23.3853C40.1883 21.3104 41.019 19.443 42.0573 17.5755C42.6804 16.538 43.0957 15.0856 43.511 13.6331C44.1341 10.5207 43.7187 7.82327 42.265 6.16331C40.1883 3.88087 36.8655 3.67338 36.0349 3.67338C33.9581 3.67338 31.4661 4.29586 29.8047 6.37081C28.351 8.03076 27.9357 10.3132 28.351 13.0106C28.5587 14.6706 29.1817 15.9156 29.8047 17.1605C30.8431 19.2355 31.6737 21.3104 29.8047 23.5928C29.597 23.8003 29.1817 24.0078 28.7663 24.0078L2.18435 21.1029C1.56134 21.1029 1.146 20.4804 1.146 19.8579C1.146 19.2355 1.76901 18.613 2.39203 18.8205L28.1433 21.3104C28.5587 20.6879 28.351 19.8579 27.5203 17.9905C26.8973 16.7455 26.2743 15.0856 25.8589 13.2181C25.2359 9.69072 26.0666 6.7858 27.9357 4.50336C30.22 2.01342 33.5428 0.975952 36.0349 0.975952C37.2809 0.975952 41.4343 1.18345 44.1341 4.29586C46.0031 6.5783 46.6261 9.69072 46.0031 13.6331C45.5878 15.5006 44.9647 17.1605 44.3417 18.198C43.511 19.8579 43.3034 20.2729 43.7187 20.8954L68.6393 18.8205C69.2623 18.8205 69.8854 19.2355 69.8854 19.8579C69.8854 20.4804 69.47 21.1029 68.847 21.1029L43.0957 23.8003Z\" fill=\"black\"></path>\n                </svg>\n                <svg class=\"puzzle-icon puzzle-icon-2 puzzle-icon-hidden\" width=\"70\" height=\"106\" viewBox=\"0 0 70 106\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M67.925 87.7293C67.302 87.7293 66.679 87.1068 66.679 86.4843V59.5101C66.2636 59.3026 65.6406 59.5101 63.9792 60.5475C62.3179 61.585 59.8258 63.0375 56.503 63.0375C50.8959 63.0375 49.0269 57.0201 49.0269 52.8702C49.0269 48.9279 51.3112 42.9105 57.3337 42.9105C59.8258 42.9105 62.1102 44.1555 63.7716 45.193C65.4329 46.2304 66.2636 46.4379 66.679 46.2304V19.8786C66.679 19.2561 67.302 18.6337 67.925 18.6337C68.548 18.6337 69.171 19.2561 69.171 19.8786V46.8529C69.171 47.0604 68.9633 47.4754 68.7557 47.6829C66.8866 49.5503 64.6022 48.3054 62.5255 47.2679C61.0718 46.4379 59.2028 45.4004 57.3337 45.4004C52.5573 45.4004 51.3112 50.7953 51.3112 53.0777C51.3112 55.1527 52.1419 60.755 56.503 60.755C59.2028 60.755 61.0718 59.7176 62.7332 58.6801C64.6022 57.6426 66.679 56.3976 68.7557 58.2651C68.9633 58.4726 69.171 58.8876 69.171 59.0951V86.6918C69.171 87.1068 68.7557 87.7293 67.925 87.7293Z\" fill=\"black\"></path>\n                    <path d=\"M34.9052 105.366C32.4132 105.366 28.8827 104.536 26.806 101.839C24.937 99.764 24.3139 96.8591 24.7293 93.1242C24.937 91.0492 25.7677 89.5968 26.3907 88.3518C27.2214 86.4843 27.429 85.8619 27.0137 85.0319L1.26238 87.3143C0.639367 87.3143 0.0163574 86.8993 0.0163574 86.2769C0.0163574 85.6544 0.431701 85.0319 1.05472 85.0319L27.6367 82.7495C28.052 82.7495 28.4674 82.9569 28.6751 83.1644C30.7518 85.4469 29.7134 87.5218 28.6751 89.5968C28.052 90.8417 27.429 92.0867 27.2214 93.7467C26.806 96.6516 27.2214 98.934 28.6751 100.386C30.3364 102.254 33.0362 103.084 34.9052 103.084C35.9436 103.084 39.2663 102.876 41.1354 100.594C42.5891 98.934 43.0044 96.4441 42.3814 93.1242C42.1737 91.4642 41.5507 90.2192 40.9277 89.1818C40.097 87.3143 39.0586 85.4469 41.1354 83.3719C41.343 83.1644 41.7584 82.9569 42.1737 82.9569L67.925 85.4469C68.548 85.4469 68.9634 86.0694 68.9634 86.6918C68.9634 87.3143 68.3404 87.7293 67.7173 87.7293L42.5891 85.2394C42.1737 85.8619 42.3814 86.2769 43.2121 87.9368C43.8351 89.1818 44.4581 90.6342 44.8734 92.5017C45.4965 96.4441 44.8735 99.5565 43.0044 101.839C40.3047 105.159 36.1512 105.366 34.9052 105.366Z\" fill=\"black\"></path>\n                    <path class=\"puzzle-icon-hide\" d=\"M42.1737 23.406C41.966 23.406 41.5506 23.1985 41.343 22.991C39.2663 20.9161 40.0969 19.0486 41.1353 17.1812C41.7583 16.1437 42.1737 14.6912 42.589 13.2388C43.212 10.1264 42.7967 7.42894 41.343 5.76899C39.2663 3.48655 35.9435 3.27906 35.1128 3.27906C33.0361 3.27906 30.544 3.90154 28.8827 5.97648C27.429 7.63644 27.0136 9.91887 27.429 12.6163C27.6366 14.2763 28.2597 15.5212 28.8827 16.7662C29.921 18.8411 30.7517 20.9161 28.8827 23.1985C28.675 23.406 28.2597 23.6135 27.8443 23.6135L1.47 21.1236C0.846984 21.1236 0.431641 20.5011 0.431641 19.8786C0.431641 19.2561 1.05466 18.6336 1.67767 18.8411L27.429 21.1236C27.8443 20.5011 27.6366 19.6711 26.806 17.8037C26.1829 16.5587 25.5599 14.8987 25.1446 13.0313C24.5216 9.50389 25.3522 6.59897 27.2213 4.31653C29.5057 1.8266 32.8284 0.789124 35.3205 0.789124C36.5665 0.789124 40.72 0.996622 43.4197 4.10904C45.2887 6.39148 45.9118 9.50389 45.2887 13.4463C44.8734 15.3137 44.2504 16.9737 43.6274 18.0112C42.7967 19.6711 42.589 20.0861 43.0043 20.7086L68.1326 18.2187C68.7556 18.2187 69.3787 18.6336 69.3787 19.2561C69.3787 19.8786 68.9633 20.5011 68.3403 20.5011L42.1737 23.406C42.3813 23.406 42.3813 23.406 42.1737 23.406Z\" fill=\"black\"></path>\n                </svg>\n                <svg class=\"puzzle-icon puzzle-icon-3\" width=\"105\" height=\"70\" viewBox=\"0 0 105 70\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M52.8271 20.7606C48.6737 20.7606 42.6512 18.6857 42.6512 13.2908C42.6512 9.97091 44.1049 7.68848 45.1432 5.82103C46.1816 4.16107 46.3893 3.53859 46.1816 3.1236H19.1843C18.5612 3.1236 17.9382 2.50111 17.9382 1.87863C17.9382 1.25614 18.5612 0.633667 19.1843 0.633667H46.8046C47.22 0.633667 47.4276 0.84116 47.6353 1.04865C49.5043 3.1236 48.2583 5.19854 47.22 7.06599C46.1816 8.72594 45.1432 10.5934 45.1432 13.2908C45.1432 17.4407 50.7504 18.4782 52.8271 18.4782C54.9038 18.4782 60.5109 17.4407 60.5109 12.4608C60.5109 10.5934 59.4726 8.72595 58.6419 7.27349C57.3959 5.19854 56.1498 2.9161 58.2266 1.04865C58.4342 0.84116 58.8496 0.633667 59.0572 0.633667H86.0546C86.6776 0.633667 87.3006 1.25614 87.3006 1.87863C87.3006 2.50111 86.6776 3.1236 86.0546 3.1236H59.4726C59.2649 3.53859 59.6803 4.36856 60.5109 6.02852C61.5493 7.68847 62.7953 9.97091 62.7953 12.4608C62.7953 18.4782 56.7729 20.7606 52.8271 20.7606Z\" fill=\"black\"></path>\n                    <path d=\"M85.8469 69.5218H58.8496C58.6419 69.5218 58.2266 69.3143 58.0189 69.1068C56.1498 67.2393 57.3959 64.9569 58.4342 62.882C59.2649 61.4295 60.3033 59.5621 60.3033 57.6946C60.3033 52.9222 54.9038 51.6773 52.6194 51.6773C50.5427 51.6773 44.9356 52.5072 44.9356 56.8646C44.9356 59.5621 45.9739 61.4295 47.0123 63.0895C48.0506 64.9569 49.2967 67.0319 47.4276 69.1068C47.2199 69.3143 46.8046 69.5218 46.5969 69.5218H19.1843C18.5612 69.5218 17.9382 68.8993 17.9382 68.2768C17.9382 67.6543 18.5612 67.0319 19.1843 67.0319H46.1816C46.3893 66.6169 46.1816 65.9944 45.1432 64.3344C44.1049 62.6745 42.6512 60.1845 42.6512 56.8646C42.6512 51.2623 48.6737 49.3948 52.8271 49.3948C56.7729 49.3948 62.7953 51.6773 62.7953 57.6946C62.7953 60.1845 61.5493 62.467 60.5109 64.1269C59.4726 65.7869 59.2649 66.6169 59.4726 67.0319H85.8469C86.4699 67.0319 87.0929 67.6543 87.0929 68.2768C87.0929 68.8993 86.4699 69.5218 85.8469 69.5218Z\" fill=\"black\"></path>\n                    <path d=\"M19.1844 69.5218C18.3537 69.5218 17.9383 68.8993 17.9383 68.2768L20.4304 43.17C19.8074 42.755 19.1844 42.9625 17.7307 43.7925C16.4846 44.415 15.0309 45.0375 13.1619 45.4525C9.21611 46.0749 6.10103 45.4525 3.81664 43.585C0.701568 40.8876 0.493896 36.7377 0.493896 35.4927C0.493896 33.0028 1.32458 29.4754 4.02432 27.4004C6.10103 25.533 9.00844 24.9105 12.7465 25.3255C14.8232 25.533 16.2769 26.363 17.523 26.9855C19.392 27.8154 20.015 28.0229 20.8457 27.6079L17.9383 1.87863C17.9383 1.25614 18.3537 0.633667 18.9767 0.633667C19.5997 0.633667 20.2227 1.04866 20.2227 1.67114L22.7148 28.0229C22.7148 28.4379 22.7148 28.8529 22.2994 29.0604C20.015 31.1353 17.9383 30.0979 15.8616 29.0604C14.6156 28.4379 13.3695 27.8154 11.7082 27.6079C8.80077 27.193 6.51638 27.6079 5.06268 29.0604C3.19363 30.7204 2.36294 33.4178 2.36294 35.2852C2.36294 36.3227 2.57061 39.6426 4.855 41.5101C6.51638 42.9625 9.00844 43.3775 12.3312 42.755C13.9926 42.5475 15.2386 41.9251 16.277 41.3026C18.146 40.4726 20.015 39.4351 22.0918 41.5101C22.2994 41.7176 22.5071 42.1325 22.5071 42.5475L20.015 68.2768C20.4304 69.1068 19.8074 69.5218 19.1844 69.5218Z\" fill=\"black\"></path>\n                    <path d=\"M86.0547 69.5218C85.4316 69.5218 85.0163 69.1068 84.8086 68.4844L82.3166 42.7551C82.3166 42.3401 82.3166 42.1326 82.7319 41.7176C84.8086 39.6426 86.6777 40.4726 88.5467 41.5101C89.5851 42.1326 91.0388 42.5476 92.4925 42.9625C95.8152 43.585 98.3073 43.17 99.9687 41.7176C102.253 39.6426 102.461 36.3227 102.461 35.4927C102.461 33.4178 101.838 30.9279 99.761 29.2679C98.0996 27.8155 95.8152 27.4005 93.1155 27.8154C91.4541 28.0229 90.2081 28.6454 88.9621 29.2679C86.8853 30.3054 84.8086 31.1354 82.5242 29.2679C82.3166 29.0604 82.1089 28.6454 82.1089 28.2304L84.601 1.87865C84.601 1.25617 85.224 0.633682 85.847 0.841177C86.47 0.841177 86.8853 1.46366 86.8853 2.08615L84.3933 27.8154C85.0163 28.2304 85.847 28.023 87.716 27.193C88.9621 26.5705 90.6234 25.948 92.4925 25.533C96.0229 24.9105 98.9303 25.7405 101.215 27.608C103.707 29.8904 104.745 33.2103 104.745 35.7002C104.745 36.9452 104.537 41.0951 101.422 43.7925C99.138 45.66 96.0229 46.2825 92.0771 45.66C90.2081 45.245 88.5467 44.6225 87.5084 44C85.847 43.17 85.4316 42.9625 84.8086 43.3775L87.3007 68.2769C87.3007 68.8993 86.8853 69.5218 86.0547 69.5218Z\" fill=\"black\"></path>\n                </svg>\n                <svg class=\"puzzle-icon puzzle-icon-4 puzzle-icon-4-animation\" width=\"101\" height=\"89\" viewBox=\"0 0 101 89\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M30.8137 1.82686L31.2114 0.773003L30.1567 0.374969L29.759 1.42882L30.8137 1.82686ZM21.5675 27.1687L22.5631 27.6394L22.5841 27.584L22.605 27.5285L21.5675 27.1687ZM7.16128 64.5035L6.10653 64.1055L5.74023 65.0761L6.68032 65.5259L7.16128 64.5035ZM30.972 76.0236L30.5015 77.0183L30.557 77.0393L30.6125 77.0602L30.972 76.0236ZM45.5311 81.1376L44.8768 82.0313L45.0501 82.1601L45.2549 82.2057L45.5311 81.1376ZM70.6978 87.7201L70.4216 88.7881C70.7096 88.8651 71.0118 88.8207 71.262 88.6617C71.5123 88.5027 71.7002 88.2568 71.7771 87.969L70.6978 87.7201ZM76.8808 62.9331L75.8224 62.6288L75.8119 62.6565L75.8014 62.6842L76.8808 62.9331ZM81.6941 48.7499L80.7089 48.2514L80.5451 48.6014L80.6243 48.9798L81.6941 48.7499ZM93.2632 25.2352L94.2483 25.7337L94.7989 24.6108L93.6227 24.1986L93.2632 25.2352ZM67.5909 15.959L67.9504 14.9224L67.8671 14.891L67.7839 14.8596L67.5909 15.959ZM55.9336 11.3064L56.6885 10.4824L56.5256 10.3259L56.3313 10.2525L55.9336 11.3064ZM29.7867 1.4393L20.5405 26.7811L22.6327 27.539L31.879 2.19716L29.7867 1.4393ZM20.5719 26.6979C20.6243 26.5592 20.5892 26.7361 20.308 26.725C20.0928 26.7072 19.4507 26.5599 18.5607 25.3053L16.7633 26.623C17.8681 28.1488 19.0403 28.908 20.2311 28.9455C21.3559 28.9898 22.2633 28.35 22.5909 27.6499L20.5719 26.6979ZM18.5607 25.3053C17.6429 24.0401 16.5481 22.7399 15.2827 21.7237C14.0172 20.7076 12.5466 19.8991 10.8803 19.7772L10.6819 21.9835C11.758 22.0728 12.8542 22.6132 13.9012 23.4519C14.9482 24.2905 15.9184 25.417 16.7633 26.623L18.5607 25.3053ZM10.8803 19.7772C9.19667 19.6171 7.39066 19.9494 5.75347 21.0108C4.08852 22.0616 2.63061 23.8243 1.59132 26.4102L3.65214 27.2513C4.55537 25.0259 5.76257 23.6755 6.97567 22.8977C8.18878 22.1199 9.48425 21.8801 10.7096 21.994L10.8803 19.7772ZM1.56356 26.3998C-0.521841 31.5057 0.695353 36.1789 3.9661 38.0151L5.04588 36.0781C3.10701 34.9979 1.76922 31.7367 3.59662 27.2304L1.56356 26.3998ZM3.9661 38.0151C6.68535 39.5482 10.3765 39.262 13.0439 38.7478L12.6312 36.5644C10.0021 37.0613 7.01252 37.1687 5.04588 36.0781L3.9661 38.0151ZM13.0717 38.7583C14.197 38.5493 15.0615 38.527 15.5543 38.6496C15.7868 38.7057 15.7659 38.7612 15.7486 38.723C15.7036 38.6743 15.7868 38.7057 15.6995 39.0212L17.8649 39.585C18.0224 38.9157 18.0306 38.2218 17.6602 37.6068C17.2898 36.9917 16.7105 36.6781 16.19 36.545C15.1594 36.2511 13.8398 36.3868 12.6763 36.6131L13.0717 38.7583ZM15.6717 39.0108C15.5843 39.3263 15.1621 40.5293 14.4609 42.3874C13.7701 44.2178 12.8806 46.5751 11.9073 49.1543C9.94334 54.2744 7.64817 60.1883 6.10653 64.1055L8.17782 64.9188C9.71946 61.0017 12.0146 55.0877 13.9785 49.9676C14.9518 47.3884 15.8692 45.0416 16.5322 43.2008C17.202 41.4258 17.687 40.0564 17.799 39.5918L15.6717 39.0108ZM6.69078 65.4982L30.5015 77.0183L31.4807 75.0117L7.67 63.4916L6.69078 65.4982ZM30.6125 77.0602C31.4279 77.3363 32.48 77.3214 33.3213 76.6884C34.2009 76.0382 34.6195 74.9289 34.5699 73.5478L32.3512 73.6293C32.3912 74.5315 32.1269 74.812 32.0122 74.8637C31.8766 74.971 31.6404 75.0086 31.3247 74.9211L30.6125 77.0602ZM34.5595 73.5755C34.3834 69.1686 34.3629 67.0381 35.2033 64.9791L33.1425 64.138C32.065 66.7412 32.1401 69.3992 32.3303 73.6848L34.5595 73.5755ZM35.2033 64.9791C35.5869 64.0467 36.6521 62.4843 38.2893 61.423C39.8778 60.4066 42.0037 59.8149 44.6893 60.765L45.4187 58.664C42.001 57.4693 39.1562 58.2017 37.0567 59.5638C35.0058 60.8809 33.6726 62.8173 33.1425 64.138L35.2033 64.9791ZM44.6616 60.7545C47.6247 61.8093 49.1358 63.2667 49.8798 64.6563C50.6411 66.0842 50.7043 67.5971 50.5596 68.9049L52.7847 69.1426C52.9576 67.592 52.9058 65.5448 51.8642 63.5993C50.8054 61.6156 48.8087 59.8483 45.4187 58.664L44.6616 60.7545ZM50.5596 68.9049C50.242 71.7632 48.1716 74.3085 46.6623 75.7033L48.1662 77.348C49.8216 75.8183 52.3788 72.823 52.7847 69.1426L50.5596 68.9049ZM46.6623 75.7033C45.8833 76.4231 44.8886 77.3784 44.2966 78.359C44.0145 78.8545 43.746 79.4818 43.8038 80.169C43.8407 80.9116 44.2388 81.5371 44.8872 82.0035L46.1959 80.2163C46.0953 80.1466 46.0503 80.0979 46.0608 80.0702C46.0608 80.0702 46.0607 80.0702 46.0435 80.032C46.0366 79.9661 46.0717 79.7892 46.2528 79.4774C46.6254 78.8259 47.3872 78.0679 48.2044 77.3307L46.6623 75.7033ZM45.2271 82.1952L70.4111 88.8158L70.974 86.6521L45.79 80.0314L45.2271 82.1952ZM71.7667 87.9967L77.9496 63.2098L75.7737 62.6738L69.5907 87.4607L71.7667 87.9967ZM77.9392 63.2375L77.9496 63.2098C77.9774 63.2202 78.356 63.1413 79.2574 63.8617L80.6389 62.1336C79.5363 61.2739 78.4643 60.8377 77.4987 61.0436C76.4949 61.2668 75.9866 62.0254 75.7946 62.6183L77.9392 63.2375ZM79.2574 63.8617C79.8398 64.3349 80.4568 64.8846 81.1016 65.4448C81.7359 66.0326 82.398 66.631 83.0983 67.2121C84.4538 68.3256 86.0177 69.391 87.8019 69.6208L88.094 67.4182C87.0006 67.2907 85.8457 66.5697 84.5353 65.5049C83.9078 64.983 83.2735 64.3951 82.6392 63.8072C82.0048 63.2193 81.3428 62.621 80.6771 62.1163L79.2574 63.8617ZM87.8019 69.6208C89.2494 69.8185 91.5022 70.0667 93.6909 69.3085C95.9838 68.5263 98.0805 66.7513 99.2987 63.1873L97.196 62.4571C96.1803 65.4005 94.5636 66.6597 92.9656 67.1972C91.2911 67.7692 89.486 67.5949 88.0663 67.4077L87.8019 69.6208ZM99.2987 63.1873C100.485 59.7065 100.307 56.8192 99.2482 54.5823C98.1793 52.373 96.2445 50.9458 94.1555 50.3476L93.5371 52.4904C95.0778 52.9451 96.4925 53.9859 97.257 55.5734C98.0214 57.1608 98.243 59.4305 97.2133 62.4953L99.2987 63.1873ZM94.145 50.3753C90.4042 49.2805 88.651 49.2208 86.9879 49.2585L87.0707 51.4759C88.4526 51.4271 89.9906 51.4689 93.5371 52.4904L94.145 50.3753ZM86.9601 49.2481C86.5087 49.2678 85.9427 49.3394 85.4808 49.3868C84.9807 49.4516 84.4911 49.4886 84.0607 49.4529C83.6302 49.4172 83.3422 49.3402 83.1688 49.2114C83.0127 49.1208 82.8603 48.9365 82.7638 48.5199L80.5861 48.9971C80.7858 49.8962 81.2463 50.6086 81.8947 51.0751C82.5259 51.5033 83.2616 51.6543 83.9073 51.7078C84.553 51.7614 85.2128 51.6936 85.7406 51.6393C86.3345 51.5782 86.7408 51.5098 87.0602 51.5036L86.9601 49.2481ZM82.6792 49.2484L94.2483 25.7337L92.2398 24.7539L80.6707 48.2687L82.6792 49.2484ZM93.6227 24.1986L67.9504 14.9224L67.1932 17.0129L92.8655 26.289L93.6227 24.1986ZM67.7839 14.8596C67.4021 14.7789 66.8292 14.7845 66.2664 15.0156C65.6375 15.2535 65.081 15.8039 64.8503 16.6673L66.9985 17.1929C67.009 17.1651 67.0194 17.1374 67.0299 17.1097L67.0404 17.0819C67.0404 17.0819 67.0404 17.0819 67.0786 17.0647C67.1168 17.0474 67.155 17.0301 67.221 17.0234C67.287 17.0166 67.3147 17.0271 67.3425 17.0375L67.7839 14.8596ZM64.8608 16.6396C64.707 17.2152 64.803 17.8851 64.9131 18.4336C65.0023 19.0375 65.1816 19.7388 65.3436 20.4019C65.6639 21.8218 65.8941 23.1443 65.7258 24.0946L67.9263 24.4814C68.1893 23.0283 67.8348 21.2787 67.5213 19.9248C67.3525 19.1957 67.2078 18.5708 67.115 18.0606C67.0599 17.7863 67.0395 17.5885 67.0363 17.4289C67.0331 17.2693 67.0367 17.1756 67.0367 17.1756L64.8608 16.6396ZM65.7258 24.0946C65.4942 25.4646 65.3554 27.3448 64.1864 28.6779C63.1844 29.8206 61.1168 30.8462 56.1893 29.3669L55.5431 31.4992C60.8697 33.0974 64.0481 32.2375 65.8573 30.1322C67.4995 28.2173 67.737 25.4872 67.8985 24.471L65.7258 24.0946ZM56.1511 29.3841C53.7289 28.6602 52.2829 27.7026 51.4479 26.7222C50.6302 25.7799 50.3613 24.728 50.4118 23.6698C50.4887 21.4494 51.9789 19.097 53.127 17.8194L51.4666 16.3374C50.162 17.7777 48.2786 20.5837 48.1621 23.5813C48.1107 25.146 48.528 26.7292 49.7302 28.165C50.915 29.5626 52.7948 30.7155 55.4772 31.506L56.1511 29.3841ZM53.1547 17.8298C53.7426 17.1963 54.3478 16.6009 54.9321 16.061C55.4886 15.5106 56.0623 14.9985 56.5146 14.4722C56.946 14.0013 57.402 13.3813 57.5143 12.6633C57.6513 11.7962 57.3228 11.0703 56.678 10.5101L55.196 12.1686C55.241 12.2173 55.2861 12.266 55.3138 12.2765L55.3311 12.3147C55.3275 12.4083 55.216 12.6197 54.8333 13.0456C54.4889 13.4542 54.002 13.9041 53.4073 14.4718C52.823 15.0117 52.1691 15.652 51.5221 16.3583L53.1547 17.8298ZM56.3313 10.2525L31.2114 0.773003L30.4265 2.85298L55.5463 12.3325L56.3313 10.2525Z\" fill=\"black\"></path>\n                </svg>\n            </div>\n            <div class=\"logo-text\">\n                <img decoding=\"async\" class=\"puzzle-text\" src=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/images/logo-text.svg\" width=\"891\" height=\"52\" alt=\"logo text\">\n            </div>\n        </div>\n    </a>\n</div>\n                                    <div class=\"hero-section__gallery slick-initialized slick-slider\"><div class=\"slick-list draggable\"><div class=\"slick-track\" style=\"opacity: 1; width: 1950px;\"><div class=\"slick-slide slick-current slick-active\" data-slick-index=\"0\" aria-hidden=\"false\" style=\"width: 650px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;\"><div><div class=\"hero-section__image\" style=\"width: 100%; display: inline-block;\">\n\t\t\t\t\t            <img fetchpriority=\"high\" decoding=\"async\" width=\"352\" height=\"535\" src=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2924-2.png\" class=\"attachment-full size-full\" alt=\"\" srcset=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2924-2.png 352w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2924-2-197x300.png 197w\" sizes=\"(max-width: 352px) 100vw, 352px\">                            </div></div></div><div class=\"slick-slide\" data-slick-index=\"1\" aria-hidden=\"true\" style=\"width: 650px; position: relative; left: -650px; top: 0px; z-index: 998; opacity: 0;\" tabindex=\"-1\"><div><div class=\"hero-section__image\" style=\"width: 100%; display: inline-block;\">\n\t\t\t\t\t            <img decoding=\"async\" width=\"744\" height=\"750\" src=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145.png\" class=\"attachment-full size-full\" alt=\"\" srcset=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145.png 744w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-298x300.png 298w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-150x150.png 150w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-10x10.png 10w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-600x605.png 600w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-100x100.png 100w\" sizes=\"(max-width: 744px) 100vw, 744px\">                            </div></div></div><div class=\"slick-slide\" data-slick-index=\"2\" aria-hidden=\"true\" style=\"width: 650px; position: relative; left: -1300px; top: 0px; z-index: 998; opacity: 0;\" tabindex=\"-1\"><div><div class=\"hero-section__image\" style=\"width: 100%; display: inline-block;\">\n\t\t\t\t\t            <img loading=\"lazy\" decoding=\"async\" width=\"911\" height=\"750\" src=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/Group-339.png\" class=\"attachment-full size-full\" alt=\"\" srcset=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/Group-339.png 911w, htt",
+    "headers": {
+      "content-encoding": "gzip",
+      "content-length": "27146",
+      "content-type": "text/html; charset=UTF-8",
+      "date": "Wed, 27 Aug 2025 08:37:52 GMT",
+      "link": "<https://tipsnotricks.lt/wp-json/>; rel=\"https://api.w.org/\", <https://tipsnotricks.lt/wp-json/wp/v2/pages/8>; rel=\"alternate\"; title=\"JSON\"; type=\"application/json\", <https://tipsnotricks.lt/>; rel=shortlink",
+      "server": "Apache/2",
+      "vary": "Accept-Encoding,User-Agent"
+    },
+    "statusCode": 200,
+    "loadTime": 0,
+    "screenshot": null,
+    "finalUrl": "https://tipsnotricks.lt/"
+  },
+  "aiInsights": {
+    "summary": "The website data provided is insufficient for a comprehensive analysis. However, based on the limited data, the website seems to have a good accessibility score but lacks information on performance, SEO, and security. The title and technologies used are also not specified.",
+    "technicalInsights": {
+      "strengths": [
+        "Good accessibility score"
+      ],
+      "weaknesses": [
+        "Lack of data on performance, SEO, and security",
+        "Title and technologies used are not specified"
+      ],
+      "recommendations": [
+        "Provide more detailed data on website performance, SEO, and security",
+        "Specify the technologies used for the website",
+        "Include the website title"
+      ]
+    },
+    "businessInsights": {
+      "opportunities": [
+        "Potential to improve user experience and conversion rates with better website performance and SEO"
+      ],
+      "risks": [
+        "Potential security vulnerabilities due to lack of data on security",
+        "Potential loss of users due to lack of website title and poor performance or SEO"
+      ],
+      "recommendations": [
+        "Improve website performance and SEO",
+        "Ensure website security",
+        "Specify a relevant and engaging website title"
+      ]
+    },
+    "recommendations": [
+      "Provide more detailed data on website performance, SEO, and security",
+      "Specify the technologies used for the website",
+      "Include the website title",
+      "Improve website performance and SEO",
+      "Ensure website security",
+      "Specify a relevant and engaging website title"
+    ],
+    "priority": "high",
+    "confidence": 0.6,
+    "provider": "ai-generated"
+  },
+  "scores": {
+    "performance": 51,
+    "seo": 92,
+    "accessibility": 90,
+    "security": 0,
+    "bestPractices": 93,
+    "overall": 68
+  },
+  "raw": {
+    "url": "https://tipsnotricks.lt/",
+    "analyzedAt": "2025-08-27T08:38:17.937Z",
+    "analysisTime": 26040,
+    "basic": {
+      "title": "Pagrindinis - Tips No Tricks",
+      "description": "",
+      "keywords": "",
+      "lang": "lt-LT",
+      "charset": "UTF-8",
+      "ogTitle": "Pagrindinis - Tips No Tricks",
+      "ogDescription": "",
+      "ogImage": "",
+      "ogUrl": "https://tipsnotricks.lt/",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "",
+      "twitterDescription": "",
+      "hasStructuredData": true,
+      "structuredDataCount": 1,
+      "headingStructure": {
+        "h1": {
+          "count": 0,
+          "texts": []
+        },
+        "h2": {
+          "count": 8,
+          "texts": [
+            "Mūsų tikslas – sklandus\nbendradarbiavimas ir\naukščiausios kokybės\nmokymai, kurie kuria realią\nvertę Jūsų komandai.",
+            "135",
+            "2009",
+            "61",
+            "34"
+          ]
+        },
+        "h3": {
+          "count": 9,
+          "texts": [
+            "Vadovavimas ir lyderystė:",
+            "Pardavimų, derybų ir klientų aptarnavimas:",
+            "Asmeninis efektyvumas:",
+            "Organizacijų vystymas:",
+            "Renginiai:"
+          ]
+        },
+        "h4": {
+          "count": 0,
+          "texts": []
+        },
+        "h5": {
+          "count": 4,
+          "texts": [
+            "Mokymų dienų",
+            "Dalyvių",
+            "Konsultacijų",
+            "Vebinarų"
+          ]
+        },
+        "h6": {
+          "count": 0,
+          "texts": []
+        }
+      },
+      "imageCount": 39,
+      "linkCount": 53,
+      "formCount": 0,
+      "wordCount": 291,
+      "paragraphCount": 13,
+      "externalScripts": [
+        "https://connect.facebook.net/signals/config/3078154479014772?v=2.9.226&r=stable&domain=tipsnotricks.lt&hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138",
+        "https://connect.facebook.net/en_US/fbevents.js",
+        "https://www.googletagmanager.com/gtag/js?id=G-YYY0FC37MX",
+        "https://tools.luckyorange.com/core/lo.js?site-id=129472cb",
+        "https://www.googletagmanager.com/gtag/js?id=G-YYY0FC37MX"
+      ],
+      "externalStyles": [
+        "https://unpkg.com/webtour@1.1.0/dist/webtour.min.css"
+      ],
+      "domElements": 584,
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "html": "<!DOCTYPE html><html lang=\"lt-LT\"><head>\n    <!-- Set up Meta -->\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta charset=\"UTF-8\">\n\n    <!-- Set the viewport width to device width for mobile -->\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes\">\n    <!-- Remove Microsoft Edge's & Safari phone-email styling -->\n    <meta name=\"format-detection\" content=\"telephone=no,email=no,url=no\">\n    <!-- Color mobile browser tab -->\n    <!--\t<meta name=\"theme-color\" content=\"#4285f4\" />-->\n\n    <!-- Add external fonts below (Typekit Only!) -->\n\n    <link rel=\"stylesheet\" href=\"https://unpkg.com/webtour@1.1.0/dist/webtour.min.css\">\n\n    <meta name=\"robots\" content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n\t<style>img:is([sizes=\"auto\" i], [sizes^=\"auto,\" i]) { contain-intrinsic-size: 3000px 1500px }</style>\n\t\n\t<!-- This site is optimized with the Yoast SEO plugin v25.5 - https://yoast.com/wordpress/plugins/seo/ -->\n\t<title>Pagrindinis - Tips No Tricks</title>\n\t<link rel=\"canonical\" href=\"https://tipsnotricks.lt/\">\n\t<meta property=\"og:locale\" content=\"lt_LT\">\n\t<meta property=\"og:type\" content=\"website\">\n\t<meta property=\"og:title\" content=\"Pagrindinis - Tips No Tricks\">\n\t<meta property=\"og:url\" content=\"https://tipsnotricks.lt/\">\n\t<meta property=\"og:site_name\" content=\"Tips No Tricks\">\n\t<meta property=\"article:modified_time\" content=\"2025-03-13T09:22:57+00:00\">\n\t<meta name=\"twitter:card\" content=\"summary_large_image\">\n\t<script src=\"https://connect.facebook.net/signals/config/3078154479014772?v=2.9.226&amp;r=stable&amp;domain=tipsnotricks.lt&amp;hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&amp;ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138\" async=\"\"></script><script async=\"\" src=\"https://connect.facebook.net/en_US/fbevents.js\"></script><script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https://tipsnotricks.lt/\",\"url\":\"https://tipsnotricks.lt/\",\"name\":\"Pagrindinis - Tips No Tricks\",\"isPartOf\":{\"@id\":\"https://tipsnotricks.lt/#website\"},\"about\":{\"@id\":\"https://tipsnotricks.lt/#organization\"},\"datePublished\":\"2025-02-19T14:21:27+00:00\",\"dateModified\":\"2025-03-13T09:22:57+00:00\",\"breadcrumb\":{\"@id\":\"https://tipsnotricks.lt/#breadcrumb\"},\"inLanguage\":\"lt-LT\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://tipsnotricks.lt/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://tipsnotricks.lt/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://tipsnotricks.lt/#website\",\"url\":\"https://tipsnotricks.lt/\",\"name\":\"Tips No Tricks\",\"description\":\"\",\"publisher\":{\"@id\":\"https://tipsnotricks.lt/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://tipsnotricks.lt/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"lt-LT\"},{\"@type\":\"Organization\",\"@id\":\"https://tipsnotricks.lt/#organization\",\"name\":\"Tips No Tricks\",\"url\":\"https://tipsnotricks.lt/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"lt-LT\",\"@id\":\"https://tipsnotricks.lt/#/schema/logo/image/\",\"url\":\"https://tipsnotricks.lt/wp-content/uploads/2025/02/cropped-Group-257.png\",\"contentUrl\":\"https://tipsnotricks.lt/wp-content/uploads/2025/02/cropped-Group-257.png\",\"width\":430,\"height\":81,\"caption\":\"Tips No Tricks\"},\"image\":{\"@id\":\"https://tipsnotricks.lt/#/schema/logo/image/\"}}]}</script>\n\t<!-- / Yoast SEO plugin. -->\n\n\n<link rel=\"dns-prefetch\" href=\"//www.googletagmanager.com\">\n<link rel=\"stylesheet\" id=\"acfwf-wc-cart-block-integration-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/assets/index-467dde24.css?ver=1751430610\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"acfwf-wc-checkout-block-integration-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/assets/index-2a7d8588.css?ver=1751430610\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"wp-block-library-css\" href=\"https://tipsnotricks.lt/wp-includes/css/dist/block-library/style.min.css?ver=6.8.2\" type=\"text/css\" media=\"all\">\n<style id=\"classic-theme-styles-inline-css\" type=\"text/css\">\n/*! This file is auto-generated */\n.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}\n</style>\n<link rel=\"stylesheet\" id=\"acfw-blocks-frontend-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/css/acfw-blocks-frontend.css?ver=4.6.7\" type=\"text/css\" media=\"all\">\n<style id=\"global-styles-inline-css\" type=\"text/css\">\n:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}\n:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}\n:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}\n:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}\n</style>\n<link rel=\"stylesheet\" id=\"contact-form-7-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"woocommerce-layout-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/woocommerce-layout.css?ver=9.9.5\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"woocommerce-smallscreen-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreen.css?ver=9.9.5\" type=\"text/css\" media=\"only screen and (max-width: 768px)\">\n<link rel=\"stylesheet\" id=\"woocommerce-general-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/woocommerce.css?ver=9.9.5\" type=\"text/css\" media=\"all\">\n<style id=\"woocommerce-inline-inline-css\" type=\"text/css\">\n.woocommerce form .form-row .required { visibility: visible; }\n</style>\n<link rel=\"stylesheet\" id=\"advance-ecommerce-tracking-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woo-ecommerce-tracking-for-google-and-facebook/public/css/advance-ecommerce-tracking-public.css?ver=3.8.1\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"brands-styles-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/css/brands.css?ver=9.9.5\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"bootstrap-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/bootstrap.min.css?ver=1.0.0\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"aos-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/aos.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"slick-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/slick.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"magnific-css-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/magnific-popup.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"owl-css-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/owl.carousel.min.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"owl-css-def-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/css/owl.theme.default.min.css?ver=1741892267\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"main-css-css\" href=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/style.css?ver=1752584934\" type=\"text/css\" media=\"all\">\n<link rel=\"stylesheet\" id=\"wqpmb-style-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/wc-quantity-plus-minus-button/assets/css/style.css?ver=1.0.0\" type=\"text/css\" media=\"all\">\n<script id=\"woocommerce-google-analytics-integration-gtag-js-after\">\n/* Google Analytics for WooCommerce (gtag.js) */\n\t\t\t\t\twindow.dataLayer = window.dataLayer || [];\n\t\t\t\t\tfunction gtag(){dataLayer.push(arguments);}\n\t\t\t\t\t// Set up default consent state.\n\t\t\t\t\tfor ( const mode of [{\"analytics_storage\":\"denied\",\"ad_storage\":\"denied\",\"ad_user_data\":\"denied\",\"ad_personalization\":\"denied\",\"region\":[\"AT\",\"BE\",\"BG\",\"HR\",\"CY\",\"CZ\",\"DK\",\"EE\",\"FI\",\"FR\",\"DE\",\"GR\",\"HU\",\"IS\",\"IE\",\"IT\",\"LV\",\"LI\",\"LT\",\"LU\",\"MT\",\"NL\",\"NO\",\"PL\",\"PT\",\"RO\",\"SK\",\"SI\",\"ES\",\"SE\",\"GB\",\"CH\"]}] || [] ) {\n\t\t\t\t\t\tgtag( \"consent\", \"default\", { \"wait_for_update\": 500, ...mode } );\n\t\t\t\t\t}\n\t\t\t\t\tgtag(\"js\", new Date());\n\t\t\t\t\tgtag(\"set\", \"developer_id.dOGY3NW\", true);\n\t\t\t\t\tgtag(\"config\", \"G-YYY0FC37MX\", {\"track_404\":true,\"allow_google_signals\":true,\"logged_in\":false,\"linker\":{\"domains\":[],\"allow_incoming\":false},\"custom_map\":{\"dimension1\":\"logged_in\"}});\n</script>\n<script src=\"https://tipsnotricks.lt/wp-includes/js/jquery/jquery.min.js?ver=3.7.1\" id=\"jquery-core-js\"></script>\n<script src=\"https://tipsnotricks.lt/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1\" id=\"jquery-migrate-js\"></script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.9.9.5\" id=\"jquery-blockui-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<script id=\"wc-add-to-cart-js-extra\">\nvar wc_add_to_cart_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"i18n_view_cart\":\"Krep\\u0161elis\",\"cart_url\":\"https:\\/\\/tipsnotricks.lt\\/krepselis\\/\",\"is_cart\":\"\",\"cart_redirect_after_add\":\"no\"};\n</script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=9.9.5\" id=\"wc-add-to-cart-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.9.9.5\" id=\"js-cookie-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<script id=\"woocommerce-js-extra\">\nvar woocommerce_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"i18n_password_show\":\"Rodyti slapta\\u017eod\\u012f\",\"i18n_password_hide\":\"Sl\\u0117pti slapta\\u017eod\\u012f\"};\n</script>\n<script src=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=9.9.5\" id=\"woocommerce-js\" defer=\"\" data-wp-strategy=\"defer\"></script>\n<link rel=\"https://api.w.org/\" href=\"https://tipsnotricks.lt/wp-json/\"><link rel=\"alternate\" title=\"JSON\" type=\"application/json\" href=\"https://tipsnotricks.lt/wp-json/wp/v2/pages/8\"><link rel=\"EditURI\" type=\"application/rsd+xml\" title=\"RSD\" href=\"https://tipsnotricks.lt/xmlrpc.php?rsd\">\n<meta name=\"generator\" content=\"WordPress 6.8.2\">\n<meta name=\"generator\" content=\"WooCommerce 9.9.5\">\n<link rel=\"shortlink\" href=\"https://tipsnotricks.lt/\">\n<link rel=\"alternate\" title=\"oEmbed (JSON)\" type=\"application/json+oembed\" href=\"https://tipsnotricks.lt/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftipsnotricks.lt%2F\">\n<link rel=\"alternate\" title=\"oEmbed (XML)\" type=\"text/xml+oembed\" href=\"https://tipsnotricks.lt/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftipsnotricks.lt%2F&amp;format=xml\">\n<meta name=\"wwp\" content=\"yes\">\t<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>\n\t<meta name=\"generator\" content=\"Elementor 3.30.0; features: e_font_icon_svg, additional_custom_breakpoints, e_element_cache; settings: css_print_method-external, google_font-enabled, font_display-swap\">\n\t\t\t<style>\n\t\t\t\t.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),\n\t\t\t\t.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {\n\t\t\t\t\tbackground-image: none !important;\n\t\t\t\t}\n\t\t\t\t@media screen and (max-height: 1024px) {\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {\n\t\t\t\t\t\tbackground-image: none !important;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t@media screen and (max-height: 640px) {\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),\n\t\t\t\t\t.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {\n\t\t\t\t\t\tbackground-image: none !important;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t</style>\n\t\t\t<link rel=\"modulepreload\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/common/NoticesPlugin.4b31c3cc.js\"><link rel=\"modulepreload\" href=\"https://tipsnotricks.lt/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/common/NoticesPlugin.4b31c3cc.js\"><link rel=\"icon\" href=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-32x32.png\" sizes=\"32x32\">\n<link rel=\"icon\" href=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-192x192.png\" sizes=\"192x192\">\n<link rel=\"apple-touch-icon\" href=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-180x180.png\">\n<meta name=\"msapplication-TileImage\" content=\"https://tipsnotricks.lt/wp-content/uploads/2025/04/cropped-Vector-23-270x270.png\">\n    <script src=\"/wp-content/themes/itbrolis/js/webtour.min.js\"></script>\n\n    <!-- Google tag (gtag.js) -->\n    <script async=\"\" src=\"https://www.googletagmanager.com/gtag/js?id=G-YYY0FC37MX\"></script>\n    <script>\n        window.dataLayer = window.dataLayer || [];\n        function gtag(){dataLayer.push(arguments);}\n        gtag('js', new Date());\n\n        gtag('config', 'G-YYY0FC37MX');\n    </script>\n\n    <!-- Meta Pixel Code -->\n    <script>\n        !function(f,b,e,v,n,t,s)\n        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\n            n.callMethod.apply(n,arguments):n.queue.push(arguments)};\n            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\n            n.queue=[];t=b.createElement(e);t.async=!0;\n            t.src=v;s=b.getElementsByTagName(e)[0];\n            s.parentNode.insertBefore(t,s)}(window, document,'script',\n            'https://connect.facebook.net/en_US/fbevents.js');\n        fbq('init', '3078154479014772');\n        fbq('track', 'PageView');\n    </script>\n    <noscript><img height=\"1\" width=\"1\" style=\"display:none\"\n                   src=\"https://www.facebook.com/tr?id=3078154479014772&ev=PageView&noscript=1\"\n        /></noscript>\n    <!-- End Meta Pixel Code -->\n\n\n    <script async=\"\" defer=\"\" src=\"https://tools.luckyorange.com/core/lo.js?site-id=129472cb\"></script>\n<style>\n\t:root {\n\t\t--bg-color: #181815;\n\t\t--color: #fff;\n\t\t--color-hover: #7F815D;\n\t}\n</style></head>\n\n\n\n\n\n\n\n<body class=\"home wp-singular page-template page-template-templates page-template-template-home page-template-templatestemplate-home-php page page-id-8 wp-custom-logo wp-theme-itbrolis no-outline theme-itbrolis woocommerce-js elementor-default elementor-kit-367\" data-aos-easing=\"ease\" data-aos-duration=\"400\" data-aos-delay=\"0\">\n\n\n<!-- BEGIN of header -->\n<header class=\"header\">\n    <div class=\"header__container\">\n        <div class=\"header__button\">\n            <span class=\"header__button-title\">MENIU</span>\n            <div id=\"clickWrapper\" class=\"header__button-open\">\n                <span class=\"menu\"></span>\n            </div>\n        </div>\n    </div>\n</header>\n    <div class=\"mega-header\" id=\"menu\">\n        <div class=\"bg\"></div>\n        <div class=\"mega-header__container\">\n            <div class=\"mega-header__block\">\n                <nav class=\"header-menu-nav\" id=\"mainMenu\">\n\t\t\t\t\t<ul id=\"menu-header-menu\" class=\"header-menu w-100\"><li id=\"menu-item-83\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-8 current_page_item menu-item-83\"><a href=\"https://tipsnotricks.lt/\" aria-current=\"page\">Pagrindinis</a></li>\n<li id=\"menu-item-88\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-88\"><a href=\"https://tipsnotricks.lt/mokymai/\">MokymaI</a></li>\n<li id=\"menu-item-91\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-91\"><a href=\"https://tipsnotricks.lt/konsultantams/\">Konsultantams</a></li>\n<li id=\"menu-item-132\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-132\"><a href=\"https://tipsnotricks.lt/organizacijoms/\">Organizacijoms</a></li>\n<li id=\"menu-item-84\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-84\"><a href=\"https://tipsnotricks.lt/apie-mus/\">Apie mus</a></li>\n<li id=\"menu-item-85\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-85\"><a href=\"https://tipsnotricks.lt/shop/\">E-Shop</a></li>\n<li id=\"menu-item-87\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-87\"><a href=\"https://tipsnotricks.lt/kontaktai/\">Kontaktai</a></li>\n<li id=\"menu-item-86\" class=\"menu-item menu-item-type-post_type menu-item-object-page menu-item-86\"><a href=\"https://tipsnotricks.lt/es-parama/\">ES parama</a></li>\n</ul>                </nav>\n\t\t\t\t\t\t\t\t\t\t\t\t                    <div class=\"header-links\">\n\t\t\t\t\t\t                            <a class=\"contact-link\" href=\"mailto:hello@tipsnotricks.lt\" target=\"_self\" title=\"hello@tipsnotricks.lt\">\n                                <img class=\"email-icon\" src=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/images/mail.png\" width=\"24\" height=\"23\" alt=\"email\">\n\t\t\t\t\t\t\t\thello@tipsnotricks.lt                            </a>\n\t\t\t\t\t\t\t                                                <a class=\"contact-link\" href=\"tel:+37069534470\" target=\"_self\" title=\"+370 695 34 470\">\n                                <img class=\"phone-icon\" src=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/images/phone.png\" width=\"21\" height=\"20\" alt=\"phone\">\n\t\t\t                    +370 695 34 470                            </a>\n\t                                        </div>\n\t\t\t\t            </div>\n        </div>\n    </div>\n<!-- END of header -->\n\n\n\t<!-- BEGIN of main content -->\n\t<main class=\"main-content\">\n\t\t\t\t\t\t\t\t\t\n\n<section id=\"hero-section\" class=\"hero-section web-section hero-section-8\">\n    <div class=\"hero-section__container\">\n        <div class=\"hero-section__row\">\n            <div class=\"hero-section__block hero-section__block-slider\">\n\t            <div class=\"logo\">\n    <a class=\"link-no-hover\" href=\"https://tipsnotricks.lt\" title=\"Tips No Tricks\">\n        <div class=\"puzzle-animations\">\n            <div class=\"puzzle__container\">\n                <svg class=\"puzzle-icon puzzle-icon-1 puzzle-icon-hidden\" width=\"71\" height=\"88\" viewBox=\"0 0 71 88\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M2.18426 87.9161C1.56125 87.9161 0.938232 87.2936 0.938232 86.6712V59.2819C0.938232 58.8669 1.1459 58.6594 1.35358 58.4519C3.43029 56.5845 5.50701 57.8294 7.37606 58.8669C9.03743 59.9044 10.9065 60.9419 13.6062 60.9419C17.7596 60.9419 18.798 55.3395 18.798 53.2646C18.798 51.1896 17.7596 45.5873 12.7755 45.5873C10.9065 45.5873 9.03743 46.6247 7.58373 47.4547C5.50701 48.6997 3.22262 49.9447 1.35358 47.8697C1.1459 47.6622 0.938232 47.2472 0.938232 47.0397V20.0655C0.938232 19.443 1.56125 18.8205 2.18426 18.8205C2.80728 18.8205 3.43029 19.443 3.43029 20.0655V46.4173C3.84564 46.6247 4.67632 46.2098 6.3377 45.3798C7.99907 44.3423 10.2835 43.0973 12.7755 43.0973C18.798 43.0973 21.0824 49.1147 21.0824 53.0571C21.0824 57.207 19.0057 63.2243 13.6062 63.2243C10.2835 63.2243 7.99907 61.7718 6.13003 60.7344C4.46865 59.6969 3.84564 59.4894 3.43029 59.6969V86.6712C3.43029 87.5011 2.80728 87.9161 2.18426 87.9161Z\" fill=\"black\"></path>\n                    <path class=\"puzzle-icon-hide\" d=\"M68.8471 87.9161C68.2241 87.9161 67.6011 87.2936 67.6011 86.6711V59.9044C67.1857 59.6969 66.5627 59.9044 64.9013 60.9418C63.24 61.9793 60.7479 63.4318 57.4252 63.4318C51.818 63.4318 49.949 57.4144 49.949 53.2645C49.949 49.3221 52.2334 43.3048 58.2558 43.3048C60.7479 43.3048 63.0323 44.5498 64.6937 45.5872C66.355 46.6247 67.1857 46.8322 67.6011 46.6247V20.2729C67.6011 19.6504 68.2241 19.028 68.8471 19.028C69.4701 19.028 70.0931 19.6504 70.0931 20.2729V47.2472C70.0931 47.4547 69.8855 47.8697 69.6778 48.0772C67.8088 49.9446 65.5244 48.6997 63.4476 47.6622C61.9939 46.8322 60.1249 45.7947 58.2558 45.7947C53.4794 45.7947 52.2334 51.1896 52.2334 53.472C52.2334 55.547 53.0641 61.1493 57.4252 61.1493C60.1249 61.1493 61.9939 60.1119 63.6553 59.0744C65.5244 58.0369 67.6011 56.7919 69.6778 58.6594C69.8855 58.8669 70.0931 59.2819 70.0931 59.4894V86.8786C70.0931 87.5011 69.4701 87.9161 68.8471 87.9161Z\" fill=\"black\"></path>\n                    <path d=\"M43.0957 23.8003C42.888 23.8003 42.4727 23.5928 42.265 23.3853C40.1883 21.3104 41.019 19.443 42.0573 17.5755C42.6804 16.538 43.0957 15.0856 43.511 13.6331C44.1341 10.5207 43.7187 7.82327 42.265 6.16331C40.1883 3.88087 36.8655 3.67338 36.0349 3.67338C33.9581 3.67338 31.4661 4.29586 29.8047 6.37081C28.351 8.03076 27.9357 10.3132 28.351 13.0106C28.5587 14.6706 29.1817 15.9156 29.8047 17.1605C30.8431 19.2355 31.6737 21.3104 29.8047 23.5928C29.597 23.8003 29.1817 24.0078 28.7663 24.0078L2.18435 21.1029C1.56134 21.1029 1.146 20.4804 1.146 19.8579C1.146 19.2355 1.76901 18.613 2.39203 18.8205L28.1433 21.3104C28.5587 20.6879 28.351 19.8579 27.5203 17.9905C26.8973 16.7455 26.2743 15.0856 25.8589 13.2181C25.2359 9.69072 26.0666 6.7858 27.9357 4.50336C30.22 2.01342 33.5428 0.975952 36.0349 0.975952C37.2809 0.975952 41.4343 1.18345 44.1341 4.29586C46.0031 6.5783 46.6261 9.69072 46.0031 13.6331C45.5878 15.5006 44.9647 17.1605 44.3417 18.198C43.511 19.8579 43.3034 20.2729 43.7187 20.8954L68.6393 18.8205C69.2623 18.8205 69.8854 19.2355 69.8854 19.8579C69.8854 20.4804 69.47 21.1029 68.847 21.1029L43.0957 23.8003Z\" fill=\"black\"></path>\n                </svg>\n                <svg class=\"puzzle-icon puzzle-icon-2 puzzle-icon-hidden\" width=\"70\" height=\"106\" viewBox=\"0 0 70 106\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M67.925 87.7293C67.302 87.7293 66.679 87.1068 66.679 86.4843V59.5101C66.2636 59.3026 65.6406 59.5101 63.9792 60.5475C62.3179 61.585 59.8258 63.0375 56.503 63.0375C50.8959 63.0375 49.0269 57.0201 49.0269 52.8702C49.0269 48.9279 51.3112 42.9105 57.3337 42.9105C59.8258 42.9105 62.1102 44.1555 63.7716 45.193C65.4329 46.2304 66.2636 46.4379 66.679 46.2304V19.8786C66.679 19.2561 67.302 18.6337 67.925 18.6337C68.548 18.6337 69.171 19.2561 69.171 19.8786V46.8529C69.171 47.0604 68.9633 47.4754 68.7557 47.6829C66.8866 49.5503 64.6022 48.3054 62.5255 47.2679C61.0718 46.4379 59.2028 45.4004 57.3337 45.4004C52.5573 45.4004 51.3112 50.7953 51.3112 53.0777C51.3112 55.1527 52.1419 60.755 56.503 60.755C59.2028 60.755 61.0718 59.7176 62.7332 58.6801C64.6022 57.6426 66.679 56.3976 68.7557 58.2651C68.9633 58.4726 69.171 58.8876 69.171 59.0951V86.6918C69.171 87.1068 68.7557 87.7293 67.925 87.7293Z\" fill=\"black\"></path>\n                    <path d=\"M34.9052 105.366C32.4132 105.366 28.8827 104.536 26.806 101.839C24.937 99.764 24.3139 96.8591 24.7293 93.1242C24.937 91.0492 25.7677 89.5968 26.3907 88.3518C27.2214 86.4843 27.429 85.8619 27.0137 85.0319L1.26238 87.3143C0.639367 87.3143 0.0163574 86.8993 0.0163574 86.2769C0.0163574 85.6544 0.431701 85.0319 1.05472 85.0319L27.6367 82.7495C28.052 82.7495 28.4674 82.9569 28.6751 83.1644C30.7518 85.4469 29.7134 87.5218 28.6751 89.5968C28.052 90.8417 27.429 92.0867 27.2214 93.7467C26.806 96.6516 27.2214 98.934 28.6751 100.386C30.3364 102.254 33.0362 103.084 34.9052 103.084C35.9436 103.084 39.2663 102.876 41.1354 100.594C42.5891 98.934 43.0044 96.4441 42.3814 93.1242C42.1737 91.4642 41.5507 90.2192 40.9277 89.1818C40.097 87.3143 39.0586 85.4469 41.1354 83.3719C41.343 83.1644 41.7584 82.9569 42.1737 82.9569L67.925 85.4469C68.548 85.4469 68.9634 86.0694 68.9634 86.6918C68.9634 87.3143 68.3404 87.7293 67.7173 87.7293L42.5891 85.2394C42.1737 85.8619 42.3814 86.2769 43.2121 87.9368C43.8351 89.1818 44.4581 90.6342 44.8734 92.5017C45.4965 96.4441 44.8735 99.5565 43.0044 101.839C40.3047 105.159 36.1512 105.366 34.9052 105.366Z\" fill=\"black\"></path>\n                    <path class=\"puzzle-icon-hide\" d=\"M42.1737 23.406C41.966 23.406 41.5506 23.1985 41.343 22.991C39.2663 20.9161 40.0969 19.0486 41.1353 17.1812C41.7583 16.1437 42.1737 14.6912 42.589 13.2388C43.212 10.1264 42.7967 7.42894 41.343 5.76899C39.2663 3.48655 35.9435 3.27906 35.1128 3.27906C33.0361 3.27906 30.544 3.90154 28.8827 5.97648C27.429 7.63644 27.0136 9.91887 27.429 12.6163C27.6366 14.2763 28.2597 15.5212 28.8827 16.7662C29.921 18.8411 30.7517 20.9161 28.8827 23.1985C28.675 23.406 28.2597 23.6135 27.8443 23.6135L1.47 21.1236C0.846984 21.1236 0.431641 20.5011 0.431641 19.8786C0.431641 19.2561 1.05466 18.6336 1.67767 18.8411L27.429 21.1236C27.8443 20.5011 27.6366 19.6711 26.806 17.8037C26.1829 16.5587 25.5599 14.8987 25.1446 13.0313C24.5216 9.50389 25.3522 6.59897 27.2213 4.31653C29.5057 1.8266 32.8284 0.789124 35.3205 0.789124C36.5665 0.789124 40.72 0.996622 43.4197 4.10904C45.2887 6.39148 45.9118 9.50389 45.2887 13.4463C44.8734 15.3137 44.2504 16.9737 43.6274 18.0112C42.7967 19.6711 42.589 20.0861 43.0043 20.7086L68.1326 18.2187C68.7556 18.2187 69.3787 18.6336 69.3787 19.2561C69.3787 19.8786 68.9633 20.5011 68.3403 20.5011L42.1737 23.406C42.3813 23.406 42.3813 23.406 42.1737 23.406Z\" fill=\"black\"></path>\n                </svg>\n                <svg class=\"puzzle-icon puzzle-icon-3\" width=\"105\" height=\"70\" viewBox=\"0 0 105 70\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M52.8271 20.7606C48.6737 20.7606 42.6512 18.6857 42.6512 13.2908C42.6512 9.97091 44.1049 7.68848 45.1432 5.82103C46.1816 4.16107 46.3893 3.53859 46.1816 3.1236H19.1843C18.5612 3.1236 17.9382 2.50111 17.9382 1.87863C17.9382 1.25614 18.5612 0.633667 19.1843 0.633667H46.8046C47.22 0.633667 47.4276 0.84116 47.6353 1.04865C49.5043 3.1236 48.2583 5.19854 47.22 7.06599C46.1816 8.72594 45.1432 10.5934 45.1432 13.2908C45.1432 17.4407 50.7504 18.4782 52.8271 18.4782C54.9038 18.4782 60.5109 17.4407 60.5109 12.4608C60.5109 10.5934 59.4726 8.72595 58.6419 7.27349C57.3959 5.19854 56.1498 2.9161 58.2266 1.04865C58.4342 0.84116 58.8496 0.633667 59.0572 0.633667H86.0546C86.6776 0.633667 87.3006 1.25614 87.3006 1.87863C87.3006 2.50111 86.6776 3.1236 86.0546 3.1236H59.4726C59.2649 3.53859 59.6803 4.36856 60.5109 6.02852C61.5493 7.68847 62.7953 9.97091 62.7953 12.4608C62.7953 18.4782 56.7729 20.7606 52.8271 20.7606Z\" fill=\"black\"></path>\n                    <path d=\"M85.8469 69.5218H58.8496C58.6419 69.5218 58.2266 69.3143 58.0189 69.1068C56.1498 67.2393 57.3959 64.9569 58.4342 62.882C59.2649 61.4295 60.3033 59.5621 60.3033 57.6946C60.3033 52.9222 54.9038 51.6773 52.6194 51.6773C50.5427 51.6773 44.9356 52.5072 44.9356 56.8646C44.9356 59.5621 45.9739 61.4295 47.0123 63.0895C48.0506 64.9569 49.2967 67.0319 47.4276 69.1068C47.2199 69.3143 46.8046 69.5218 46.5969 69.5218H19.1843C18.5612 69.5218 17.9382 68.8993 17.9382 68.2768C17.9382 67.6543 18.5612 67.0319 19.1843 67.0319H46.1816C46.3893 66.6169 46.1816 65.9944 45.1432 64.3344C44.1049 62.6745 42.6512 60.1845 42.6512 56.8646C42.6512 51.2623 48.6737 49.3948 52.8271 49.3948C56.7729 49.3948 62.7953 51.6773 62.7953 57.6946C62.7953 60.1845 61.5493 62.467 60.5109 64.1269C59.4726 65.7869 59.2649 66.6169 59.4726 67.0319H85.8469C86.4699 67.0319 87.0929 67.6543 87.0929 68.2768C87.0929 68.8993 86.4699 69.5218 85.8469 69.5218Z\" fill=\"black\"></path>\n                    <path d=\"M19.1844 69.5218C18.3537 69.5218 17.9383 68.8993 17.9383 68.2768L20.4304 43.17C19.8074 42.755 19.1844 42.9625 17.7307 43.7925C16.4846 44.415 15.0309 45.0375 13.1619 45.4525C9.21611 46.0749 6.10103 45.4525 3.81664 43.585C0.701568 40.8876 0.493896 36.7377 0.493896 35.4927C0.493896 33.0028 1.32458 29.4754 4.02432 27.4004C6.10103 25.533 9.00844 24.9105 12.7465 25.3255C14.8232 25.533 16.2769 26.363 17.523 26.9855C19.392 27.8154 20.015 28.0229 20.8457 27.6079L17.9383 1.87863C17.9383 1.25614 18.3537 0.633667 18.9767 0.633667C19.5997 0.633667 20.2227 1.04866 20.2227 1.67114L22.7148 28.0229C22.7148 28.4379 22.7148 28.8529 22.2994 29.0604C20.015 31.1353 17.9383 30.0979 15.8616 29.0604C14.6156 28.4379 13.3695 27.8154 11.7082 27.6079C8.80077 27.193 6.51638 27.6079 5.06268 29.0604C3.19363 30.7204 2.36294 33.4178 2.36294 35.2852C2.36294 36.3227 2.57061 39.6426 4.855 41.5101C6.51638 42.9625 9.00844 43.3775 12.3312 42.755C13.9926 42.5475 15.2386 41.9251 16.277 41.3026C18.146 40.4726 20.015 39.4351 22.0918 41.5101C22.2994 41.7176 22.5071 42.1325 22.5071 42.5475L20.015 68.2768C20.4304 69.1068 19.8074 69.5218 19.1844 69.5218Z\" fill=\"black\"></path>\n                    <path d=\"M86.0547 69.5218C85.4316 69.5218 85.0163 69.1068 84.8086 68.4844L82.3166 42.7551C82.3166 42.3401 82.3166 42.1326 82.7319 41.7176C84.8086 39.6426 86.6777 40.4726 88.5467 41.5101C89.5851 42.1326 91.0388 42.5476 92.4925 42.9625C95.8152 43.585 98.3073 43.17 99.9687 41.7176C102.253 39.6426 102.461 36.3227 102.461 35.4927C102.461 33.4178 101.838 30.9279 99.761 29.2679C98.0996 27.8155 95.8152 27.4005 93.1155 27.8154C91.4541 28.0229 90.2081 28.6454 88.9621 29.2679C86.8853 30.3054 84.8086 31.1354 82.5242 29.2679C82.3166 29.0604 82.1089 28.6454 82.1089 28.2304L84.601 1.87865C84.601 1.25617 85.224 0.633682 85.847 0.841177C86.47 0.841177 86.8853 1.46366 86.8853 2.08615L84.3933 27.8154C85.0163 28.2304 85.847 28.023 87.716 27.193C88.9621 26.5705 90.6234 25.948 92.4925 25.533C96.0229 24.9105 98.9303 25.7405 101.215 27.608C103.707 29.8904 104.745 33.2103 104.745 35.7002C104.745 36.9452 104.537 41.0951 101.422 43.7925C99.138 45.66 96.0229 46.2825 92.0771 45.66C90.2081 45.245 88.5467 44.6225 87.5084 44C85.847 43.17 85.4316 42.9625 84.8086 43.3775L87.3007 68.2769C87.3007 68.8993 86.8853 69.5218 86.0547 69.5218Z\" fill=\"black\"></path>\n                </svg>\n                <svg class=\"puzzle-icon puzzle-icon-4 puzzle-icon-4-animation\" width=\"101\" height=\"89\" viewBox=\"0 0 101 89\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M30.8137 1.82686L31.2114 0.773003L30.1567 0.374969L29.759 1.42882L30.8137 1.82686ZM21.5675 27.1687L22.5631 27.6394L22.5841 27.584L22.605 27.5285L21.5675 27.1687ZM7.16128 64.5035L6.10653 64.1055L5.74023 65.0761L6.68032 65.5259L7.16128 64.5035ZM30.972 76.0236L30.5015 77.0183L30.557 77.0393L30.6125 77.0602L30.972 76.0236ZM45.5311 81.1376L44.8768 82.0313L45.0501 82.1601L45.2549 82.2057L45.5311 81.1376ZM70.6978 87.7201L70.4216 88.7881C70.7096 88.8651 71.0118 88.8207 71.262 88.6617C71.5123 88.5027 71.7002 88.2568 71.7771 87.969L70.6978 87.7201ZM76.8808 62.9331L75.8224 62.6288L75.8119 62.6565L75.8014 62.6842L76.8808 62.9331ZM81.6941 48.7499L80.7089 48.2514L80.5451 48.6014L80.6243 48.9798L81.6941 48.7499ZM93.2632 25.2352L94.2483 25.7337L94.7989 24.6108L93.6227 24.1986L93.2632 25.2352ZM67.5909 15.959L67.9504 14.9224L67.8671 14.891L67.7839 14.8596L67.5909 15.959ZM55.9336 11.3064L56.6885 10.4824L56.5256 10.3259L56.3313 10.2525L55.9336 11.3064ZM29.7867 1.4393L20.5405 26.7811L22.6327 27.539L31.879 2.19716L29.7867 1.4393ZM20.5719 26.6979C20.6243 26.5592 20.5892 26.7361 20.308 26.725C20.0928 26.7072 19.4507 26.5599 18.5607 25.3053L16.7633 26.623C17.8681 28.1488 19.0403 28.908 20.2311 28.9455C21.3559 28.9898 22.2633 28.35 22.5909 27.6499L20.5719 26.6979ZM18.5607 25.3053C17.6429 24.0401 16.5481 22.7399 15.2827 21.7237C14.0172 20.7076 12.5466 19.8991 10.8803 19.7772L10.6819 21.9835C11.758 22.0728 12.8542 22.6132 13.9012 23.4519C14.9482 24.2905 15.9184 25.417 16.7633 26.623L18.5607 25.3053ZM10.8803 19.7772C9.19667 19.6171 7.39066 19.9494 5.75347 21.0108C4.08852 22.0616 2.63061 23.8243 1.59132 26.4102L3.65214 27.2513C4.55537 25.0259 5.76257 23.6755 6.97567 22.8977C8.18878 22.1199 9.48425 21.8801 10.7096 21.994L10.8803 19.7772ZM1.56356 26.3998C-0.521841 31.5057 0.695353 36.1789 3.9661 38.0151L5.04588 36.0781C3.10701 34.9979 1.76922 31.7367 3.59662 27.2304L1.56356 26.3998ZM3.9661 38.0151C6.68535 39.5482 10.3765 39.262 13.0439 38.7478L12.6312 36.5644C10.0021 37.0613 7.01252 37.1687 5.04588 36.0781L3.9661 38.0151ZM13.0717 38.7583C14.197 38.5493 15.0615 38.527 15.5543 38.6496C15.7868 38.7057 15.7659 38.7612 15.7486 38.723C15.7036 38.6743 15.7868 38.7057 15.6995 39.0212L17.8649 39.585C18.0224 38.9157 18.0306 38.2218 17.6602 37.6068C17.2898 36.9917 16.7105 36.6781 16.19 36.545C15.1594 36.2511 13.8398 36.3868 12.6763 36.6131L13.0717 38.7583ZM15.6717 39.0108C15.5843 39.3263 15.1621 40.5293 14.4609 42.3874C13.7701 44.2178 12.8806 46.5751 11.9073 49.1543C9.94334 54.2744 7.64817 60.1883 6.10653 64.1055L8.17782 64.9188C9.71946 61.0017 12.0146 55.0877 13.9785 49.9676C14.9518 47.3884 15.8692 45.0416 16.5322 43.2008C17.202 41.4258 17.687 40.0564 17.799 39.5918L15.6717 39.0108ZM6.69078 65.4982L30.5015 77.0183L31.4807 75.0117L7.67 63.4916L6.69078 65.4982ZM30.6125 77.0602C31.4279 77.3363 32.48 77.3214 33.3213 76.6884C34.2009 76.0382 34.6195 74.9289 34.5699 73.5478L32.3512 73.6293C32.3912 74.5315 32.1269 74.812 32.0122 74.8637C31.8766 74.971 31.6404 75.0086 31.3247 74.9211L30.6125 77.0602ZM34.5595 73.5755C34.3834 69.1686 34.3629 67.0381 35.2033 64.9791L33.1425 64.138C32.065 66.7412 32.1401 69.3992 32.3303 73.6848L34.5595 73.5755ZM35.2033 64.9791C35.5869 64.0467 36.6521 62.4843 38.2893 61.423C39.8778 60.4066 42.0037 59.8149 44.6893 60.765L45.4187 58.664C42.001 57.4693 39.1562 58.2017 37.0567 59.5638C35.0058 60.8809 33.6726 62.8173 33.1425 64.138L35.2033 64.9791ZM44.6616 60.7545C47.6247 61.8093 49.1358 63.2667 49.8798 64.6563C50.6411 66.0842 50.7043 67.5971 50.5596 68.9049L52.7847 69.1426C52.9576 67.592 52.9058 65.5448 51.8642 63.5993C50.8054 61.6156 48.8087 59.8483 45.4187 58.664L44.6616 60.7545ZM50.5596 68.9049C50.242 71.7632 48.1716 74.3085 46.6623 75.7033L48.1662 77.348C49.8216 75.8183 52.3788 72.823 52.7847 69.1426L50.5596 68.9049ZM46.6623 75.7033C45.8833 76.4231 44.8886 77.3784 44.2966 78.359C44.0145 78.8545 43.746 79.4818 43.8038 80.169C43.8407 80.9116 44.2388 81.5371 44.8872 82.0035L46.1959 80.2163C46.0953 80.1466 46.0503 80.0979 46.0608 80.0702C46.0608 80.0702 46.0607 80.0702 46.0435 80.032C46.0366 79.9661 46.0717 79.7892 46.2528 79.4774C46.6254 78.8259 47.3872 78.0679 48.2044 77.3307L46.6623 75.7033ZM45.2271 82.1952L70.4111 88.8158L70.974 86.6521L45.79 80.0314L45.2271 82.1952ZM71.7667 87.9967L77.9496 63.2098L75.7737 62.6738L69.5907 87.4607L71.7667 87.9967ZM77.9392 63.2375L77.9496 63.2098C77.9774 63.2202 78.356 63.1413 79.2574 63.8617L80.6389 62.1336C79.5363 61.2739 78.4643 60.8377 77.4987 61.0436C76.4949 61.2668 75.9866 62.0254 75.7946 62.6183L77.9392 63.2375ZM79.2574 63.8617C79.8398 64.3349 80.4568 64.8846 81.1016 65.4448C81.7359 66.0326 82.398 66.631 83.0983 67.2121C84.4538 68.3256 86.0177 69.391 87.8019 69.6208L88.094 67.4182C87.0006 67.2907 85.8457 66.5697 84.5353 65.5049C83.9078 64.983 83.2735 64.3951 82.6392 63.8072C82.0048 63.2193 81.3428 62.621 80.6771 62.1163L79.2574 63.8617ZM87.8019 69.6208C89.2494 69.8185 91.5022 70.0667 93.6909 69.3085C95.9838 68.5263 98.0805 66.7513 99.2987 63.1873L97.196 62.4571C96.1803 65.4005 94.5636 66.6597 92.9656 67.1972C91.2911 67.7692 89.486 67.5949 88.0663 67.4077L87.8019 69.6208ZM99.2987 63.1873C100.485 59.7065 100.307 56.8192 99.2482 54.5823C98.1793 52.373 96.2445 50.9458 94.1555 50.3476L93.5371 52.4904C95.0778 52.9451 96.4925 53.9859 97.257 55.5734C98.0214 57.1608 98.243 59.4305 97.2133 62.4953L99.2987 63.1873ZM94.145 50.3753C90.4042 49.2805 88.651 49.2208 86.9879 49.2585L87.0707 51.4759C88.4526 51.4271 89.9906 51.4689 93.5371 52.4904L94.145 50.3753ZM86.9601 49.2481C86.5087 49.2678 85.9427 49.3394 85.4808 49.3868C84.9807 49.4516 84.4911 49.4886 84.0607 49.4529C83.6302 49.4172 83.3422 49.3402 83.1688 49.2114C83.0127 49.1208 82.8603 48.9365 82.7638 48.5199L80.5861 48.9971C80.7858 49.8962 81.2463 50.6086 81.8947 51.0751C82.5259 51.5033 83.2616 51.6543 83.9073 51.7078C84.553 51.7614 85.2128 51.6936 85.7406 51.6393C86.3345 51.5782 86.7408 51.5098 87.0602 51.5036L86.9601 49.2481ZM82.6792 49.2484L94.2483 25.7337L92.2398 24.7539L80.6707 48.2687L82.6792 49.2484ZM93.6227 24.1986L67.9504 14.9224L67.1932 17.0129L92.8655 26.289L93.6227 24.1986ZM67.7839 14.8596C67.4021 14.7789 66.8292 14.7845 66.2664 15.0156C65.6375 15.2535 65.081 15.8039 64.8503 16.6673L66.9985 17.1929C67.009 17.1651 67.0194 17.1374 67.0299 17.1097L67.0404 17.0819C67.0404 17.0819 67.0404 17.0819 67.0786 17.0647C67.1168 17.0474 67.155 17.0301 67.221 17.0234C67.287 17.0166 67.3147 17.0271 67.3425 17.0375L67.7839 14.8596ZM64.8608 16.6396C64.707 17.2152 64.803 17.8851 64.9131 18.4336C65.0023 19.0375 65.1816 19.7388 65.3436 20.4019C65.6639 21.8218 65.8941 23.1443 65.7258 24.0946L67.9263 24.4814C68.1893 23.0283 67.8348 21.2787 67.5213 19.9248C67.3525 19.1957 67.2078 18.5708 67.115 18.0606C67.0599 17.7863 67.0395 17.5885 67.0363 17.4289C67.0331 17.2693 67.0367 17.1756 67.0367 17.1756L64.8608 16.6396ZM65.7258 24.0946C65.4942 25.4646 65.3554 27.3448 64.1864 28.6779C63.1844 29.8206 61.1168 30.8462 56.1893 29.3669L55.5431 31.4992C60.8697 33.0974 64.0481 32.2375 65.8573 30.1322C67.4995 28.2173 67.737 25.4872 67.8985 24.471L65.7258 24.0946ZM56.1511 29.3841C53.7289 28.6602 52.2829 27.7026 51.4479 26.7222C50.6302 25.7799 50.3613 24.728 50.4118 23.6698C50.4887 21.4494 51.9789 19.097 53.127 17.8194L51.4666 16.3374C50.162 17.7777 48.2786 20.5837 48.1621 23.5813C48.1107 25.146 48.528 26.7292 49.7302 28.165C50.915 29.5626 52.7948 30.7155 55.4772 31.506L56.1511 29.3841ZM53.1547 17.8298C53.7426 17.1963 54.3478 16.6009 54.9321 16.061C55.4886 15.5106 56.0623 14.9985 56.5146 14.4722C56.946 14.0013 57.402 13.3813 57.5143 12.6633C57.6513 11.7962 57.3228 11.0703 56.678 10.5101L55.196 12.1686C55.241 12.2173 55.2861 12.266 55.3138 12.2765L55.3311 12.3147C55.3275 12.4083 55.216 12.6197 54.8333 13.0456C54.4889 13.4542 54.002 13.9041 53.4073 14.4718C52.823 15.0117 52.1691 15.652 51.5221 16.3583L53.1547 17.8298ZM56.3313 10.2525L31.2114 0.773003L30.4265 2.85298L55.5463 12.3325L56.3313 10.2525Z\" fill=\"black\"></path>\n                </svg>\n            </div>\n            <div class=\"logo-text\">\n                <img decoding=\"async\" class=\"puzzle-text\" src=\"https://tipsnotricks.lt/wp-content/themes/itbrolis/images/logo-text.svg\" width=\"891\" height=\"52\" alt=\"logo text\">\n            </div>\n        </div>\n    </a>\n</div>\n                                    <div class=\"hero-section__gallery slick-initialized slick-slider\"><div class=\"slick-list draggable\"><div class=\"slick-track\" style=\"opacity: 1; width: 1950px;\"><div class=\"slick-slide slick-current slick-active\" data-slick-index=\"0\" aria-hidden=\"false\" style=\"width: 650px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;\"><div><div class=\"hero-section__image\" style=\"width: 100%; display: inline-block;\">\n\t\t\t\t\t            <img fetchpriority=\"high\" decoding=\"async\" width=\"352\" height=\"535\" src=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2924-2.png\" class=\"attachment-full size-full\" alt=\"\" srcset=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2924-2.png 352w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2924-2-197x300.png 197w\" sizes=\"(max-width: 352px) 100vw, 352px\">                            </div></div></div><div class=\"slick-slide\" data-slick-index=\"1\" aria-hidden=\"true\" style=\"width: 650px; position: relative; left: -650px; top: 0px; z-index: 998; opacity: 0;\" tabindex=\"-1\"><div><div class=\"hero-section__image\" style=\"width: 100%; display: inline-block;\">\n\t\t\t\t\t            <img decoding=\"async\" width=\"744\" height=\"750\" src=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145.png\" class=\"attachment-full size-full\" alt=\"\" srcset=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145.png 744w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-298x300.png 298w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-150x150.png 150w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-10x10.png 10w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-600x605.png 600w, https://tipsnotricks.lt/wp-content/uploads/2025/02/DSC_2145-100x100.png 100w\" sizes=\"(max-width: 744px) 100vw, 744px\">                            </div></div></div><div class=\"slick-slide\" data-slick-index=\"2\" aria-hidden=\"true\" style=\"width: 650px; position: relative; left: -1300px; top: 0px; z-index: 998; opacity: 0;\" tabindex=\"-1\"><div><div class=\"hero-section__image\" style=\"width: 100%; display: inline-block;\">\n\t\t\t\t\t            <img loading=\"lazy\" decoding=\"async\" width=\"911\" height=\"750\" src=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/Group-339.png\" class=\"attachment-full size-full\" alt=\"\" srcset=\"https://tipsnotricks.lt/wp-content/uploads/2025/02/Group-339.png 911w, htt",
+      "headers": {
+        "content-encoding": "gzip",
+        "content-length": "27146",
+        "content-type": "text/html; charset=UTF-8",
+        "date": "Wed, 27 Aug 2025 08:37:52 GMT",
+        "link": "<https://tipsnotricks.lt/wp-json/>; rel=\"https://api.w.org/\", <https://tipsnotricks.lt/wp-json/wp/v2/pages/8>; rel=\"alternate\"; title=\"JSON\"; type=\"application/json\", <https://tipsnotricks.lt/>; rel=shortlink",
+        "server": "Apache/2",
+        "vary": "Accept-Encoding,User-Agent"
+      },
+      "statusCode": 200,
+      "loadTime": 0,
+      "screenshot": null,
+      "finalUrl": "https://tipsnotricks.lt/"
+    },
+    "lighthouse": {
+      "performance": 51,
+      "seo": 92,
+      "accessibility": 90,
+      "bestPractices": 93,
+      "metrics": {
+        "firstContentfulPaint": 1388.1851500000002,
+        "largestContentfulPaint": 2355.4403,
+        "firstInputDelay": 16,
+        "cumulativeLayoutShift": 1.0071782360618597,
+        "speedIndex": 3726.1026354401956,
+        "totalBlockingTime": 0,
+        "timeToInteractive": 2355.4403,
+        "serverResponseTime": 1743.069
+      },
+      "opportunities": [
+        {
+          "audit": "first-contentful-paint",
+          "title": "First Contentful Paint",
+          "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+          "score": 0.63,
+          "savings": 1388.1851500000002,
+          "displayValue": "1.4 s"
+        },
+        {
+          "audit": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "score": 0.51,
+          "savings": 2355.4403,
+          "displayValue": "2.4 s"
+        },
+        {
+          "audit": "speed-index",
+          "title": "Speed Index",
+          "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+          "score": 0.13,
+          "savings": 3726.1026354401956,
+          "displayValue": "3.7 s"
+        },
+        {
+          "audit": "cumulative-layout-shift",
+          "title": "Cumulative Layout Shift",
+          "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+          "score": 0.02,
+          "savings": 1.0071782360618597,
+          "displayValue": "1.007"
+        },
+        {
+          "audit": "errors-in-console",
+          "title": "Browser errors were logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "server-response-time",
+          "title": "Reduce initial server response time",
+          "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+          "score": 0,
+          "savings": 1743.069,
+          "displayValue": "Root document took 1,740 ms"
+        },
+        {
+          "audit": "image-aspect-ratio",
+          "title": "Displays images with incorrect aspect ratio",
+          "description": "Image display dimensions should match natural aspect ratio. [Learn more about image aspect ratio](https://developer.chrome.com/docs/lighthouse/best-practices/image-aspect-ratio/).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "largest-contentful-paint-element",
+          "title": "Largest Contentful Paint element",
+          "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "2,360 ms"
+        },
+        {
+          "audit": "layout-shifts",
+          "title": "Avoid large layout shifts",
+          "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "4 layout shifts found"
+        },
+        {
+          "audit": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.10/heading-order).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "link-name",
+          "title": "Links do not have a discernible name",
+          "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "description": "Touch targets with sufficient size and spacing help users who may have difficulty targeting small controls to activate the targets. [Learn more about touch targets](https://dequeuniversity.com/rules/axe/4.10/target-size).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "uses-long-cache-ttl",
+          "title": "Serve static assets with an efficient cache policy",
+          "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+          "score": 0.5,
+          "savings": 5805818.533333333,
+          "displayValue": "81 resources found"
+        },
+        {
+          "audit": "total-byte-weight",
+          "title": "Avoid enormous network payloads",
+          "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+          "score": 0.5,
+          "savings": 6006606,
+          "displayValue": "Total size was 5,866 KiB"
+        },
+        {
+          "audit": "render-blocking-resources",
+          "title": "Eliminate render-blocking resources",
+          "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+          "score": 0,
+          "savings": 261,
+          "displayValue": "Est savings of 260 ms"
+        }
+      ],
+      "rawLighthouseData": {
+        "fetchTime": "2025-08-27T08:37:59.642Z",
+        "requestedUrl": "https://tipsnotricks.lt/",
+        "finalUrl": "https://tipsnotricks.lt/",
+        "lighthouseVersion": "12.8.1",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+        "environment": {
+          "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+          "benchmarkIndex": 3887,
+          "credits": {
+            "axe-core": "4.10.3"
+          }
+        },
+        "configSettings": {
+          "output": "json",
+          "maxWaitForFcp": 30000,
+          "maxWaitForLoad": 45000,
+          "pauseAfterFcpMs": 1000,
+          "pauseAfterLoadMs": 1000,
+          "networkQuietThresholdMs": 1000,
+          "cpuQuietThresholdMs": 1000,
+          "formFactor": "desktop",
+          "throttling": {
+            "rttMs": 40,
+            "throughputKbps": 10240,
+            "requestLatencyMs": 0,
+            "downloadThroughputKbps": 0,
+            "uploadThroughputKbps": 0,
+            "cpuSlowdownMultiplier": 1
+          },
+          "throttlingMethod": "simulate",
+          "screenEmulation": {
+            "mobile": false,
+            "width": 1350,
+            "height": 940,
+            "deviceScaleFactor": 1,
+            "disabled": false
+          },
+          "emulatedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "auditMode": false,
+          "gatherMode": false,
+          "clearStorageTypes": [
+            "file_systems",
+            "shader_cache",
+            "service_workers",
+            "cache_storage"
+          ],
+          "disableStorageReset": false,
+          "debugNavigation": false,
+          "channel": "node",
+          "usePassiveGathering": false,
+          "disableFullPageScreenshot": false,
+          "skipAboutBlank": false,
+          "blankPage": "about:blank",
+          "ignoreStatusCode": false,
+          "locale": "en-US",
+          "blockedUrlPatterns": null,
+          "additionalTraceCategories": null,
+          "extraHeaders": null,
+          "precomputedLanternData": null,
+          "onlyAudits": null,
+          "onlyCategories": [
+            "performance",
+            "seo",
+            "best-practices",
+            "accessibility"
+          ],
+          "skipAudits": []
+        }
+      }
+    },
+    "comprehensiveSEO": {
+      "technical": {
+        "score": 56,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 28,
+            "optimal": false,
+            "issues": [
+              "Title too short"
+            ],
+            "recommendations": [
+              "Expand title with more descriptive keywords"
+            ]
+          },
+          "metaDescription": {
+            "present": false,
+            "length": 0,
+            "optimal": false,
+            "issues": [
+              "Missing meta description"
+            ],
+            "recommendations": [
+              "Add a compelling meta description"
+            ]
+          },
+          "headingStructure": {
+            "hasH1": false,
+            "h1Count": 0,
+            "hasHierarchy": true,
+            "issues": [
+              "Missing H1 tag"
+            ],
+            "recommendations": [
+              "Add a single, descriptive H1 tag"
+            ],
+            "structure": {
+              "h1": {
+                "count": 0,
+                "texts": []
+              },
+              "h2": {
+                "count": 8,
+                "texts": [
+                  "Mūsų tikslas – sklandus\nbendradarbiavimas ir\naukščiausios kokybės\nmokymai, kurie kuria realią\nvertę Jūsų komandai.",
+                  "135",
+                  "2009",
+                  "61",
+                  "34"
+                ]
+              },
+              "h3": {
+                "count": 9,
+                "texts": [
+                  "Vadovavimas ir lyderystė:",
+                  "Pardavimų, derybų ir klientų aptarnavimas:",
+                  "Asmeninis efektyvumas:",
+                  "Organizacijų vystymas:",
+                  "Renginiai:"
+                ]
+              },
+              "h4": {
+                "count": 0,
+                "texts": []
+              },
+              "h5": {
+                "count": 4,
+                "texts": [
+                  "Mokymų dienų",
+                  "Dalyvių",
+                  "Konsultacijų",
+                  "Vebinarų"
+                ]
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": false,
+            "score": 70
+          },
+          "structuredData": {
+            "present": true,
+            "score": 90
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 53
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 46,
+        "analysis": {
+          "depth": {
+            "wordCount": 291,
+            "paragraphCount": 13,
+            "adequateDepth": false,
+            "contentRatio": 22.384615384615383,
+            "depthScore": 20,
+            "issues": [
+              "Thin content: only 291 words"
+            ],
+            "recommendations": [
+              "Add more comprehensive content (target: 300+ words)",
+              "Include detailed explanations, examples, and supporting information",
+              "Break content into logical sections with subheadings"
+            ]
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 53
+          },
+          "socialSignals": {
+            "score": 70,
+            "hasOpenGraph": true
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 53
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "thin",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 55,
+      "recommendations": [
+        {
+          "priority": "high",
+          "category": "Content",
+          "issue": "Thin content",
+          "action": "Expand content to at least 300 words with valuable, detailed information",
+          "impact": "High - Essential for ranking"
+        },
+        {
+          "priority": "high",
+          "category": "Technical",
+          "issue": "Title optimization",
+          "action": "Optimize title tag length and keyword placement",
+          "impact": "High - Direct ranking factor"
+        },
+        {
+          "priority": "medium",
+          "category": "Structure",
+          "issue": "Missing H1",
+          "action": "Add a single, keyword-rich H1 tag",
+          "impact": "Medium - Helps search engines understand content"
+        },
+        {
+          "priority": "medium",
+          "category": "Technical",
+          "issue": "Meta description",
+          "action": "Write compelling meta description (120-160 characters)",
+          "impact": "Medium - Affects click-through rates"
+        }
+      ],
+      "criticalIssues": [
+        "Thin content - insufficient word count for ranking"
+      ],
+      "opportunities": [
+        "Expand content for better topical authority"
+      ]
+    },
+    "accessibility": {
+      "score": 82,
+      "issues": {
+        "errors": 23,
+        "warnings": 0,
+        "notices": 0,
+        "total": 23
+      },
+      "details": [
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+          "selector": "html > body > header > div > div > span",
+          "context": "<span class=\"header__button-title\">MENIU</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > p",
+          "context": "<p>Mes jungiame laisvai samdomus u...</p>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h2 element appears to be the primary document heading, so should be an h1 element.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > h2",
+          "context": "<h2>Mūsų tikslas – sklandus<br>\nben...</h2>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h2 element should be an h1 to be properly nested.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > h2",
+          "context": "<h2>Mūsų tikslas – sklandus<br>\nben...</h2>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #757770.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > h2",
+          "context": "<h2>Mūsų tikslas – sklandus<br>\nben...</h2>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(2) > a",
+          "context": "<a class=\"white-button\" href=\"https://tipsnotricks.lt/kontaktai/\" target=\"_self\">\n\t\t\t\t                SUSISIEK  ...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > ul > li:nth-child(1) > a",
+          "context": "<a class=\"hero-links__link\" href=\"https://tipsnotricks.lt/mokymai/\" target=\"_self\">\n\t\t                            ...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > ul > li:nth-child(2) > a",
+          "context": "<a class=\"hero-links__link\" href=\"https://tipsnotricks.lt/organizacijoms/\" target=\"_self\">\n\t\t                            ...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.29:1. Recommendation:  change background to #575952.",
+          "selector": "#hero-section > div:nth-child(1) > div > div:nth-child(2) > ul > li:nth-child(3) > a",
+          "context": "<a class=\"hero-links__link\" href=\"https://tipsnotricks.lt/konsultantams/\" target=\"_self\">\n\t\t                            ...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+          "selector": "#numbers > div > div > div:nth-child(1) > h5",
+          "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tMokymų dienų\t\t\t\t\t\t</h5>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+          "selector": "#numbers > div > div > div:nth-child(2) > h5",
+          "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tDalyvių\t\t\t\t\t\t</h5>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+          "selector": "#numbers > div > div > div:nth-child(3) > h5",
+          "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tKonsultacijų\t\t\t\t\t\t</h5>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h5 element should be an h3 to be properly nested.",
+          "selector": "#numbers > div > div > div:nth-child(4) > h5",
+          "context": "<h5 class=\"number-item__sufix\">\n\t\t\t\t\t\t\tVebinarų\t\t\t\t\t\t</h5>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "html > body > footer > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(2) > a",
+          "context": "<a href=\"https://tipsnotricks.lt\">\n\t\t\t\t        <img width=\"431\" h...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_8.H59.1",
+          "message": "Link elements can only be located in the head section of the document.",
+          "selector": "#wc-stripe-blocks-checkout-style-css",
+          "context": "<link rel=\"stylesheet\" id=\"wc-stripe-blocks-checkout-style-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce-gateway-stripe/build/upe-blocks.css?ver=a7aab132721a0ef865695d5cfdc746fb\" type=\"text/css\" media=\"all\">"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_8.H59.1",
+          "message": "Link elements can only be located in the head section of the document.",
+          "selector": "#wc-blocks-style-css",
+          "context": "<link rel=\"stylesheet\" id=\"wc-blocks-style-css\" href=\"https://tipsnotricks.lt/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks.css?ver=wc-9.9.5\" type=\"text/css\" media=\"all\">"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "html > body > div:nth-child(30) > a:nth-child(1)",
+          "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/1.jpg\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "html > body > div:nth-child(30) > a:nth-child(2)",
+          "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/2.png\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "html > body > div:nth-child(30) > a:nth-child(3)",
+          "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/3.jpg\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "html > body > div:nth-child(30) > a:nth-child(4)",
+          "context": "<a href=\"https://tipsnotricks.lt/wp-content/uploads/2025/06/4.jpg\" title=\"Pirkimas\"><img src=\"https://tipsnotricks....</a>"
+        }
+      ]
+    },
+    "technologies": {
+      "technologies": [
+        {
+          "name": "WordPress",
+          "categories": [
+            "CMS"
+          ],
+          "version": "6.8.2",
+          "confidence": 100,
+          "website": null,
+          "source": "custom-patterns, meta-tags"
+        },
+        {
+          "name": "Apache",
+          "categories": [
+            "Web Servers"
+          ],
+          "version": "2",
+          "confidence": 90,
+          "website": null,
+          "source": "headers"
+        },
+        {
+          "name": "WooCommerce",
+          "categories": [
+            "E-commerce"
+          ],
+          "version": ".",
+          "confidence": 70,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Google Analytics",
+          "categories": [
+            "Analytics"
+          ],
+          "version": "25.5",
+          "confidence": 70,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Facebook Pixel",
+          "categories": [
+            "Analytics"
+          ],
+          "version": "25.5",
+          "confidence": 70,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "PHP",
+          "categories": [
+            "Programming Languages"
+          ],
+          "version": "25.5",
+          "confidence": 70,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "jQuery",
+          "categories": [
+            "JavaScript Libraries"
+          ],
+          "version": ".",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Bootstrap",
+          "categories": [
+            "CSS Frameworks"
+          ],
+          "version": ".",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Bulma",
+          "categories": [
+            "CSS Frameworks"
+          ],
+          "version": "25.5",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Google Tag Manager",
+          "categories": [
+            "Analytics"
+          ],
+          "version": "25.5",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        }
+      ],
+      "categories": [
+        "JavaScript Libraries",
+        "CSS Frameworks",
+        "CMS",
+        "E-commerce",
+        "Analytics",
+        "Programming Languages",
+        "Web Servers"
+      ],
+      "count": 10,
+      "stats": {
+        "total": 10,
+        "byCategory": {
+          "CMS": 1,
+          "Web Servers": 1,
+          "E-commerce": 1,
+          "Analytics": 3,
+          "Programming Languages": 1,
+          "JavaScript Libraries": 1,
+          "CSS Frameworks": 2
+        },
+        "byConfidence": {
+          "high": 2,
+          "medium": 8,
+          "low": 0
+        },
+        "topTechnologies": [
+          {
+            "name": "WordPress",
+            "confidence": 100
+          },
+          {
+            "name": "Apache",
+            "confidence": 90
+          },
+          {
+            "name": "WooCommerce",
+            "confidence": 70
+          },
+          {
+            "name": "Google Analytics",
+            "confidence": 70
+          },
+          {
+            "name": "Facebook Pixel",
+            "confidence": 70
+          },
+          {
+            "name": "PHP",
+            "confidence": 70
+          },
+          {
+            "name": "jQuery",
+            "confidence": 50
+          },
+          {
+            "name": "Bootstrap",
+            "confidence": 50
+          },
+          {
+            "name": "Bulma",
+            "confidence": 50
+          },
+          {
+            "name": "Google Tag Manager",
+            "confidence": 50
+          }
+        ]
+      }
+    },
+    "security": {
+      "isHttps": true,
+      "score": 0,
+      "headers": {
+        "strict-transport-security": false,
+        "content-security-policy": false,
+        "x-frame-options": false,
+        "x-content-type-options": false,
+        "x-xss-protection": false,
+        "referrer-policy": false
+      },
+      "rawHeaders": {},
+      "recommendations": [
+        "Add HSTS header to enforce HTTPS",
+        "Implement Content Security Policy to prevent XSS attacks",
+        "Add X-Frame-Options header to prevent clickjacking",
+        "Add X-Content-Type-Options header to prevent MIME sniffing"
+      ]
+    },
+    "scores": {
+      "performance": 51,
+      "seo": 92,
+      "accessibility": 90,
+      "security": 0,
+      "bestPractices": 93,
+      "overall": 68
+    }
+  }
+}

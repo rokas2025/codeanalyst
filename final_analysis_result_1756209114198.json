@@ -1,0 +1,1858 @@
+{
+  "id": "22f8edba-13cb-4a04-af9e-80b2b0748e54",
+  "url": "https://www.delfi.lt/",
+  "analyzedAt": "2025-08-26T11:51:41.567Z",
+  "analysisTime": 93880,
+  "performance": {
+    "score": 50,
+    "metrics": {
+      "firstContentfulPaint": 1722.1410999999996,
+      "largestContentfulPaint": 2524.9570999999996,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 0.514114539426641,
+      "speedIndex": 4219.948617160557,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 2524.9570999999996,
+      "serverResponseTime": 398.127
+    },
+    "opportunities": [
+      {
+        "audit": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "score": 0.43,
+        "savings": 1722.1410999999996,
+        "displayValue": "1.7 s"
+      },
+      {
+        "audit": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0.46,
+        "savings": 2524.9570999999996,
+        "displayValue": "2.5 s"
+      },
+      {
+        "audit": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "score": 0.08,
+        "savings": 4219.948617160557,
+        "displayValue": "4.2 s"
+      },
+      {
+        "audit": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "score": 0.15,
+        "savings": 0.514114539426641,
+        "displayValue": "0.514"
+      },
+      {
+        "audit": "errors-in-console",
+        "title": "Browser errors were logged to the console",
+        "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "interactive",
+        "title": "Time to Interactive",
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "score": 0.89,
+        "savings": 2524.9570999999996,
+        "displayValue": "2.5 s"
+      },
+      {
+        "audit": "third-party-cookies",
+        "title": "Uses third-party cookies",
+        "description": "Third-party cookies may be blocked in some contexts. [Learn more about preparing for third-party cookie restrictions](https://privacysandbox.google.com/cookies/prepare/overview).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "7 cookies found"
+      },
+      {
+        "audit": "font-display",
+        "title": "Ensure text remains visible during webfont load",
+        "description": "Leverage the `font-display` CSS feature to ensure text is user-visible while webfonts are loading. [Learn more about `font-display`](https://developer.chrome.com/docs/lighthouse/performance/font-display/).",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "largest-contentful-paint-element",
+        "title": "Largest Contentful Paint element",
+        "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "2,520 ms"
+      },
+      {
+        "audit": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "13 layout shifts found"
+      },
+      {
+        "audit": "unsized-images",
+        "title": "Image elements do not have explicit `width` and `height`",
+        "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "valid-source-maps",
+        "title": "Missing source maps for large first-party JavaScript",
+        "description": "Source maps translate minified code to the original source code. This helps developers debug in production. In addition, Lighthouse is able to provide further insights. Consider deploying source maps to take advantage of these benefits. [Learn more about source maps](https://developer.chrome.com/docs/devtools/javascript/source-maps/).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "button-name",
+        "title": "Buttons do not have an accessible name",
+        "description": "When a button doesn't have an accessible name, screen readers announce it as \"button\", making it unusable for users who rely on screen readers. [Learn how to make buttons more accessible](https://dequeuniversity.com/rules/axe/4.10/button-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.10/color-contrast).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "frame-title",
+        "title": "`<frame>` or `<iframe>` elements do not have a title",
+        "description": "Screen reader users rely on frame titles to describe the contents of frames. [Learn more about frame titles](https://dequeuniversity.com/rules/axe/4.10/frame-title).",
+        "score": 0,
+        "savings": 0
+      }
+    ]
+  },
+  "lighthouse": {
+    "performance": 50,
+    "seo": 100,
+    "accessibility": 80,
+    "bestPractices": 70,
+    "metrics": {
+      "firstContentfulPaint": 1722.1410999999996,
+      "largestContentfulPaint": 2524.9570999999996,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 0.514114539426641,
+      "speedIndex": 4219.948617160557,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 2524.9570999999996,
+      "serverResponseTime": 398.127
+    },
+    "opportunities": [
+      {
+        "audit": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "score": 0.43,
+        "savings": 1722.1410999999996,
+        "displayValue": "1.7 s"
+      },
+      {
+        "audit": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0.46,
+        "savings": 2524.9570999999996,
+        "displayValue": "2.5 s"
+      },
+      {
+        "audit": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "score": 0.08,
+        "savings": 4219.948617160557,
+        "displayValue": "4.2 s"
+      },
+      {
+        "audit": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "score": 0.15,
+        "savings": 0.514114539426641,
+        "displayValue": "0.514"
+      },
+      {
+        "audit": "errors-in-console",
+        "title": "Browser errors were logged to the console",
+        "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "interactive",
+        "title": "Time to Interactive",
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "score": 0.89,
+        "savings": 2524.9570999999996,
+        "displayValue": "2.5 s"
+      },
+      {
+        "audit": "third-party-cookies",
+        "title": "Uses third-party cookies",
+        "description": "Third-party cookies may be blocked in some contexts. [Learn more about preparing for third-party cookie restrictions](https://privacysandbox.google.com/cookies/prepare/overview).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "7 cookies found"
+      },
+      {
+        "audit": "font-display",
+        "title": "Ensure text remains visible during webfont load",
+        "description": "Leverage the `font-display` CSS feature to ensure text is user-visible while webfonts are loading. [Learn more about `font-display`](https://developer.chrome.com/docs/lighthouse/performance/font-display/).",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "largest-contentful-paint-element",
+        "title": "Largest Contentful Paint element",
+        "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "2,520 ms"
+      },
+      {
+        "audit": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "13 layout shifts found"
+      },
+      {
+        "audit": "unsized-images",
+        "title": "Image elements do not have explicit `width` and `height`",
+        "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "valid-source-maps",
+        "title": "Missing source maps for large first-party JavaScript",
+        "description": "Source maps translate minified code to the original source code. This helps developers debug in production. In addition, Lighthouse is able to provide further insights. Consider deploying source maps to take advantage of these benefits. [Learn more about source maps](https://developer.chrome.com/docs/devtools/javascript/source-maps/).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "button-name",
+        "title": "Buttons do not have an accessible name",
+        "description": "When a button doesn't have an accessible name, screen readers announce it as \"button\", making it unusable for users who rely on screen readers. [Learn how to make buttons more accessible](https://dequeuniversity.com/rules/axe/4.10/button-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.10/color-contrast).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "frame-title",
+        "title": "`<frame>` or `<iframe>` elements do not have a title",
+        "description": "Screen reader users rely on frame titles to describe the contents of frames. [Learn more about frame titles](https://dequeuniversity.com/rules/axe/4.10/frame-title).",
+        "score": 0,
+        "savings": 0
+      }
+    ]
+  },
+  "seo": {
+    "score": 69,
+    "lighthouseScore": 100,
+    "title": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+    "description": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+    "keywords": [],
+    "headings": {
+      "h1": {
+        "count": 0,
+        "texts": []
+      },
+      "h2": {
+        "count": 0,
+        "texts": []
+      },
+      "h3": {
+        "count": 20,
+        "texts": [
+          "Prenumeruok ir valdyk pats, ką nori skaityti!",
+          "Pauliaus Samoškos nuotykiai. 7 pasaulio stebuklai",
+          "Ūkininko Petro dienoraštis",
+          "Ūkininko Petro dienoraštis",
+          "Orijaus kelionių archyvai"
+        ]
+      },
+      "h4": {
+        "count": 10,
+        "texts": [
+          "Mano Delfi",
+          "TIK PRENUMERATORIAMS",
+          "Delfi Fone",
+          "Aktualu",
+          "Nuomonių ringas"
+        ]
+      },
+      "h5": {
+        "count": 95,
+        "texts": [
+          "Sostinėje – didžiulis protestas „Gėdos diena“ (233)",
+          "Siūbuoja dar vieno socialdemokratų ministro postas: jau užsimena, kas galėtų pakeisti",
+          "Protestuotojų minioje kilo sujudimas: prireikė medikų pagalbos  (3)",
+          "Ruginienė: koalicijoje liko tie, kam svarbiau ne postai (17)",
+          "Per neeilinį protestą pasisakė politikai – kai kurie buvo nušvilpti (12)"
+        ]
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "comprehensive": {
+      "technical": {
+        "score": 76,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 54,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 150,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "headingStructure": {
+            "hasH1": false,
+            "h1Count": 0,
+            "hasHierarchy": false,
+            "issues": [
+              "Missing H1 tag",
+              "H3 without H2 - broken hierarchy"
+            ],
+            "recommendations": [
+              "Add a single, descriptive H1 tag",
+              "Add H2 tags before using H3"
+            ],
+            "structure": {
+              "h1": {
+                "count": 0,
+                "texts": []
+              },
+              "h2": {
+                "count": 0,
+                "texts": []
+              },
+              "h3": {
+                "count": 20,
+                "texts": [
+                  "Prenumeruok ir valdyk pats, ką nori skaityti!",
+                  "Pauliaus Samoškos nuotykiai. 7 pasaulio stebuklai",
+                  "Ūkininko Petro dienoraštis",
+                  "Ūkininko Petro dienoraštis",
+                  "Orijaus kelionių archyvai"
+                ]
+              },
+              "h4": {
+                "count": 10,
+                "texts": [
+                  "Mano Delfi",
+                  "TIK PRENUMERATORIAMS",
+                  "Delfi Fone",
+                  "Aktualu",
+                  "Nuomonių ringas"
+                ]
+              },
+              "h5": {
+                "count": 95,
+                "texts": [
+                  "Sostinėje – didžiulis protestas „Gėdos diena“ (233)",
+                  "Siūbuoja dar vieno socialdemokratų ministro postas: jau užsimena, kas galėtų pakeisti",
+                  "Protestuotojų minioje kilo sujudimas: prireikė medikų pagalbos  (3)",
+                  "Ruginienė: koalicijoje liko tie, kam svarbiau ne postai (17)",
+                  "Per neeilinį protestą pasisakė politikai – kai kurie buvo nušvilpti (12)"
+                ]
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": true,
+            "score": 70
+          },
+          "structuredData": {
+            "present": true,
+            "score": 90
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 4330
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 72,
+        "analysis": {
+          "depth": {
+            "wordCount": 1470,
+            "paragraphCount": 98,
+            "adequateDepth": true,
+            "contentRatio": 15,
+            "depthScore": 85,
+            "issues": [],
+            "recommendations": []
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 4330
+          },
+          "socialSignals": {
+            "score": 70,
+            "hasOpenGraph": true
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 4330
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "adequate",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 69,
+      "recommendations": [
+        {
+          "priority": "medium",
+          "category": "Structure",
+          "issue": "Missing H1",
+          "action": "Add a single, keyword-rich H1 tag",
+          "impact": "Medium - Helps search engines understand content"
+        }
+      ],
+      "criticalIssues": [],
+      "opportunities": []
+    },
+    "contentDepth": {
+      "wordCount": 1470,
+      "paragraphCount": 98,
+      "adequateDepth": true,
+      "contentRatio": 15,
+      "depthScore": 85,
+      "issues": [],
+      "recommendations": []
+    },
+    "technicalSEO": {
+      "score": 76,
+      "factors": {
+        "titleOptimization": {
+          "present": true,
+          "length": 54,
+          "optimal": true,
+          "issues": [],
+          "recommendations": []
+        },
+        "metaDescription": {
+          "present": true,
+          "length": 150,
+          "optimal": true,
+          "issues": [],
+          "recommendations": []
+        },
+        "headingStructure": {
+          "hasH1": false,
+          "h1Count": 0,
+          "hasHierarchy": false,
+          "issues": [
+            "Missing H1 tag",
+            "H3 without H2 - broken hierarchy"
+          ],
+          "recommendations": [
+            "Add a single, descriptive H1 tag",
+            "Add H2 tags before using H3"
+          ],
+          "structure": {
+            "h1": {
+              "count": 0,
+              "texts": []
+            },
+            "h2": {
+              "count": 0,
+              "texts": []
+            },
+            "h3": {
+              "count": 20,
+              "texts": [
+                "Prenumeruok ir valdyk pats, ką nori skaityti!",
+                "Pauliaus Samoškos nuotykiai. 7 pasaulio stebuklai",
+                "Ūkininko Petro dienoraštis",
+                "Ūkininko Petro dienoraštis",
+                "Orijaus kelionių archyvai"
+              ]
+            },
+            "h4": {
+              "count": 10,
+              "texts": [
+                "Mano Delfi",
+                "TIK PRENUMERATORIAMS",
+                "Delfi Fone",
+                "Aktualu",
+                "Nuomonių ringas"
+              ]
+            },
+            "h5": {
+              "count": 95,
+              "texts": [
+                "Sostinėje – didžiulis protestas „Gėdos diena“ (233)",
+                "Siūbuoja dar vieno socialdemokratų ministro postas: jau užsimena, kas galėtų pakeisti",
+                "Protestuotojų minioje kilo sujudimas: prireikė medikų pagalbos  (3)",
+                "Ruginienė: koalicijoje liko tie, kam svarbiau ne postai (17)",
+                "Per neeilinį protestą pasisakė politikai – kai kurie buvo nušvilpti (12)"
+              ]
+            },
+            "h6": {
+              "count": 0,
+              "texts": []
+            }
+          }
+        },
+        "urlStructure": {
+          "optimal": true,
+          "score": 80
+        },
+        "metaTags": {
+          "optimal": true,
+          "score": 70
+        },
+        "structuredData": {
+          "present": true,
+          "score": 90
+        },
+        "internalLinking": {
+          "score": 60,
+          "linkCount": 4330
+        }
+      },
+      "issues": []
+    },
+    "recommendations": [
+      {
+        "priority": "medium",
+        "category": "Structure",
+        "issue": "Missing H1",
+        "action": "Add a single, keyword-rich H1 tag",
+        "impact": "Medium - Helps search engines understand content"
+      }
+    ],
+    "criticalIssues": []
+  },
+  "accessibility": {
+    "score": 40,
+    "issues": {
+      "errors": 210,
+      "warnings": 0,
+      "notices": 0,
+      "total": 210
+    },
+    "details": [
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_1.H64.1",
+        "message": "Iframe element requires a non-empty title attribute that identifies the frame.",
+        "selector": "html > head > iframe:nth-child(123)",
+        "context": "<iframe src=\"https://btloader.com/trustedIframe.html?o=5749741711261696&amp;tid=PiUONnR12-YoN6mEhgk7-98e6372718&amp;upapi=true\" referrerpolicy=\"origin\" style=\"display: none !important; width: 0px !important; height: 0px !important;\"></iframe>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_1.H64.1",
+        "message": "Iframe element requires a non-empty title attribute that identifies the frame.",
+        "selector": "html > head > iframe:nth-child(127)",
+        "context": "<iframe src=\"https://btloader.com/trustedIframe.html?o=5749741711261696&amp;tid=PiUONnR12-YoN6mEhgk7-98e6372718&amp;upapi=true\" referrerpolicy=\"origin\" style=\"display: none !important; width: 0px !important; height: 0px !important;\"></iframe>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.Button.Name",
+        "message": "This button element does not have a name available to an accessibility API. Valid names are: title undefined, element content, aria-label undefined, aria-labelledby undefined.",
+        "selector": "#CybotCookiebotDialogHeader > button",
+        "context": "<button class=\"CybotCookiebotBannerCloseButton\" aria-label=\"\"><svg xmlns=\"http://www.w3.org/2...</button>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 6.11:1. Recommendation:  change text colour to #1f43e4.",
+        "selector": "#CybotCookiebotDialogBodyContentTextShowIABVendors",
+        "context": "<a id=\"CybotCookiebotDialogBodyContentTextShowIABVendors\" href=\"#\"> 965 mūsų partneriai</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 6.11:1. Recommendation:  change text colour to #1f43e4.",
+        "selector": "#CybotCookiebotDialogBodyContentTextToggleDetails",
+        "context": "<a id=\"CybotCookiebotDialogBodyContentTextToggleDetails\" href=\"#\">išsamios informacijos dalyje</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+        "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonsSelectPane > form",
+        "context": "<form><fieldset><legend class=\"visual...</form>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+        "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+        "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerNecessaryCard > div:nth-child(1) > div > form",
+        "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+        "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+        "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerPreferenceCard > div:nth-child(1) > div > form",
+        "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+        "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+        "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerStatisticsCard > div:nth-child(1) > div > form",
+        "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+        "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+        "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerAdvertisingCard > div:nth-child(1) > div > form",
+        "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer618 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+        "message": "Anchor element found with no link content and no name and/or ID attribute.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer618 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer416 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+        "message": "Anchor element found with no link content and no name and/or ID attribute.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer416 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer1251 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+        "message": "Anchor element found with no link content and no name and/or ID attribute.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer1251 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+        "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer87 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+        "message": "Anchor element found with no link content and no name and/or ID attribute.",
+        "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer87 > div:nth-child(3) > div:nth-child(2) > a",
+        "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+        "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+        "selector": "#CybotCookiebotDialogBodyButtons > div:nth-child(1) > form",
+        "context": "<form class=\"CybotCookiebotDialogBodyLevelButtonSliderWrapper\"><input type=\"checkbox\" id=\"Cybo...</form>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.Button.Name",
+        "message": "This button element does not have a name available to an accessibility API. Valid names are: title undefined, element content, aria-label undefined, aria-labelledby undefined.",
+        "selector": "#CybotCookiebotBannerCloseButtonE2E",
+        "context": "<button id=\"CybotCookiebotBannerCloseButtonE2E\" class=\"CybotCookiebotBannerCloseButton\" aria-label=\"\"><svg xmlns=\"http://www.w3.org/2...</button>"
+      }
+    ]
+  },
+  "security": {
+    "score": 33,
+    "headers": {
+      "strict-transport-security": true,
+      "content-security-policy": false,
+      "x-frame-options": false,
+      "x-content-type-options": true,
+      "x-xss-protection": false,
+      "referrer-policy": false
+    },
+    "vulnerabilities": []
+  },
+  "technologies": [
+    "Google Analytics",
+    "Google Tag Manager",
+    "Vue.js",
+    "Bulma",
+    "Facebook Pixel",
+    "Cloudflare"
+  ],
+  "basic": {
+    "title": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+    "description": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+    "keywords": "",
+    "lang": "lt",
+    "charset": "UTF-8",
+    "ogTitle": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+    "ogDescription": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+    "ogImage": "https://g.delfi.lt/glt/c/delfi-logo/delfi-og-image.jpg",
+    "ogUrl": "https://www.delfi.lt",
+    "twitterCard": "summary_large_image",
+    "twitterTitle": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+    "twitterDescription": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+    "hasStructuredData": true,
+    "structuredDataCount": 1,
+    "headingStructure": {
+      "h1": {
+        "count": 0,
+        "texts": []
+      },
+      "h2": {
+        "count": 0,
+        "texts": []
+      },
+      "h3": {
+        "count": 20,
+        "texts": [
+          "Prenumeruok ir valdyk pats, ką nori skaityti!",
+          "Pauliaus Samoškos nuotykiai. 7 pasaulio stebuklai",
+          "Ūkininko Petro dienoraštis",
+          "Ūkininko Petro dienoraštis",
+          "Orijaus kelionių archyvai"
+        ]
+      },
+      "h4": {
+        "count": 10,
+        "texts": [
+          "Mano Delfi",
+          "TIK PRENUMERATORIAMS",
+          "Delfi Fone",
+          "Aktualu",
+          "Nuomonių ringas"
+        ]
+      },
+      "h5": {
+        "count": 95,
+        "texts": [
+          "Sostinėje – didžiulis protestas „Gėdos diena“ (233)",
+          "Siūbuoja dar vieno socialdemokratų ministro postas: jau užsimena, kas galėtų pakeisti",
+          "Protestuotojų minioje kilo sujudimas: prireikė medikų pagalbos  (3)",
+          "Ruginienė: koalicijoje liko tie, kam svarbiau ne postai (17)",
+          "Per neeilinį protestą pasisakė politikai – kai kurie buvo nušvilpti (12)"
+        ]
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "imageCount": 2006,
+    "linkCount": 4330,
+    "formCount": 6,
+    "wordCount": 1470,
+    "paragraphCount": 98,
+    "externalScripts": [
+      "https://www.google-analytics.com/analytics.js",
+      "https://adx.adform.net/adx/?rp=3&pv=1&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTkz&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODI0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTg0MjQ5&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODIy&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODE2&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTQyOTc3Mg&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTM3NTg4MQ&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTA3MjQ0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTc0MDc1&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTc1OTQxMg&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9ODAzNjYx&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA3&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk5&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk3&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk1&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTI4ODA2&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjAx&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTYyNzgy&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTU4OTgx&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTAyNDI2OA&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTU0NDAwNQ&adid=3229f985-4385-4efc-ba44-007a180ae03d&url=https%3A%2F%2Fwww.delfi.lt%2F&callback=_adform_cb_1756209014379_5468800063992068",
+      "https://macro.adnami.io/macro/gen/adsm.macro.rmb.js",
+      "https://auth.delfi.lt/id/api/v1/identity/token/verify?browser_id=meshi27a7zvp7pce&page_view_id=meshi27ar72dy4la&content_type=website&page_title=Delfi+%C5%BEinios+-+Pagrindinis+naujien%C5%B3+portalas+Lietuvoje&callback=jsonp272&client_id=aH6KBWojpe&site=https%3A%2F%2Fwww.delfi.lt&user_state=anon",
+      "https://www.googletagmanager.com/gtag/js?id=G-5RSNZL365S&cx=c&gtm=4e58m1",
+      "https://cdn.delfi.lt/api/tinypass.min.js",
+      "https://www.googletagmanager.com/gtm.js?id=GTM-WL89FDR",
+      "https://consent.cookiebot.com/34888f84-c185-4693-bff3-44da0c6d5b6e/cc.js?renew=false&referer=www.delfi.lt&dnt=false&init=false&culture=lt&framework=TCFv2.2",
+      "https://consent.cookiebot.com/Framework/IAB/consent-sdk-2.2.js",
+      "https://g.delfi.lt/misc/portal-root/j.js",
+      "https://g.delfi.lt/js/c.js",
+      "https://cdn.cxense.com/track_banners_init.js",
+      "https://consent.cookiebot.com/uc.js",
+      "https://s1.adform.net/banners/scripts/adx.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-Media-lt_LT-json.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-piano-lt_LT-json.js",
+      "https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js",
+      "https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js",
+      "https://g.delfi.lt/components/video/jwplayer-8.36.4/jwplayer.js",
+      "https://www.google-analytics.com/analytics.js",
+      "https://scdn.cxense.com/cx.js",
+      "https://galt.hit.gemius.pl/gemius.min.js",
+      "https://connect.facebook.net/signals/config/1720142964883079?v=2.9.226&r=stable&domain=www.delfi.lt&hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138",
+      "https://connect.facebook.net/en_US/fbevents.js",
+      "https://www.googletagmanager.com/gtag/js?id=GTM-WL89FDR",
+      "https://geojs.delfi.lt/g.js",
+      "https://core.dimatter.ai/pubs/delfi-lt-desktop.min.js",
+      "https://www.npttech.com/advertising.js",
+      "https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js",
+      "https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js",
+      "https://lt-production-portal-custom-page.s3.delfi.lt/tv-guide/widget.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleBase.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/page/Article.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article/page/ArticleComments/page/ArticleCommentsNapo.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments/page/ArticleCommentsNapo.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments.js",
+      "https://securepubads.g.doubleclick.net/tag/js/gpt.js",
+      "https://cdn.cxense.com/track_banners_init.js",
+      "https://functions.adnami.io/api/macro/adsm.macro.delfi.lt.js",
+      "https://btloader.com/tag?o=5749741711261696&domain=delfi.lt&upapi=true",
+      "https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202508210101/pubads_impl.js",
+      "https://fundingchoicesmessages.google.com/i/99287527?ers=3",
+      "https://fundingchoicesmessages.google.com/f/AGSKWxWITEm-Q4kwzYm0pSo1O-sz2EDjh749L3tgxn6_oXeWj4_PevJktvgQryWuLE6Vh9u_zOEk6WxE2WXYzLuohu8q8rn5AJJFLUGfre-tL5XTRguiI-ythqugVHxPBbZngyYNPLHO0w==?fccs=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLFsxNzU2MjA5MDE0LDU5NzAwMDAwMF0sbnVsbCxudWxsLG51bGwsW251bGwsWzddXSwiaHR0cHM6Ly93d3cuZGVsZmkubHQvIixudWxsLFtbOCwiNHl0bURLR1V1WFUiXSxbOSwiZW4tVVMiXSxbMTksIjEiXSxbMTcsIlswXSJdLFsyNCwiIl0sWzI5LCJmYWxzZSJdXV0",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/runtime.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage/page/MyDelfi.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/commons/app.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.js",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.js"
+    ],
+    "externalStyles": [
+      "https://static.delfi.lt/portal/css/hotfixes.css",
+      "https://g.delfi.lt/glt/c/delfi-fonts/inter/inter.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/delfi-root-variables-css.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/main-root-styles.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article/page/ArticleComments/page/ArticleCommentsNapo.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments/page/ArticleCommentsNapo.css",
+      "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments.css"
+    ],
+    "domElements": 48404,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "html": "<!DOCTYPE html><html lang=\"lt\" data-n-head=\"%7B%22lang%22:%7B%22ssr%22:%22lt%22%7D%7D\" style=\"--delfi-header-height: 113px; --delfi-promo-line-offset: 180px; --delfi-promo-line-stick-position: 70px;\"><head><script async=\"\" src=\"https://www.google-analytics.com/analytics.js\"></script><script type=\"text/javascript\" src=\"https://adx.adform.net/adx/?rp=3&amp;pv=1&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTkz&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODI0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTg0MjQ5&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODIy&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODE2&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTQyOTc3Mg&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTM3NTg4MQ&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTA3MjQ0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTc0MDc1&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTc1OTQxMg&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9ODAzNjYx&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA3&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk5&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk3&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk1&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTI4ODA2&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjAx&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTYyNzgy&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTU4OTgx&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTAyNDI2OA&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTU0NDAwNQ&amp;adid=3229f985-4385-4efc-ba44-007a180ae03d&amp;url=https%3A%2F%2Fwww.delfi.lt%2F&amp;callback=_adform_cb_1756209014379_5468800063992068\"></script><script async=\"\" type=\"text/javascript\" src=\"https://macro.adnami.io/macro/gen/adsm.macro.rmb.js\"></script><script src=\"https://auth.delfi.lt/id/api/v1/identity/token/verify?browser_id=meshi27a7zvp7pce&amp;page_view_id=meshi27ar72dy4la&amp;content_type=website&amp;page_title=Delfi+%C5%BEinios+-+Pagrindinis+naujien%C5%B3+portalas+Lietuvoje&amp;callback=jsonp272&amp;client_id=aH6KBWojpe&amp;site=https%3A%2F%2Fwww.delfi.lt&amp;user_state=anon\"></script>\n    <meta data-n-head=\"ssr\" charset=\"utf-8\"><meta data-n-head=\"ssr\" name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0\"><meta data-n-head=\"ssr\" data-hid=\"description\" name=\"description\" content=\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"><meta data-n-head=\"ssr\" data-hid=\"keywords\" name=\"keywords\" content=\"\"><meta data-n-head=\"ssr\" data-hid=\"robots\" name=\"robots\" content=\"max-snippet:160, max-image-preview:large, max-video-preview:60\"><meta data-n-head=\"ssr\" data-hid=\"og_type\" property=\"og:type\" content=\"website\"><meta data-n-head=\"ssr\" data-hid=\"og_url\" property=\"og:url\" content=\"https://www.delfi.lt\"><meta data-n-head=\"ssr\" data-hid=\"og_site_name\" property=\"og:site_name\" content=\"Delfi\"><meta data-n-head=\"ssr\" data-hid=\"og_title\" property=\"og:title\" content=\"Delfi žinios - Pagrindinis naujienų portalas Lietuvoje\"><meta data-n-head=\"ssr\" data-hid=\"og_description\" property=\"og:description\" content=\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"><meta data-n-head=\"ssr\" data-hid=\"og_image\" property=\"og:image\" content=\"https://g.delfi.lt/glt/c/delfi-logo/delfi-og-image.jpg\"><meta data-n-head=\"ssr\" data-hid=\"og_image_width\" property=\"og:image:width\" content=\"1200\"><meta data-n-head=\"ssr\" data-hid=\"og_image_height\" property=\"og:image:height\" content=\"630\"><meta data-n-head=\"ssr\" data-hid=\"twitter:card\" name=\"twitter:card\" content=\"summary_large_image\"><meta data-n-head=\"ssr\" data-hid=\"twitter:title\" name=\"twitter:title\" content=\"Delfi žinios - Pagrindinis naujienų portalas Lietuvoje\"><meta data-n-head=\"ssr\" data-hid=\"twitter:description\" name=\"twitter:description\" content=\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"><meta data-n-head=\"ssr\" data-hid=\"twitter:image\" name=\"twitter:image\" content=\"https://g.delfi.lt/glt/c/delfi-logo/delfi-og-image.jpg\"><meta data-n-head=\"ssr\" content=\"161041023936278\" data-hid=\"fb_app_id\" property=\"fb:app_id\" vmid=\"fb:app_id\"><title>Delfi žinios - Pagrindinis naujienų portalas Lietuvoje</title><link data-n-head=\"ssr\" href=\"https://static.delfi.lt/portal/css/hotfixes.css\" rel=\"stylesheet\"><link data-n-head=\"ssr\" rel=\"icon\" data-hid=\"favicon\" type=\"image/x-icon\" href=\"https://g.delfi.lt/glt/c/delfi-icons/2020/favicon.ico\"><link data-n-head=\"ssr\" rel=\"apple-touch-icon\" data-hid=\"apple_touch_icon\" href=\"https://g.delfi.lt/glt/c/delfi-icons/2020/apple-icon-180x180.png\"><link data-n-head=\"ssr\" rel=\"preconnect\" data-hid=\"preconnect\" href=\"https://fonts.gstatic.com\"><link data-n-head=\"ssr\" rel=\"preconnect\" data-hid=\"dimatter-preconnect\" href=\"https://core.dimatter.ai\"><link data-n-head=\"ssr\" rel=\"preconnect\" data-hid=\"g-preconnect\" href=\"https://securepubads.g.doubleclick.net\"><link data-n-head=\"ssr\" rel=\"dns-prefetch\" data-hid=\"dimatter-dns-prefetch\" href=\"https://core.dimatter.ai\"><link data-n-head=\"ssr\" rel=\"dns-prefetch\" data-hid=\"g-dns-prefetch\" href=\"https://securepubads.g.doubleclick.net\"><link data-n-head=\"ssr\" rel=\"stylesheet\" data-hid=\"inter_font\" href=\"https://g.delfi.lt/glt/c/delfi-fonts/inter/inter.css\"><link data-n-head=\"ssr\" rel=\"stylesheet\" data-hid=\"root-variables\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/delfi-root-variables-css.css\"><link data-n-head=\"ssr\" rel=\"stylesheet\" data-hid=\"main_styles\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/main-root-styles.css\"><link data-n-head=\"ssr\" rel=\"canonical\" href=\"https://www.delfi.lt/\" data-hid=\"canonical\"><script type=\"text/javascript\" async=\"\" src=\"https://www.googletagmanager.com/gtag/js?id=G-5RSNZL365S&amp;cx=c&amp;gtm=4e58m1\"></script><script type=\"text/javascript\" async=\"\" src=\"https://cdn.delfi.lt/api/tinypass.min.js\"></script><script async=\"\" src=\"https://www.googletagmanager.com/gtm.js?id=GTM-WL89FDR\"></script><script type=\"text/javascript\" charset=\"UTF-8\" async=\"\" src=\"https://consent.cookiebot.com/34888f84-c185-4693-bff3-44da0c6d5b6e/cc.js?renew=false&amp;referer=www.delfi.lt&amp;dnt=false&amp;init=false&amp;culture=lt&amp;framework=TCFv2.2\"></script><script type=\"text/javascript\" charset=\"UTF-8\" src=\"https://consent.cookiebot.com/Framework/IAB/consent-sdk-2.2.js\"></script><script data-n-head=\"ssr\" src=\"https://g.delfi.lt/misc/portal-root/j.js\"></script><script data-n-head=\"ssr\" data-hid=\"cjs\" src=\"https://g.delfi.lt/js/c.js\"></script><script data-n-head=\"ssr\" data-hid=\"track_banners_init\" src=\"https://cdn.cxense.com/track_banners_init.js\"></script><script data-n-head=\"ssr\" id=\"Cookiebot\" src=\"https://consent.cookiebot.com/uc.js\" async=\"\" data-cbid=\"34888f84-c185-4693-bff3-44da0c6d5b6e\" data-framework=\"TCFv2.2\" data-culture=\"lt\" data-wipe-preferences=\"0\" data-wipe-statistics=\"0\" data-wipe-marketing=\"0\"></script><script data-n-head=\"ssr\" src=\"//s1.adform.net/banners/scripts/adx.js\" async=\"\"></script><script data-n-head=\"ssr\" data-hid=\"default-ld-json\" type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"url\":\"https://www.delfi.lt\",\"author\":{\"@type\":\"Organization\",\"name\":\"Delfi\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Delfi\"},\"description\":\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"}</script><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/runtime.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/commons/app.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage/page/MyDelfi.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.js\" as=\"script\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.css\">\n  <script charset=\"utf-8\" src=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-Media-lt_LT-json.js\"></script><script charset=\"utf-8\" src=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-piano-lt_LT-json.js\"></script><style type=\"text/css\" id=\"CookieConsentStateDisplayStyles\">.cookieconsent-optin-preferences,.cookieconsent-optin-statistics,.cookieconsent-optin-marketing,.cookieconsent-optin{display:none;}.cookieconsent-optout-preferences,.cookieconsent-optout-statistics,.cookieconsent-optout-marketing,.cookieconsent-optout{display:block;display:initial;}</style><script src=\"https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js\" type=\"text/javascript\"></script><script src=\"https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js\" type=\"text/javascript\"></script><script src=\"https://g.delfi.lt/components/video/jwplayer-8.36.4/jwplayer.js\" type=\"text/javascript\" async=\"\"></script><script src=\"//www.google-analytics.com/analytics.js\" type=\"text/javascript\"></script><script src=\"https://scdn.cxense.com/cx.js\" type=\"text/javascript\"></script><script src=\"https://galt.hit.gemius.pl/gemius.min.js\" type=\"text/javascript\"></script><script src=\"https://connect.facebook.net/signals/config/1720142964883079?v=2.9.226&amp;r=stable&amp;domain=www.delfi.lt&amp;hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&amp;ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138\" async=\"\"></script><script async=\"\" src=\"https://connect.facebook.net/en_US/fbevents.js\"></script><script src=\"https://www.googletagmanager.com/gtag/js?id=GTM-WL89FDR\" type=\"text/javascript\" async=\"\"></script><script async=\"\" src=\"//geojs.delfi.lt/g.js\"></script><script src=\"//core.dimatter.ai/pubs/delfi-lt-desktop.min.js\" async=\"\"></script><script src=\"//www.npttech.com/advertising.js\" type=\"text/javascript\" async=\"\"></script><script src=\"https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js\"></script><script src=\"https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js\"></script><script src=\"https://lt-production-portal-custom-page.s3.delfi.lt/tv-guide/widget.js\" type=\"text/javascript\" defer=\"\"></script><style type=\"text/css\" id=\"CookiebotDialogStyle\">#CybotCookiebotDialog *,#CybotCookiebotDialogBodyUnderlay *{background:transparent;box-sizing:border-box;color:inherit;font-family:inherit;font-size:15px;margin:0;outline:0;padding:0;vertical-align:baseline}#CybotCookiebotDialog #CybotCookiebotDialogNav :after,#CybotCookiebotDialog #CybotCookiebotDialogNav :before{content:none}#CybotCookiebotDialog label{width:auto}#CybotCookiebotDialogBodyUnderlay{background-color:#000;height:100%;left:0;margin:0;opacity:0;overflow:hidden;padding:0;pointer-events:none;position:fixed;top:0;transition:opacity .5s ease;width:100%;z-index:2147483630}#CybotCookiebotDialog.CybotCookiebotDialogActive+#CybotCookiebotDialogBodyUnderlay{opacity:.75;pointer-events:auto}#CybotCookiebotDialog{background-color:#ffffff;border-radius:8px;box-shadow:0 32px 68px rgba(0,0,0,.3);box-sizing:border-box;color:#141414;font-family:sans-serif;font-size:15px;height:auto;left:50%;letter-spacing:.1px;line-height:24px;max-height:calc(100% - 16px);overflow:hidden;position:fixed;text-align:initial;top:50%;transform:translate(-50%,-50%);transition:all .5s ease;transition-property:width,max-width,top,bottom,left,opacity;width:calc(100% - 16px);z-index:2147483631}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl{max-height:calc(100vh - 10px);width:calc(100vw - 10px)}#CybotCookiebotDialog ol,#CybotCookiebotDialog ul{list-style-position:inside}#CybotCookiebotDialog .CybotCookiebotDialogContentWrapper{align-items:flex-start;display:flex;flex-direction:column;width:100%}#CybotCookiebotDialog .CybotCookiebotDialogSROnly{clip:rect(0,0,0,0);border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}:root #CybotCookiebotDialog,:root #CybotCookiebotDialog #CybotCookiebotDialogTabContent,_:-ms-fullscreen{height:100%}:root #CybotCookiebotDialogBody,:root #CybotCookiebotDialogTabContent .CybotCookiebotDialogTabPanel,_:-ms-fullscreen{flex:auto}@media screen and (min-width:601px){#CybotCookiebotDialog{max-width:900px}}@media screen and (min-width:1280px){#CybotCookiebotDialog{left:50%;max-height:80vh;top:0;transform:translate(-50%)}#CybotCookiebotDialog.CybotEdge{box-shadow:0 30px 70px rgba(0,0,0,.3);height:auto;max-height:70vh;max-width:100vw;min-width:100vw;padding:24px;transition-property:transform,opacity,top;width:100vw}#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogContentWrapper{flex-direction:row;margin:0 auto;max-width:1600px;position:relative}#CybotCookiebotDialog[data-template=bottom]{top:100%;transform:translate(-50%,-100%)}#CybotCookiebotDialog[data-template=pushdown],#CybotCookiebotDialog[data-template=slidedown]{transform:translate(-50%,-150%)}#CybotCookiebotDialog[data-template=pushdown].CybotCookiebotDialogActive,#CybotCookiebotDialog[data-template=slidedown].CybotCookiebotDialogActive{transform:translate(-50%)}#CybotCookiebotDialog[data-template=slideup]{top:100%;transform:translate(-50%,50%)}#CybotCookiebotDialog[data-template=slideup].CybotCookiebotDialogActive{transform:translate(-50%,-100%)}#CybotCookiebotDialog[data-template=overlay],#CybotCookiebotDialog[data-template=popup]{opacity:0;top:50%;transform:translate(-50%,-50%)}#CybotCookiebotDialog[data-template=overlay].CybotCookiebotDialogActive,#CybotCookiebotDialog[data-template=popup].CybotCookiebotDialogActive{opacity:1}}#CybotCookiebotDialogHeader{align-items:center;border-bottom:1px solid #D6D6D6;display:flex;padding:1em;width:100%}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogHeader{padding:.5em 1em}#CybotCookiebotDialogHeaderLogosWrapper{align-items:center;display:flex;flex:1;justify-content:space-between}#CybotCookiebotDialogPoweredbyCybot,#CybotCookiebotDialogPoweredbyLink{align-items:center;display:flex;width:50%}#CybotCookiebotDialogPoweredbyCybot{justify-content:flex-end;width:175px}#CybotCookiebotDialogPoweredbyImage{max-height:1.5em;width:auto}#CybotCookiebotDialogPoweredbyCybot svg{fill:#141414;height:1.7em;max-width:133px}@media screen and (min-width:601px){#CybotCookiebotDialogPoweredbyCybot svg{height:2em}}@media screen and (min-width:1280px){#CybotCookiebotDialogHeader{padding:1.5em}#CybotCookiebotDialogPoweredbyImage{max-height:2.125em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogHeader{align-items:center;align-self:stretch;border:none;justify-content:space-between;padding:0;width:210px}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogHeaderLogosWrapper{align-self:stretch;flex-direction:column}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyLink{flex:1}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyImage{height:auto;max-height:6em;max-width:100%}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyCybot{height:2em;margin-top:2em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyCybot,#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyLink{justify-content:center}}#CybotCookiebotDialogNav{border-bottom:1px solid #D6D6D6;position:relative;width:100%}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogNav{display:none}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItems{display:flex;list-style:none;overflow-x:auto}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItems::-webkit-scrollbar{height:0;width:0}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItem{flex:1 1 0%;margin:0 auto}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink{border-bottom:1px solid #ffffff;color:#141414;display:block;font-weight:600;height:100%;outline-offset:-5px;padding:1em;text-align:center;text-decoration:none;white-space:nowrap}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink{padding:.5em}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink:hover{color:#1032CF}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink.CybotCookiebotDialogActive{border-color:transparent;border-bottom:1px solid #1032CF;color:#1032CF}@media screen and (min-width:1280px){#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink.CybotCookiebotDialogActive{border-width:3px}}#CybotCookiebotDialogTabContent{display:flex;flex-direction:column;height:auto;min-height:60px;overflow:auto;width:100%}#CybotCookiebotDialogTabContent .CybotCookiebotScrollContainer{display:flex;flex:1;flex-direction:column}#CybotCookiebotDialogTabContent .CybotCookiebotDialogTabPanel{flex:1;overflow-x:hidden;overflow-y:auto;width:100%}#CybotCookiebotDialogSpecialFeaturesText ul{margin:.25em 0 .25em 2em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogSpecialFeaturesText ul{margin:.25em 2em .25em 0}#CybotCookiebotDialog .CybotCookiebotScrollContainer{border-bottom:1px solid #D6D6D6;height:100%;padding:.375em;position:relative}#CybotCookiebotDialog .CybotCookiebotScrollArea{height:100%}#CybotCookiebotDialog .CybotCookiebotDialogBodyBottomWrapper{width:100%}@media screen and (min-width:601px){#CybotCookiebotDialog .CybotCookiebotScrollContainer{display:flex;min-height:auto}}@media screen and (min-width:1280px){#CybotCookiebotDialog.CybotEdge .CybotCookiebotScrollContainer{border-bottom:none;display:none}#CybotCookiebotDialog.CybotEdge.CybotMultilevel .CybotCookiebotScrollContainer{width:calc(100% - 286px - 1.5em)}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogTabContent{flex:1;margin-left:1.5em;overflow:visible}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogTabContent{margin-left:0;margin-right:1.5em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogTabContent .CybotCookiebotDialogTabPanel{overflow:visible}#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogBodyBottomWrapper{align-items:flex-end;display:flex;flex-wrap:wrap;justify-content:flex-start;margin-top:1.5em;padding-left:.375em}#CybotCookiebotDialog.CybotEdge[dir=rtl] .CybotCookiebotDialogBodyBottomWrapper{padding-left:0;padding-right:.375em}#CybotCookiebotDialog.CybotEdge.CybotMultilevel .CybotCookiebotDialogBodyBottomWrapper{border-top:1px solid #D6D6D6;padding-top:1em}}@media screen and (min-width:1510px){#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) #CybotCookiebotDialogTabContent{margin:0 1.5em}#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) .CybotCookiebotScrollContainer{width:auto}#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) .CybotCookiebotDialogBodyBottomWrapper{border-top:none;padding-top:0}}#CybotCookiebotDialog .CybotCookiebotFader{bottom:0;height:5em;left:1px;opacity:0;pointer-events:none;position:absolute;transition:opacity .3s;width:calc(100% - 1em);z-index:10}#CybotCookiebotDialog .CybotCookiebotFader:not(.CybotCookiebotFaderRight):not(.CybotCookiebotFaderLeft){max-height:50%}#CybotCookiebotDialog[dir=rtl] .CybotCookiebotFader:not(.CybotCookiebotFaderLeft){left:auto;right:1px}#CybotCookiebotDialog .CybotCookiebotFader.CybotCookiebotDialogActive{opacity:1}#CybotCookiebotDialog .CybotCookiebotFaderLeft,#CybotCookiebotDialog .CybotCookiebotFaderRight{height:100%;width:3.5em}#CybotCookiebotDialog .CybotCookiebotFaderLeft{left:0}#CybotCookiebotDialog .CybotCookiebotFaderRight{left:auto;right:0}#CybotCookiebotDialog .CybotCookiebotFader:not(.CybotCookiebotFaderLeft):not(.CybotCookiebotFaderRight){max-height:30%}@media screen and (min-width:1280px){#CybotCookiebotDialog .CybotCookiebotFader:not(.CybotCookiebotFaderLeft):not(.CybotCookiebotFaderRight){width:calc(100% - 1.5em)}}#CybotCookiebotDialogBody{display:flex;flex-direction:column;height:100%}#CybotCookiebotDialogBody .CybotCookiebotScrollContainer{display:flex;flex-direction:column;max-height:18em}#CybotCookiebotDialog #CybotCookiebotDialogBodyContent{max-height:inherit}#CybotCookiebotDialog .CybotCookiebotDialogBodyContentHeading{font-weight:600;letter-spacing:.25px;line-height:1.6em;margin-bottom:.5em}#CybotCookiebotDialogBodyContent{flex:1;height:100%;letter-spacing:.5px;line-height:1.6em;max-height:100%;overflow-x:hidden;padding:1.625em .625em}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogBodyContent{padding:.8em}#CybotCookiebotDialog .CybotCookiebotDialogDetailBodyContentCookieTabContent{list-style-type:none}#CybotCookiebotDialogDetailBulkConsent{border:1px solid #D6D6D6;border-radius:.5em;margin:0 .625em 1em;padding:1em}#CybotCookiebotDialogDetailBulkConsent:before{border-top:1px solid #D6D6D6;content:\"\";width:100%}#CybotCookiebotDialogDetailBulkConsentLink{color:#141414;display:block;font-weight:600;line-height:1.6em;margin-bottom:.625em;text-decoration:none}#CybotCookiebotDialogDetailBulkConsentLink:hover{color:#1032CF}#CybotCookiebotDialogTabContent .CybotCookiebotDialogDetailBulkConsentCount{background-color:#D6D6D6;border-radius:5em;display:inline-block;font-size:.8em;font-weight:700;letter-spacing:.25px;line-height:1.2em;margin-left:.5em;padding:.25em .5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogTabContent .CybotCookiebotDialogDetailBulkConsentCount{margin-left:0;margin-right:.5em}#CybotCookiebotDialogDetailBulkConsentListWrapper{background-color:#F4F4F4;border:1px solid #D6D6D6;border-radius:.5em;margin-top:1.5em;padding:1em}#CybotCookiebotDialogDetailBulkConsentListWrapper>span{border-bottom:1px solid #D6D6D6;display:block;font-weight:600;padding-bottom:1em}#CybotCookiebotDialogDetailBulkConsentList{margin-top:1em}#CybotCookiebotDialogDetailFooter{letter-spacing:.3px;line-height:1.6em;padding:0 1em 1em}#CybotCookiebotDialogDetailFooter a{color:#141414}#CybotCookiebotDialogDetailBulkConsentList dt:not(:last-of-type){margin-bottom:.5em}@media screen and (min-width:1280px){#CybotCookiebotDialog #CybotCookiebotDialogBody .CybotCookiebotScrollContainer{display:flex;flex:auto;height:auto;max-height:15.5em;overflow:hidden}#CybotCookiebotDialogBodyContent{padding:1.125em}#CybotCookiebotDialogDetailBulkConsent{margin:0 2em 1em;padding:1.5em}#CybotCookiebotDialogDetailFooter{padding:0 2em 1.125em}#CybotCookiebotDialogDetailBulkConsentListWrapper{margin-top:2em;padding:1.5em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBody{display:flex;justify-content:space-between;overflow:hidden}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyContent{height:auto;padding:0 1.125em 0 0}#CybotCookiebotDialog[dir=rtl].CybotEdge #CybotCookiebotDialogBodyContent{padding-left:1.125em;padding-right:0}}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeader{font-weight:600;line-height:1.6em;margin-bottom:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABWrapper{border:2px solid #D6D6D6;border-radius:1em;margin:1.5em 0 1em;padding:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABWrapper:last-of-type{margin-bottom:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed{background-color:#F4F4F4;border:2px solid #D6D6D6;border-radius:1em;margin-bottom:.5em;padding:.5em 1em 1em;position:relative}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer:last-of-type,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:last-of-type{margin-bottom:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper{align-items:center;display:flex;font-weight:600;margin:.5em 2em 0 0}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper{margin:.5em 0 0 2em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-right:0}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-left:0;margin-right:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-right:3.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-left:3.5em;margin-right:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription{border-top:1px solid #D6D6D6;margin-top:1em;padding-top:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABPurposeCount{margin-top:2em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABPurposeCount .CybotCookiebotDialogDetailBulkConsentCount{margin-left:.4em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLinkWrapper{font-weight:700}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLinkWrapper:nth-of-type(2){margin-top:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLinkWrapper a{margin-top:0;word-break:break-word}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription a{align-items:center;display:inline-flex;margin-top:.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABBullet{margin:1em 0 0 1em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABBullet{margin:1em 1em 0 0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABList{font-weight:700;margin-top:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABList li{font-weight:400;margin-left:2px}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABList li{font-weight:400;margin-right:2px}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed .CybotCookiebotDialogBodyLevelButtonIABDescription{display:none}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer .CybotCookiebotDialogBodyLevelButtonIABDescription,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription.CybotCookiebotDialogShow{display:block}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow{display:block;height:2em;position:absolute;right:1.35em;top:.75em;width:2em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow{left:1.35em;right:auto}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before,#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:before{border-style:solid;border-width:.15em .15em 0 0;content:\"\";display:inline-block;height:.5em;position:absolute;right:2em;top:1.3em;transform:rotate(-225deg);width:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:before{left:2em;right:auto}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before{top:1.6em;transform:rotate(-45deg)}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyIABIntroContainer{padding-bottom:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLabel{line-height:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs p.CybotCookiebotDialogBodyLevelButtonIABLabel{padding-left:2em}@media screen and (min-width:1280px){#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABWrapper{padding:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeader{align-items:center;border-bottom:1px solid #D6D6D6;display:flex;margin-bottom:1.5em;padding-bottom:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyIABIntroContainer{padding-bottom:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerTogglesWrapper{align-items:center;display:flex;justify-content:space-between;width:100%}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed{padding:1em 1.5em 1.5em}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before,#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:before{top:1.8em}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before{top:2.1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription{width:100%}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow{top:1.2em}}#CybotCookiebotDialogDetailBodyContentTextAbout{padding:1.625em .625em}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogDetailBodyContentTextAbout{padding:.5em}@media screen and (min-width:1280px){#CybotCookiebotDialogDetailBodyContentTextAbout{padding:1.125em}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogDetailBodyContentTextAbout{padding:.5em}}#CybotCookiebotDialogFooter.CybotCookiebotScrollContainer{height:auto;min-height:80px;width:100%}#CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:1em;width:100%}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:.5em}#CybotCookiebotDialog:not(.CybotCookiebotDialogZoomedLg):not(.CybotCookiebotDialogZoomedXl) #CybotCookiebotDialogFooter.CybotCookiebotScrollContainer{min-height:auto;padding:0}#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter .CybotCookiebotScrollArea,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter .CybotCookiebotScrollArea{overflow:auto}#CybotCookiebotDialogBodyButtons{align-items:flex-start;display:flex;flex-direction:column;flex-wrap:wrap}@media screen and (min-width:601px){#CybotCookiebotDialogBodyButtons{align-items:center;flex-direction:row}}@media screen and (min-width:1280px){#CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:1em 1.5em 1.5em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter{display:block;padding:0;width:auto}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:0}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotScrollbarContainer{display:none}#CybotCookiebotDialog.CybotEdge.CybotMultilevel #CybotCookiebotDialogFooter{position:absolute;right:0;top:0}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogFooter{left:0;right:auto}#CybotCookiebotDialog.CybotEdge.CybotMultilevel.CybotCloseButtonEnabled #CybotCookiebotDialogFooter{right:51px}#CybotCookiebotDialog.CybotEdge[dir=rtl].CybotCloseButtonEnabled #CybotCookiebotDialogFooter{left:51px;right:auto}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyButtons{align-items:flex-end;flex-direction:column-reverse;max-width:286px}}@media screen and (min-width:1510px){#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) #CybotCookiebotDialogFooter{position:relative;right:0}#CybotCookiebotDialog.CybotEdge[dir=rtl]:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) #CybotCookiebotDialogFooter{left:0;position:relative;right:auto}}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar{width:.25em}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar-track,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-track,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-track{background:#f2f2f2;border-radius:.313em}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-thumb{background:#141414;border-radius:.313em}#CybotCookiebotDialog .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{background:#ffffff;display:none;height:100%;pointer-events:none;position:absolute;right:.375em;top:0;transition:opacity .5s;width:.6em}#CybotCookiebotDialog[dir=rtl] .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{left:.375em;right:auto}#CybotCookiebotDialog:hover .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{opacity:0}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type:focus{outline:none}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type:focus::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type:focus::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type:focus::-webkit-scrollbar-thumb{background:#1032CF}@-moz-document url-prefix(){#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type{scrollbar-track-color:#f2f2f2;scrollbar-face-color:#141414;scrollbar-color:#141414 #f2f2f2;scrollbar-width:thin}}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type:focus,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type:focus,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type:focus{scrollbar-color:#1032CF #f2f2f2}@media screen and (min-width:1510px){#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar{width:.5em}#CybotCookiebotDialog .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{display:block}}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow,#CybotCookiebotDialog a:after,#CybotCookiebotDialog a:before,#CybotCookiebotDialog button:after,#CybotCookiebotDialog button:before{border-color:#141414}#CybotCookiebotDialog a:hover:after,#CybotCookiebotDialog a:hover:before,#CybotCookiebotDialog button:hover:after,#CybotCookiebotDialog button:hover:before{border-color:#1032CF}#CybotCookiebotDialog #CybotCookiebotBannerCloseButtonE2E,#CybotCookiebotDialog .CybotCookiebotBannerCloseButton{fill:#141414;border:none;display:none}#CybotCookiebotDialog.CybotCloseButtonEnabled .CybotCookiebotBannerCloseButton{display:flex;margin-left:2.313rem}#CybotCookiebotDialog[dir=rtl] .CybotCookiebotBannerCloseButton{margin-left:auto;margin-right:2.313rem}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonsWrapper{display:flex;flex-direction:column;width:100%}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyButton:not(:first-of-type),#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:first-of-type){margin-top:.5em}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper{align-items:center;display:flex;margin-bottom:.5em}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper .CybotCookiebotDialogBodyLevelButtonSliderWrapper{margin-right:1em}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper .CybotCookiebotDialogBodyLevelButtonDescription{font-weight:600}#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton{background-color:transparent;border:2px solid #1032CF;border-radius:.25em;color:#141414;display:block;font-weight:600;padding:1em;text-align:center;user-select:none;width:100%}#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:hover{opacity:.85}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize,#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection{background-color:transparent;border-color:#1032CF;color:#141414}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonAccept,#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonAccept,#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll{background-color:#1032CF;border-color:#1032CF;color:#ffffff}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize{align-items:center}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize .CybotCookiebotDialogArrow{border-color:#141414;border-style:solid;border-width:.15em .15em 0 0;display:inline-block;height:.5em;margin-left:1em;transform:rotate(45deg);vertical-align:baseline;width:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize .CybotCookiebotDialogArrow{margin-left:0;margin-right:1em;transform:rotate(-135deg)}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggle{border-bottom:1px solid #D6D6D6;display:flex;flex-wrap:wrap;justify-content:flex-end;margin:1em 0 1.5em auto;padding-bottom:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleDeselectVendorsLink,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink{align-items:center;background-color:transparent;border:2px solid #1032CF;border-radius:.25em;color:#141414;display:flex;font-weight:600;padding:.75em 1em;text-decoration:none;user-select:none}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton:hover,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleDeselectVendorsLink:hover,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink:hover{opacity:.85}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton.select,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink{background-color:#1032CF;border-color:#1032CF;color:#ffffff;margin-left:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton.select,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink{margin-left:0;margin-right:.5em}@media screen and (min-width:601px){#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonsWrapper{align-items:stretch;flex:1;flex-direction:row;justify-content:flex-end}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyButton:not(:first-of-type),#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton,#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:first-of-type){margin-top:0;width:33%}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper:not(.CybotCookiebotDialogHide)+#CybotCookiebotDialogBodyButtonsWrapper .CybotCookiebotDialogBodyButton{max-width:286px;width:100%}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyButton:not(:last-of-type){margin-right:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:last-of-type){margin-left:.5em;margin-right:0}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper{margin-bottom:0;margin-right:1em}}@media screen and (min-width:1280px){#CybotCookiebotDialog.CybotEdge .CybotCookiebotBannerCloseButton{display:none}#CybotCookiebotDialog.CybotEdge.CybotCloseButtonEnabled #CybotCookiebotBannerCloseButtonE2E{display:flex}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggle{border-bottom:none;justify-content:flex-start;margin:0 0 0 auto;padding:0}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggle{margin-left:0;margin-right:auto}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonsWrapper{flex:auto;flex-direction:column}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton{max-width:none;width:286px}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:first-of-type){margin-top:.5em}}#CybotCookiebotDialogBodyLevelWrapper{width:100%}#CybotCookiebotDialogBodyEdgeMoreDetails{display:none}#CybotCookiebotDialogDetailBodyContentCookieContainerTypes{list-style-type:none}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails{display:flex;justify-content:flex-end;margin:1.5em 2em .5em 0}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogBodyEdgeMoreDetails{margin-left:1.125em;margin-right:0}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails a{align-items:center;color:#1032CF;display:flex;font-weight:600;text-decoration:none}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails a:after{border-style:solid;border-width:.15em .15em 0 0;color:#141414;content:\"\";display:block;height:.563em;margin-left:1em;transform:rotate(45deg);width:.563em}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogBodyEdgeMoreDetails a:after{margin-left:0;margin-right:1em;transform:rotate(225deg)}#CybotCookiebotDialogBodyLevelButtons{width:100%}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper{-webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;flex-shrink:0;height:32px;position:relative;width:57px}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper:hover input[type=checkbox]:not(:disabled)+.CybotCookiebotDialogBodyLevelButtonSlider{opacity:.85}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input[type=checkbox].CybotCookiebotDialogBodyLevelButton{opacity:0}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSlider{background-color:#141414;border-radius:32px;bottom:0;left:0;pointer-events:none;position:absolute;right:0;top:0;transition:background-color .4s}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSlider:before{background-color:#ffffff;border-radius:50%;bottom:4px;content:\"\";height:24px;left:4px;position:absolute;transition:transform .4s;width:24px}#CybotCookiebotDialog input:checked+.CybotCookiebotDialogBodyLevelButtonSlider{background-color:#1032CF}#CybotCookiebotDialog input:checked+.CybotCookiebotDialogBodyLevelButtonSlider:before,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogTabContent input+.CybotCookiebotDialogBodyLevelButtonSlider:before{background-color:#ffffff;transform:translateX(26px)}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogTabContent input:checked+.CybotCookiebotDialogBodyLevelButtonSlider:before{transform:translateX(0)}#CybotCookiebotDialog form input[type=checkbox][disabled]:checked+.CybotCookiebotDialogBodyLevelButtonSlider{background-color:#D6D6D6;pointer-events:none}#CybotCookiebotDialogBodyLevelButtonsSelectPane{border-bottom:1px solid #D6D6D6;padding:1em 0}#CybotCookiebotDialogBodyLevelButtonsSelectPane .CybotCookiebotDialogBodyLevelButtonWrapper{align-items:center;display:flex;justify-content:space-between;padding:1em;text-align:center;width:100%}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper+.CybotCookiebotDialogBodyLevelButtonWrapper label{font-size:.875em;font-style:italic;font-weight:400;letter-spacing:.15px;padding-bottom:0}#CybotCookiebotDialogBodyLevelButtonsSelectPane .CybotCookiebotDialogBodyLevelButtonDescription{font-weight:700}#CybotCookiebotDialogBodyLevelButtonsSelectPane label:not([for=CybotCookiebotDialogBodyLevelButtonNecessary]) .CybotCookiebotDialogBodyLevelButtonDescriptio",
+    "headers": {
+      "age": "60",
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cache-control": "public, max-age=60, stale-while-revalidate=60, stale-if-error=3600",
+      "cf-cache-status": "HIT",
+      "cf-ray": "97531c1c7f465606-VNO",
+      "content-encoding": "gzip",
+      "content-type": "text/html; charset=utf-8",
+      "date": "Tue, 26 Aug 2025 11:50:08 GMT",
+      "etag": "\"8f425-qVhh8U7D+RodJq90UGVXY+c3NSc\"",
+      "server": "cloudflare",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "vary": "Accept-Encoding",
+      "x-content-type-options": "nosniff",
+      "x-envoy-upstream-service-time": "311"
+    },
+    "statusCode": 200,
+    "loadTime": 0,
+    "screenshot": null,
+    "finalUrl": "https://www.delfi.lt/"
+  },
+  "aiInsights": {
+    "summary": "The website has low scores in accessibility and security, indicating potential issues in these areas. The technologies used are not specified, making it difficult to assess the technology stack and code quality. The performance, SEO scores are not available, suggesting potential areas for improvement.",
+    "technicalInsights": {
+      "strengths": [
+        "Not enough information to determine strengths"
+      ],
+      "weaknesses": [
+        "Low accessibility score, indicating potential issues with website accessibility",
+        "Low security score, suggesting potential vulnerabilities"
+      ],
+      "recommendations": [
+        "Conduct a thorough security audit to identify and address potential vulnerabilities",
+        "Improve accessibility by following best practices for web accessibility",
+        "Conduct a performance audit and optimize the website for better speed and user experience",
+        "Identify and use appropriate technologies for better website functionality and performance"
+      ]
+    },
+    "businessInsights": {
+      "opportunities": [
+        "Improving website performance and security can enhance user experience and trust, potentially leading to higher conversion rates",
+        "Optimizing the website for SEO can increase visibility and attract more visitors"
+      ],
+      "risks": [
+        "Potential loss of users due to poor website performance and security",
+        "Potential loss of visibility due to lack of SEO optimization"
+      ],
+      "recommendations": [
+        "Invest in SEO optimization to increase website visibility and attract more visitors",
+        "Improve user experience by optimizing website performance and security",
+        "Conduct a competitive analysis to identify strengths and weaknesses compared to competitors",
+        "Explore potential revenue streams such as advertising or premium content"
+      ]
+    },
+    "recommendations": [
+      "Conduct a thorough security audit to identify and address potential vulnerabilities",
+      "Improve accessibility by following best practices for web accessibility",
+      "Conduct a performance audit and optimize the website for better speed and user experience",
+      "Identify and use appropriate technologies for better website functionality and performance",
+      "Invest in SEO optimization to increase website visibility and attract more visitors",
+      "Improve user experience by optimizing website performance and security",
+      "Conduct a competitive analysis to identify strengths and weaknesses compared to competitors",
+      "Explore potential revenue streams such as advertising or premium content"
+    ],
+    "priority": "high",
+    "confidence": 0.7,
+    "provider": "ai-generated"
+  },
+  "scores": {
+    "performance": 50,
+    "seo": 100,
+    "accessibility": 80,
+    "security": 33,
+    "bestPractices": 70,
+    "overall": 69
+  },
+  "raw": {
+    "url": "https://www.delfi.lt/",
+    "analyzedAt": "2025-08-26T11:51:41.567Z",
+    "analysisTime": 93880,
+    "basic": {
+      "title": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+      "description": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+      "keywords": "",
+      "lang": "lt",
+      "charset": "UTF-8",
+      "ogTitle": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+      "ogDescription": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+      "ogImage": "https://g.delfi.lt/glt/c/delfi-logo/delfi-og-image.jpg",
+      "ogUrl": "https://www.delfi.lt",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Delfi žinios - Pagrindinis naujienų portalas Lietuvoje",
+      "twitterDescription": "Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.",
+      "hasStructuredData": true,
+      "structuredDataCount": 1,
+      "headingStructure": {
+        "h1": {
+          "count": 0,
+          "texts": []
+        },
+        "h2": {
+          "count": 0,
+          "texts": []
+        },
+        "h3": {
+          "count": 20,
+          "texts": [
+            "Prenumeruok ir valdyk pats, ką nori skaityti!",
+            "Pauliaus Samoškos nuotykiai. 7 pasaulio stebuklai",
+            "Ūkininko Petro dienoraštis",
+            "Ūkininko Petro dienoraštis",
+            "Orijaus kelionių archyvai"
+          ]
+        },
+        "h4": {
+          "count": 10,
+          "texts": [
+            "Mano Delfi",
+            "TIK PRENUMERATORIAMS",
+            "Delfi Fone",
+            "Aktualu",
+            "Nuomonių ringas"
+          ]
+        },
+        "h5": {
+          "count": 95,
+          "texts": [
+            "Sostinėje – didžiulis protestas „Gėdos diena“ (233)",
+            "Siūbuoja dar vieno socialdemokratų ministro postas: jau užsimena, kas galėtų pakeisti",
+            "Protestuotojų minioje kilo sujudimas: prireikė medikų pagalbos  (3)",
+            "Ruginienė: koalicijoje liko tie, kam svarbiau ne postai (17)",
+            "Per neeilinį protestą pasisakė politikai – kai kurie buvo nušvilpti (12)"
+          ]
+        },
+        "h6": {
+          "count": 0,
+          "texts": []
+        }
+      },
+      "imageCount": 2006,
+      "linkCount": 4330,
+      "formCount": 6,
+      "wordCount": 1470,
+      "paragraphCount": 98,
+      "externalScripts": [
+        "https://www.google-analytics.com/analytics.js",
+        "https://adx.adform.net/adx/?rp=3&pv=1&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTkz&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODI0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTg0MjQ5&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODIy&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODE2&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTQyOTc3Mg&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTM3NTg4MQ&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTA3MjQ0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTc0MDc1&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA0&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTc1OTQxMg&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9ODAzNjYx&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA3&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk5&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk3&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk1&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTI4ODA2&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjAx&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTYyNzgy&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTU4OTgx&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTAyNDI2OA&bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTU0NDAwNQ&adid=3229f985-4385-4efc-ba44-007a180ae03d&url=https%3A%2F%2Fwww.delfi.lt%2F&callback=_adform_cb_1756209014379_5468800063992068",
+        "https://macro.adnami.io/macro/gen/adsm.macro.rmb.js",
+        "https://auth.delfi.lt/id/api/v1/identity/token/verify?browser_id=meshi27a7zvp7pce&page_view_id=meshi27ar72dy4la&content_type=website&page_title=Delfi+%C5%BEinios+-+Pagrindinis+naujien%C5%B3+portalas+Lietuvoje&callback=jsonp272&client_id=aH6KBWojpe&site=https%3A%2F%2Fwww.delfi.lt&user_state=anon",
+        "https://www.googletagmanager.com/gtag/js?id=G-5RSNZL365S&cx=c&gtm=4e58m1",
+        "https://cdn.delfi.lt/api/tinypass.min.js",
+        "https://www.googletagmanager.com/gtm.js?id=GTM-WL89FDR",
+        "https://consent.cookiebot.com/34888f84-c185-4693-bff3-44da0c6d5b6e/cc.js?renew=false&referer=www.delfi.lt&dnt=false&init=false&culture=lt&framework=TCFv2.2",
+        "https://consent.cookiebot.com/Framework/IAB/consent-sdk-2.2.js",
+        "https://g.delfi.lt/misc/portal-root/j.js",
+        "https://g.delfi.lt/js/c.js",
+        "https://cdn.cxense.com/track_banners_init.js",
+        "https://consent.cookiebot.com/uc.js",
+        "https://s1.adform.net/banners/scripts/adx.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-Media-lt_LT-json.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-piano-lt_LT-json.js",
+        "https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js",
+        "https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js",
+        "https://g.delfi.lt/components/video/jwplayer-8.36.4/jwplayer.js",
+        "https://www.google-analytics.com/analytics.js",
+        "https://scdn.cxense.com/cx.js",
+        "https://galt.hit.gemius.pl/gemius.min.js",
+        "https://connect.facebook.net/signals/config/1720142964883079?v=2.9.226&r=stable&domain=www.delfi.lt&hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138",
+        "https://connect.facebook.net/en_US/fbevents.js",
+        "https://www.googletagmanager.com/gtag/js?id=GTM-WL89FDR",
+        "https://geojs.delfi.lt/g.js",
+        "https://core.dimatter.ai/pubs/delfi-lt-desktop.min.js",
+        "https://www.npttech.com/advertising.js",
+        "https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js",
+        "https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js",
+        "https://lt-production-portal-custom-page.s3.delfi.lt/tv-guide/widget.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleBase.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/page/Article.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article/page/ArticleComments/page/ArticleCommentsNapo.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments/page/ArticleCommentsNapo.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments.js",
+        "https://securepubads.g.doubleclick.net/tag/js/gpt.js",
+        "https://cdn.cxense.com/track_banners_init.js",
+        "https://functions.adnami.io/api/macro/adsm.macro.delfi.lt.js",
+        "https://btloader.com/tag?o=5749741711261696&domain=delfi.lt&upapi=true",
+        "https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202508210101/pubads_impl.js",
+        "https://fundingchoicesmessages.google.com/i/99287527?ers=3",
+        "https://fundingchoicesmessages.google.com/f/AGSKWxWITEm-Q4kwzYm0pSo1O-sz2EDjh749L3tgxn6_oXeWj4_PevJktvgQryWuLE6Vh9u_zOEk6WxE2WXYzLuohu8q8rn5AJJFLUGfre-tL5XTRguiI-ythqugVHxPBbZngyYNPLHO0w==?fccs=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLFsxNzU2MjA5MDE0LDU5NzAwMDAwMF0sbnVsbCxudWxsLG51bGwsW251bGwsWzddXSwiaHR0cHM6Ly93d3cuZGVsZmkubHQvIixudWxsLFtbOCwiNHl0bURLR1V1WFUiXSxbOSwiZW4tVVMiXSxbMTksIjEiXSxbMTcsIlswXSJdLFsyNCwiIl0sWzI5LCJmYWxzZSJdXV0",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/runtime.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage/page/MyDelfi.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/commons/app.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.js",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.js"
+      ],
+      "externalStyles": [
+        "https://static.delfi.lt/portal/css/hotfixes.css",
+        "https://g.delfi.lt/glt/c/delfi-fonts/inter/inter.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/delfi-root-variables-css.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/main-root-styles.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article/page/ArticleComments/page/ArticleCommentsNapo.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Article.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments/page/ArticleCommentsNapo.css",
+        "https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/ArticleComments.css"
+      ],
+      "domElements": 48404,
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "html": "<!DOCTYPE html><html lang=\"lt\" data-n-head=\"%7B%22lang%22:%7B%22ssr%22:%22lt%22%7D%7D\" style=\"--delfi-header-height: 113px; --delfi-promo-line-offset: 180px; --delfi-promo-line-stick-position: 70px;\"><head><script async=\"\" src=\"https://www.google-analytics.com/analytics.js\"></script><script type=\"text/javascript\" src=\"https://adx.adform.net/adx/?rp=3&amp;pv=1&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTkz&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODI0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTg0MjQ5&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODIy&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxODE2&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTQyOTc3Mg&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTM3NTg4MQ&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTA3MjQ0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTc0MDc1&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA0&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTc1OTQxMg&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9ODAzNjYx&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjA3&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk5&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk3&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNTk1&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9OTI4ODA2&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTIxNjAx&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTYyNzgy&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9NTU4OTgx&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTAyNDI2OA&amp;bWt2PXd3dy5kZWxmaS5sdDpmcm9udCZta3c9Y2hhbm5lbF92dWUsbG9nZ2VkLW91dCxkZWxmaSxmcm9udCZtaWQ9MTU0NDAwNQ&amp;adid=3229f985-4385-4efc-ba44-007a180ae03d&amp;url=https%3A%2F%2Fwww.delfi.lt%2F&amp;callback=_adform_cb_1756209014379_5468800063992068\"></script><script async=\"\" type=\"text/javascript\" src=\"https://macro.adnami.io/macro/gen/adsm.macro.rmb.js\"></script><script src=\"https://auth.delfi.lt/id/api/v1/identity/token/verify?browser_id=meshi27a7zvp7pce&amp;page_view_id=meshi27ar72dy4la&amp;content_type=website&amp;page_title=Delfi+%C5%BEinios+-+Pagrindinis+naujien%C5%B3+portalas+Lietuvoje&amp;callback=jsonp272&amp;client_id=aH6KBWojpe&amp;site=https%3A%2F%2Fwww.delfi.lt&amp;user_state=anon\"></script>\n    <meta data-n-head=\"ssr\" charset=\"utf-8\"><meta data-n-head=\"ssr\" name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0\"><meta data-n-head=\"ssr\" data-hid=\"description\" name=\"description\" content=\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"><meta data-n-head=\"ssr\" data-hid=\"keywords\" name=\"keywords\" content=\"\"><meta data-n-head=\"ssr\" data-hid=\"robots\" name=\"robots\" content=\"max-snippet:160, max-image-preview:large, max-video-preview:60\"><meta data-n-head=\"ssr\" data-hid=\"og_type\" property=\"og:type\" content=\"website\"><meta data-n-head=\"ssr\" data-hid=\"og_url\" property=\"og:url\" content=\"https://www.delfi.lt\"><meta data-n-head=\"ssr\" data-hid=\"og_site_name\" property=\"og:site_name\" content=\"Delfi\"><meta data-n-head=\"ssr\" data-hid=\"og_title\" property=\"og:title\" content=\"Delfi žinios - Pagrindinis naujienų portalas Lietuvoje\"><meta data-n-head=\"ssr\" data-hid=\"og_description\" property=\"og:description\" content=\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"><meta data-n-head=\"ssr\" data-hid=\"og_image\" property=\"og:image\" content=\"https://g.delfi.lt/glt/c/delfi-logo/delfi-og-image.jpg\"><meta data-n-head=\"ssr\" data-hid=\"og_image_width\" property=\"og:image:width\" content=\"1200\"><meta data-n-head=\"ssr\" data-hid=\"og_image_height\" property=\"og:image:height\" content=\"630\"><meta data-n-head=\"ssr\" data-hid=\"twitter:card\" name=\"twitter:card\" content=\"summary_large_image\"><meta data-n-head=\"ssr\" data-hid=\"twitter:title\" name=\"twitter:title\" content=\"Delfi žinios - Pagrindinis naujienų portalas Lietuvoje\"><meta data-n-head=\"ssr\" data-hid=\"twitter:description\" name=\"twitter:description\" content=\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"><meta data-n-head=\"ssr\" data-hid=\"twitter:image\" name=\"twitter:image\" content=\"https://g.delfi.lt/glt/c/delfi-logo/delfi-og-image.jpg\"><meta data-n-head=\"ssr\" content=\"161041023936278\" data-hid=\"fb_app_id\" property=\"fb:app_id\" vmid=\"fb:app_id\"><title>Delfi žinios - Pagrindinis naujienų portalas Lietuvoje</title><link data-n-head=\"ssr\" href=\"https://static.delfi.lt/portal/css/hotfixes.css\" rel=\"stylesheet\"><link data-n-head=\"ssr\" rel=\"icon\" data-hid=\"favicon\" type=\"image/x-icon\" href=\"https://g.delfi.lt/glt/c/delfi-icons/2020/favicon.ico\"><link data-n-head=\"ssr\" rel=\"apple-touch-icon\" data-hid=\"apple_touch_icon\" href=\"https://g.delfi.lt/glt/c/delfi-icons/2020/apple-icon-180x180.png\"><link data-n-head=\"ssr\" rel=\"preconnect\" data-hid=\"preconnect\" href=\"https://fonts.gstatic.com\"><link data-n-head=\"ssr\" rel=\"preconnect\" data-hid=\"dimatter-preconnect\" href=\"https://core.dimatter.ai\"><link data-n-head=\"ssr\" rel=\"preconnect\" data-hid=\"g-preconnect\" href=\"https://securepubads.g.doubleclick.net\"><link data-n-head=\"ssr\" rel=\"dns-prefetch\" data-hid=\"dimatter-dns-prefetch\" href=\"https://core.dimatter.ai\"><link data-n-head=\"ssr\" rel=\"dns-prefetch\" data-hid=\"g-dns-prefetch\" href=\"https://securepubads.g.doubleclick.net\"><link data-n-head=\"ssr\" rel=\"stylesheet\" data-hid=\"inter_font\" href=\"https://g.delfi.lt/glt/c/delfi-fonts/inter/inter.css\"><link data-n-head=\"ssr\" rel=\"stylesheet\" data-hid=\"root-variables\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/delfi-root-variables-css.css\"><link data-n-head=\"ssr\" rel=\"stylesheet\" data-hid=\"main_styles\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/main-root-styles.css\"><link data-n-head=\"ssr\" rel=\"canonical\" href=\"https://www.delfi.lt/\" data-hid=\"canonical\"><script type=\"text/javascript\" async=\"\" src=\"https://www.googletagmanager.com/gtag/js?id=G-5RSNZL365S&amp;cx=c&amp;gtm=4e58m1\"></script><script type=\"text/javascript\" async=\"\" src=\"https://cdn.delfi.lt/api/tinypass.min.js\"></script><script async=\"\" src=\"https://www.googletagmanager.com/gtm.js?id=GTM-WL89FDR\"></script><script type=\"text/javascript\" charset=\"UTF-8\" async=\"\" src=\"https://consent.cookiebot.com/34888f84-c185-4693-bff3-44da0c6d5b6e/cc.js?renew=false&amp;referer=www.delfi.lt&amp;dnt=false&amp;init=false&amp;culture=lt&amp;framework=TCFv2.2\"></script><script type=\"text/javascript\" charset=\"UTF-8\" src=\"https://consent.cookiebot.com/Framework/IAB/consent-sdk-2.2.js\"></script><script data-n-head=\"ssr\" src=\"https://g.delfi.lt/misc/portal-root/j.js\"></script><script data-n-head=\"ssr\" data-hid=\"cjs\" src=\"https://g.delfi.lt/js/c.js\"></script><script data-n-head=\"ssr\" data-hid=\"track_banners_init\" src=\"https://cdn.cxense.com/track_banners_init.js\"></script><script data-n-head=\"ssr\" id=\"Cookiebot\" src=\"https://consent.cookiebot.com/uc.js\" async=\"\" data-cbid=\"34888f84-c185-4693-bff3-44da0c6d5b6e\" data-framework=\"TCFv2.2\" data-culture=\"lt\" data-wipe-preferences=\"0\" data-wipe-statistics=\"0\" data-wipe-marketing=\"0\"></script><script data-n-head=\"ssr\" src=\"//s1.adform.net/banners/scripts/adx.js\" async=\"\"></script><script data-n-head=\"ssr\" data-hid=\"default-ld-json\" type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"url\":\"https://www.delfi.lt\",\"author\":{\"@type\":\"Organization\",\"name\":\"Delfi\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Delfi\"},\"description\":\"Delfi.lt naujausios žinios, politika, verslas, sportas, pramogos, orai, horoskopai, TV programa, piliečių nuomonės ir komentarai, nuotraukos ir video.\"}</script><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/runtime.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/commons/app.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Frontpage/page/MyDelfi.js\" as=\"script\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.css\" as=\"style\"><link rel=\"preload\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.js\" as=\"script\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/vendors/app.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/app.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Custom/page/Frontpage/page/Weather/_id.vue.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage/page/Weather/_id.vue.css\"><link rel=\"stylesheet\" href=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/page/Category/page/Frontpage.css\">\n  <script charset=\"utf-8\" src=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-Media-lt_LT-json.js\"></script><script charset=\"utf-8\" src=\"https://lt-production-portal-root.s3.delfi.lt/1.22.1/portal-piano-lt_LT-json.js\"></script><style type=\"text/css\" id=\"CookieConsentStateDisplayStyles\">.cookieconsent-optin-preferences,.cookieconsent-optin-statistics,.cookieconsent-optin-marketing,.cookieconsent-optin{display:none;}.cookieconsent-optout-preferences,.cookieconsent-optout-statistics,.cookieconsent-optout-marketing,.cookieconsent-optout{display:block;display:initial;}</style><script src=\"https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js\" type=\"text/javascript\"></script><script src=\"https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js\" type=\"text/javascript\"></script><script src=\"https://g.delfi.lt/components/video/jwplayer-8.36.4/jwplayer.js\" type=\"text/javascript\" async=\"\"></script><script src=\"//www.google-analytics.com/analytics.js\" type=\"text/javascript\"></script><script src=\"https://scdn.cxense.com/cx.js\" type=\"text/javascript\"></script><script src=\"https://galt.hit.gemius.pl/gemius.min.js\" type=\"text/javascript\"></script><script src=\"https://connect.facebook.net/signals/config/1720142964883079?v=2.9.226&amp;r=stable&amp;domain=www.delfi.lt&amp;hme=825b619bbc176436932a2e4145098d1010345eea23437a3ceb8bb05f4da8ba89&amp;ex_m=85%2C146%2C127%2C18%2C120%2C59%2C40%2C121%2C66%2C58%2C134%2C74%2C13%2C84%2C26%2C115%2C106%2C64%2C67%2C114%2C131%2C93%2C136%2C7%2C3%2C4%2C6%2C5%2C2%2C75%2C83%2C137%2C211%2C158%2C53%2C216%2C213%2C214%2C46%2C173%2C25%2C63%2C220%2C219%2C161%2C28%2C52%2C8%2C55%2C79%2C80%2C81%2C86%2C110%2C27%2C24%2C113%2C109%2C108%2C128%2C65%2C130%2C129%2C42%2C111%2C51%2C103%2C12%2C133%2C37%2C202%2C204%2C168%2C21%2C22%2C23%2C15%2C16%2C36%2C33%2C34%2C70%2C76%2C78%2C91%2C119%2C122%2C38%2C92%2C19%2C17%2C97%2C60%2C31%2C124%2C123%2C125%2C116%2C20%2C30%2C50%2C90%2C132%2C61%2C29%2C183%2C154%2C260%2C200%2C144%2C186%2C179%2C88%2C112%2C69%2C101%2C45%2C39%2C99%2C100%2C105%2C49%2C14%2C107%2C98%2C56%2C41%2C94%2C44%2C47%2C0%2C82%2C135%2C1%2C104%2C11%2C102%2C9%2C48%2C77%2C54%2C126%2C57%2C96%2C73%2C72%2C43%2C117%2C71%2C68%2C62%2C95%2C87%2C35%2C118%2C32%2C89%2C10%2C138\" async=\"\"></script><script async=\"\" src=\"https://connect.facebook.net/en_US/fbevents.js\"></script><script src=\"https://www.googletagmanager.com/gtag/js?id=GTM-WL89FDR\" type=\"text/javascript\" async=\"\"></script><script async=\"\" src=\"//geojs.delfi.lt/g.js\"></script><script src=\"//core.dimatter.ai/pubs/delfi-lt-desktop.min.js\" async=\"\"></script><script src=\"//www.npttech.com/advertising.js\" type=\"text/javascript\" async=\"\"></script><script src=\"https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js\"></script><script src=\"https://lt-production-portal-custom-page.s3.delfi.lt/embeds/js/embeds.js\"></script><script src=\"https://lt-production-portal-custom-page.s3.delfi.lt/tv-guide/widget.js\" type=\"text/javascript\" defer=\"\"></script><style type=\"text/css\" id=\"CookiebotDialogStyle\">#CybotCookiebotDialog *,#CybotCookiebotDialogBodyUnderlay *{background:transparent;box-sizing:border-box;color:inherit;font-family:inherit;font-size:15px;margin:0;outline:0;padding:0;vertical-align:baseline}#CybotCookiebotDialog #CybotCookiebotDialogNav :after,#CybotCookiebotDialog #CybotCookiebotDialogNav :before{content:none}#CybotCookiebotDialog label{width:auto}#CybotCookiebotDialogBodyUnderlay{background-color:#000;height:100%;left:0;margin:0;opacity:0;overflow:hidden;padding:0;pointer-events:none;position:fixed;top:0;transition:opacity .5s ease;width:100%;z-index:2147483630}#CybotCookiebotDialog.CybotCookiebotDialogActive+#CybotCookiebotDialogBodyUnderlay{opacity:.75;pointer-events:auto}#CybotCookiebotDialog{background-color:#ffffff;border-radius:8px;box-shadow:0 32px 68px rgba(0,0,0,.3);box-sizing:border-box;color:#141414;font-family:sans-serif;font-size:15px;height:auto;left:50%;letter-spacing:.1px;line-height:24px;max-height:calc(100% - 16px);overflow:hidden;position:fixed;text-align:initial;top:50%;transform:translate(-50%,-50%);transition:all .5s ease;transition-property:width,max-width,top,bottom,left,opacity;width:calc(100% - 16px);z-index:2147483631}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl{max-height:calc(100vh - 10px);width:calc(100vw - 10px)}#CybotCookiebotDialog ol,#CybotCookiebotDialog ul{list-style-position:inside}#CybotCookiebotDialog .CybotCookiebotDialogContentWrapper{align-items:flex-start;display:flex;flex-direction:column;width:100%}#CybotCookiebotDialog .CybotCookiebotDialogSROnly{clip:rect(0,0,0,0);border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}:root #CybotCookiebotDialog,:root #CybotCookiebotDialog #CybotCookiebotDialogTabContent,_:-ms-fullscreen{height:100%}:root #CybotCookiebotDialogBody,:root #CybotCookiebotDialogTabContent .CybotCookiebotDialogTabPanel,_:-ms-fullscreen{flex:auto}@media screen and (min-width:601px){#CybotCookiebotDialog{max-width:900px}}@media screen and (min-width:1280px){#CybotCookiebotDialog{left:50%;max-height:80vh;top:0;transform:translate(-50%)}#CybotCookiebotDialog.CybotEdge{box-shadow:0 30px 70px rgba(0,0,0,.3);height:auto;max-height:70vh;max-width:100vw;min-width:100vw;padding:24px;transition-property:transform,opacity,top;width:100vw}#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogContentWrapper{flex-direction:row;margin:0 auto;max-width:1600px;position:relative}#CybotCookiebotDialog[data-template=bottom]{top:100%;transform:translate(-50%,-100%)}#CybotCookiebotDialog[data-template=pushdown],#CybotCookiebotDialog[data-template=slidedown]{transform:translate(-50%,-150%)}#CybotCookiebotDialog[data-template=pushdown].CybotCookiebotDialogActive,#CybotCookiebotDialog[data-template=slidedown].CybotCookiebotDialogActive{transform:translate(-50%)}#CybotCookiebotDialog[data-template=slideup]{top:100%;transform:translate(-50%,50%)}#CybotCookiebotDialog[data-template=slideup].CybotCookiebotDialogActive{transform:translate(-50%,-100%)}#CybotCookiebotDialog[data-template=overlay],#CybotCookiebotDialog[data-template=popup]{opacity:0;top:50%;transform:translate(-50%,-50%)}#CybotCookiebotDialog[data-template=overlay].CybotCookiebotDialogActive,#CybotCookiebotDialog[data-template=popup].CybotCookiebotDialogActive{opacity:1}}#CybotCookiebotDialogHeader{align-items:center;border-bottom:1px solid #D6D6D6;display:flex;padding:1em;width:100%}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogHeader{padding:.5em 1em}#CybotCookiebotDialogHeaderLogosWrapper{align-items:center;display:flex;flex:1;justify-content:space-between}#CybotCookiebotDialogPoweredbyCybot,#CybotCookiebotDialogPoweredbyLink{align-items:center;display:flex;width:50%}#CybotCookiebotDialogPoweredbyCybot{justify-content:flex-end;width:175px}#CybotCookiebotDialogPoweredbyImage{max-height:1.5em;width:auto}#CybotCookiebotDialogPoweredbyCybot svg{fill:#141414;height:1.7em;max-width:133px}@media screen and (min-width:601px){#CybotCookiebotDialogPoweredbyCybot svg{height:2em}}@media screen and (min-width:1280px){#CybotCookiebotDialogHeader{padding:1.5em}#CybotCookiebotDialogPoweredbyImage{max-height:2.125em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogHeader{align-items:center;align-self:stretch;border:none;justify-content:space-between;padding:0;width:210px}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogHeaderLogosWrapper{align-self:stretch;flex-direction:column}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyLink{flex:1}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyImage{height:auto;max-height:6em;max-width:100%}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyCybot{height:2em;margin-top:2em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyCybot,#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogPoweredbyLink{justify-content:center}}#CybotCookiebotDialogNav{border-bottom:1px solid #D6D6D6;position:relative;width:100%}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogNav{display:none}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItems{display:flex;list-style:none;overflow-x:auto}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItems::-webkit-scrollbar{height:0;width:0}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItem{flex:1 1 0%;margin:0 auto}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink{border-bottom:1px solid #ffffff;color:#141414;display:block;font-weight:600;height:100%;outline-offset:-5px;padding:1em;text-align:center;text-decoration:none;white-space:nowrap}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink{padding:.5em}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink:hover{color:#1032CF}#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink.CybotCookiebotDialogActive{border-color:transparent;border-bottom:1px solid #1032CF;color:#1032CF}@media screen and (min-width:1280px){#CybotCookiebotDialogNav .CybotCookiebotDialogNavItemLink.CybotCookiebotDialogActive{border-width:3px}}#CybotCookiebotDialogTabContent{display:flex;flex-direction:column;height:auto;min-height:60px;overflow:auto;width:100%}#CybotCookiebotDialogTabContent .CybotCookiebotScrollContainer{display:flex;flex:1;flex-direction:column}#CybotCookiebotDialogTabContent .CybotCookiebotDialogTabPanel{flex:1;overflow-x:hidden;overflow-y:auto;width:100%}#CybotCookiebotDialogSpecialFeaturesText ul{margin:.25em 0 .25em 2em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogSpecialFeaturesText ul{margin:.25em 2em .25em 0}#CybotCookiebotDialog .CybotCookiebotScrollContainer{border-bottom:1px solid #D6D6D6;height:100%;padding:.375em;position:relative}#CybotCookiebotDialog .CybotCookiebotScrollArea{height:100%}#CybotCookiebotDialog .CybotCookiebotDialogBodyBottomWrapper{width:100%}@media screen and (min-width:601px){#CybotCookiebotDialog .CybotCookiebotScrollContainer{display:flex;min-height:auto}}@media screen and (min-width:1280px){#CybotCookiebotDialog.CybotEdge .CybotCookiebotScrollContainer{border-bottom:none;display:none}#CybotCookiebotDialog.CybotEdge.CybotMultilevel .CybotCookiebotScrollContainer{width:calc(100% - 286px - 1.5em)}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogTabContent{flex:1;margin-left:1.5em;overflow:visible}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogTabContent{margin-left:0;margin-right:1.5em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogTabContent .CybotCookiebotDialogTabPanel{overflow:visible}#CybotCookiebotDialog.CybotEdge .CybotCookiebotDialogBodyBottomWrapper{align-items:flex-end;display:flex;flex-wrap:wrap;justify-content:flex-start;margin-top:1.5em;padding-left:.375em}#CybotCookiebotDialog.CybotEdge[dir=rtl] .CybotCookiebotDialogBodyBottomWrapper{padding-left:0;padding-right:.375em}#CybotCookiebotDialog.CybotEdge.CybotMultilevel .CybotCookiebotDialogBodyBottomWrapper{border-top:1px solid #D6D6D6;padding-top:1em}}@media screen and (min-width:1510px){#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) #CybotCookiebotDialogTabContent{margin:0 1.5em}#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) .CybotCookiebotScrollContainer{width:auto}#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) .CybotCookiebotDialogBodyBottomWrapper{border-top:none;padding-top:0}}#CybotCookiebotDialog .CybotCookiebotFader{bottom:0;height:5em;left:1px;opacity:0;pointer-events:none;position:absolute;transition:opacity .3s;width:calc(100% - 1em);z-index:10}#CybotCookiebotDialog .CybotCookiebotFader:not(.CybotCookiebotFaderRight):not(.CybotCookiebotFaderLeft){max-height:50%}#CybotCookiebotDialog[dir=rtl] .CybotCookiebotFader:not(.CybotCookiebotFaderLeft){left:auto;right:1px}#CybotCookiebotDialog .CybotCookiebotFader.CybotCookiebotDialogActive{opacity:1}#CybotCookiebotDialog .CybotCookiebotFaderLeft,#CybotCookiebotDialog .CybotCookiebotFaderRight{height:100%;width:3.5em}#CybotCookiebotDialog .CybotCookiebotFaderLeft{left:0}#CybotCookiebotDialog .CybotCookiebotFaderRight{left:auto;right:0}#CybotCookiebotDialog .CybotCookiebotFader:not(.CybotCookiebotFaderLeft):not(.CybotCookiebotFaderRight){max-height:30%}@media screen and (min-width:1280px){#CybotCookiebotDialog .CybotCookiebotFader:not(.CybotCookiebotFaderLeft):not(.CybotCookiebotFaderRight){width:calc(100% - 1.5em)}}#CybotCookiebotDialogBody{display:flex;flex-direction:column;height:100%}#CybotCookiebotDialogBody .CybotCookiebotScrollContainer{display:flex;flex-direction:column;max-height:18em}#CybotCookiebotDialog #CybotCookiebotDialogBodyContent{max-height:inherit}#CybotCookiebotDialog .CybotCookiebotDialogBodyContentHeading{font-weight:600;letter-spacing:.25px;line-height:1.6em;margin-bottom:.5em}#CybotCookiebotDialogBodyContent{flex:1;height:100%;letter-spacing:.5px;line-height:1.6em;max-height:100%;overflow-x:hidden;padding:1.625em .625em}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogBodyContent{padding:.8em}#CybotCookiebotDialog .CybotCookiebotDialogDetailBodyContentCookieTabContent{list-style-type:none}#CybotCookiebotDialogDetailBulkConsent{border:1px solid #D6D6D6;border-radius:.5em;margin:0 .625em 1em;padding:1em}#CybotCookiebotDialogDetailBulkConsent:before{border-top:1px solid #D6D6D6;content:\"\";width:100%}#CybotCookiebotDialogDetailBulkConsentLink{color:#141414;display:block;font-weight:600;line-height:1.6em;margin-bottom:.625em;text-decoration:none}#CybotCookiebotDialogDetailBulkConsentLink:hover{color:#1032CF}#CybotCookiebotDialogTabContent .CybotCookiebotDialogDetailBulkConsentCount{background-color:#D6D6D6;border-radius:5em;display:inline-block;font-size:.8em;font-weight:700;letter-spacing:.25px;line-height:1.2em;margin-left:.5em;padding:.25em .5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogTabContent .CybotCookiebotDialogDetailBulkConsentCount{margin-left:0;margin-right:.5em}#CybotCookiebotDialogDetailBulkConsentListWrapper{background-color:#F4F4F4;border:1px solid #D6D6D6;border-radius:.5em;margin-top:1.5em;padding:1em}#CybotCookiebotDialogDetailBulkConsentListWrapper>span{border-bottom:1px solid #D6D6D6;display:block;font-weight:600;padding-bottom:1em}#CybotCookiebotDialogDetailBulkConsentList{margin-top:1em}#CybotCookiebotDialogDetailFooter{letter-spacing:.3px;line-height:1.6em;padding:0 1em 1em}#CybotCookiebotDialogDetailFooter a{color:#141414}#CybotCookiebotDialogDetailBulkConsentList dt:not(:last-of-type){margin-bottom:.5em}@media screen and (min-width:1280px){#CybotCookiebotDialog #CybotCookiebotDialogBody .CybotCookiebotScrollContainer{display:flex;flex:auto;height:auto;max-height:15.5em;overflow:hidden}#CybotCookiebotDialogBodyContent{padding:1.125em}#CybotCookiebotDialogDetailBulkConsent{margin:0 2em 1em;padding:1.5em}#CybotCookiebotDialogDetailFooter{padding:0 2em 1.125em}#CybotCookiebotDialogDetailBulkConsentListWrapper{margin-top:2em;padding:1.5em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBody{display:flex;justify-content:space-between;overflow:hidden}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyContent{height:auto;padding:0 1.125em 0 0}#CybotCookiebotDialog[dir=rtl].CybotEdge #CybotCookiebotDialogBodyContent{padding-left:1.125em;padding-right:0}}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeader{font-weight:600;line-height:1.6em;margin-bottom:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABWrapper{border:2px solid #D6D6D6;border-radius:1em;margin:1.5em 0 1em;padding:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABWrapper:last-of-type{margin-bottom:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed{background-color:#F4F4F4;border:2px solid #D6D6D6;border-radius:1em;margin-bottom:.5em;padding:.5em 1em 1em;position:relative}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer:last-of-type,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:last-of-type{margin-bottom:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper{align-items:center;display:flex;font-weight:600;margin:.5em 2em 0 0}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper{margin:.5em 0 0 2em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-right:0}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-left:0;margin-right:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-right:3.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonWrapper:nth-of-type(2){margin-left:3.5em;margin-right:0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription{border-top:1px solid #D6D6D6;margin-top:1em;padding-top:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABPurposeCount{margin-top:2em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABPurposeCount .CybotCookiebotDialogDetailBulkConsentCount{margin-left:.4em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLinkWrapper{font-weight:700}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLinkWrapper:nth-of-type(2){margin-top:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLinkWrapper a{margin-top:0;word-break:break-word}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription a{align-items:center;display:inline-flex;margin-top:.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABBullet{margin:1em 0 0 1em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABBullet{margin:1em 1em 0 0}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABList{font-weight:700;margin-top:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABList li{font-weight:400;margin-left:2px}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription .CybotCookiebotDialogBodyLevelButtonIABList li{font-weight:400;margin-right:2px}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed .CybotCookiebotDialogBodyLevelButtonIABDescription{display:none}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer .CybotCookiebotDialogBodyLevelButtonIABDescription,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription.CybotCookiebotDialogShow{display:block}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow{display:block;height:2em;position:absolute;right:1.35em;top:.75em;width:2em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow{left:1.35em;right:auto}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before,#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:before{border-style:solid;border-width:.15em .15em 0 0;content:\"\";display:inline-block;height:.5em;position:absolute;right:2em;top:1.3em;transform:rotate(-225deg);width:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:before{left:2em;right:auto}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before{top:1.6em;transform:rotate(-45deg)}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyIABIntroContainer{padding-bottom:1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABLabel{line-height:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs p.CybotCookiebotDialogBodyLevelButtonIABLabel{padding-left:2em}@media screen and (min-width:1280px){#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABWrapper{padding:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeader{align-items:center;border-bottom:1px solid #D6D6D6;display:flex;margin-bottom:1.5em;padding-bottom:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyIABIntroContainer{padding-bottom:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerTogglesWrapper{align-items:center;display:flex;justify-content:space-between;width:100%}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainer,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed{padding:1em 1.5em 1.5em}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before,#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainerCollapsed:before{top:1.8em}#CybotCookiebotDialogDetailBodyContentIABv2PartnersBody .CybotCookiebotDialogBodyLevelButtonIABContainer:before{top:2.1em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABDescription{width:100%}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow{top:1.2em}}#CybotCookiebotDialogDetailBodyContentTextAbout{padding:1.625em .625em}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogDetailBodyContentTextAbout{padding:.5em}@media screen and (min-width:1280px){#CybotCookiebotDialogDetailBodyContentTextAbout{padding:1.125em}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogDetailBodyContentTextAbout{padding:.5em}}#CybotCookiebotDialogFooter.CybotCookiebotScrollContainer{height:auto;min-height:80px;width:100%}#CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:1em;width:100%}#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:.5em}#CybotCookiebotDialog:not(.CybotCookiebotDialogZoomedLg):not(.CybotCookiebotDialogZoomedXl) #CybotCookiebotDialogFooter.CybotCookiebotScrollContainer{min-height:auto;padding:0}#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter .CybotCookiebotScrollArea,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter .CybotCookiebotScrollArea{overflow:auto}#CybotCookiebotDialogBodyButtons{align-items:flex-start;display:flex;flex-direction:column;flex-wrap:wrap}@media screen and (min-width:601px){#CybotCookiebotDialogBodyButtons{align-items:center;flex-direction:row}}@media screen and (min-width:1280px){#CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:1em 1.5em 1.5em}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter{display:block;padding:0;width:auto}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotScrollArea{padding:0}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotScrollbarContainer{display:none}#CybotCookiebotDialog.CybotEdge.CybotMultilevel #CybotCookiebotDialogFooter{position:absolute;right:0;top:0}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogFooter{left:0;right:auto}#CybotCookiebotDialog.CybotEdge.CybotMultilevel.CybotCloseButtonEnabled #CybotCookiebotDialogFooter{right:51px}#CybotCookiebotDialog.CybotEdge[dir=rtl].CybotCloseButtonEnabled #CybotCookiebotDialogFooter{left:51px;right:auto}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyButtons{align-items:flex-end;flex-direction:column-reverse;max-width:286px}}@media screen and (min-width:1510px){#CybotCookiebotDialog.CybotEdge:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) #CybotCookiebotDialogFooter{position:relative;right:0}#CybotCookiebotDialog.CybotEdge[dir=rtl]:not([lang=ta]):not([lang=bg]):not([lang=is]):not([lang=el]) #CybotCookiebotDialogFooter{left:0;position:relative;right:auto}}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar{width:.25em}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar-track,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-track,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-track{background:#f2f2f2;border-radius:.313em}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar-thumb{background:#141414;border-radius:.313em}#CybotCookiebotDialog .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{background:#ffffff;display:none;height:100%;pointer-events:none;position:absolute;right:.375em;top:0;transition:opacity .5s;width:.6em}#CybotCookiebotDialog[dir=rtl] .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{left:.375em;right:auto}#CybotCookiebotDialog:hover .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{opacity:0}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type:focus{outline:none}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type:focus::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type:focus::-webkit-scrollbar-thumb,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type:focus::-webkit-scrollbar-thumb{background:#1032CF}@-moz-document url-prefix(){#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type{scrollbar-track-color:#f2f2f2;scrollbar-face-color:#141414;scrollbar-color:#141414 #f2f2f2;scrollbar-width:thin}}#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type:focus,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type:focus,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type:focus{scrollbar-color:#1032CF #f2f2f2}@media screen and (min-width:1510px){#CybotCookiebotDialog .CybotCookiebotScrollContainer>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedLg #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar,#CybotCookiebotDialog.CybotCookiebotDialogZoomedXl #CybotCookiebotDialogFooter>div:first-of-type::-webkit-scrollbar{width:.5em}#CybotCookiebotDialog .CybotCookiebotScrollContainer .CybotCookiebotScrollbarContainer{display:block}}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonIABContainerToggleHide,#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonIABContainerToggleShow,#CybotCookiebotDialog a:after,#CybotCookiebotDialog a:before,#CybotCookiebotDialog button:after,#CybotCookiebotDialog button:before{border-color:#141414}#CybotCookiebotDialog a:hover:after,#CybotCookiebotDialog a:hover:before,#CybotCookiebotDialog button:hover:after,#CybotCookiebotDialog button:hover:before{border-color:#1032CF}#CybotCookiebotDialog #CybotCookiebotBannerCloseButtonE2E,#CybotCookiebotDialog .CybotCookiebotBannerCloseButton{fill:#141414;border:none;display:none}#CybotCookiebotDialog.CybotCloseButtonEnabled .CybotCookiebotBannerCloseButton{display:flex;margin-left:2.313rem}#CybotCookiebotDialog[dir=rtl] .CybotCookiebotBannerCloseButton{margin-left:auto;margin-right:2.313rem}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonsWrapper{display:flex;flex-direction:column;width:100%}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyButton:not(:first-of-type),#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:first-of-type){margin-top:.5em}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper{align-items:center;display:flex;margin-bottom:.5em}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper .CybotCookiebotDialogBodyLevelButtonSliderWrapper{margin-right:1em}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper .CybotCookiebotDialogBodyLevelButtonDescription{font-weight:600}#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton{background-color:transparent;border:2px solid #1032CF;border-radius:.25em;color:#141414;display:block;font-weight:600;padding:1em;text-align:center;user-select:none;width:100%}#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:hover{opacity:.85}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize,#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection{background-color:transparent;border-color:#1032CF;color:#141414}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonAccept,#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonAccept,#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll{background-color:#1032CF;border-color:#1032CF;color:#ffffff}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize{align-items:center}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize .CybotCookiebotDialogArrow{border-color:#141414;border-style:solid;border-width:.15em .15em 0 0;display:inline-block;height:.5em;margin-left:1em;transform:rotate(45deg);vertical-align:baseline;width:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogFooter #CybotCookiebotDialogBodyLevelButtonCustomize .CybotCookiebotDialogArrow{margin-left:0;margin-right:1em;transform:rotate(-135deg)}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggle{border-bottom:1px solid #D6D6D6;display:flex;flex-wrap:wrap;justify-content:flex-end;margin:1em 0 1.5em auto;padding-bottom:1.5em}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleDeselectVendorsLink,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink{align-items:center;background-color:transparent;border:2px solid #1032CF;border-radius:.25em;color:#141414;display:flex;font-weight:600;padding:.75em 1em;text-decoration:none;user-select:none}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton:hover,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleDeselectVendorsLink:hover,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink:hover{opacity:.85}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton.select,#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink{background-color:#1032CF;border-color:#1032CF;color:#ffffff;margin-left:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderButton.select,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggleSelectVendorsLink{margin-left:0;margin-right:.5em}@media screen and (min-width:601px){#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonsWrapper{align-items:stretch;flex:1;flex-direction:row;justify-content:flex-end}#CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyButton:not(:first-of-type),#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton,#CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:first-of-type){margin-top:0;width:33%}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper:not(.CybotCookiebotDialogHide)+#CybotCookiebotDialogBodyButtonsWrapper .CybotCookiebotDialogBodyButton{max-width:286px;width:100%}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyButton:not(:last-of-type){margin-right:.5em}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:last-of-type){margin-left:.5em;margin-right:0}#CybotCookiebotDialogBodyButtons .CybotCookiebotDialogBodyContentControlsWrapper{margin-bottom:0;margin-right:1em}}@media screen and (min-width:1280px){#CybotCookiebotDialog.CybotEdge .CybotCookiebotBannerCloseButton{display:none}#CybotCookiebotDialog.CybotEdge.CybotCloseButtonEnabled #CybotCookiebotBannerCloseButtonE2E{display:flex}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggle{border-bottom:none;justify-content:flex-start;margin:0 0 0 auto;padding:0}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonIABHeaderToggle{margin-left:0;margin-right:auto}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter #CybotCookiebotDialogBodyButtonsWrapper{flex:auto;flex-direction:column}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton{max-width:none;width:286px}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogFooter .CybotCookiebotDialogBodyButton:not(:first-of-type){margin-top:.5em}}#CybotCookiebotDialogBodyLevelWrapper{width:100%}#CybotCookiebotDialogBodyEdgeMoreDetails{display:none}#CybotCookiebotDialogDetailBodyContentCookieContainerTypes{list-style-type:none}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails{display:flex;justify-content:flex-end;margin:1.5em 2em .5em 0}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogBodyEdgeMoreDetails{margin-left:1.125em;margin-right:0}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails a{align-items:center;color:#1032CF;display:flex;font-weight:600;text-decoration:none}#CybotCookiebotDialog.CybotEdge #CybotCookiebotDialogBodyEdgeMoreDetails a:after{border-style:solid;border-width:.15em .15em 0 0;color:#141414;content:\"\";display:block;height:.563em;margin-left:1em;transform:rotate(45deg);width:.563em}#CybotCookiebotDialog.CybotEdge[dir=rtl] #CybotCookiebotDialogBodyEdgeMoreDetails a:after{margin-left:0;margin-right:1em;transform:rotate(225deg)}#CybotCookiebotDialogBodyLevelButtons{width:100%}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper{-webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;flex-shrink:0;height:32px;position:relative;width:57px}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper:hover input[type=checkbox]:not(:disabled)+.CybotCookiebotDialogBodyLevelButtonSlider{opacity:.85}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper input[type=checkbox].CybotCookiebotDialogBodyLevelButton{opacity:0}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSlider{background-color:#141414;border-radius:32px;bottom:0;left:0;pointer-events:none;position:absolute;right:0;top:0;transition:background-color .4s}#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSlider:before{background-color:#ffffff;border-radius:50%;bottom:4px;content:\"\";height:24px;left:4px;position:absolute;transition:transform .4s;width:24px}#CybotCookiebotDialog input:checked+.CybotCookiebotDialogBodyLevelButtonSlider{background-color:#1032CF}#CybotCookiebotDialog input:checked+.CybotCookiebotDialogBodyLevelButtonSlider:before,#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogTabContent input+.CybotCookiebotDialogBodyLevelButtonSlider:before{background-color:#ffffff;transform:translateX(26px)}#CybotCookiebotDialog[dir=rtl] #CybotCookiebotDialogTabContent input:checked+.CybotCookiebotDialogBodyLevelButtonSlider:before{transform:translateX(0)}#CybotCookiebotDialog form input[type=checkbox][disabled]:checked+.CybotCookiebotDialogBodyLevelButtonSlider{background-color:#D6D6D6;pointer-events:none}#CybotCookiebotDialogBodyLevelButtonsSelectPane{border-bottom:1px solid #D6D6D6;padding:1em 0}#CybotCookiebotDialogBodyLevelButtonsSelectPane .CybotCookiebotDialogBodyLevelButtonWrapper{align-items:center;display:flex;justify-content:space-between;padding:1em;text-align:center;width:100%}#CybotCookiebotDialogDetailBodyContentIABv2Tabs .CybotCookiebotDialogBodyLevelButtonWrapper+.CybotCookiebotDialogBodyLevelButtonWrapper label{font-size:.875em;font-style:italic;font-weight:400;letter-spacing:.15px;padding-bottom:0}#CybotCookiebotDialogBodyLevelButtonsSelectPane .CybotCookiebotDialogBodyLevelButtonDescription{font-weight:700}#CybotCookiebotDialogBodyLevelButtonsSelectPane label:not([for=CybotCookiebotDialogBodyLevelButtonNecessary]) .CybotCookiebotDialogBodyLevelButtonDescriptio",
+      "headers": {
+        "age": "60",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "public, max-age=60, stale-while-revalidate=60, stale-if-error=3600",
+        "cf-cache-status": "HIT",
+        "cf-ray": "97531c1c7f465606-VNO",
+        "content-encoding": "gzip",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Tue, 26 Aug 2025 11:50:08 GMT",
+        "etag": "\"8f425-qVhh8U7D+RodJq90UGVXY+c3NSc\"",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-envoy-upstream-service-time": "311"
+      },
+      "statusCode": 200,
+      "loadTime": 0,
+      "screenshot": null,
+      "finalUrl": "https://www.delfi.lt/"
+    },
+    "lighthouse": {
+      "performance": 50,
+      "seo": 100,
+      "accessibility": 80,
+      "bestPractices": 70,
+      "metrics": {
+        "firstContentfulPaint": 1722.1410999999996,
+        "largestContentfulPaint": 2524.9570999999996,
+        "firstInputDelay": 16,
+        "cumulativeLayoutShift": 0.514114539426641,
+        "speedIndex": 4219.948617160557,
+        "totalBlockingTime": 0,
+        "timeToInteractive": 2524.9570999999996,
+        "serverResponseTime": 398.127
+      },
+      "opportunities": [
+        {
+          "audit": "first-contentful-paint",
+          "title": "First Contentful Paint",
+          "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+          "score": 0.43,
+          "savings": 1722.1410999999996,
+          "displayValue": "1.7 s"
+        },
+        {
+          "audit": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "score": 0.46,
+          "savings": 2524.9570999999996,
+          "displayValue": "2.5 s"
+        },
+        {
+          "audit": "speed-index",
+          "title": "Speed Index",
+          "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+          "score": 0.08,
+          "savings": 4219.948617160557,
+          "displayValue": "4.2 s"
+        },
+        {
+          "audit": "cumulative-layout-shift",
+          "title": "Cumulative Layout Shift",
+          "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+          "score": 0.15,
+          "savings": 0.514114539426641,
+          "displayValue": "0.514"
+        },
+        {
+          "audit": "errors-in-console",
+          "title": "Browser errors were logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "interactive",
+          "title": "Time to Interactive",
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "score": 0.89,
+          "savings": 2524.9570999999996,
+          "displayValue": "2.5 s"
+        },
+        {
+          "audit": "third-party-cookies",
+          "title": "Uses third-party cookies",
+          "description": "Third-party cookies may be blocked in some contexts. [Learn more about preparing for third-party cookie restrictions](https://privacysandbox.google.com/cookies/prepare/overview).",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "7 cookies found"
+        },
+        {
+          "audit": "font-display",
+          "title": "Ensure text remains visible during webfont load",
+          "description": "Leverage the `font-display` CSS feature to ensure text is user-visible while webfonts are loading. [Learn more about `font-display`](https://developer.chrome.com/docs/lighthouse/performance/font-display/).",
+          "score": 0.5,
+          "savings": 0
+        },
+        {
+          "audit": "largest-contentful-paint-element",
+          "title": "Largest Contentful Paint element",
+          "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "2,520 ms"
+        },
+        {
+          "audit": "layout-shifts",
+          "title": "Avoid large layout shifts",
+          "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "13 layout shifts found"
+        },
+        {
+          "audit": "unsized-images",
+          "title": "Image elements do not have explicit `width` and `height`",
+          "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+          "score": 0.5,
+          "savings": 0
+        },
+        {
+          "audit": "valid-source-maps",
+          "title": "Missing source maps for large first-party JavaScript",
+          "description": "Source maps translate minified code to the original source code. This helps developers debug in production. In addition, Lighthouse is able to provide further insights. Consider deploying source maps to take advantage of these benefits. [Learn more about source maps](https://developer.chrome.com/docs/devtools/javascript/source-maps/).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "button-name",
+          "title": "Buttons do not have an accessible name",
+          "description": "When a button doesn't have an accessible name, screen readers announce it as \"button\", making it unusable for users who rely on screen readers. [Learn how to make buttons more accessible](https://dequeuniversity.com/rules/axe/4.10/button-name).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+          "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.10/color-contrast).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "frame-title",
+          "title": "`<frame>` or `<iframe>` elements do not have a title",
+          "description": "Screen reader users rely on frame titles to describe the contents of frames. [Learn more about frame titles](https://dequeuniversity.com/rules/axe/4.10/frame-title).",
+          "score": 0,
+          "savings": 0
+        }
+      ],
+      "rawLighthouseData": {
+        "fetchTime": "2025-08-26T11:50:21.372Z",
+        "requestedUrl": "https://www.delfi.lt/",
+        "finalUrl": "https://www.delfi.lt/",
+        "lighthouseVersion": "12.8.1",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+        "environment": {
+          "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+          "benchmarkIndex": 3411,
+          "credits": {
+            "axe-core": "4.10.3"
+          }
+        },
+        "configSettings": {
+          "output": "json",
+          "maxWaitForFcp": 30000,
+          "maxWaitForLoad": 45000,
+          "pauseAfterFcpMs": 1000,
+          "pauseAfterLoadMs": 1000,
+          "networkQuietThresholdMs": 1000,
+          "cpuQuietThresholdMs": 1000,
+          "formFactor": "desktop",
+          "throttling": {
+            "rttMs": 40,
+            "throughputKbps": 10240,
+            "requestLatencyMs": 0,
+            "downloadThroughputKbps": 0,
+            "uploadThroughputKbps": 0,
+            "cpuSlowdownMultiplier": 1
+          },
+          "throttlingMethod": "simulate",
+          "screenEmulation": {
+            "mobile": false,
+            "width": 1350,
+            "height": 940,
+            "deviceScaleFactor": 1,
+            "disabled": false
+          },
+          "emulatedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "auditMode": false,
+          "gatherMode": false,
+          "clearStorageTypes": [
+            "file_systems",
+            "shader_cache",
+            "service_workers",
+            "cache_storage"
+          ],
+          "disableStorageReset": false,
+          "debugNavigation": false,
+          "channel": "node",
+          "usePassiveGathering": false,
+          "disableFullPageScreenshot": false,
+          "skipAboutBlank": false,
+          "blankPage": "about:blank",
+          "ignoreStatusCode": false,
+          "locale": "en-US",
+          "blockedUrlPatterns": null,
+          "additionalTraceCategories": null,
+          "extraHeaders": null,
+          "precomputedLanternData": null,
+          "onlyAudits": null,
+          "onlyCategories": [
+            "performance",
+            "seo",
+            "best-practices",
+            "accessibility"
+          ],
+          "skipAudits": []
+        }
+      }
+    },
+    "comprehensiveSEO": {
+      "technical": {
+        "score": 76,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 54,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 150,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "headingStructure": {
+            "hasH1": false,
+            "h1Count": 0,
+            "hasHierarchy": false,
+            "issues": [
+              "Missing H1 tag",
+              "H3 without H2 - broken hierarchy"
+            ],
+            "recommendations": [
+              "Add a single, descriptive H1 tag",
+              "Add H2 tags before using H3"
+            ],
+            "structure": {
+              "h1": {
+                "count": 0,
+                "texts": []
+              },
+              "h2": {
+                "count": 0,
+                "texts": []
+              },
+              "h3": {
+                "count": 20,
+                "texts": [
+                  "Prenumeruok ir valdyk pats, ką nori skaityti!",
+                  "Pauliaus Samoškos nuotykiai. 7 pasaulio stebuklai",
+                  "Ūkininko Petro dienoraštis",
+                  "Ūkininko Petro dienoraštis",
+                  "Orijaus kelionių archyvai"
+                ]
+              },
+              "h4": {
+                "count": 10,
+                "texts": [
+                  "Mano Delfi",
+                  "TIK PRENUMERATORIAMS",
+                  "Delfi Fone",
+                  "Aktualu",
+                  "Nuomonių ringas"
+                ]
+              },
+              "h5": {
+                "count": 95,
+                "texts": [
+                  "Sostinėje – didžiulis protestas „Gėdos diena“ (233)",
+                  "Siūbuoja dar vieno socialdemokratų ministro postas: jau užsimena, kas galėtų pakeisti",
+                  "Protestuotojų minioje kilo sujudimas: prireikė medikų pagalbos  (3)",
+                  "Ruginienė: koalicijoje liko tie, kam svarbiau ne postai (17)",
+                  "Per neeilinį protestą pasisakė politikai – kai kurie buvo nušvilpti (12)"
+                ]
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": true,
+            "score": 70
+          },
+          "structuredData": {
+            "present": true,
+            "score": 90
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 4330
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 72,
+        "analysis": {
+          "depth": {
+            "wordCount": 1470,
+            "paragraphCount": 98,
+            "adequateDepth": true,
+            "contentRatio": 15,
+            "depthScore": 85,
+            "issues": [],
+            "recommendations": []
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 4330
+          },
+          "socialSignals": {
+            "score": 70,
+            "hasOpenGraph": true
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 4330
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "adequate",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 69,
+      "recommendations": [
+        {
+          "priority": "medium",
+          "category": "Structure",
+          "issue": "Missing H1",
+          "action": "Add a single, keyword-rich H1 tag",
+          "impact": "Medium - Helps search engines understand content"
+        }
+      ],
+      "criticalIssues": [],
+      "opportunities": []
+    },
+    "accessibility": {
+      "score": 40,
+      "issues": {
+        "errors": 210,
+        "warnings": 0,
+        "notices": 0,
+        "total": 210
+      },
+      "details": [
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_1.H64.1",
+          "message": "Iframe element requires a non-empty title attribute that identifies the frame.",
+          "selector": "html > head > iframe:nth-child(123)",
+          "context": "<iframe src=\"https://btloader.com/trustedIframe.html?o=5749741711261696&amp;tid=PiUONnR12-YoN6mEhgk7-98e6372718&amp;upapi=true\" referrerpolicy=\"origin\" style=\"display: none !important; width: 0px !important; height: 0px !important;\"></iframe>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle2.Guideline2_4.2_4_1.H64.1",
+          "message": "Iframe element requires a non-empty title attribute that identifies the frame.",
+          "selector": "html > head > iframe:nth-child(127)",
+          "context": "<iframe src=\"https://btloader.com/trustedIframe.html?o=5749741711261696&amp;tid=PiUONnR12-YoN6mEhgk7-98e6372718&amp;upapi=true\" referrerpolicy=\"origin\" style=\"display: none !important; width: 0px !important; height: 0px !important;\"></iframe>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.Button.Name",
+          "message": "This button element does not have a name available to an accessibility API. Valid names are: title undefined, element content, aria-label undefined, aria-labelledby undefined.",
+          "selector": "#CybotCookiebotDialogHeader > button",
+          "context": "<button class=\"CybotCookiebotBannerCloseButton\" aria-label=\"\"><svg xmlns=\"http://www.w3.org/2...</button>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 6.11:1. Recommendation:  change text colour to #1f43e4.",
+          "selector": "#CybotCookiebotDialogBodyContentTextShowIABVendors",
+          "context": "<a id=\"CybotCookiebotDialogBodyContentTextShowIABVendors\" href=\"#\"> 965 mūsų partneriai</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 6.11:1. Recommendation:  change text colour to #1f43e4.",
+          "selector": "#CybotCookiebotDialogBodyContentTextToggleDetails",
+          "context": "<a id=\"CybotCookiebotDialogBodyContentTextToggleDetails\" href=\"#\">išsamios informacijos dalyje</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+          "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonsSelectPane > form",
+          "context": "<form><fieldset><legend class=\"visual...</form>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+          "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+          "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerNecessaryCard > div:nth-child(1) > div > form",
+          "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+          "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+          "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerPreferenceCard > div:nth-child(1) > div > form",
+          "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+          "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+          "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerStatisticsCard > div:nth-child(1) > div > form",
+          "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+          "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+          "selector": "#CybotCookiebotDialogDetailBodyContentCookieContainerAdvertisingCard > div:nth-child(1) > div > form",
+          "context": "<form><input type=\"checkbox\" id=\"Cybo...</form>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer618 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+          "message": "Anchor element found with no link content and no name and/or ID attribute.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer618 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer416 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+          "message": "Anchor element found with no link content and no name and/or ID attribute.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer416 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer1251 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+          "message": "Anchor element found with no link content and no name and/or ID attribute.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer1251 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_1.1_1_1.H30.2",
+          "message": "Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer87 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId",
+          "message": "Anchor element found with no link content and no name and/or ID attribute.",
+          "selector": "#CybotCookiebotDialogBodyLevelButtonIABVendorContainer87 > div:nth-child(3) > div:nth-child(2) > a",
+          "context": "<a href=\" \" target=\"_blank\" aria-label=\"Teisėtas interesas - opens in a new window\" rel=\"noopener noreferrer nofollow\" style=\"margin-top: 0; word-break: break-word;\"> <img class=\"CybotExternalLinkA...</a>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle3.Guideline3_2.3_2_2.H32.2",
+          "message": "This form does not contain a submit button, which creates issues for those who cannot submit the form using the keyboard. Submit buttons are INPUT elements with type attribute \"submit\" or \"image\", or BUTTON elements with type \"submit\" or omitted/invalid.",
+          "selector": "#CybotCookiebotDialogBodyButtons > div:nth-child(1) > form",
+          "context": "<form class=\"CybotCookiebotDialogBodyLevelButtonSliderWrapper\"><input type=\"checkbox\" id=\"Cybo...</form>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.Button.Name",
+          "message": "This button element does not have a name available to an accessibility API. Valid names are: title undefined, element content, aria-label undefined, aria-labelledby undefined.",
+          "selector": "#CybotCookiebotBannerCloseButtonE2E",
+          "context": "<button id=\"CybotCookiebotBannerCloseButtonE2E\" class=\"CybotCookiebotBannerCloseButton\" aria-label=\"\"><svg xmlns=\"http://www.w3.org/2...</button>"
+        }
+      ]
+    },
+    "technologies": {
+      "technologies": [
+        {
+          "name": "Google Analytics",
+          "categories": [
+            "Analytics"
+          ],
+          "version": "1",
+          "confidence": 90,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Google Tag Manager",
+          "categories": [
+            "Analytics"
+          ],
+          "version": "1",
+          "confidence": 90,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Vue.js",
+          "categories": [
+            "JavaScript Frameworks"
+          ],
+          "version": "1",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Bulma",
+          "categories": [
+            "CSS Frameworks"
+          ],
+          "version": "1",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Facebook Pixel",
+          "categories": [
+            "Analytics"
+          ],
+          "version": "1",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Cloudflare",
+          "categories": [
+            "CDN"
+          ],
+          "version": "1",
+          "confidence": 45,
+          "website": null,
+          "source": "custom-patterns"
+        }
+      ],
+      "categories": [
+        "JavaScript Frameworks",
+        "CSS Frameworks",
+        "Analytics",
+        "CDN"
+      ],
+      "count": 6,
+      "stats": {
+        "total": 6,
+        "byCategory": {
+          "Analytics": 3,
+          "JavaScript Frameworks": 1,
+          "CSS Frameworks": 1,
+          "CDN": 1
+        },
+        "byConfidence": {
+          "high": 2,
+          "medium": 3,
+          "low": 1
+        },
+        "topTechnologies": [
+          {
+            "name": "Google Analytics",
+            "confidence": 90
+          },
+          {
+            "name": "Google Tag Manager",
+            "confidence": 90
+          },
+          {
+            "name": "Vue.js",
+            "confidence": 50
+          },
+          {
+            "name": "Bulma",
+            "confidence": 50
+          },
+          {
+            "name": "Facebook Pixel",
+            "confidence": 50
+          },
+          {
+            "name": "Cloudflare",
+            "confidence": 45
+          }
+        ]
+      }
+    },
+    "security": {
+      "isHttps": true,
+      "score": 33,
+      "headers": {
+        "strict-transport-security": true,
+        "content-security-policy": false,
+        "x-frame-options": false,
+        "x-content-type-options": true,
+        "x-xss-protection": false,
+        "referrer-policy": false
+      },
+      "rawHeaders": {
+        "x-envoy-upstream-service-time": "233",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "x-content-type-options": "nosniff"
+      },
+      "recommendations": [
+        "Implement Content Security Policy to prevent XSS attacks",
+        "Add X-Frame-Options header to prevent clickjacking"
+      ]
+    },
+    "scores": {
+      "performance": 50,
+      "seo": 100,
+      "accessibility": 80,
+      "security": 33,
+      "bestPractices": 70,
+      "overall": 69
+    }
+  }
+}

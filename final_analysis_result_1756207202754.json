@@ -1,0 +1,1583 @@
+{
+  "id": "bc37fff2-7179-4eca-98f5-4cc950187cfd",
+  "url": "https://www.tyrimas.com/",
+  "analyzedAt": "2025-08-26T11:19:53.061Z",
+  "analysisTime": 15386,
+  "performance": {
+    "score": 100,
+    "metrics": {
+      "firstContentfulPaint": 516.386575,
+      "largestContentfulPaint": 703.81535,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 703.8153500000001,
+      "serverResponseTime": 30.547
+    },
+    "opportunities": [
+      {
+        "audit": "third-party-cookies",
+        "title": "Uses third-party cookies",
+        "description": "Third-party cookies may be blocked in some contexts. [Learn more about preparing for third-party cookie restrictions](https://privacysandbox.google.com/cookies/prepare/overview).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "1 cookie found"
+      },
+      {
+        "audit": "unsized-images",
+        "title": "Image elements do not have explicit `width` and `height`",
+        "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "aria-progressbar-name",
+        "title": "ARIA `progressbar` elements do not have accessible names.",
+        "description": "When a `progressbar` element doesn't have an accessible name, screen readers announce it with a generic name, making it unusable for users who rely on screen readers. [Learn how to label `progressbar` elements](https://dequeuniversity.com/rules/axe/4.10/aria-progressbar-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "frame-title",
+        "title": "`<frame>` or `<iframe>` elements do not have a title",
+        "description": "Screen reader users rely on frame titles to describe the contents of frames. [Learn more about frame titles](https://dequeuniversity.com/rules/axe/4.10/frame-title).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "heading-order",
+        "title": "Heading elements are not in a sequentially-descending order",
+        "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.10/heading-order).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "uses-long-cache-ttl",
+        "title": "Serve static assets with an efficient cache policy",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+        "score": 0.5,
+        "savings": 19171.025,
+        "displayValue": "5 resources found"
+      },
+      {
+        "audit": "total-byte-weight",
+        "title": "Avoid enormous network payloads",
+        "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+        "score": 0.5,
+        "savings": 2733711,
+        "displayValue": "Total size was 2,670 KiB"
+      },
+      {
+        "audit": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "Est savings of 56 KiB"
+      },
+      {
+        "audit": "modern-image-formats",
+        "title": "Serve images in next-gen formats",
+        "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 1,952 KiB"
+      },
+      {
+        "audit": "uses-responsive-images",
+        "title": "Properly size images",
+        "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 1,523 KiB"
+      },
+      {
+        "audit": "inspector-issues",
+        "title": "Issues were logged in the `Issues` panel in Chrome Devtools",
+        "description": "Issues logged to the `Issues` panel in Chrome Devtools indicate unresolved problems. They can come from network request failures, insufficient security controls, and other browser concerns. Open up the Issues panel in Chrome DevTools for more details on each issue.",
+        "score": 0,
+        "savings": 0
+      }
+    ]
+  },
+  "lighthouse": {
+    "performance": 100,
+    "seo": 100,
+    "accessibility": 91,
+    "bestPractices": 78,
+    "metrics": {
+      "firstContentfulPaint": 516.386575,
+      "largestContentfulPaint": 703.81535,
+      "firstInputDelay": 16,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTime": 0,
+      "timeToInteractive": 703.8153500000001,
+      "serverResponseTime": 30.547
+    },
+    "opportunities": [
+      {
+        "audit": "third-party-cookies",
+        "title": "Uses third-party cookies",
+        "description": "Third-party cookies may be blocked in some contexts. [Learn more about preparing for third-party cookie restrictions](https://privacysandbox.google.com/cookies/prepare/overview).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "1 cookie found"
+      },
+      {
+        "audit": "unsized-images",
+        "title": "Image elements do not have explicit `width` and `height`",
+        "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+        "score": 0.5,
+        "savings": 0
+      },
+      {
+        "audit": "aria-progressbar-name",
+        "title": "ARIA `progressbar` elements do not have accessible names.",
+        "description": "When a `progressbar` element doesn't have an accessible name, screen readers announce it with a generic name, making it unusable for users who rely on screen readers. [Learn how to label `progressbar` elements](https://dequeuniversity.com/rules/axe/4.10/aria-progressbar-name).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "frame-title",
+        "title": "`<frame>` or `<iframe>` elements do not have a title",
+        "description": "Screen reader users rely on frame titles to describe the contents of frames. [Learn more about frame titles](https://dequeuniversity.com/rules/axe/4.10/frame-title).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "heading-order",
+        "title": "Heading elements are not in a sequentially-descending order",
+        "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.10/heading-order).",
+        "score": 0,
+        "savings": 0
+      },
+      {
+        "audit": "uses-long-cache-ttl",
+        "title": "Serve static assets with an efficient cache policy",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+        "score": 0.5,
+        "savings": 19171.025,
+        "displayValue": "5 resources found"
+      },
+      {
+        "audit": "total-byte-weight",
+        "title": "Avoid enormous network payloads",
+        "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+        "score": 0.5,
+        "savings": 2733711,
+        "displayValue": "Total size was 2,670 KiB"
+      },
+      {
+        "audit": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+        "score": 0,
+        "savings": 0,
+        "displayValue": "Est savings of 56 KiB"
+      },
+      {
+        "audit": "modern-image-formats",
+        "title": "Serve images in next-gen formats",
+        "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 1,952 KiB"
+      },
+      {
+        "audit": "uses-responsive-images",
+        "title": "Properly size images",
+        "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+        "score": 0.5,
+        "savings": 0,
+        "displayValue": "Est savings of 1,523 KiB"
+      },
+      {
+        "audit": "inspector-issues",
+        "title": "Issues were logged in the `Issues` panel in Chrome Devtools",
+        "description": "Issues logged to the `Issues` panel in Chrome Devtools indicate unresolved problems. They can come from network request failures, insufficient security controls, and other browser concerns. Open up the Issues panel in Chrome DevTools for more details on each issue.",
+        "score": 0,
+        "savings": 0
+      }
+    ]
+  },
+  "seo": {
+    "score": 62,
+    "lighthouseScore": 100,
+    "title": "Tyrimas.com – prisijunk ir paremk",
+    "description": "Padėk finansuoti blockchain tyrimą ir teisines priemones susigrąžinti prarastas lėšas. Prisijunk el. paštu.",
+    "keywords": [],
+    "headings": {
+      "h1": {
+        "count": 1,
+        "texts": [
+          "Prisijunk prie tyrimo –padėk susigrąžinti lėšas"
+        ]
+      },
+      "h2": {
+        "count": 9,
+        "texts": [
+          "‼️ Svarbus pranešimas visiems grupės nariams ‼️",
+          "Apie tyrimą",
+          "Paremti mokėjimu kortele",
+          "Biudžetas ir progresas",
+          "Kaip prisijungti"
+        ]
+      },
+      "h3": {
+        "count": 21,
+        "texts": [
+          "5 tyrėjų komanda",
+          "Teisinis ekspertas",
+          "Bendruomenės apsauga",
+          "Palik el. paštą",
+          "Gauk laišką"
+        ]
+      },
+      "h4": {
+        "count": 1,
+        "texts": [
+          "Prisijunkite prie naujienų"
+        ]
+      },
+      "h5": {
+        "count": 0,
+        "texts": []
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "comprehensive": {
+      "technical": {
+        "score": 56,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 33,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 107,
+            "optimal": false,
+            "issues": [
+              "Description too short"
+            ],
+            "recommendations": [
+              "Expand description to at least 120 characters"
+            ]
+          },
+          "headingStructure": {
+            "hasH1": true,
+            "h1Count": 1,
+            "hasHierarchy": true,
+            "issues": [],
+            "recommendations": [],
+            "structure": {
+              "h1": {
+                "count": 1,
+                "texts": [
+                  "Prisijunk prie tyrimo –padėk susigrąžinti lėšas"
+                ]
+              },
+              "h2": {
+                "count": 9,
+                "texts": [
+                  "‼️ Svarbus pranešimas visiems grupės nariams ‼️",
+                  "Apie tyrimą",
+                  "Paremti mokėjimu kortele",
+                  "Biudžetas ir progresas",
+                  "Kaip prisijungti"
+                ]
+              },
+              "h3": {
+                "count": 21,
+                "texts": [
+                  "5 tyrėjų komanda",
+                  "Teisinis ekspertas",
+                  "Bendruomenės apsauga",
+                  "Palik el. paštą",
+                  "Gauk laišką"
+                ]
+              },
+              "h4": {
+                "count": 1,
+                "texts": [
+                  "Prisijunkite prie naujienų"
+                ]
+              },
+              "h5": {
+                "count": 0,
+                "texts": []
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": true,
+            "score": 70
+          },
+          "structuredData": {
+            "present": false,
+            "score": 20
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 2
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 66,
+        "analysis": {
+          "depth": {
+            "wordCount": 610,
+            "paragraphCount": 55,
+            "adequateDepth": true,
+            "contentRatio": 11.090909090909092,
+            "depthScore": 70,
+            "issues": [],
+            "recommendations": []
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 2
+          },
+          "socialSignals": {
+            "score": 30,
+            "hasOpenGraph": false
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 2
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "adequate",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 62,
+      "recommendations": [
+        {
+          "priority": "medium",
+          "category": "Technical",
+          "issue": "Meta description",
+          "action": "Write compelling meta description (120-160 characters)",
+          "impact": "Medium - Affects click-through rates"
+        },
+        {
+          "priority": "low",
+          "category": "Enhancement",
+          "issue": "No structured data",
+          "action": "Add relevant schema markup (Organization, Article, etc.)",
+          "impact": "Low - Rich snippets potential"
+        }
+      ],
+      "criticalIssues": [],
+      "opportunities": [
+        "Add structured data for rich snippets",
+        "Expand content for better topical authority"
+      ]
+    },
+    "contentDepth": {
+      "wordCount": 610,
+      "paragraphCount": 55,
+      "adequateDepth": true,
+      "contentRatio": 11.090909090909092,
+      "depthScore": 70,
+      "issues": [],
+      "recommendations": []
+    },
+    "technicalSEO": {
+      "score": 56,
+      "factors": {
+        "titleOptimization": {
+          "present": true,
+          "length": 33,
+          "optimal": true,
+          "issues": [],
+          "recommendations": []
+        },
+        "metaDescription": {
+          "present": true,
+          "length": 107,
+          "optimal": false,
+          "issues": [
+            "Description too short"
+          ],
+          "recommendations": [
+            "Expand description to at least 120 characters"
+          ]
+        },
+        "headingStructure": {
+          "hasH1": true,
+          "h1Count": 1,
+          "hasHierarchy": true,
+          "issues": [],
+          "recommendations": [],
+          "structure": {
+            "h1": {
+              "count": 1,
+              "texts": [
+                "Prisijunk prie tyrimo –padėk susigrąžinti lėšas"
+              ]
+            },
+            "h2": {
+              "count": 9,
+              "texts": [
+                "‼️ Svarbus pranešimas visiems grupės nariams ‼️",
+                "Apie tyrimą",
+                "Paremti mokėjimu kortele",
+                "Biudžetas ir progresas",
+                "Kaip prisijungti"
+              ]
+            },
+            "h3": {
+              "count": 21,
+              "texts": [
+                "5 tyrėjų komanda",
+                "Teisinis ekspertas",
+                "Bendruomenės apsauga",
+                "Palik el. paštą",
+                "Gauk laišką"
+              ]
+            },
+            "h4": {
+              "count": 1,
+              "texts": [
+                "Prisijunkite prie naujienų"
+              ]
+            },
+            "h5": {
+              "count": 0,
+              "texts": []
+            },
+            "h6": {
+              "count": 0,
+              "texts": []
+            }
+          }
+        },
+        "urlStructure": {
+          "optimal": true,
+          "score": 80
+        },
+        "metaTags": {
+          "optimal": true,
+          "score": 70
+        },
+        "structuredData": {
+          "present": false,
+          "score": 20
+        },
+        "internalLinking": {
+          "score": 60,
+          "linkCount": 2
+        }
+      },
+      "issues": []
+    },
+    "recommendations": [
+      {
+        "priority": "medium",
+        "category": "Technical",
+        "issue": "Meta description",
+        "action": "Write compelling meta description (120-160 characters)",
+        "impact": "Medium - Affects click-through rates"
+      },
+      {
+        "priority": "low",
+        "category": "Enhancement",
+        "issue": "No structured data",
+        "action": "Add relevant schema markup (Organization, Article, etc.)",
+        "impact": "Low - Rich snippets potential"
+      }
+    ],
+    "criticalIssues": []
+  },
+  "accessibility": {
+    "score": 62,
+    "issues": {
+      "errors": 48,
+      "warnings": 0,
+      "notices": 0,
+      "total": 48
+    },
+    "details": [
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1:1. Recommendation:  change text colour to #767676.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > h1",
+        "context": "<h1 class=\"text-4xl md:text-6xl font-bold mb-6 leading-tight\">Prisijunk prie tyrimo –<br><spa...</h1>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1.9:1. Recommendation:  change text colour to #b45d5d.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > h1 > span",
+        "context": "<span class=\"text-red-300\">padėk susigrąžinti lėšas</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1.22:1. Recommendation:  change text colour to #8b6f6f.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > p:nth-child(3)",
+        "context": "<p class=\"text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto\">Skenuojame blockchain, rengiame...</p>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(4) > p:nth-child(1)",
+        "context": "<p class=\"text-lg text-yellow-300 animate-pulse bg-red-700/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Jei manote, kad turite naudingo...</p>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(4) > p:nth-child(2)",
+        "context": "<p class=\"text-base text-red-100 bg-red-800/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Prašome kantrybės, netrukus gau...</p>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+        "message": "The heading structure is not logically nested. This h4 element should be an h2 to be properly nested.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > h4",
+        "context": "<h4 class=\"text-xl font-semibold mb-4 text-center text-white\">Prisijunkite prie naujienų</h4>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > h4",
+        "context": "<h4 class=\"text-xl font-semibold mb-4 text-center text-white\">Prisijunkite prie naujienų</h4>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.InputEmail.Name",
+        "message": "This emailinput element does not have a name available to an accessibility API. Valid names are: label element, title undefined, aria-label undefined, aria-labelledby undefined.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > form > input",
+        "context": "<input type=\"email\" class=\"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2..."
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.62:1. Recommendation:  change background to #1b0000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > form > button",
+        "context": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2..."
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.45:1. Recommendation:  change text colour to #7e4a4a.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > p:nth-child(6)",
+        "context": "<p class=\"mt-6 text-red-200\">↓ Apie kampaniją skaitykite žem...</p>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 2.8:1. Recommendation:  change text colour to #c85200.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(2) > div > div > div > div > h2 > span:nth-child(1)",
+        "context": "<span class=\"flash-warning text-orange-500\">‼️</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 2.8:1. Recommendation:  change text colour to #c85200.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(2) > div > div > div > div > h2 > span:nth-child(2)",
+        "context": "<span class=\"flash-warning text-orange-500\">‼️</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 5.18:1. Recommendation:  change text colour to #a33000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(2) > div > div > div > div > button",
+        "context": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:p..."
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change text colour to #b60000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(5) > div > div > div:nth-child(2) > div > p:nth-child(4)",
+        "context": "<p class=\"text-red-600 text-sm font-medium mb-8\">Duomenys atnaujinami kas 24h da...</p>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.62:1. Recommendation:  change background to #1b0000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(5) > div > div > div:nth-child(2) > div > button",
+        "context": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-e..."
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change background to #b60000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(6) > div > div > div > div:nth-child(1) > div > div > div",
+        "context": "<div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">1</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change background to #b60000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(6) > div > div > div > div:nth-child(2) > div > div > div",
+        "context": "<div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">2</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change background to #b60000.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(6) > div > div > div > div:nth-child(3) > div > div > div",
+        "context": "<div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">3</div>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.76:1. Recommendation:  change text colour to #4a5a71.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(7) > div > div > div > div:nth-child(1) > div > div > div:nth-child(1) > div > span",
+        "context": "<span class=\"text-sm text-slate-500\">2025-06-26</span>"
+      },
+      {
+        "type": "error",
+        "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+        "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 6.49:1. Recommendation:  change background to #f7fff9.",
+        "selector": "#root > div:nth-child(2) > section:nth-child(7) > div > div > div > div:nth-child(1) > div > div > div:nth-child(1) > div > div",
+        "context": "<div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atl..."
+      }
+    ]
+  },
+  "security": {
+    "score": 17,
+    "headers": {
+      "strict-transport-security": true,
+      "content-security-policy": false,
+      "x-frame-options": false,
+      "x-content-type-options": false,
+      "x-xss-protection": false,
+      "referrer-policy": false
+    },
+    "vulnerabilities": []
+  },
+  "technologies": [
+    "Tailwind CSS",
+    "Bulma"
+  ],
+  "basic": {
+    "title": "Tyrimas.com – prisijunk ir paremk",
+    "description": "Padėk finansuoti blockchain tyrimą ir teisines priemones susigrąžinti prarastas lėšas. Prisijunk el. paštu.",
+    "keywords": "",
+    "lang": "lt",
+    "charset": "UTF-8",
+    "ogTitle": "",
+    "ogDescription": "",
+    "ogImage": "",
+    "ogUrl": "",
+    "twitterCard": "",
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "hasStructuredData": false,
+    "structuredDataCount": 0,
+    "headingStructure": {
+      "h1": {
+        "count": 1,
+        "texts": [
+          "Prisijunk prie tyrimo –padėk susigrąžinti lėšas"
+        ]
+      },
+      "h2": {
+        "count": 9,
+        "texts": [
+          "‼️ Svarbus pranešimas visiems grupės nariams ‼️",
+          "Apie tyrimą",
+          "Paremti mokėjimu kortele",
+          "Biudžetas ir progresas",
+          "Kaip prisijungti"
+        ]
+      },
+      "h3": {
+        "count": 21,
+        "texts": [
+          "5 tyrėjų komanda",
+          "Teisinis ekspertas",
+          "Bendruomenės apsauga",
+          "Palik el. paštą",
+          "Gauk laišką"
+        ]
+      },
+      "h4": {
+        "count": 1,
+        "texts": [
+          "Prisijunkite prie naujienų"
+        ]
+      },
+      "h5": {
+        "count": 0,
+        "texts": []
+      },
+      "h6": {
+        "count": 0,
+        "texts": []
+      }
+    },
+    "imageCount": 1,
+    "linkCount": 2,
+    "formCount": 1,
+    "wordCount": 610,
+    "paragraphCount": 55,
+    "externalScripts": [
+      "https://assets.mailerlite.com/js/universal.js",
+      "https://assets.mailerlite.com/jsonp/1640870/forms?callback=ml.fn.renderPopupsAndPromotions",
+      "https://js.stripe.com/v3/buy-button.js"
+    ],
+    "externalStyles": [
+      "https://assets.mailerlite.com/css/universal.css"
+    ],
+    "domElements": 350,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "html": "<!DOCTYPE html><html lang=\"lt\"><head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Tyrimas.com – prisijunk ir paremk</title>\n    <meta name=\"description\" content=\"Padėk finansuoti blockchain tyrimą ir teisines priemones susigrąžinti prarastas lėšas. Prisijunk el. paštu.\">\n    <meta name=\"author\" content=\"Tyrimas.com\">\n\n    <link rel=\"icon\" href=\"/lovable-uploads/8be408a9-7216-4c1e-aedd-a34e8e136fbe.png\" type=\"image/png\">\n    \n    <!-- MailerLite Universal -->\n    <script async=\"\" src=\"https://assets.mailerlite.com/js/universal.js\"></script><script>\n        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])\n        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,\n        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})\n        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');\n        ml('account', '1640870');\n    </script>\n    <!-- End MailerLite Universal -->\n    <script type=\"module\" crossorigin=\"\" src=\"/assets/index-cJH80W21.js\"></script>\n    <link rel=\"stylesheet\" crossorigin=\"\" href=\"/assets/index-DRDpMvFx.css\">\n  <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"https://assets.mailerlite.com/css/universal.css\"><script src=\"https://assets.mailerlite.com/jsonp/1640870/forms?callback=ml.fn.renderPopupsAndPromotions\" async=\"true\"></script><style type=\"text/css\">:where(html[dir=\"ltr\"]),:where([data-sonner-toaster][dir=\"ltr\"]){--toast-icon-margin-start: -3px;--toast-icon-margin-end: 4px;--toast-svg-margin-start: -1px;--toast-svg-margin-end: 0px;--toast-button-margin-start: auto;--toast-button-margin-end: 0;--toast-close-button-start: 0;--toast-close-button-end: unset;--toast-close-button-transform: translate(-35%, -35%)}:where(html[dir=\"rtl\"]),:where([data-sonner-toaster][dir=\"rtl\"]){--toast-icon-margin-start: 4px;--toast-icon-margin-end: -3px;--toast-svg-margin-start: 0px;--toast-svg-margin-end: -1px;--toast-button-margin-start: 0;--toast-button-margin-end: auto;--toast-close-button-start: unset;--toast-close-button-end: 0;--toast-close-button-transform: translate(35%, -35%)}:where([data-sonner-toaster]){position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1: hsl(0, 0%, 99%);--gray2: hsl(0, 0%, 97.3%);--gray3: hsl(0, 0%, 95.1%);--gray4: hsl(0, 0%, 93%);--gray5: hsl(0, 0%, 90.9%);--gray6: hsl(0, 0%, 88.7%);--gray7: hsl(0, 0%, 85.8%);--gray8: hsl(0, 0%, 78%);--gray9: hsl(0, 0%, 56.1%);--gray10: hsl(0, 0%, 52.3%);--gray11: hsl(0, 0%, 43.5%);--gray12: hsl(0, 0%, 9%);--border-radius: 8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:none;z-index:999999999}:where([data-sonner-toaster][data-x-position=\"right\"]){right:max(var(--offset),env(safe-area-inset-right))}:where([data-sonner-toaster][data-x-position=\"left\"]){left:max(var(--offset),env(safe-area-inset-left))}:where([data-sonner-toaster][data-x-position=\"center\"]){left:50%;transform:translate(-50%)}:where([data-sonner-toaster][data-y-position=\"top\"]){top:max(var(--offset),env(safe-area-inset-top))}:where([data-sonner-toaster][data-y-position=\"bottom\"]){bottom:max(var(--offset),env(safe-area-inset-bottom))}:where([data-sonner-toast]){--y: translateY(100%);--lift-amount: calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);filter:blur(0);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:none;overflow-wrap:anywhere}:where([data-sonner-toast][data-styled=\"true\"]){padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px #0000001a;width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}:where([data-sonner-toast]:focus-visible){box-shadow:0 4px 12px #0000001a,0 0 0 2px #0003}:where([data-sonner-toast][data-y-position=\"top\"]){top:0;--y: translateY(-100%);--lift: 1;--lift-amount: calc(1 * var(--gap))}:where([data-sonner-toast][data-y-position=\"bottom\"]){bottom:0;--y: translateY(100%);--lift: -1;--lift-amount: calc(var(--lift) * var(--gap))}:where([data-sonner-toast]) :where([data-description]){font-weight:400;line-height:1.4;color:inherit}:where([data-sonner-toast]) :where([data-title]){font-weight:500;line-height:1.5;color:inherit}:where([data-sonner-toast]) :where([data-icon]){display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}:where([data-sonner-toast][data-promise=\"true\"]) :where([data-icon])>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}:where([data-sonner-toast]) :where([data-icon])>*{flex-shrink:0}:where([data-sonner-toast]) :where([data-icon]) svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}:where([data-sonner-toast]) :where([data-content]){display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;cursor:pointer;outline:none;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}:where([data-sonner-toast]) :where([data-button]):focus-visible{box-shadow:0 0 0 2px #0006}:where([data-sonner-toast]) :where([data-button]):first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}:where([data-sonner-toast]) :where([data-cancel]){color:var(--normal-text);background:rgba(0,0,0,.08)}:where([data-sonner-toast][data-theme=\"dark\"]) :where([data-cancel]){background:rgba(255,255,255,.3)}:where([data-sonner-toast]) :where([data-close-button]){position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;background:var(--gray1);color:var(--gray12);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}:where([data-sonner-toast]) :where([data-close-button]):focus-visible{box-shadow:0 4px 12px #0000001a,0 0 0 2px #0003}:where([data-sonner-toast]) :where([data-disabled=\"true\"]){cursor:not-allowed}:where([data-sonner-toast]):hover :where([data-close-button]):hover{background:var(--gray2);border-color:var(--gray5)}:where([data-sonner-toast][data-swiping=\"true\"]):before{content:\"\";position:absolute;left:0;right:0;height:100%;z-index:-1}:where([data-sonner-toast][data-y-position=\"top\"][data-swiping=\"true\"]):before{bottom:50%;transform:scaleY(3) translateY(50%)}:where([data-sonner-toast][data-y-position=\"bottom\"][data-swiping=\"true\"]):before{top:50%;transform:scaleY(3) translateY(-50%)}:where([data-sonner-toast][data-swiping=\"false\"][data-removed=\"true\"]):before{content:\"\";position:absolute;inset:0;transform:scaleY(2)}:where([data-sonner-toast]):after{content:\"\";position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}:where([data-sonner-toast][data-mounted=\"true\"]){--y: translateY(0);opacity:1}:where([data-sonner-toast][data-expanded=\"false\"][data-front=\"false\"]){--scale: var(--toasts-before) * .05 + 1;--y: translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}:where([data-sonner-toast])>*{transition:opacity .4s}:where([data-sonner-toast][data-expanded=\"false\"][data-front=\"false\"][data-styled=\"true\"])>*{opacity:0}:where([data-sonner-toast][data-visible=\"false\"]){opacity:0;pointer-events:none}:where([data-sonner-toast][data-mounted=\"true\"][data-expanded=\"true\"]){--y: translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"true\"][data-swipe-out=\"false\"]){--y: translateY(calc(var(--lift) * -100%));opacity:0}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"false\"][data-swipe-out=\"false\"][data-expanded=\"true\"]){--y: translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"false\"][data-swipe-out=\"false\"][data-expanded=\"false\"]){--y: translateY(40%);opacity:0;transition:transform .5s,opacity .2s}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"false\"]):before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount, 0px));transition:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation:swipe-out .2s ease-out forwards}@keyframes swipe-out{0%{transform:translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount)));opacity:1}to{transform:translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount) + var(--lift) * -100%));opacity:0}}@media (max-width: 600px){[data-sonner-toaster]{position:fixed;--mobile-offset: 16px;right:var(--mobile-offset);left:var(--mobile-offset);width:100%}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset)}[data-sonner-toaster][data-y-position=bottom]{bottom:20px}[data-sonner-toaster][data-y-position=top]{top:20px}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset);right:var(--mobile-offset);transform:none}}[data-sonner-toaster][data-theme=light]{--normal-bg: #fff;--normal-border: var(--gray4);--normal-text: var(--gray12);--success-bg: hsl(143, 85%, 96%);--success-border: hsl(145, 92%, 91%);--success-text: hsl(140, 100%, 27%);--info-bg: hsl(208, 100%, 97%);--info-border: hsl(221, 91%, 91%);--info-text: hsl(210, 92%, 45%);--warning-bg: hsl(49, 100%, 97%);--warning-border: hsl(49, 91%, 91%);--warning-text: hsl(31, 92%, 45%);--error-bg: hsl(359, 100%, 97%);--error-border: hsl(359, 100%, 94%);--error-text: hsl(360, 100%, 45%)}[data-sonner-toaster][data-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg: #000;--normal-border: hsl(0, 0%, 20%);--normal-text: var(--gray1)}[data-sonner-toaster][data-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg: #fff;--normal-border: var(--gray3);--normal-text: var(--gray12)}[data-sonner-toaster][data-theme=dark]{--normal-bg: #000;--normal-border: hsl(0, 0%, 20%);--normal-text: var(--gray1);--success-bg: hsl(150, 100%, 6%);--success-border: hsl(147, 100%, 12%);--success-text: hsl(150, 86%, 65%);--info-bg: hsl(215, 100%, 6%);--info-border: hsl(223, 100%, 12%);--info-text: hsl(216, 87%, 65%);--warning-bg: hsl(64, 100%, 6%);--warning-border: hsl(60, 100%, 12%);--warning-text: hsl(46, 87%, 65%);--error-bg: hsl(358, 76%, 10%);--error-border: hsl(357, 89%, 16%);--error-text: hsl(358, 100%, 81%)}[data-rich-colors=true][data-sonner-toast][data-type=success],[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info],[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning],[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error],[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size: 16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:nth-child(1){animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}to{opacity:.15}}@media (prefers-reduced-motion){[data-sonner-toast],[data-sonner-toast]>*,.sonner-loading-bar{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}\n</style><script src=\"https://js.stripe.com/v3/buy-button.js\" async=\"\"></script></head>\n\n  <body>\n    <div id=\"root\"><div role=\"region\" aria-label=\"Notifications (F8)\" tabindex=\"-1\" style=\"pointer-events: none;\"><ol tabindex=\"-1\" class=\"fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]\"></ol></div><div class=\"min-h-screen bg-background\"><section class=\"relative min-h-screen flex items-center justify-center overflow-hidden\"><div class=\"absolute inset-0 bg-cover bg-center bg-no-repeat\" style=\"background-image: url(&quot;/lovable-uploads/f4bb132e-46ef-4f66-821d-d8e3f82ef128.png&quot;);\"></div><div class=\"absolute inset-0 bg-gradient-to-br from-red-900/90 via-slate-800/85 to-red-800/90\"></div><div class=\"relative z-10 container mx-auto px-4 text-center text-white\"><div class=\"mb-8\"><img src=\"/lovable-uploads/8be408a9-7216-4c1e-aedd-a34e8e136fbe.png\" alt=\"Tyrimas.com logotipas\" class=\"h-60 mx-auto\"></div><h1 class=\"text-4xl md:text-6xl font-bold mb-6 leading-tight\">Prisijunk prie tyrimo –<br><span class=\"text-red-300\">padėk susigrąžinti lėšas</span></h1><p class=\"text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto\">Skenuojame blockchain, rengiame ieškinį, ieškome teisybės</p><div class=\"mb-8 space-y-4\"><p class=\"text-lg text-yellow-300 animate-pulse bg-red-700/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Jei manote, kad turite naudingos informacijos, kuri gali padėti tyrimui - būtinai susisiekite su mumis!</p><p class=\"text-base text-red-100 bg-red-800/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Prašome kantrybės, netrukus gausite pirmus informacinius emailus, su informaciją. Fiziškai nespėjame su užduotimis, bei komunikacija</p></div><div class=\"max-w-md mx-auto bg-white/10 rounded-lg p-6 backdrop-blur-sm\"><h4 class=\"text-xl font-semibold mb-4 text-center text-white\">Prisijunkite prie naujienų</h4><form class=\"space-y-4\"><input type=\"email\" class=\"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white/90 text-slate-900 placeholder:text-slate-600\" name=\"email\" placeholder=\"Jūsų el. paštas\" required=\"\"><button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 text-primary-foreground h-10 px-4 py-2 w-full bg-red-600 hover:bg-red-700\" type=\"submit\">Prisijungti</button></form></div><p class=\"mt-6 text-red-200\">↓ Apie kampaniją skaitykite žemiau</p></div></section><section class=\"py-12 bg-gradient-to-r from-yellow-50 to-orange-50 border-y-2 border-orange-200\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto text-center\"><style>\n                @keyframes flash {\n                  0%, 50% { opacity: 1; }\n                  25%, 75% { opacity: 0.3; }\n                }\n                .flash-warning {\n                  animation: flash 1.5s infinite;\n                }\n              </style><div class=\"rounded-lg text-card-foreground border-2 border-orange-300 shadow-xl bg-white\"><div class=\"p-8\"><h2 class=\"text-2xl md:text-3xl font-bold mb-6 text-slate-800\"><span class=\"flash-warning text-orange-500\">‼️</span> Svarbus pranešimas visiems grupės nariams <span class=\"flash-warning text-orange-500\">‼️</span></h2><p class=\"text-lg text-slate-700 leading-relaxed mb-8\">Kreipėmės į TV3 redakciją, kad projektas www.tyrimas.com būtų pristatytas plačiajai visuomenei. Tikimės, jog netrukus išgirsime jų atsakymą ir galėsime pasirodyti viešai. Tai labai svarbus žingsnis – norime, kad kuo daugiau nukentėjusiųjų mus surastų, o kartu parodytume, jog mūsų iniciatyva yra skaidri ir rimta.</p><button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border bg-background hover:text-accent-foreground h-11 rounded-md px-8 border-orange-400 text-orange-700 hover:bg-orange-50\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:r0:\" data-state=\"closed\">Daugiau informacijos</button></div></div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Apie tyrimą</h2><div class=\"grid md:grid-cols-3 gap-8 mb-12\"><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg\"><div class=\"p-6\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-users h-12 w-12 text-red-600 mx-auto mb-4\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"></path><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">5 tyrėjų komanda</h3><p class=\"text-slate-600\">Specializuojamės blockchain analizėje ir pinigų judėjimo sekime. Taip pat naudojamės ethical hacking paslauga.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg\"><div class=\"p-6\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-scale h-12 w-12 text-red-600 mx-auto mb-4\"><path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"M7 21h10\"></path><path d=\"M12 3v18\"></path><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Teisinis ekspertas</h3><p class=\"text-slate-600 mb-4\">Dirbame su Advokatų kontora Ožiūnas ir partneriai. Advokatas parengs ieškinius Interpolui ir kitoms institucijoms.</p><div class=\"text-sm text-slate-700 bg-slate-100 p-3 rounded-lg\"><p class=\"font-medium\">Algirdas Tomas Parulis</p><p>Pažymėjimo nr. 1597</p><p>Tel: +37065526079</p></div></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg\"><div class=\"p-6\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-shield h-12 w-12 text-red-600 mx-auto mb-4\"><path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Bendruomenės apsauga</h3><p class=\"text-slate-600\">Pagrindinis tikslas – apsaugoti narius nuo baudžiamosios atsakomybės</p></div></div></div><div class=\"rounded-lg text-card-foreground border-0 shadow-lg bg-red-50\"><div class=\"p-8\"><p class=\"text-lg text-slate-700 leading-relaxed\">Mūsų komanda atlieka išsamų blockchain tyrimo darbą, analizuodama visus pinigų judėjimus, susijusius su Anthony ir LWEX platforma. Rengiame dokumentus teisės gynimo institucijoms ir siekiame užtikrinti, kad nukentėjusieji gautų tinkamą teisminę paramą bei apsaugą.</p></div></div></div></div></section><section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-2xl mx-auto text-center\"><h2 class=\"text-3xl md:text-4xl font-bold mb-8 text-slate-800\">Paremti mokėjimu kortele</h2><div>\n                <stripe-buy-button buy-button-id=\"buy_btn_1RfHN4ICr7kiPKSH87IW1y5v\" publishable-key=\"pk_live_51R8jmWICr7kiPKSHk6UgltXi9M3GUF93nn0O1FHBrJ5L1CU8I8UNbOK7Ox1d3cje0pjjP13y0oXf5AfjkQ6hvoaP00m6SY0iMK\">\n                </stripe-buy-button>\n              </div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-3xl mx-auto text-center\"><h2 class=\"text-3xl md:text-4xl font-bold mb-8 text-slate-800\">Biudžetas ir progresas</h2><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-xl\"><div class=\"p-8\"><div class=\"flex items-center justify-between mb-6\"><div class=\"text-left\"><p class=\"text-sm text-slate-600 mb-1\">Surinkta</p><p class=\"text-3xl font-bold text-red-600\">180 EUR</p></div><div class=\"text-right\"><p class=\"text-sm text-slate-600 mb-1\">Tikslas</p><p class=\"text-3xl font-bold text-slate-800\">5000 EUR</p></div></div><div aria-valuemax=\"100\" aria-valuemin=\"0\" role=\"progressbar\" data-state=\"indeterminate\" data-max=\"100\" class=\"relative w-full overflow-hidden rounded-full bg-secondary h-4 mb-6\"><div data-state=\"indeterminate\" data-max=\"100\" class=\"h-full w-full flex-1 bg-primary transition-all\" style=\"transform: translateX(-96.4%);\"></div></div><p class=\"text-slate-600 mb-4\">4% surinkta • Liko 4820 EUR</p><p class=\"text-red-600 text-sm font-medium mb-8\">Duomenys atnaujinami kas 24h darbo dienomis.</p><button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 text-primary-foreground h-11 rounded-md bg-red-600 hover:bg-red-700 text-lg px-8 py-3\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:r3:\" data-state=\"closed\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-dollar-sign mr-2 h-5 w-5\"><line x1=\"12\" x2=\"12\" y1=\"2\" y2=\"22\"></line><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"></path></svg>Paremti dabar</button></div></div><div class=\"rounded-lg text-card-foreground border-0 shadow-lg mt-8 bg-red-50\"><div class=\"p-8\"><p class=\"text-lg text-slate-700 leading-relaxed mb-4\">Supraskite mus teisingai – be finansinės paramos mūsų galimybės yra ribotos. Veikla sulėtėja, o vidinė motyvacija, kai nuolat susiduriame su kliūtimis, mažėja. Nors stengiamės daryti kiek įmanoma daugiau savo jėgomis, vien entuziazmu tokio masto projektas negali ilgai laikytis – ypač kai reikia samdyti IT ar kitus specifinius specialistus. Tai nėra parama tik teisininko paslaugoms apmokėti, kad surašytų ieškinį. Prisidėję finansiškai pagreitinsite mūsų tyrimą, bei informacijos surinkimą.</p><p class=\"text-lg text-slate-700 leading-relaxed\">Paremdami mūsų veiklą, pagreitinsite tyrimą, nes galėsime pasamdyti daugiau rankų, kad informacija surinkti greičiau.</p></div></div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Kaip prisijungti</h2><div class=\"grid md:grid-cols-3 gap-8\"><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg relative\"><div class=\"p-6\"><div class=\"absolute -top-4 left-1/2 transform -translate-x-1/2\"><div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">1</div></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-mail h-12 w-12 text-red-600 mx-auto mb-4 mt-4\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Palik el. paštą</h3><p class=\"text-slate-600\">Užregistruokite savo el. pašto adresą aukščiau esančioje formoje</p></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg relative\"><div class=\"p-6\"><div class=\"absolute -top-4 left-1/2 transform -translate-x-1/2\"><div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">2</div></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-eye h-12 w-12 text-red-600 mx-auto mb-4 mt-4\"><path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"></path><circle cx=\"12\" cy=\"12\" r=\"3\"></circle></svg><h3 class=\"text-xl font-semibold mb-3\">Gauk laišką</h3><p class=\"text-slate-600\">Gausite informaciją apie ieškinio parengimo procesą ir eigą</p></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg relative\"><div class=\"p-6\"><div class=\"absolute -top-4 left-1/2 transform -translate-x-1/2\"><div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">3</div></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-circle-check-big h-12 w-12 text-red-600 mx-auto mb-4 mt-4\"><path d=\"M21.801 10A10 10 0 1 1 17 3.335\"></path><path d=\"m9 11 3 3L22 4\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Pasirašyk dokumentus</h3><p class=\"text-slate-600\">Įrašykite duomenis ir pasirašykite teisinius dokumentus</p></div></div></div></div></div></section><section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Ataskaitos ir pažanga</h2><div class=\"space-y-6\"><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-26</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atlikta</div></div><h3 class=\"text-xl font-semibold mb-2\">Tyrimo pradžia</h3><p class=\"text-slate-600\">Sukūrėme tyrimo komandą ir pradėjome duomenų rinkimą. Pirmieji blockchain skenavimo rezultatai.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">0 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-27</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atlikta</div></div><h3 class=\"text-xl font-semibold mb-2\">Svetainė, reikalingi įrankiai tyrimui</h3><p class=\"text-slate-600\">Sukūrėme svetainę ir įsigijome reikalingus programinius įrankius blockchain analizei bei duomenų rinkimui.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">250 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-27</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atlikta</div></div><h3 class=\"text-xl font-semibold mb-2\">Teisinio eksperto konsultacija</h3><p class=\"text-slate-600\">Aptarėme strategiją su advokatu, pradėjome rengti pradinius dokumentus, bei užduotis komandai.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">100 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-27</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\">Vyksta</div></div><h3 class=\"text-xl font-semibold mb-2\">Duomenų analizės plėtojimas</h3><p class=\"text-slate-600\">Išplėtėme blockchain analizės apimtis, identifikavome papildomus pinigų judėjimo kelius, ruošiame užduotis programuotojams.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">0 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-30</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\">Vyksta</div></div><h3 class=\"text-xl font-semibold mb-2\">IT komandos pradinė analizė</h3><p class=\"text-slate-600\">IT komanda, pradeda atlikineti uzduotis, skanuoti blockchain grandinę, bei dokumentuoti rezultatus.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">500 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-07-05</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 bg-blue-100 text-blue-800\">Suplanuota</div></div><h3 class=\"text-xl font-semibold mb-2\">Kreipimasis į TV3 dėl informacijos paviešinimo apie tai ką norime padaryti</h3><p class=\"text-slate-600\">Kreipėmės į TV3 redakciją, kad projektas www.tyrimas.com būtų pristatytas plačiajai visuomenei ir daugiau nukentėjusiųjų mus surastų.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">0 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div></div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-3xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Dažnai užduodami klausimai</h2><div class=\"space-y-6\"><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Ar mano duomenys saugūs?</h3><p class=\"text-slate-600\">Taip, visi duomenys šifruojami ir saugomi pagal GDPR reikalavimus. Naudojame tik būtiniausią informaciją tyrimo tikslams.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Kaip bus naudojamos lėšos?</h3><p class=\"text-slate-600\">Lėšos skirstomos: 75% tyrėjų komandos darbui, 15% teisinėms paslaugoms, 10% administracinėms išlaidoms. Visa veikla dokumentuojama.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Kas atsitiks, jei tikslas nepasiekiamas?</h3><p class=\"text-slate-600\">Jei nesurinksite pilnos sumos, tęsime darbą su turimomis lėšomis, bet apribota apimtimi. Visos lėšos bus panaudotos tyrimo tikslams.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Kada tikimasi rezultatų?</h3><p class=\"text-slate-600\">Preliminarūs pradinio tyrimo rezultatai bus gauti per 1-2 savaites. Nuo jų priklausys tolimesnė eiga, apie kurią informuosime.</p></div></div></div></div></div></section><section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto text-center\"><h2 class=\"text-3xl font-bold mb-8 text-slate-800\">Partneriai</h2><div class=\"grid md:grid-cols-2 gap-8\"><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg cursor-pointer hover:shadow-xl transition-shadow\"><div class=\"p-6\"><a href=\"https://www.ecomcorner.ee\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"block\"><h3 class=\"text-xl font-semibold mb-4 flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 transition-colors\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link h-5 w-5\"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg>www.ecomcorner.ee</h3><p class=\"text-slate-600\">IT Paslaugos</p></a></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg cursor-pointer hover:shadow-xl transition-shadow\"><div class=\"p-6\"><a href=\"https://www.google.com/maps/search/Laisv%C4%97s+pr.+77D,+Vilnius?entry=gmail&amp;source=g\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"block\"><h3 class=\"text-xl font-semibold mb-4 flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 transition-colors\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-scale h-5 w-5\"><path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"M7 21h10\"></path><path d=\"M12 3v18\"></path><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"></path></svg>Advokatų kontora</h3><p class=\"text-slate-600 mb-3\">Ožiūnas ir partneriai</p><div class=\"text-sm text-slate-700 bg-slate-100 p-3 rounded-lg\"><p class=\"font-medium\">Algirdas Tomas Parulis</p><p>Pažymėjimo nr. 1597</p><p>Tel: +37065526079</p></div></a></div></div></div></div></div></section><section class=\"py-16 bg-red-900 text-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto text-center\"><h2 class=\"text-3xl font-bold mb-8\">Kontaktai ir rekvizitai</h2><div class=\"grid md:grid-cols-3 gap-8 mb-12\"><div class=\"rounded-lg border shadow-sm bg-white/10 border-white/20 text-white\"><div class=\"p-6\"><h3 class=\"text-xl font-semibold mb-4\">Susisiekite su mumis</h3><div class=\"space-y-3\"><div class=\"flex items-center justify-center gap-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-mail h-4 w-4\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path></svg><span>tyrimas@tyrimas.com</span></div></div></div></div><div class=\"rounded-lg border shadow-sm bg-white/10 border-white/20 text-white\"><div class=\"p-6\"><h3 class=\"text-xl font-semibold mb-4\">Teisinis pagrindas</h3><p class=\"text-sm text-red-100\">Gausite sąskaitą faktūrą už IT paslaugas ir atstovavimą. Jei Jums reikalinga sąskaita - kreipkitės el.paštu. Visos finansinės operacijos atliekamos pagal Lietuvos Respublikos įstatymus.</p></div></div><div class=\"rounded-lg border shadow-sm bg-white/10 border-white/20 text-white\"><div class=\"p-6\"><h3 class=\"text-xl font-semibold mb-4 flex items-center justify-center gap-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-building h-4 w-4\"><rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" ry=\"2\"></rect><path d=\"M9 22v-4h6v4\"></path><path d=\"M8 6h.01\"></path><path d=\"M16 6h.01\"></path><path d=\"M12 6h.01\"></path><path d=\"M12 10h.01\"></path><path d=\"M12 14h.01\"></path><path d=\"M16 10h.01\"></path><path d=\"M16 14h.01\"></path><path d=\"M8 10h.01\"></path><path d=\"M8 14h.01\"></path></svg>Įmonės rekvizitai</h3><div class=\"space-y-2 text-sm text-red-100\"><div><p class=\"font-medium text-white\">ECOMCORNER OÜ</p></div><div><p>Company code: 17126567</p></div><div><p>VAT: EE102807855</p></div></div></div></div></div><div class=\"text-center text-red-200 text-sm\"><p>© 2025 Tyrimas.com. Visos teisės saugomos.</p></div></div></div></section></div></div>\n  \n\n</body></html>",
+    "headers": {
+      "accept-ranges": "bytes",
+      "access-control-allow-origin": "*",
+      "age": "1199997",
+      "cache-control": "public, max-age=0, must-revalidate",
+      "content-disposition": "inline",
+      "content-encoding": "br",
+      "content-length": "734",
+      "content-type": "text/html; charset=utf-8",
+      "date": "Tue, 26 Aug 2025 11:19:38 GMT",
+      "etag": "\"067c5b9b975bf97473c900538233297e\"",
+      "last-modified": "Tue, 12 Aug 2025 13:59:40 GMT",
+      "server": "Vercel",
+      "strict-transport-security": "max-age=63072000",
+      "x-vercel-cache": "HIT",
+      "x-vercel-id": "arn1::7tfmt-1756207178158-3af9118e8ad8"
+    },
+    "statusCode": 200,
+    "loadTime": 0,
+    "screenshot": null,
+    "finalUrl": "https://www.tyrimas.com/"
+  },
+  "aiInsights": {
+    "summary": "The website https://www.tyrimas.com/ has a low security score and unknown performance and SEO scores, which suggests potential issues in these areas. However, it has a relatively decent accessibility score. The technology stack and title of the website are unknown, which makes it difficult to provide a comprehensive analysis. The user experience, conversion optimization opportunities, and SEO and marketing improvements cannot be evaluated due to lack of data.",
+    "technicalInsights": {
+      "strengths": [
+        "Decent accessibility score"
+      ],
+      "weaknesses": [
+        "Low security score",
+        "Unknown performance and SEO scores",
+        "Unknown technology stack"
+      ],
+      "recommendations": [
+        "Improve security measures",
+        "Conduct performance and SEO audits",
+        "Identify and optimize technology stack"
+      ]
+    },
+    "businessInsights": {
+      "opportunities": [
+        "Potential to improve user experience",
+        "Opportunity to optimize for conversions",
+        "Potential for SEO and marketing improvements"
+      ],
+      "risks": [
+        "Low security could deter users",
+        "Poor performance and SEO could affect visibility and user retention"
+      ],
+      "recommendations": [
+        "Conduct user experience research",
+        "Implement conversion optimization strategies",
+        "Develop and execute an SEO and marketing plan"
+      ]
+    },
+    "recommendations": [
+      "Improve security measures",
+      "Conduct performance and SEO audits",
+      "Identify and optimize technology stack",
+      "Conduct user experience research",
+      "Implement conversion optimization strategies",
+      "Develop and execute an SEO and marketing plan"
+    ],
+    "priority": "high",
+    "confidence": 0.6,
+    "provider": "ai-generated"
+  },
+  "scores": {
+    "performance": 100,
+    "seo": 100,
+    "accessibility": 91,
+    "security": 17,
+    "bestPractices": 78,
+    "overall": 82
+  },
+  "raw": {
+    "url": "https://www.tyrimas.com/",
+    "analyzedAt": "2025-08-26T11:19:53.061Z",
+    "analysisTime": 15386,
+    "basic": {
+      "title": "Tyrimas.com – prisijunk ir paremk",
+      "description": "Padėk finansuoti blockchain tyrimą ir teisines priemones susigrąžinti prarastas lėšas. Prisijunk el. paštu.",
+      "keywords": "",
+      "lang": "lt",
+      "charset": "UTF-8",
+      "ogTitle": "",
+      "ogDescription": "",
+      "ogImage": "",
+      "ogUrl": "",
+      "twitterCard": "",
+      "twitterTitle": "",
+      "twitterDescription": "",
+      "hasStructuredData": false,
+      "structuredDataCount": 0,
+      "headingStructure": {
+        "h1": {
+          "count": 1,
+          "texts": [
+            "Prisijunk prie tyrimo –padėk susigrąžinti lėšas"
+          ]
+        },
+        "h2": {
+          "count": 9,
+          "texts": [
+            "‼️ Svarbus pranešimas visiems grupės nariams ‼️",
+            "Apie tyrimą",
+            "Paremti mokėjimu kortele",
+            "Biudžetas ir progresas",
+            "Kaip prisijungti"
+          ]
+        },
+        "h3": {
+          "count": 21,
+          "texts": [
+            "5 tyrėjų komanda",
+            "Teisinis ekspertas",
+            "Bendruomenės apsauga",
+            "Palik el. paštą",
+            "Gauk laišką"
+          ]
+        },
+        "h4": {
+          "count": 1,
+          "texts": [
+            "Prisijunkite prie naujienų"
+          ]
+        },
+        "h5": {
+          "count": 0,
+          "texts": []
+        },
+        "h6": {
+          "count": 0,
+          "texts": []
+        }
+      },
+      "imageCount": 1,
+      "linkCount": 2,
+      "formCount": 1,
+      "wordCount": 610,
+      "paragraphCount": 55,
+      "externalScripts": [
+        "https://assets.mailerlite.com/js/universal.js",
+        "https://assets.mailerlite.com/jsonp/1640870/forms?callback=ml.fn.renderPopupsAndPromotions",
+        "https://js.stripe.com/v3/buy-button.js"
+      ],
+      "externalStyles": [
+        "https://assets.mailerlite.com/css/universal.css"
+      ],
+      "domElements": 350,
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "html": "<!DOCTYPE html><html lang=\"lt\"><head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Tyrimas.com – prisijunk ir paremk</title>\n    <meta name=\"description\" content=\"Padėk finansuoti blockchain tyrimą ir teisines priemones susigrąžinti prarastas lėšas. Prisijunk el. paštu.\">\n    <meta name=\"author\" content=\"Tyrimas.com\">\n\n    <link rel=\"icon\" href=\"/lovable-uploads/8be408a9-7216-4c1e-aedd-a34e8e136fbe.png\" type=\"image/png\">\n    \n    <!-- MailerLite Universal -->\n    <script async=\"\" src=\"https://assets.mailerlite.com/js/universal.js\"></script><script>\n        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])\n        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,\n        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})\n        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');\n        ml('account', '1640870');\n    </script>\n    <!-- End MailerLite Universal -->\n    <script type=\"module\" crossorigin=\"\" src=\"/assets/index-cJH80W21.js\"></script>\n    <link rel=\"stylesheet\" crossorigin=\"\" href=\"/assets/index-DRDpMvFx.css\">\n  <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"https://assets.mailerlite.com/css/universal.css\"><script src=\"https://assets.mailerlite.com/jsonp/1640870/forms?callback=ml.fn.renderPopupsAndPromotions\" async=\"true\"></script><style type=\"text/css\">:where(html[dir=\"ltr\"]),:where([data-sonner-toaster][dir=\"ltr\"]){--toast-icon-margin-start: -3px;--toast-icon-margin-end: 4px;--toast-svg-margin-start: -1px;--toast-svg-margin-end: 0px;--toast-button-margin-start: auto;--toast-button-margin-end: 0;--toast-close-button-start: 0;--toast-close-button-end: unset;--toast-close-button-transform: translate(-35%, -35%)}:where(html[dir=\"rtl\"]),:where([data-sonner-toaster][dir=\"rtl\"]){--toast-icon-margin-start: 4px;--toast-icon-margin-end: -3px;--toast-svg-margin-start: 0px;--toast-svg-margin-end: -1px;--toast-button-margin-start: 0;--toast-button-margin-end: auto;--toast-close-button-start: unset;--toast-close-button-end: 0;--toast-close-button-transform: translate(35%, -35%)}:where([data-sonner-toaster]){position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1: hsl(0, 0%, 99%);--gray2: hsl(0, 0%, 97.3%);--gray3: hsl(0, 0%, 95.1%);--gray4: hsl(0, 0%, 93%);--gray5: hsl(0, 0%, 90.9%);--gray6: hsl(0, 0%, 88.7%);--gray7: hsl(0, 0%, 85.8%);--gray8: hsl(0, 0%, 78%);--gray9: hsl(0, 0%, 56.1%);--gray10: hsl(0, 0%, 52.3%);--gray11: hsl(0, 0%, 43.5%);--gray12: hsl(0, 0%, 9%);--border-radius: 8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:none;z-index:999999999}:where([data-sonner-toaster][data-x-position=\"right\"]){right:max(var(--offset),env(safe-area-inset-right))}:where([data-sonner-toaster][data-x-position=\"left\"]){left:max(var(--offset),env(safe-area-inset-left))}:where([data-sonner-toaster][data-x-position=\"center\"]){left:50%;transform:translate(-50%)}:where([data-sonner-toaster][data-y-position=\"top\"]){top:max(var(--offset),env(safe-area-inset-top))}:where([data-sonner-toaster][data-y-position=\"bottom\"]){bottom:max(var(--offset),env(safe-area-inset-bottom))}:where([data-sonner-toast]){--y: translateY(100%);--lift-amount: calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);filter:blur(0);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:none;overflow-wrap:anywhere}:where([data-sonner-toast][data-styled=\"true\"]){padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px #0000001a;width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}:where([data-sonner-toast]:focus-visible){box-shadow:0 4px 12px #0000001a,0 0 0 2px #0003}:where([data-sonner-toast][data-y-position=\"top\"]){top:0;--y: translateY(-100%);--lift: 1;--lift-amount: calc(1 * var(--gap))}:where([data-sonner-toast][data-y-position=\"bottom\"]){bottom:0;--y: translateY(100%);--lift: -1;--lift-amount: calc(var(--lift) * var(--gap))}:where([data-sonner-toast]) :where([data-description]){font-weight:400;line-height:1.4;color:inherit}:where([data-sonner-toast]) :where([data-title]){font-weight:500;line-height:1.5;color:inherit}:where([data-sonner-toast]) :where([data-icon]){display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}:where([data-sonner-toast][data-promise=\"true\"]) :where([data-icon])>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}:where([data-sonner-toast]) :where([data-icon])>*{flex-shrink:0}:where([data-sonner-toast]) :where([data-icon]) svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}:where([data-sonner-toast]) :where([data-content]){display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;cursor:pointer;outline:none;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}:where([data-sonner-toast]) :where([data-button]):focus-visible{box-shadow:0 0 0 2px #0006}:where([data-sonner-toast]) :where([data-button]):first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}:where([data-sonner-toast]) :where([data-cancel]){color:var(--normal-text);background:rgba(0,0,0,.08)}:where([data-sonner-toast][data-theme=\"dark\"]) :where([data-cancel]){background:rgba(255,255,255,.3)}:where([data-sonner-toast]) :where([data-close-button]){position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;background:var(--gray1);color:var(--gray12);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}:where([data-sonner-toast]) :where([data-close-button]):focus-visible{box-shadow:0 4px 12px #0000001a,0 0 0 2px #0003}:where([data-sonner-toast]) :where([data-disabled=\"true\"]){cursor:not-allowed}:where([data-sonner-toast]):hover :where([data-close-button]):hover{background:var(--gray2);border-color:var(--gray5)}:where([data-sonner-toast][data-swiping=\"true\"]):before{content:\"\";position:absolute;left:0;right:0;height:100%;z-index:-1}:where([data-sonner-toast][data-y-position=\"top\"][data-swiping=\"true\"]):before{bottom:50%;transform:scaleY(3) translateY(50%)}:where([data-sonner-toast][data-y-position=\"bottom\"][data-swiping=\"true\"]):before{top:50%;transform:scaleY(3) translateY(-50%)}:where([data-sonner-toast][data-swiping=\"false\"][data-removed=\"true\"]):before{content:\"\";position:absolute;inset:0;transform:scaleY(2)}:where([data-sonner-toast]):after{content:\"\";position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}:where([data-sonner-toast][data-mounted=\"true\"]){--y: translateY(0);opacity:1}:where([data-sonner-toast][data-expanded=\"false\"][data-front=\"false\"]){--scale: var(--toasts-before) * .05 + 1;--y: translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}:where([data-sonner-toast])>*{transition:opacity .4s}:where([data-sonner-toast][data-expanded=\"false\"][data-front=\"false\"][data-styled=\"true\"])>*{opacity:0}:where([data-sonner-toast][data-visible=\"false\"]){opacity:0;pointer-events:none}:where([data-sonner-toast][data-mounted=\"true\"][data-expanded=\"true\"]){--y: translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"true\"][data-swipe-out=\"false\"]){--y: translateY(calc(var(--lift) * -100%));opacity:0}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"false\"][data-swipe-out=\"false\"][data-expanded=\"true\"]){--y: translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"false\"][data-swipe-out=\"false\"][data-expanded=\"false\"]){--y: translateY(40%);opacity:0;transition:transform .5s,opacity .2s}:where([data-sonner-toast][data-removed=\"true\"][data-front=\"false\"]):before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount, 0px));transition:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation:swipe-out .2s ease-out forwards}@keyframes swipe-out{0%{transform:translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount)));opacity:1}to{transform:translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount) + var(--lift) * -100%));opacity:0}}@media (max-width: 600px){[data-sonner-toaster]{position:fixed;--mobile-offset: 16px;right:var(--mobile-offset);left:var(--mobile-offset);width:100%}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset)}[data-sonner-toaster][data-y-position=bottom]{bottom:20px}[data-sonner-toaster][data-y-position=top]{top:20px}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset);right:var(--mobile-offset);transform:none}}[data-sonner-toaster][data-theme=light]{--normal-bg: #fff;--normal-border: var(--gray4);--normal-text: var(--gray12);--success-bg: hsl(143, 85%, 96%);--success-border: hsl(145, 92%, 91%);--success-text: hsl(140, 100%, 27%);--info-bg: hsl(208, 100%, 97%);--info-border: hsl(221, 91%, 91%);--info-text: hsl(210, 92%, 45%);--warning-bg: hsl(49, 100%, 97%);--warning-border: hsl(49, 91%, 91%);--warning-text: hsl(31, 92%, 45%);--error-bg: hsl(359, 100%, 97%);--error-border: hsl(359, 100%, 94%);--error-text: hsl(360, 100%, 45%)}[data-sonner-toaster][data-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg: #000;--normal-border: hsl(0, 0%, 20%);--normal-text: var(--gray1)}[data-sonner-toaster][data-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg: #fff;--normal-border: var(--gray3);--normal-text: var(--gray12)}[data-sonner-toaster][data-theme=dark]{--normal-bg: #000;--normal-border: hsl(0, 0%, 20%);--normal-text: var(--gray1);--success-bg: hsl(150, 100%, 6%);--success-border: hsl(147, 100%, 12%);--success-text: hsl(150, 86%, 65%);--info-bg: hsl(215, 100%, 6%);--info-border: hsl(223, 100%, 12%);--info-text: hsl(216, 87%, 65%);--warning-bg: hsl(64, 100%, 6%);--warning-border: hsl(60, 100%, 12%);--warning-text: hsl(46, 87%, 65%);--error-bg: hsl(358, 76%, 10%);--error-border: hsl(357, 89%, 16%);--error-text: hsl(358, 100%, 81%)}[data-rich-colors=true][data-sonner-toast][data-type=success],[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info],[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning],[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error],[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size: 16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:nth-child(1){animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}to{opacity:.15}}@media (prefers-reduced-motion){[data-sonner-toast],[data-sonner-toast]>*,.sonner-loading-bar{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}\n</style><script src=\"https://js.stripe.com/v3/buy-button.js\" async=\"\"></script></head>\n\n  <body>\n    <div id=\"root\"><div role=\"region\" aria-label=\"Notifications (F8)\" tabindex=\"-1\" style=\"pointer-events: none;\"><ol tabindex=\"-1\" class=\"fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]\"></ol></div><div class=\"min-h-screen bg-background\"><section class=\"relative min-h-screen flex items-center justify-center overflow-hidden\"><div class=\"absolute inset-0 bg-cover bg-center bg-no-repeat\" style=\"background-image: url(&quot;/lovable-uploads/f4bb132e-46ef-4f66-821d-d8e3f82ef128.png&quot;);\"></div><div class=\"absolute inset-0 bg-gradient-to-br from-red-900/90 via-slate-800/85 to-red-800/90\"></div><div class=\"relative z-10 container mx-auto px-4 text-center text-white\"><div class=\"mb-8\"><img src=\"/lovable-uploads/8be408a9-7216-4c1e-aedd-a34e8e136fbe.png\" alt=\"Tyrimas.com logotipas\" class=\"h-60 mx-auto\"></div><h1 class=\"text-4xl md:text-6xl font-bold mb-6 leading-tight\">Prisijunk prie tyrimo –<br><span class=\"text-red-300\">padėk susigrąžinti lėšas</span></h1><p class=\"text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto\">Skenuojame blockchain, rengiame ieškinį, ieškome teisybės</p><div class=\"mb-8 space-y-4\"><p class=\"text-lg text-yellow-300 animate-pulse bg-red-700/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Jei manote, kad turite naudingos informacijos, kuri gali padėti tyrimui - būtinai susisiekite su mumis!</p><p class=\"text-base text-red-100 bg-red-800/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Prašome kantrybės, netrukus gausite pirmus informacinius emailus, su informaciją. Fiziškai nespėjame su užduotimis, bei komunikacija</p></div><div class=\"max-w-md mx-auto bg-white/10 rounded-lg p-6 backdrop-blur-sm\"><h4 class=\"text-xl font-semibold mb-4 text-center text-white\">Prisijunkite prie naujienų</h4><form class=\"space-y-4\"><input type=\"email\" class=\"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white/90 text-slate-900 placeholder:text-slate-600\" name=\"email\" placeholder=\"Jūsų el. paštas\" required=\"\"><button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 text-primary-foreground h-10 px-4 py-2 w-full bg-red-600 hover:bg-red-700\" type=\"submit\">Prisijungti</button></form></div><p class=\"mt-6 text-red-200\">↓ Apie kampaniją skaitykite žemiau</p></div></section><section class=\"py-12 bg-gradient-to-r from-yellow-50 to-orange-50 border-y-2 border-orange-200\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto text-center\"><style>\n                @keyframes flash {\n                  0%, 50% { opacity: 1; }\n                  25%, 75% { opacity: 0.3; }\n                }\n                .flash-warning {\n                  animation: flash 1.5s infinite;\n                }\n              </style><div class=\"rounded-lg text-card-foreground border-2 border-orange-300 shadow-xl bg-white\"><div class=\"p-8\"><h2 class=\"text-2xl md:text-3xl font-bold mb-6 text-slate-800\"><span class=\"flash-warning text-orange-500\">‼️</span> Svarbus pranešimas visiems grupės nariams <span class=\"flash-warning text-orange-500\">‼️</span></h2><p class=\"text-lg text-slate-700 leading-relaxed mb-8\">Kreipėmės į TV3 redakciją, kad projektas www.tyrimas.com būtų pristatytas plačiajai visuomenei. Tikimės, jog netrukus išgirsime jų atsakymą ir galėsime pasirodyti viešai. Tai labai svarbus žingsnis – norime, kad kuo daugiau nukentėjusiųjų mus surastų, o kartu parodytume, jog mūsų iniciatyva yra skaidri ir rimta.</p><button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border bg-background hover:text-accent-foreground h-11 rounded-md px-8 border-orange-400 text-orange-700 hover:bg-orange-50\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:r0:\" data-state=\"closed\">Daugiau informacijos</button></div></div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Apie tyrimą</h2><div class=\"grid md:grid-cols-3 gap-8 mb-12\"><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg\"><div class=\"p-6\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-users h-12 w-12 text-red-600 mx-auto mb-4\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"></path><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">5 tyrėjų komanda</h3><p class=\"text-slate-600\">Specializuojamės blockchain analizėje ir pinigų judėjimo sekime. Taip pat naudojamės ethical hacking paslauga.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg\"><div class=\"p-6\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-scale h-12 w-12 text-red-600 mx-auto mb-4\"><path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"M7 21h10\"></path><path d=\"M12 3v18\"></path><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Teisinis ekspertas</h3><p class=\"text-slate-600 mb-4\">Dirbame su Advokatų kontora Ožiūnas ir partneriai. Advokatas parengs ieškinius Interpolui ir kitoms institucijoms.</p><div class=\"text-sm text-slate-700 bg-slate-100 p-3 rounded-lg\"><p class=\"font-medium\">Algirdas Tomas Parulis</p><p>Pažymėjimo nr. 1597</p><p>Tel: +37065526079</p></div></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg\"><div class=\"p-6\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-shield h-12 w-12 text-red-600 mx-auto mb-4\"><path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Bendruomenės apsauga</h3><p class=\"text-slate-600\">Pagrindinis tikslas – apsaugoti narius nuo baudžiamosios atsakomybės</p></div></div></div><div class=\"rounded-lg text-card-foreground border-0 shadow-lg bg-red-50\"><div class=\"p-8\"><p class=\"text-lg text-slate-700 leading-relaxed\">Mūsų komanda atlieka išsamų blockchain tyrimo darbą, analizuodama visus pinigų judėjimus, susijusius su Anthony ir LWEX platforma. Rengiame dokumentus teisės gynimo institucijoms ir siekiame užtikrinti, kad nukentėjusieji gautų tinkamą teisminę paramą bei apsaugą.</p></div></div></div></div></section><section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-2xl mx-auto text-center\"><h2 class=\"text-3xl md:text-4xl font-bold mb-8 text-slate-800\">Paremti mokėjimu kortele</h2><div>\n                <stripe-buy-button buy-button-id=\"buy_btn_1RfHN4ICr7kiPKSH87IW1y5v\" publishable-key=\"pk_live_51R8jmWICr7kiPKSHk6UgltXi9M3GUF93nn0O1FHBrJ5L1CU8I8UNbOK7Ox1d3cje0pjjP13y0oXf5AfjkQ6hvoaP00m6SY0iMK\">\n                </stripe-buy-button>\n              </div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-3xl mx-auto text-center\"><h2 class=\"text-3xl md:text-4xl font-bold mb-8 text-slate-800\">Biudžetas ir progresas</h2><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-xl\"><div class=\"p-8\"><div class=\"flex items-center justify-between mb-6\"><div class=\"text-left\"><p class=\"text-sm text-slate-600 mb-1\">Surinkta</p><p class=\"text-3xl font-bold text-red-600\">180 EUR</p></div><div class=\"text-right\"><p class=\"text-sm text-slate-600 mb-1\">Tikslas</p><p class=\"text-3xl font-bold text-slate-800\">5000 EUR</p></div></div><div aria-valuemax=\"100\" aria-valuemin=\"0\" role=\"progressbar\" data-state=\"indeterminate\" data-max=\"100\" class=\"relative w-full overflow-hidden rounded-full bg-secondary h-4 mb-6\"><div data-state=\"indeterminate\" data-max=\"100\" class=\"h-full w-full flex-1 bg-primary transition-all\" style=\"transform: translateX(-96.4%);\"></div></div><p class=\"text-slate-600 mb-4\">4% surinkta • Liko 4820 EUR</p><p class=\"text-red-600 text-sm font-medium mb-8\">Duomenys atnaujinami kas 24h darbo dienomis.</p><button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 text-primary-foreground h-11 rounded-md bg-red-600 hover:bg-red-700 text-lg px-8 py-3\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:r3:\" data-state=\"closed\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-dollar-sign mr-2 h-5 w-5\"><line x1=\"12\" x2=\"12\" y1=\"2\" y2=\"22\"></line><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"></path></svg>Paremti dabar</button></div></div><div class=\"rounded-lg text-card-foreground border-0 shadow-lg mt-8 bg-red-50\"><div class=\"p-8\"><p class=\"text-lg text-slate-700 leading-relaxed mb-4\">Supraskite mus teisingai – be finansinės paramos mūsų galimybės yra ribotos. Veikla sulėtėja, o vidinė motyvacija, kai nuolat susiduriame su kliūtimis, mažėja. Nors stengiamės daryti kiek įmanoma daugiau savo jėgomis, vien entuziazmu tokio masto projektas negali ilgai laikytis – ypač kai reikia samdyti IT ar kitus specifinius specialistus. Tai nėra parama tik teisininko paslaugoms apmokėti, kad surašytų ieškinį. Prisidėję finansiškai pagreitinsite mūsų tyrimą, bei informacijos surinkimą.</p><p class=\"text-lg text-slate-700 leading-relaxed\">Paremdami mūsų veiklą, pagreitinsite tyrimą, nes galėsime pasamdyti daugiau rankų, kad informacija surinkti greičiau.</p></div></div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Kaip prisijungti</h2><div class=\"grid md:grid-cols-3 gap-8\"><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg relative\"><div class=\"p-6\"><div class=\"absolute -top-4 left-1/2 transform -translate-x-1/2\"><div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">1</div></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-mail h-12 w-12 text-red-600 mx-auto mb-4 mt-4\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Palik el. paštą</h3><p class=\"text-slate-600\">Užregistruokite savo el. pašto adresą aukščiau esančioje formoje</p></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg relative\"><div class=\"p-6\"><div class=\"absolute -top-4 left-1/2 transform -translate-x-1/2\"><div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">2</div></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-eye h-12 w-12 text-red-600 mx-auto mb-4 mt-4\"><path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"></path><circle cx=\"12\" cy=\"12\" r=\"3\"></circle></svg><h3 class=\"text-xl font-semibold mb-3\">Gauk laišką</h3><p class=\"text-slate-600\">Gausite informaciją apie ieškinio parengimo procesą ir eigą</p></div></div><div class=\"rounded-lg bg-card text-card-foreground text-center border-0 shadow-lg relative\"><div class=\"p-6\"><div class=\"absolute -top-4 left-1/2 transform -translate-x-1/2\"><div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">3</div></div><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-circle-check-big h-12 w-12 text-red-600 mx-auto mb-4 mt-4\"><path d=\"M21.801 10A10 10 0 1 1 17 3.335\"></path><path d=\"m9 11 3 3L22 4\"></path></svg><h3 class=\"text-xl font-semibold mb-3\">Pasirašyk dokumentus</h3><p class=\"text-slate-600\">Įrašykite duomenis ir pasirašykite teisinius dokumentus</p></div></div></div></div></div></section><section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Ataskaitos ir pažanga</h2><div class=\"space-y-6\"><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-26</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atlikta</div></div><h3 class=\"text-xl font-semibold mb-2\">Tyrimo pradžia</h3><p class=\"text-slate-600\">Sukūrėme tyrimo komandą ir pradėjome duomenų rinkimą. Pirmieji blockchain skenavimo rezultatai.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">0 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-27</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atlikta</div></div><h3 class=\"text-xl font-semibold mb-2\">Svetainė, reikalingi įrankiai tyrimui</h3><p class=\"text-slate-600\">Sukūrėme svetainę ir įsigijome reikalingus programinius įrankius blockchain analizei bei duomenų rinkimui.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">250 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-27</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atlikta</div></div><h3 class=\"text-xl font-semibold mb-2\">Teisinio eksperto konsultacija</h3><p class=\"text-slate-600\">Aptarėme strategiją su advokatu, pradėjome rengti pradinius dokumentus, bei užduotis komandai.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">100 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-27</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\">Vyksta</div></div><h3 class=\"text-xl font-semibold mb-2\">Duomenų analizės plėtojimas</h3><p class=\"text-slate-600\">Išplėtėme blockchain analizės apimtis, identifikavome papildomus pinigų judėjimo kelius, ruošiame užduotis programuotojams.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">0 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-06-30</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\">Vyksta</div></div><h3 class=\"text-xl font-semibold mb-2\">IT komandos pradinė analizė</h3><p class=\"text-slate-600\">IT komanda, pradeda atlikineti uzduotis, skanuoti blockchain grandinę, bei dokumentuoti rezultatus.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">500 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div><div class=\"rounded-lg border bg-card text-card-foreground border-l-4 border-l-red-600 shadow-lg\"><div class=\"p-6\"><div class=\"flex items-start justify-between\"><div class=\"flex-1\"><div class=\"flex items-center gap-3 mb-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-calendar h-4 w-4 text-slate-500\"><path d=\"M8 2v4\"></path><path d=\"M16 2v4\"></path><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect><path d=\"M3 10h18\"></path></svg><span class=\"text-sm text-slate-500\">2025-07-05</span><div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 bg-blue-100 text-blue-800\">Suplanuota</div></div><h3 class=\"text-xl font-semibold mb-2\">Kreipimasis į TV3 dėl informacijos paviešinimo apie tai ką norime padaryti</h3><p class=\"text-slate-600\">Kreipėmės į TV3 redakciją, kad projektas www.tyrimas.com būtų pristatytas plačiajai visuomenei ir daugiau nukentėjusiųjų mus surastų.</p></div><div class=\"text-right ml-4\"><p class=\"text-lg font-semibold text-red-600\">0 EUR</p><p class=\"text-xs text-slate-500\">išlaidos</p></div></div></div></div></div></div></div></section><section class=\"py-16 bg-slate-50\"><div class=\"container mx-auto px-4\"><div class=\"max-w-3xl mx-auto\"><h2 class=\"text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800\">Dažnai užduodami klausimai</h2><div class=\"space-y-6\"><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Ar mano duomenys saugūs?</h3><p class=\"text-slate-600\">Taip, visi duomenys šifruojami ir saugomi pagal GDPR reikalavimus. Naudojame tik būtiniausią informaciją tyrimo tikslams.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Kaip bus naudojamos lėšos?</h3><p class=\"text-slate-600\">Lėšos skirstomos: 75% tyrėjų komandos darbui, 15% teisinėms paslaugoms, 10% administracinėms išlaidoms. Visa veikla dokumentuojama.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Kas atsitiks, jei tikslas nepasiekiamas?</h3><p class=\"text-slate-600\">Jei nesurinksite pilnos sumos, tęsime darbą su turimomis lėšomis, bet apribota apimtimi. Visos lėšos bus panaudotos tyrimo tikslams.</p></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg\"><div class=\"p-6\"><h3 class=\"text-lg font-semibold mb-3 text-slate-800\">Kada tikimasi rezultatų?</h3><p class=\"text-slate-600\">Preliminarūs pradinio tyrimo rezultatai bus gauti per 1-2 savaites. Nuo jų priklausys tolimesnė eiga, apie kurią informuosime.</p></div></div></div></div></div></section><section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto text-center\"><h2 class=\"text-3xl font-bold mb-8 text-slate-800\">Partneriai</h2><div class=\"grid md:grid-cols-2 gap-8\"><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg cursor-pointer hover:shadow-xl transition-shadow\"><div class=\"p-6\"><a href=\"https://www.ecomcorner.ee\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"block\"><h3 class=\"text-xl font-semibold mb-4 flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 transition-colors\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link h-5 w-5\"><path d=\"M15 3h6v6\"></path><path d=\"M10 14 21 3\"></path><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path></svg>www.ecomcorner.ee</h3><p class=\"text-slate-600\">IT Paslaugos</p></a></div></div><div class=\"rounded-lg bg-card text-card-foreground border-0 shadow-lg cursor-pointer hover:shadow-xl transition-shadow\"><div class=\"p-6\"><a href=\"https://www.google.com/maps/search/Laisv%C4%97s+pr.+77D,+Vilnius?entry=gmail&amp;source=g\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"block\"><h3 class=\"text-xl font-semibold mb-4 flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 transition-colors\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-scale h-5 w-5\"><path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\"></path><path d=\"M7 21h10\"></path><path d=\"M12 3v18\"></path><path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\"></path></svg>Advokatų kontora</h3><p class=\"text-slate-600 mb-3\">Ožiūnas ir partneriai</p><div class=\"text-sm text-slate-700 bg-slate-100 p-3 rounded-lg\"><p class=\"font-medium\">Algirdas Tomas Parulis</p><p>Pažymėjimo nr. 1597</p><p>Tel: +37065526079</p></div></a></div></div></div></div></div></section><section class=\"py-16 bg-red-900 text-white\"><div class=\"container mx-auto px-4\"><div class=\"max-w-4xl mx-auto text-center\"><h2 class=\"text-3xl font-bold mb-8\">Kontaktai ir rekvizitai</h2><div class=\"grid md:grid-cols-3 gap-8 mb-12\"><div class=\"rounded-lg border shadow-sm bg-white/10 border-white/20 text-white\"><div class=\"p-6\"><h3 class=\"text-xl font-semibold mb-4\">Susisiekite su mumis</h3><div class=\"space-y-3\"><div class=\"flex items-center justify-center gap-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-mail h-4 w-4\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path></svg><span>tyrimas@tyrimas.com</span></div></div></div></div><div class=\"rounded-lg border shadow-sm bg-white/10 border-white/20 text-white\"><div class=\"p-6\"><h3 class=\"text-xl font-semibold mb-4\">Teisinis pagrindas</h3><p class=\"text-sm text-red-100\">Gausite sąskaitą faktūrą už IT paslaugas ir atstovavimą. Jei Jums reikalinga sąskaita - kreipkitės el.paštu. Visos finansinės operacijos atliekamos pagal Lietuvos Respublikos įstatymus.</p></div></div><div class=\"rounded-lg border shadow-sm bg-white/10 border-white/20 text-white\"><div class=\"p-6\"><h3 class=\"text-xl font-semibold mb-4 flex items-center justify-center gap-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-building h-4 w-4\"><rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" ry=\"2\"></rect><path d=\"M9 22v-4h6v4\"></path><path d=\"M8 6h.01\"></path><path d=\"M16 6h.01\"></path><path d=\"M12 6h.01\"></path><path d=\"M12 10h.01\"></path><path d=\"M12 14h.01\"></path><path d=\"M16 10h.01\"></path><path d=\"M16 14h.01\"></path><path d=\"M8 10h.01\"></path><path d=\"M8 14h.01\"></path></svg>Įmonės rekvizitai</h3><div class=\"space-y-2 text-sm text-red-100\"><div><p class=\"font-medium text-white\">ECOMCORNER OÜ</p></div><div><p>Company code: 17126567</p></div><div><p>VAT: EE102807855</p></div></div></div></div></div><div class=\"text-center text-red-200 text-sm\"><p>© 2025 Tyrimas.com. Visos teisės saugomos.</p></div></div></div></section></div></div>\n  \n\n</body></html>",
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "1199997",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-length": "734",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Tue, 26 Aug 2025 11:19:38 GMT",
+        "etag": "\"067c5b9b975bf97473c900538233297e\"",
+        "last-modified": "Tue, 12 Aug 2025 13:59:40 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "arn1::7tfmt-1756207178158-3af9118e8ad8"
+      },
+      "statusCode": 200,
+      "loadTime": 0,
+      "screenshot": null,
+      "finalUrl": "https://www.tyrimas.com/"
+    },
+    "lighthouse": {
+      "performance": 100,
+      "seo": 100,
+      "accessibility": 91,
+      "bestPractices": 78,
+      "metrics": {
+        "firstContentfulPaint": 516.386575,
+        "largestContentfulPaint": 703.81535,
+        "firstInputDelay": 16,
+        "cumulativeLayoutShift": 0,
+        "totalBlockingTime": 0,
+        "timeToInteractive": 703.8153500000001,
+        "serverResponseTime": 30.547
+      },
+      "opportunities": [
+        {
+          "audit": "third-party-cookies",
+          "title": "Uses third-party cookies",
+          "description": "Third-party cookies may be blocked in some contexts. [Learn more about preparing for third-party cookie restrictions](https://privacysandbox.google.com/cookies/prepare/overview).",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "1 cookie found"
+        },
+        {
+          "audit": "unsized-images",
+          "title": "Image elements do not have explicit `width` and `height`",
+          "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+          "score": 0.5,
+          "savings": 0
+        },
+        {
+          "audit": "aria-progressbar-name",
+          "title": "ARIA `progressbar` elements do not have accessible names.",
+          "description": "When a `progressbar` element doesn't have an accessible name, screen readers announce it with a generic name, making it unusable for users who rely on screen readers. [Learn how to label `progressbar` elements](https://dequeuniversity.com/rules/axe/4.10/aria-progressbar-name).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "frame-title",
+          "title": "`<frame>` or `<iframe>` elements do not have a title",
+          "description": "Screen reader users rely on frame titles to describe the contents of frames. [Learn more about frame titles](https://dequeuniversity.com/rules/axe/4.10/frame-title).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "description": "Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies. [Learn more about heading order](https://dequeuniversity.com/rules/axe/4.10/heading-order).",
+          "score": 0,
+          "savings": 0
+        },
+        {
+          "audit": "uses-long-cache-ttl",
+          "title": "Serve static assets with an efficient cache policy",
+          "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+          "score": 0.5,
+          "savings": 19171.025,
+          "displayValue": "5 resources found"
+        },
+        {
+          "audit": "total-byte-weight",
+          "title": "Avoid enormous network payloads",
+          "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+          "score": 0.5,
+          "savings": 2733711,
+          "displayValue": "Total size was 2,670 KiB"
+        },
+        {
+          "audit": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "score": 0,
+          "savings": 0,
+          "displayValue": "Est savings of 56 KiB"
+        },
+        {
+          "audit": "modern-image-formats",
+          "title": "Serve images in next-gen formats",
+          "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+          "score": 0.5,
+          "savings": 0,
+          "displayValue": "Est savings of 1,952 KiB"
+        },
+        {
+          "audit": "uses-responsive-images",
+          "title": "Properly size images",
+          "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+          "score": 0.5,
+          "savings": 0,
+          "displayValue": "Est savings of 1,523 KiB"
+        },
+        {
+          "audit": "inspector-issues",
+          "title": "Issues were logged in the `Issues` panel in Chrome Devtools",
+          "description": "Issues logged to the `Issues` panel in Chrome Devtools indicate unresolved problems. They can come from network request failures, insufficient security controls, and other browser concerns. Open up the Issues panel in Chrome DevTools for more details on each issue.",
+          "score": 0,
+          "savings": 0
+        }
+      ],
+      "rawLighthouseData": {
+        "fetchTime": "2025-08-26T11:19:41.801Z",
+        "requestedUrl": "https://www.tyrimas.com/",
+        "finalUrl": "https://www.tyrimas.com/",
+        "lighthouseVersion": "12.8.1",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+        "environment": {
+          "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36",
+          "benchmarkIndex": 3596.5,
+          "credits": {
+            "axe-core": "4.10.3"
+          }
+        },
+        "configSettings": {
+          "output": "json",
+          "maxWaitForFcp": 30000,
+          "maxWaitForLoad": 45000,
+          "pauseAfterFcpMs": 1000,
+          "pauseAfterLoadMs": 1000,
+          "networkQuietThresholdMs": 1000,
+          "cpuQuietThresholdMs": 1000,
+          "formFactor": "desktop",
+          "throttling": {
+            "rttMs": 40,
+            "throughputKbps": 10240,
+            "requestLatencyMs": 0,
+            "downloadThroughputKbps": 0,
+            "uploadThroughputKbps": 0,
+            "cpuSlowdownMultiplier": 1
+          },
+          "throttlingMethod": "simulate",
+          "screenEmulation": {
+            "mobile": false,
+            "width": 1350,
+            "height": 940,
+            "deviceScaleFactor": 1,
+            "disabled": false
+          },
+          "emulatedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+          "auditMode": false,
+          "gatherMode": false,
+          "clearStorageTypes": [
+            "file_systems",
+            "shader_cache",
+            "service_workers",
+            "cache_storage"
+          ],
+          "disableStorageReset": false,
+          "debugNavigation": false,
+          "channel": "node",
+          "usePassiveGathering": false,
+          "disableFullPageScreenshot": false,
+          "skipAboutBlank": false,
+          "blankPage": "about:blank",
+          "ignoreStatusCode": false,
+          "locale": "en-US",
+          "blockedUrlPatterns": null,
+          "additionalTraceCategories": null,
+          "extraHeaders": null,
+          "precomputedLanternData": null,
+          "onlyAudits": null,
+          "onlyCategories": [
+            "performance",
+            "seo",
+            "best-practices",
+            "accessibility"
+          ],
+          "skipAudits": []
+        }
+      }
+    },
+    "comprehensiveSEO": {
+      "technical": {
+        "score": 56,
+        "factors": {
+          "titleOptimization": {
+            "present": true,
+            "length": 33,
+            "optimal": true,
+            "issues": [],
+            "recommendations": []
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 107,
+            "optimal": false,
+            "issues": [
+              "Description too short"
+            ],
+            "recommendations": [
+              "Expand description to at least 120 characters"
+            ]
+          },
+          "headingStructure": {
+            "hasH1": true,
+            "h1Count": 1,
+            "hasHierarchy": true,
+            "issues": [],
+            "recommendations": [],
+            "structure": {
+              "h1": {
+                "count": 1,
+                "texts": [
+                  "Prisijunk prie tyrimo –padėk susigrąžinti lėšas"
+                ]
+              },
+              "h2": {
+                "count": 9,
+                "texts": [
+                  "‼️ Svarbus pranešimas visiems grupės nariams ‼️",
+                  "Apie tyrimą",
+                  "Paremti mokėjimu kortele",
+                  "Biudžetas ir progresas",
+                  "Kaip prisijungti"
+                ]
+              },
+              "h3": {
+                "count": 21,
+                "texts": [
+                  "5 tyrėjų komanda",
+                  "Teisinis ekspertas",
+                  "Bendruomenės apsauga",
+                  "Palik el. paštą",
+                  "Gauk laišką"
+                ]
+              },
+              "h4": {
+                "count": 1,
+                "texts": [
+                  "Prisijunkite prie naujienų"
+                ]
+              },
+              "h5": {
+                "count": 0,
+                "texts": []
+              },
+              "h6": {
+                "count": 0,
+                "texts": []
+              }
+            }
+          },
+          "urlStructure": {
+            "optimal": true,
+            "score": 80
+          },
+          "metaTags": {
+            "optimal": true,
+            "score": 70
+          },
+          "structuredData": {
+            "present": false,
+            "score": 20
+          },
+          "internalLinking": {
+            "score": 60,
+            "linkCount": 2
+          }
+        },
+        "issues": []
+      },
+      "content": {
+        "score": 66,
+        "analysis": {
+          "depth": {
+            "wordCount": 610,
+            "paragraphCount": 55,
+            "adequateDepth": true,
+            "contentRatio": 11.090909090909092,
+            "depthScore": 70,
+            "issues": [],
+            "recommendations": []
+          },
+          "structure": {
+            "score": 55
+          },
+          "uniqueness": {
+            "score": 70
+          },
+          "relevance": {
+            "score": 60
+          },
+          "freshness": {
+            "score": 50
+          }
+        },
+        "issues": []
+      },
+      "onPage": {
+        "score": 65,
+        "factors": {
+          "keywordOptimization": {
+            "score": 50,
+            "recommendations": [
+              "Research and optimize for target keywords"
+            ]
+          },
+          "imageSEO": {
+            "score": 40,
+            "issues": [
+              "Missing alt text analysis"
+            ],
+            "recommendations": [
+              "Add descriptive alt text to all images"
+            ]
+          },
+          "linkProfile": {
+            "score": 55,
+            "internalLinks": 2
+          },
+          "socialSignals": {
+            "score": 30,
+            "hasOpenGraph": false
+          }
+        },
+        "optimizationLevel": "good"
+      },
+      "userExperience": {
+        "score": 60,
+        "signals": {
+          "readability": {
+            "score": 60,
+            "recommendations": [
+              "Improve content readability"
+            ]
+          },
+          "navigation": {
+            "score": 65,
+            "linkCount": 2
+          },
+          "organization": {
+            "score": 60
+          },
+          "mobileOptimization": {
+            "score": 70
+          }
+        },
+        "userFriendliness": "good"
+      },
+      "competitive": {
+        "contentDepthVsIndustry": "adequate",
+        "technicalImplementation": "average",
+        "brandSignals": "weak",
+        "trustSignals": "moderate"
+      },
+      "overallScore": 62,
+      "recommendations": [
+        {
+          "priority": "medium",
+          "category": "Technical",
+          "issue": "Meta description",
+          "action": "Write compelling meta description (120-160 characters)",
+          "impact": "Medium - Affects click-through rates"
+        },
+        {
+          "priority": "low",
+          "category": "Enhancement",
+          "issue": "No structured data",
+          "action": "Add relevant schema markup (Organization, Article, etc.)",
+          "impact": "Low - Rich snippets potential"
+        }
+      ],
+      "criticalIssues": [],
+      "opportunities": [
+        "Add structured data for rich snippets",
+        "Expand content for better topical authority"
+      ]
+    },
+    "accessibility": {
+      "score": 62,
+      "issues": {
+        "errors": 48,
+        "warnings": 0,
+        "notices": 0,
+        "total": 48
+      },
+      "details": [
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1:1. Recommendation:  change text colour to #767676.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > h1",
+          "context": "<h1 class=\"text-4xl md:text-6xl font-bold mb-6 leading-tight\">Prisijunk prie tyrimo –<br><spa...</h1>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1.9:1. Recommendation:  change text colour to #b45d5d.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > h1 > span",
+          "context": "<span class=\"text-red-300\">padėk susigrąžinti lėšas</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 1.22:1. Recommendation:  change text colour to #8b6f6f.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > p:nth-child(3)",
+          "context": "<p class=\"text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto\">Skenuojame blockchain, rengiame...</p>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(4) > p:nth-child(1)",
+          "context": "<p class=\"text-lg text-yellow-300 animate-pulse bg-red-700/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Jei manote, kad turite naudingo...</p>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(4) > p:nth-child(2)",
+          "context": "<p class=\"text-base text-red-100 bg-red-800/50 rounded-lg px-4 py-2 max-w-4xl mx-auto\">Prašome kantrybės, netrukus gau...</p>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_3.1_3_1_AAA.G141",
+          "message": "The heading structure is not logically nested. This h4 element should be an h2 to be properly nested.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > h4",
+          "context": "<h4 class=\"text-xl font-semibold mb-4 text-center text-white\">Prisijunkite prie naujienų</h4>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of NaN:1.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > h4",
+          "context": "<h4 class=\"text-xl font-semibold mb-4 text-center text-white\">Prisijunkite prie naujienų</h4>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle4.Guideline4_1.4_1_2.H91.InputEmail.Name",
+          "message": "This emailinput element does not have a name available to an accessibility API. Valid names are: label element, title undefined, aria-label undefined, aria-labelledby undefined.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > form > input",
+          "context": "<input type=\"email\" class=\"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2..."
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.62:1. Recommendation:  change background to #1b0000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > div:nth-child(5) > form > button",
+          "context": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2..."
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 1.45:1. Recommendation:  change text colour to #7e4a4a.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(1) > div:nth-child(3) > p:nth-child(6)",
+          "context": "<p class=\"mt-6 text-red-200\">↓ Apie kampaniją skaitykite žem...</p>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 2.8:1. Recommendation:  change text colour to #c85200.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(2) > div > div > div > div > h2 > span:nth-child(1)",
+          "context": "<span class=\"flash-warning text-orange-500\">‼️</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G18.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 4.5:1, but text in this element has a contrast ratio of 2.8:1. Recommendation:  change text colour to #c85200.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(2) > div > div > div > div > h2 > span:nth-child(2)",
+          "context": "<span class=\"flash-warning text-orange-500\">‼️</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 5.18:1. Recommendation:  change text colour to #a33000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(2) > div > div > div > div > button",
+          "context": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:p..."
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change text colour to #b60000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(5) > div > div > div:nth-child(2) > div > p:nth-child(4)",
+          "context": "<p class=\"text-red-600 text-sm font-medium mb-8\">Duomenys atnaujinami kas 24h da...</p>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.62:1. Recommendation:  change background to #1b0000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(5) > div > div > div:nth-child(2) > div > button",
+          "context": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-e..."
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change background to #b60000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(6) > div > div > div > div:nth-child(1) > div > div > div",
+          "context": "<div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">1</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change background to #b60000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(6) > div > div > div > div:nth-child(2) > div > div > div",
+          "context": "<div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">2</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.83:1. Recommendation:  change background to #b60000.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(6) > div > div > div > div:nth-child(3) > div > div > div",
+          "context": "<div class=\"inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-red-600 text-white text-lg px-3 py-1\">3</div>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 4.76:1. Recommendation:  change text colour to #4a5a71.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(7) > div > div > div > div:nth-child(1) > div > div > div:nth-child(1) > div > span",
+          "context": "<span class=\"text-sm text-slate-500\">2025-06-26</span>"
+        },
+        {
+          "type": "error",
+          "code": "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+          "message": "This element has insufficient contrast at this conformance level. Expected a contrast ratio of at least 7:1, but text in this element has a contrast ratio of 6.49:1. Recommendation:  change background to #f7fff9.",
+          "selector": "#root > div:nth-child(2) > section:nth-child(7) > div > div > div > div:nth-child(1) > div > div > div:nth-child(1) > div > div",
+          "context": "<div class=\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-100 text-green-800\">Atl..."
+        }
+      ]
+    },
+    "technologies": {
+      "technologies": [
+        {
+          "name": "Tailwind CSS",
+          "categories": [
+            "CSS Frameworks"
+          ],
+          "version": "3",
+          "confidence": 70,
+          "website": null,
+          "source": "custom-patterns"
+        },
+        {
+          "name": "Bulma",
+          "categories": [
+            "CSS Frameworks"
+          ],
+          "version": "3",
+          "confidence": 50,
+          "website": null,
+          "source": "custom-patterns"
+        }
+      ],
+      "categories": [
+        "CSS Frameworks"
+      ],
+      "count": 2,
+      "stats": {
+        "total": 2,
+        "byCategory": {
+          "CSS Frameworks": 2
+        },
+        "byConfidence": {
+          "high": 0,
+          "medium": 2,
+          "low": 0
+        },
+        "topTechnologies": [
+          {
+            "name": "Tailwind CSS",
+            "confidence": 70
+          },
+          {
+            "name": "Bulma",
+            "confidence": 50
+          }
+        ]
+      }
+    },
+    "security": {
+      "isHttps": true,
+      "score": 17,
+      "headers": {
+        "strict-transport-security": true,
+        "content-security-policy": false,
+        "x-frame-options": false,
+        "x-content-type-options": false,
+        "x-xss-protection": false,
+        "referrer-policy": false
+      },
+      "rawHeaders": {
+        "strict-transport-security": "max-age=63072000",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "arn1::bhvwx-1756207181146-5c35032127c1"
+      },
+      "recommendations": [
+        "Implement Content Security Policy to prevent XSS attacks",
+        "Add X-Frame-Options header to prevent clickjacking",
+        "Add X-Content-Type-Options header to prevent MIME sniffing"
+      ]
+    },
+    "scores": {
+      "performance": 100,
+      "seo": 100,
+      "accessibility": 91,
+      "security": 17,
+      "bestPractices": 78,
+      "overall": 82
+    }
+  }
+}
