@@ -15,7 +15,7 @@
     "worker": "node src/workers/analysisWorker.js",
     "build": "tsc",
     "lint": "eslint src/**/*.js",
-    "docker:build": "docker build -t codeanalyst-backend .",
+    "docker:build": "docker build -t c-backend .",
     "docker:run": "docker run -p 3001:3001 codeanalyst-backend",
     "audit:fix": "npm audit fix --force",
     "update:check": "npm outdated",
