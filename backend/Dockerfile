@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci --only=production
 
 # Copy source code
 COPY . .
@@ -15,7 +15,7 @@ COPY . .
 RUN mkdir -p uploads temp logs
 
 # Expose port
-EXPOSE 3001
+EXPOSE $PORT
 
 # Start the application
 CMD ["npm", "start"]
