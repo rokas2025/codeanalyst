@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "Backend service for CodeAnalyst - AI-powered website analysis platform",
   "main": "src/index.js",
-  "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node start-simple.js",
+    "start": "node server.js",
     "start:local": "node start-without-redis.js",
     "start:ngrok": "node start-with-ngrok.js",
     "test": "jest",
