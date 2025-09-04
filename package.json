@@ -7,14 +7,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:vercel": "DISABLE_ESLINT_PLUGIN=true vite build --config vite.config.vercel.ts",
+    "build:vercel": "vite build --config vite.config.vercel.ts",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx,ts,tsx",
     "lint:fix": "eslint . --ext js,jsx,ts,tsx --fix",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "deploy:setup": "echo Please run setup-ngrok.bat first, then start-backend.bat",
+    "backend:start": "cd backend && npm start",
+    "backend:install": "cd backend && npm install"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.19",

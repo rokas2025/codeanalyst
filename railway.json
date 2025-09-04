@@ -1,0 +1,14 @@
+{
+  "build": {
+    "command": "npm install",
+    "directory": "backend"
+  },
+  "start": {
+    "command": "npm start",
+    "directory": "backend"
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "$PORT"
+  }
+}

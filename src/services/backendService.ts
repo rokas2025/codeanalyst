@@ -1,8 +1,8 @@
 // Backend Service - Communication with CodeAnalyst Backend API
-// Updated to use port 3002 for backend connection
+// Updated to use port 3001 for backend connection (matches env.example)
 import axios, { AxiosResponse } from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 // Create axios instance with default config
 const api = axios.create({
