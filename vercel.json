@@ -1,9 +1,9 @@
 {
   "version": 2,
   "framework": "vite",
-  "buildCommand": "npm run build:vercel",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm ci",
+  "installCommand": "npm install",
   "functions": {
     "api/fetch-url.js": {
       "maxDuration": 30

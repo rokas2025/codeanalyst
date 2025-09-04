@@ -1,0 +1,9 @@
+src/
+frontend/
+*.md
+.git/
+node_modules/
+dist/
+.env.local
+.vercel/
+vercel.json
