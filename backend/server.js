@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3001;
 
 console.log('🚀 Starting CodeAnalyst Backend...');
 console.log('📊 Port:', PORT);
+console.log('🔧 PORT from env:', process.env.PORT);
 console.log('🌍 Environment:', process.env.NODE_ENV);
 
 // Middleware
@@ -54,11 +55,20 @@ app.get('/api/test', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ CodeAnalyst Backend running on port ${PORT}`);
   console.log(`🏥 Health: http://localhost:${PORT}/health`);
   console.log(`📊 API: http://localhost:${PORT}/api/health`);
   console.log(`🌐 URL: https://codeanalyst-production.up.railway.app`);
+});
+
+server.on('error', (err) => {
+  console.error('❌ Server Error:', err);
+});
+
+process.on('SIGTERM', () => {
+  console.log('📋 SIGTERM received, shutting down gracefully');
+  server.close();
 });
 
 module.exports = app;
