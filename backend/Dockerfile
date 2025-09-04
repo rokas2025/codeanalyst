@@ -14,8 +14,8 @@ COPY . .
 # Create necessary directories
 RUN mkdir -p uploads temp logs
 
-# Expose port
-EXPOSE $PORT
+# Expose port (Railway will set PORT env var dynamically)
+EXPOSE 8080
 
 # Start the application
 CMD ["npm", "start"]
