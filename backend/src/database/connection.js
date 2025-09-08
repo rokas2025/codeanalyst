@@ -24,9 +24,15 @@ class DatabaseConnection {
           // Connection pool settings
           max: 20, // Maximum number of clients in the pool
           idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-          connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
+          connectionTimeoutMillis: 5000, // Increase timeout
           // SSL configuration for Supabase
-          ssl: { rejectUnauthorized: false }
+          ssl: { rejectUnauthorized: false },
+          // Force IPv4 to avoid IPv6 connection issues
+          host: 'db.ecwpwmsqanlatfntzoul.supabase.co',
+          port: 5432,
+          database: 'postgres',
+          user: 'postgres',
+          password: 'j7PLA9pc0FOvi20U'
         }
       } else {
         // Fallback to individual environment variables for local development
