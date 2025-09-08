@@ -50,8 +50,8 @@ const PORT = process.env.PORT || 3001
 // Security middleware
 app.use(helmet())
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: '*', // Temporary - allow all origins for testing
+  credentials: false // Must be false when origin is '*'
 }))
 
 // Rate limiting (DISABLED FOR TESTING)
