@@ -45,7 +45,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const app = express()
-const PORT = process.env.PORT || 3002
+const PORT = process.env.PORT || 3001
 
 // Security middleware
 app.use(helmet())
@@ -175,7 +175,7 @@ async function startServer() {
     logger.info('✅ Analysis worker started successfully')
     
     // Start Express server
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       logger.info(`🚀 CodeAnalyst Backend Server running on port ${PORT}`)
       logger.info(`📊 API Base URL: http://localhost:${PORT}/api`)
       logger.info(`🏥 Health Check: http://localhost:${PORT}/health`)
