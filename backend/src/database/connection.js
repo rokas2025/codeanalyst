@@ -15,21 +15,36 @@ class DatabaseConnection {
    */
   async initialize() {
     try {
-      // Database configuration for macOS Homebrew PostgreSQL
-      const config = {
-        host: process.env.DB_HOST || 'localhost',
-        port: parseInt(process.env.DB_PORT) || 5432,
-        database: process.env.DB_NAME || 'codeanalyst',
-        user: process.env.DB_USER || 'ghostarcade.xyz',
-        password: process.env.DB_PASSWORD || '', // No password for local dev
-        
-        // Connection pool settings
-        max: 20, // Maximum number of clients in the pool
-        idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-        connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
-        
-        // SSL configuration (disable for local development)
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+      let config;
+      
+      // Use DATABASE_URL if available (for production/Supabase)
+      if (process.env.DATABASE_URL) {
+        config = {
+          connectionString: process.env.DATABASE_URL,
+          // Connection pool settings
+          max: 20, // Maximum number of clients in the pool
+          idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+          connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
+          // SSL configuration for Supabase
+          ssl: { rejectUnauthorized: false }
+        }
+      } else {
+        // Fallback to individual environment variables for local development
+        config = {
+          host: process.env.DB_HOST || 'localhost',
+          port: parseInt(process.env.DB_PORT) || 5432,
+          database: process.env.DB_NAME || 'codeanalyst',
+          user: process.env.DB_USER || 'ghostarcade.xyz',
+          password: process.env.DB_PASSWORD || '', // No password for local dev
+          
+          // Connection pool settings
+          max: 20, // Maximum number of clients in the pool
+          idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+          connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
+          
+          // SSL configuration (disable for local development)
+          ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+        }
       }
 
       // Create connection pool
@@ -43,10 +58,10 @@ class DatabaseConnection {
       this.isConnected = true
       
       logger.info('✅ Database connected successfully', {
-        host: config.host,
-        port: config.port,
-        database: config.database,
-        user: config.user,
+        host: config.host || 'Supabase',
+        port: config.port || 5432,
+        database: config.database || 'postgres',
+        user: config.user || 'postgres',
         currentTime: result.rows[0].current_time,
         version: result.rows[0].version.split(' ')[0] // Just PostgreSQL version
       })
