@@ -174,10 +174,15 @@ async function startServer() {
       logger.info('💡 Redis is optional - analysis will run synchronously')
     }
 
-    // Start analysis worker
+    // Start analysis worker (optional - requires Redis)
     logger.info('👷 Starting analysis worker...')
-    await startAnalysisWorker()
-    logger.info('✅ Analysis worker started successfully')
+    try {
+      await startAnalysisWorker()
+      logger.info('✅ Analysis worker started successfully')
+    } catch (error) {
+      logger.warn('⚠️ Analysis worker initialization failed - continuing without background processing', error.message)
+      logger.info('💡 Analysis will run synchronously instead of in background queues')
+    }
     
     // Start Express server
     app.listen(PORT, '0.0.0.0', () => {
