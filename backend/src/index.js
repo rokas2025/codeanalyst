@@ -164,25 +164,13 @@ async function startServer() {
     await initDatabase()
     logger.info('✅ Database initialized successfully')
 
-    // Initialize queue service (optional - Redis required)
-    logger.info('📋 Initializing queue service...')
-    try {
-      await queueService.initialize()
-      logger.info('✅ Queue service initialized successfully')
-    } catch (error) {
-      logger.warn('⚠️ Queue service initialization failed - continuing without Redis queues', error.message)
-      logger.info('💡 Redis is optional - analysis will run synchronously')
-    }
+    // Queue service disabled for Railway deployment
+    logger.info('⚠️ Queue service disabled - Redis not available on Railway free tier')
+    logger.info('💡 Analysis will run synchronously instead of background queues')
 
-    // Start analysis worker (optional - requires Redis)
-    logger.info('👷 Starting analysis worker...')
-    try {
-      await startAnalysisWorker()
-      logger.info('✅ Analysis worker started successfully')
-    } catch (error) {
-      logger.warn('⚠️ Analysis worker initialization failed - continuing without background processing', error.message)
-      logger.info('💡 Analysis will run synchronously instead of in background queues')
-    }
+    // Analysis worker disabled for Railway deployment
+    logger.info('⚠️ Analysis worker disabled - Redis not available on Railway free tier')
+    logger.info('💡 Analysis requests will be processed synchronously')
     
     // Start Express server
     app.listen(PORT, '0.0.0.0', () => {
