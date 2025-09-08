@@ -27,11 +27,11 @@ class DatabaseConnection {
           connectionTimeoutMillis: 5000, // Increase timeout
           // SSL configuration for Supabase
           ssl: { rejectUnauthorized: false },
-          // Force IPv4 to avoid IPv6 connection issues
-          host: 'db.ecwpwmsqanlatfntzoul.supabase.co',
+          // Use Supabase session pooler for external connections
+          host: 'aws-1-eu-west-1.pooler.supabase.com',
           port: 5432,
           database: 'postgres',
-          user: 'postgres',
+          user: 'postgres.ecwpwmsqanlatfntzoul',
           password: 'j7PLA9pc0FOvi20U'
         }
       } else {
