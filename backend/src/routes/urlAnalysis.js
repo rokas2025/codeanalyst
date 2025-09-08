@@ -74,22 +74,83 @@ router.post('/analyze', [
       options: analysisOptions
     })
 
-    // Queue the analysis job for background processing
-    await queueService.addUrlAnalysisJob({
-      analysisId,
-      userId,
-      url,
-      options: analysisOptions
-    })
+    // Process analysis synchronously (no Redis queues on Railway)
+    try {
+      logger.info(`🚀 Processing URL analysis synchronously: ${analysisId}`)
+      
+      // Update status to processing
+      await DatabaseService.updateUrlAnalysisStatus(analysisId, 'processing', 10)
 
-    // Return immediate response with analysis ID
-    res.json({
-      success: true,
-      analysisId,
-      status: 'queued',
-      message: 'Real website analysis queued! This will use Lighthouse, Pa11y, and technology detection.',
-      estimatedTime: '30-60 seconds'
-    })
+      // Import required services dynamically
+      const { default: WebsiteAnalyzer } = await import('../services/WebsiteAnalyzer.js')
+      const { default: AIAnalysisService } = await import('../services/AIAnalysisService.js')
+      
+      // Initialize analyzer
+      const websiteAnalyzer = new WebsiteAnalyzer()
+      await websiteAnalyzer.initialize()
+      await DatabaseService.updateUrlAnalysisStatus(analysisId, 'processing', 30)
+
+      // Perform website analysis
+      logger.info(`🌐 Analyzing website: ${url}`)
+      const websiteResult = await websiteAnalyzer.analyzeWebsite(url, analysisOptions)
+      await DatabaseService.updateUrlAnalysisStatus(analysisId, 'processing', 70)
+
+      // Generate AI insights if requested
+      let aiInsights = null
+      if (analysisOptions.includeAI !== false) {
+        try {
+          logger.info(`🤖 Generating AI insights for website analysis`)
+          const aiAnalysisService = new AIAnalysisService()
+          aiInsights = await aiAnalysisService.generateURLInsights(websiteResult, analysisOptions.aiProfile || 'mixed')
+          await DatabaseService.updateUrlAnalysisStatus(analysisId, 'processing', 90)
+        } catch (aiError) {
+          logger.warn(`AI insights generation failed: ${aiError.message}`)
+        }
+      }
+
+      // Combine results in the format expected by frontend
+      const finalResult = {
+        id: analysisId,
+        url,
+        status: 'completed',
+        progress: 100,
+        analysisData: {
+          websiteAnalysis: websiteResult,
+          aiInsights,
+          metadata: {
+            analyzedAt: new Date().toISOString(),
+            analysisOptions,
+            processingTime: 'synchronous',
+            version: '1.0.0'
+          }
+        }
+      }
+
+      // Update database with completed analysis
+      await DatabaseService.updateUrlAnalysisStatus(analysisId, 'completed', 100)
+      await DatabaseService.updateUrlAnalysisData(analysisId, finalResult.analysisData)
+
+      // Return completed analysis immediately
+      res.json({
+        success: true,
+        analysisId,
+        status: 'completed',
+        data: finalResult,
+        message: 'Website analysis completed successfully!',
+        processingTime: 'immediate'
+      })
+
+    } catch (analysisError) {
+      logger.error(`URL analysis failed: ${analysisError.message}`, analysisError)
+      await DatabaseService.updateUrlAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
+      
+      res.status(500).json({
+        success: false,
+        analysisId,
+        error: 'Analysis failed',
+        message: analysisError.message
+      })
+    }
 
   } catch (error) {
     logger.error('URL analysis request failed:', error)
