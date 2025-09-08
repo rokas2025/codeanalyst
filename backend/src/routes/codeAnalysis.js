@@ -134,18 +134,29 @@ router.post('/github', authMiddleware, [
 
     // Check if repository is accessible
     try {
-      // Get user's GitHub access token for private repo access
-      const user = await DatabaseService.getUserById(userId)
-      if (!user?.github_access_token) {
-        return res.status(400).json({
-          success: false,
-          error: 'GitHub account not connected',
-          message: 'Please connect your GitHub account to analyze private repositories'
-        })
-      }
-
       const githubService = new GitHubService()
-      const repoInfo = await githubService.getRepoInfoWithToken(owner, repoName, user.github_access_token)
+      let repoInfo
+      
+      // First try to access as public repository (no authentication required)
+      try {
+        repoInfo = await githubService.getRepoInfo(owner, repoName)
+        logger.info(`✅ Public repository accessed: ${owner}/${repoName}`)
+      } catch (publicAccessError) {
+        // If public access fails, try with user's GitHub access token
+        logger.info(`❌ Public access failed for ${owner}/${repoName}, trying with user token`)
+        
+        const user = await DatabaseService.getUserById(userId)
+        if (!user?.github_access_token) {
+          return res.status(400).json({
+            success: false,
+            error: 'GitHub account not connected',
+            message: 'This repository appears to be private. Please connect your GitHub account to analyze private repositories.'
+          })
+        }
+
+        repoInfo = await githubService.getRepoInfoWithToken(owner, repoName, user.github_access_token)
+        logger.info(`✅ Private repository accessed with user token: ${owner}/${repoName}`)
+      }
       
       // Check repository size (limit to 500MB)
       if (repoInfo.size > 500 * 1024) { // Size in KB
@@ -164,7 +175,7 @@ router.post('/github', authMiddleware, [
       return res.status(400).json({
         success: false,
         error: 'Repository not accessible',
-        message: 'Could not access the GitHub repository. Please check the URL and ensure it\'s public.',
+        message: 'Could not access the GitHub repository. Please check the URL and ensure it\'s correct.',
         details: error.message
       })
     }
@@ -215,7 +226,7 @@ router.post('/github', authMiddleware, [
     logger.error('GitHub analysis request failed:', error)
     res.status(500).json({
       success: false,
-      error: 'Failed to queue GitHub analysis',
+      error: 'Failed to start GitHub analysis',
       message: error.message
     })
   }
