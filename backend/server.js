@@ -1,4 +1,5 @@
 // Ultra-minimal Express server for Railway
+// Updated: Fixed PORT environment variable conflict
 const express = require('express');
 const cors = require('cors');
 
