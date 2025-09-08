@@ -11,7 +11,8 @@ import { CodeAnalyzer } from '../services/CodeAnalyzer.js'
 import { AIAnalysisService } from '../services/AIAnalysisService.js'
 import { AICodeAnalysisService } from '../services/AICodeAnalysisService.js'
 import { DatabaseService } from '../services/DatabaseService.js'
-import { queueService } from '../services/QueueService.js'
+// Queue service disabled for Railway deployment (no Redis)
+// import { queueService } from '../services/QueueService.js'
 import { logger } from '../utils/logger.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { db } from '../database/connection.js'
@@ -303,28 +304,104 @@ router.post('/zip', upload.single('zipFile'), [
       }
     })
 
-    // Queue the analysis job for background processing
-    await queueService.addCodeAnalysisJob({
-      analysisId,
-      userId,
-      zipFilePath: req.file.path,
-      originalFilename: req.file.originalname,
-      options: analysisOptions
-    })
+    // Process ZIP analysis synchronously (no Redis queues on Railway)
+    try {
+      logger.info(`🚀 Processing ZIP analysis synchronously: ${analysisId}`)
+      
+      await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 10)
 
-    // Return immediate response with analysis ID
-    res.json({
-      success: true,
-      analysisId,
-      status: 'queued',
-      message: 'ZIP file analysis queued successfully',
-      file: {
-        originalName: req.file.originalname,
-        size: req.file.size,
-        uploadedAt: new Date().toISOString()
-      },
-      estimatedTime: '2-8 minutes'
-    })
+      // Step 1: Extract ZIP file
+      const { default: ZipService } = await import('../services/ZipService.js')
+      const extractedData = await ZipService.extractZipFile(req.file.path)
+      await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 30)
+      
+      // Step 2: Analyze Code Structure
+      const { default: CodeAnalyzer } = await import('../services/CodeAnalyzer.js')
+      const codeAnalysis = await CodeAnalyzer.analyzeCodebase(extractedData.extractPath, analysisOptions)
+      await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
+      
+      // Step 3: Store code analysis data
+      await DatabaseService.updateCodeAnalysisData(analysisId, {
+        total_files: codeAnalysis.totalFiles,
+        total_lines: codeAnalysis.totalLines,
+        languages: codeAnalysis.languages,
+        frameworks: codeAnalysis.frameworks,
+        code_quality_score: codeAnalysis.qualityScore,
+        technical_debt_percentage: codeAnalysis.technicalDebt,
+        test_coverage_percentage: codeAnalysis.testCoverage,
+        complexity_score: codeAnalysis.complexity,
+        test_results: codeAnalysis.testResults,
+        build_results: codeAnalysis.buildResults,
+        static_analysis_results: codeAnalysis.staticAnalysis
+      })
+      
+      // Step 4: AI Analysis
+      let aiInsights = null
+      if (analysisOptions.includeAI !== false) {
+        try {
+          logger.info(`🤖 Generating AI insights for code analysis`)
+          const { default: AIAnalysisService } = await import('../services/AIAnalysisService.js')
+          const aiAnalysisService = new AIAnalysisService()
+          
+          const aiInputData = {
+            sourceType: 'zip',
+            filename: req.file.originalname,
+            codeStructure: codeAnalysis,
+            files: codeAnalysis.keyFiles,
+            metrics: {
+              quality: codeAnalysis.qualityScore,
+              complexity: codeAnalysis.complexity,
+              testCoverage: codeAnalysis.testCoverage
+            }
+          }
+          
+          aiInsights = await aiAnalysisService.generateCodeInsights(aiInputData, analysisOptions.aiProfile || 'mixed')
+          await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 90)
+        } catch (aiError) {
+          logger.warn(`AI insights generation failed: ${aiError.message}`)
+        }
+      }
+
+      const finalResult = {
+        ...codeAnalysis,
+        aiInsights,
+        completedAt: new Date().toISOString()
+      }
+
+      await DatabaseService.updateCodeAnalysisStatus(analysisId, 'completed', 100)
+      await DatabaseService.updateCodeAnalysisData(analysisId, finalResult)
+
+      // Clean up uploaded file
+      await fs.unlink(req.file.path).catch(() => {})
+      
+      res.json({
+        success: true,
+        analysisId,
+        status: 'completed',
+        data: finalResult,
+        message: 'ZIP file analysis completed successfully!',
+        file: {
+          originalName: req.file.originalname,
+          size: req.file.size,
+          analyzedAt: new Date().toISOString()
+        },
+        processingTime: 'immediate'
+      })
+
+    } catch (analysisError) {
+      logger.error(`ZIP analysis failed: ${analysisError.message}`, analysisError)
+      await DatabaseService.updateCodeAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
+      
+      // Clean up uploaded file
+      await fs.unlink(req.file.path).catch(() => {})
+      
+      res.status(500).json({
+        success: false,
+        analysisId,
+        error: 'Analysis failed',
+        message: analysisError.message
+      })
+    }
 
   } catch (error) {
     // Clean up uploaded file on error

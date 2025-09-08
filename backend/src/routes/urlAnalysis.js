@@ -3,7 +3,8 @@ import express from 'express'
 import { body, validationResult } from 'express-validator'
 import { v4 as uuidv4 } from 'uuid'
 import { DatabaseService } from '../services/DatabaseService.js'
-import { queueService } from '../services/QueueService.js'
+// Queue service disabled for Railway deployment (no Redis)
+// import { queueService } from '../services/QueueService.js'
 import { logger } from '../utils/logger.js'
 import { authMiddleware } from '../middleware/auth.js'
 
