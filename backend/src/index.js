@@ -164,10 +164,15 @@ async function startServer() {
     await initDatabase()
     logger.info('✅ Database initialized successfully')
 
-    // Initialize queue service
+    // Initialize queue service (optional - Redis required)
     logger.info('📋 Initializing queue service...')
-    await queueService.initialize()
-    logger.info('✅ Queue service initialized successfully')
+    try {
+      await queueService.initialize()
+      logger.info('✅ Queue service initialized successfully')
+    } catch (error) {
+      logger.warn('⚠️ Queue service initialization failed - continuing without Redis queues', error.message)
+      logger.info('💡 Redis is optional - analysis will run synchronously')
+    }
 
     // Start analysis worker
     logger.info('👷 Starting analysis worker...')
