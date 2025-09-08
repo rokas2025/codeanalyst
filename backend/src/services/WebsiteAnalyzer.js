@@ -19,8 +19,8 @@ export class WebsiteAnalyzer {
    */
   async initialize() {
     try {
-      // Launch Puppeteer browser
-      this.browser = await puppeteer.launch({
+      // Launch Puppeteer browser with Railway-compatible configuration
+      const puppeteerConfig = {
         headless: process.env.PUPPETEER_HEADLESS !== 'false',
         args: [
           '--no-sandbox',
@@ -30,9 +30,19 @@ export class WebsiteAnalyzer {
           '--no-first-run',
           '--no-zygote',
           '--single-process',
-          '--disable-gpu'
+          '--disable-gpu',
+          '--disable-background-timer-throttling',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-renderer-backgrounding'
         ]
-      })
+      }
+
+      // Use installed Chrome in Railway environment
+      if (process.env.RAILWAY_ENVIRONMENT) {
+        puppeteerConfig.executablePath = '/usr/bin/google-chrome-stable'
+      }
+
+      this.browser = await puppeteer.launch(puppeteerConfig)
 
              // Initialize Technology Detector (no async initialization needed)
        // this.technologyDetector is ready to use
