@@ -94,6 +94,16 @@ router.post('/analyze', [
       // Perform website analysis
       logger.info(`🌐 Analyzing website: ${url}`)
       const websiteResult = await websiteAnalyzer.analyzeWebsite(url, analysisOptions)
+      
+      // Debug: Log the analysis result
+      logger.info(`📊 Website analysis result:`, {
+        url,
+        hasData: !!websiteResult,
+        dataKeys: websiteResult ? Object.keys(websiteResult) : 'null',
+        titleExists: !!(websiteResult && websiteResult.title),
+        technologiesCount: websiteResult && websiteResult.technologies ? websiteResult.technologies.length : 0
+      })
+      
       await DatabaseService.updateUrlAnalysisStatus(analysisId, 'processing', 70)
 
       // Generate AI insights if requested
@@ -129,7 +139,17 @@ router.post('/analyze', [
 
       // Update database with completed analysis
       await DatabaseService.updateUrlAnalysisStatus(analysisId, 'completed', 100)
-      await DatabaseService.updateUrlAnalysisData(analysisId, finalResult.analysisData)
+      
+      // Extract the actual website data for database storage
+      const dbData = websiteResult || {}
+      logger.info(`💾 Storing analysis data:`, {
+        hasTitle: !!dbData.title,
+        hasTechnologies: !!(dbData.technologies && dbData.technologies.length),
+        hasHtmlContent: !!dbData.html_content,
+        dataKeys: Object.keys(dbData)
+      })
+      
+      await DatabaseService.updateUrlAnalysisData(analysisId, dbData)
 
       // Return completed analysis immediately
       res.json({
