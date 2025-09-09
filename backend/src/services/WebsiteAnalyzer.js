@@ -21,7 +21,8 @@ export class WebsiteAnalyzer {
     try {
       // Launch Puppeteer browser with Railway-compatible configuration
       const puppeteerConfig = {
-        headless: process.env.PUPPETEER_HEADLESS !== 'false',
+        headless: true, // Force headless in production
+        timeout: 60000, // Increase timeout to 60 seconds
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -33,16 +34,30 @@ export class WebsiteAnalyzer {
           '--disable-gpu',
           '--disable-background-timer-throttling',
           '--disable-backgrounding-occluded-windows',
-          '--disable-renderer-backgrounding'
+          '--disable-renderer-backgrounding',
+          '--disable-extensions',
+          '--disable-plugins',
+          '--disable-web-security',
+          '--disable-features=VizDisplayCompositor',
+          '--run-all-compositor-stages-before-draw',
+          '--disable-ipc-flooding-protection'
         ]
       }
 
       // Use installed Chrome in Railway environment
-      if (process.env.RAILWAY_ENVIRONMENT) {
+      if (process.env.RAILWAY_ENVIRONMENT || process.env.NODE_ENV === 'production') {
         puppeteerConfig.executablePath = '/usr/bin/google-chrome-stable'
+        logger.info('🐳 Using Chrome in Docker environment')
       }
 
+      logger.info('🚀 Launching Puppeteer browser...', { 
+        executablePath: puppeteerConfig.executablePath || 'bundled',
+        headless: puppeteerConfig.headless,
+        timeout: puppeteerConfig.timeout
+      })
+
       this.browser = await puppeteer.launch(puppeteerConfig)
+      logger.info('✅ Puppeteer browser launched successfully')
 
              // Initialize Technology Detector (no async initialization needed)
        // this.technologyDetector is ready to use
