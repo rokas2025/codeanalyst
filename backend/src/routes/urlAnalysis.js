@@ -145,11 +145,31 @@ router.post('/analyze', [
       logger.error(`URL analysis failed: ${analysisError.message}`, analysisError)
       await DatabaseService.updateUrlAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
       
-      res.status(500).json({
+      // Determine appropriate error response based on error type
+      let errorType = 'Analysis failed'
+      let statusCode = 500
+      let userMessage = analysisError.message
+
+      if (analysisError.message.includes('Protocol error') || analysisError.message.includes('Connection closed')) {
+        errorType = 'Website connection failed'
+        statusCode = 422 // Unprocessable Entity - website issue, not server issue
+        userMessage = 'Unable to connect to the website. The site may be down, blocking automated analysis, or have connection issues.'
+      } else if (analysisError.message.includes('Timed out') || analysisError.message.includes('timeout')) {
+        errorType = 'Analysis timeout'
+        statusCode = 422
+        userMessage = 'Website analysis timed out. The site may be very slow or unresponsive.'
+      } else if (analysisError.message.includes('net::ERR_') || analysisError.message.includes('DNS')) {
+        errorType = 'Website not accessible'
+        statusCode = 422
+        userMessage = 'Website could not be reached. Please check if the URL is correct and the site is accessible.'
+      }
+      
+      res.status(statusCode).json({
         success: false,
         analysisId,
-        error: 'Analysis failed',
-        message: analysisError.message
+        error: errorType,
+        message: userMessage,
+        technicalDetails: analysisError.message
       })
     }
 
