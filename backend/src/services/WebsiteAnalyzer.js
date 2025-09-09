@@ -22,7 +22,7 @@ export class WebsiteAnalyzer {
       // Launch Puppeteer browser with Railway-compatible configuration
       const puppeteerConfig = {
         headless: true, // Force headless in production
-        timeout: 60000, // Increase timeout to 60 seconds
+        timeout: 90000, // Increase timeout to 90 seconds for complex sites
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -160,11 +160,20 @@ export class WebsiteAnalyzer {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       )
 
-      // Navigate to page with timeout
+      // Navigate to page with optimized timeout and loading strategy
       const response = await page.goto(url, {
-        waitUntil: 'networkidle2',
-        timeout: 30000
+        waitUntil: 'domcontentloaded', // Faster than networkidle2
+        timeout: 60000 // Increased from 30s to 60s
       })
+      
+      // Wait for additional content but don't block on slow resources
+      try {
+        await page.waitForTimeout(3000) // Wait 3 seconds for initial dynamic content
+        await page.waitForSelector('body', { timeout: 5000 }) // Ensure body is loaded
+      } catch (additionalWaitError) {
+        logger.warn(`Additional content wait timeout for ${url}, proceeding with analysis`)
+        // Continue even if additional waits fail
+      }
 
       // Handle cookie banners and overlays
       await this.handleCookieBanners(page)

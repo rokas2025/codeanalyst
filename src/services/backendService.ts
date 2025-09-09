@@ -7,7 +7,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000, // 30 second timeout
+  timeout: 120000, // 2 minute timeout for analysis operations
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': 'true'
