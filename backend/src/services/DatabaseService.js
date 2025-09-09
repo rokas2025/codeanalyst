@@ -73,8 +73,13 @@ export class DatabaseService {
         if (Array.isArray(data.technologies)) {
           technologies = data.technologies
         } else if (typeof data.technologies === 'string') {
-          technologies = JSON.parse(data.technologies)
-        } else if (data.technologies) {
+          const parsed = JSON.parse(data.technologies)
+          // If parsed object has technologies array, use it
+          technologies = parsed.technologies || []
+        } else if (data.technologies && typeof data.technologies === 'object') {
+          // If it's an object with technologies array, extract it
+          technologies = data.technologies.technologies || []
+        } else {
           technologies = []
         }
       } catch (parseError) {
