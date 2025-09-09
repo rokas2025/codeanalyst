@@ -67,16 +67,31 @@ export class DatabaseService {
         WHERE id = $1
         RETURNING *
       `
+      // Ensure proper data types for database storage
+      let technologies = []
+      try {
+        if (Array.isArray(data.technologies)) {
+          technologies = data.technologies
+        } else if (typeof data.technologies === 'string') {
+          technologies = JSON.parse(data.technologies)
+        } else if (data.technologies) {
+          technologies = []
+        }
+      } catch (parseError) {
+        logger.warn('Failed to parse technologies data:', parseError)
+        technologies = []
+      }
+
       const values = [
         analysisId,
         data.title,
-        data.technologies,
+        technologies,
         data.html_content,
-        JSON.stringify(data.basic_website_data),
-        JSON.stringify(data.performance_metrics),
-        JSON.stringify(data.seo_analysis),
-        JSON.stringify(data.accessibility_analysis),
-        JSON.stringify(data.security_analysis)
+        JSON.stringify(data.basic_website_data || {}),
+        JSON.stringify(data.performance_metrics || {}),
+        JSON.stringify(data.seo_analysis || {}),
+        JSON.stringify(data.accessibility_analysis || {}),
+        JSON.stringify(data.security_analysis || {})
       ]
       
       const result = await db.query(query, values)
