@@ -2,13 +2,10 @@ import { create } from 'zustand'
 import { storage } from '../utils/helpers'
 
 export interface SettingsState {
-  // AI Configuration
-  openaiApiKey: string
-  anthropicApiKey: string
-  googleApiKey: string
+  // AI Configuration - SECURITY: API keys are now server-side only
   preferredAiModel: string
   
-  // GitHub Integration
+  // GitHub Integration  
   githubToken: string
   githubConnected: boolean
   
@@ -27,20 +24,11 @@ interface SettingsStore extends SettingsState {
   loadSettings: () => void
   resetSettings: () => void
   
-  // API Key management
-  setOpenAIKey: (key: string) => void
-  setAnthropicKey: (key: string) => void
-  setGoogleKey: (key: string) => void
-  
-  // Validation
-  isValidApiKey: (provider: string, key: string) => boolean
+  // AI Provider availability (backend-based)
   getAvailableProviders: () => string[]
 }
 
 const DEFAULT_SETTINGS: SettingsState = {
-  openaiApiKey: '',
-  anthropicApiKey: '',
-  googleApiKey: '',
   preferredAiModel: 'gpt-4-turbo',
   githubToken: '',
   githubConnected: false,
@@ -62,9 +50,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     try {
       const state = get()
       const settingsToSave: SettingsState = {
-        openaiApiKey: state.openaiApiKey,
-        anthropicApiKey: state.anthropicApiKey,
-        googleApiKey: state.googleApiKey,
         preferredAiModel: state.preferredAiModel,
         githubToken: state.githubToken,
         githubConnected: state.githubConnected,
@@ -102,51 +87,10 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     console.log('✅ Settings reset to defaults')
   },
 
-  setOpenAIKey: (key: string) => {
-    set({ openaiApiKey: key })
-  },
-
-  setAnthropicKey: (key: string) => {
-    set({ anthropicApiKey: key })
-  },
-
-  setGoogleKey: (key: string) => {
-    set({ googleApiKey: key })
-  },
-
-  isValidApiKey: (provider: string, key: string) => {
-    if (!key || key.trim() === '') return false
-    
-    switch (provider.toLowerCase()) {
-      case 'openai':
-        return key.startsWith('sk-') && key.length > 20
-      case 'anthropic':
-        return key.startsWith('sk-ant-') && key.length > 20
-      case 'google':
-        return key.length > 20 // Google API keys vary in format
-      default:
-        return false
-    }
-  },
-
   getAvailableProviders: () => {
-    const state = get()
-    const providers: string[] = []
-    
-    if (state.isValidApiKey('openai', state.openaiApiKey)) {
-      providers.push('openai')
-    }
-    if (state.isValidApiKey('anthropic', state.anthropicApiKey)) {
-      providers.push('anthropic')
-    }
-    if (state.isValidApiKey('google', state.googleApiKey)) {
-      providers.push('google')
-    }
-    
-    // Always include local demo mode
-    providers.push('local')
-    
-    return providers
+    // SECURITY: AI providers are determined by backend, not frontend API keys
+    // The backend will check environment variables and database for API keys
+    return ['openai', 'anthropic', 'google', 'local']
   },
 }))
 
