@@ -101,17 +101,17 @@ export class WebsiteAnalyzer {
       })
 
       try {
-        this.browser = await puppeteer.launch(puppeteerConfig)
+      this.browser = await puppeteer.launch(puppeteerConfig)
         this.browserAvailable = true
-        logger.info('✅ Puppeteer browser launched successfully')
+      logger.info('✅ Puppeteer browser launched successfully')
       } catch (browserError) {
         logger.warn('⚠️ Puppeteer browser failed to launch, continuing with limited analysis', browserError.message)
         this.browser = null
         this.browserAvailable = false
       }
 
-      // Initialize Technology Detector (no async initialization needed)
-      // this.technologyDetector is ready to use
+             // Initialize Technology Detector (no async initialization needed)
+       // this.technologyDetector is ready to use
 
       logger.info('🔧 Website analyzer initialized successfully')
     } catch (error) {
@@ -220,10 +220,15 @@ export class WebsiteAnalyzer {
       // Set viewport and user agent with anti-detection measures
       await page.setViewport({ width: 1920, height: 1080 })
       
-      // More realistic user agent (latest Chrome)
-      await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      )
+      // More realistic user agent (latest Chrome with randomization)
+      const userAgents = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+      ]
+      const randomUserAgent = userAgents[Math.floor(Math.random() * userAgents.length)]
+      await page.setUserAgent(randomUserAgent)
 
       // Anti-detection: Remove webdriver properties
       await page.evaluateOnNewDocument(() => {
@@ -243,6 +248,48 @@ export class WebsiteAnalyzer {
         Object.defineProperty(navigator, 'languages', {
           get: () => ['en-US', 'en'],
         })
+        
+        // Additional anti-detection measures (safely)
+        try {
+          Object.defineProperty(navigator, 'hardwareConcurrency', {
+            get: () => 4,
+          })
+        } catch (e) {}
+        
+        try {
+          Object.defineProperty(navigator, 'deviceMemory', {
+            get: () => 8,
+          })
+        } catch (e) {}
+        
+        // Spoof permissions (safely)
+        try {
+          if (window.navigator.permissions && window.navigator.permissions.query) {
+            const originalQuery = window.navigator.permissions.query
+            window.navigator.permissions.query = (parameters) => (
+              parameters.name === 'notifications' ?
+                Promise.resolve({ state: 'granted' }) :
+                originalQuery(parameters)
+            )
+          }
+        } catch (e) {
+          // Ignore permission spoofing errors
+        }
+      })
+
+      // Add realistic headers
+      await page.setExtraHTTPHeaders({
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Cache-Control': 'max-age=0'
       })
 
       // Add random delay to mimic human behavior (300-800ms)
@@ -568,7 +615,7 @@ export class WebsiteAnalyzer {
   getFallbackPerformanceData(url) {
     logger.info(`📊 Generating fallback performance data for ${url}`)
     
-    return {
+      return {
       performance: 50, // Reasonable default
       seo: 60,
       accessibility: 50,
@@ -670,7 +717,7 @@ export class WebsiteAnalyzer {
   getFallbackAccessibilityData(url) {
     logger.info(`♿ Generating fallback accessibility data for ${url}`)
     
-    return {
+      return {
       score: 60, // Reasonable default
       totalIssues: 1,
       issues: {
