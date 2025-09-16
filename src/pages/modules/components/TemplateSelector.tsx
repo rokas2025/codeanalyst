@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { HeartIcon, StarIcon } from '@heroicons/react/24/outline'
+import { HeartIcon, StarIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid'
 import { useContentCreatorStore } from '../../../stores/contentCreatorStore'
 import type { ContentTemplate } from '../../../types/contentCreator'
