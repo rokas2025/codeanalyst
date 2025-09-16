@@ -5,15 +5,27 @@ import toast from 'react-hot-toast'
 export function Settings() {
   const {
     preferredAiModel,
+    userApiKeys,
     beenexApiUrl,
     beenexApiKey,
     updateSetting,
     saveSettings,
+    setApiKey,
+    validateApiKey,
     getAvailableProviders
   } = useSettingsStore()
 
   const [showKeys, setShowKeys] = useState({
+    openai: false,
+    anthropic: false,
+    google: false,
     beenex: false
+  })
+
+  const [tempApiKeys, setTempApiKeys] = useState({
+    openai: '',
+    anthropic: '',
+    google: ''
   })
 
   const handleSave = () => {
@@ -22,6 +34,28 @@ export function Settings() {
       toast.success('Settings saved successfully!')
     } else {
       toast.error('Failed to save settings')
+    }
+  }
+
+  const handleApiKeySave = async (provider: 'openai' | 'anthropic' | 'google') => {
+    const key = tempApiKeys[provider]
+    
+    if (!key) {
+      toast.error('Please enter an API key')
+      return
+    }
+
+    if (!validateApiKey(provider, key)) {
+      toast.error(`Invalid ${provider} API key format`)
+      return
+    }
+
+    const success = await setApiKey(provider, key)
+    if (success) {
+      toast.success(`${provider.toUpperCase()} API key saved successfully!`)
+      setTempApiKeys(prev => ({ ...prev, [provider]: '' }))
+    } else {
+      toast.error(`Failed to save ${provider} API key`)
     }
   }
 
@@ -52,23 +86,125 @@ export function Settings() {
               </select>
             </div>
             
-            {/* Security Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                  </svg>
-                </div>
+                {/* OpenAI API Key */}
                 <div>
-                  <h4 className="text-sm font-medium text-blue-900">🔒 Secure API Key Management</h4>
-                  <p className="text-sm text-blue-700 mt-1">
-                    For security reasons, AI API keys are now managed server-side and not stored in your browser. 
-                    Contact your administrator to configure OpenAI, Anthropic, and Google API keys on the backend.
-                  </p>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-700">
+                      OpenAI API Key
+                      {userApiKeys.openai && <span className="ml-2 text-xs text-green-600">✓ Configured</span>}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowKeys(prev => ({ ...prev, openai: !prev.openai }))}
+                      className="text-xs text-gray-500 hover:text-gray-700"
+                    >
+                      {showKeys.openai ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  <div className="mt-1 flex space-x-2">
+                    <input 
+                      type={showKeys.openai ? "text" : "password"} 
+                      className="input flex-1" 
+                      placeholder={userApiKeys.openai ? userApiKeys.openai : "sk-..."}
+                      value={tempApiKeys.openai}
+                      onChange={(e) => setTempApiKeys(prev => ({ ...prev, openai: e.target.value }))}
+                    />
+                    <button 
+                      onClick={() => handleApiKeySave('openai')}
+                      className="btn-primary px-3 py-2 text-sm"
+                      disabled={!tempApiKeys.openai}
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Get your key from: https://platform.openai.com/api-keys</p>
                 </div>
-              </div>
-            </div>
+
+                {/* Anthropic API Key */}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Anthropic (Claude) API Key
+                      {userApiKeys.anthropic && <span className="ml-2 text-xs text-green-600">✓ Configured</span>}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowKeys(prev => ({ ...prev, anthropic: !prev.anthropic }))}
+                      className="text-xs text-gray-500 hover:text-gray-700"
+                    >
+                      {showKeys.anthropic ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  <div className="mt-1 flex space-x-2">
+                    <input 
+                      type={showKeys.anthropic ? "text" : "password"} 
+                      className="input flex-1" 
+                      placeholder={userApiKeys.anthropic ? userApiKeys.anthropic : "sk-ant-..."}
+                      value={tempApiKeys.anthropic}
+                      onChange={(e) => setTempApiKeys(prev => ({ ...prev, anthropic: e.target.value }))}
+                    />
+                    <button 
+                      onClick={() => handleApiKeySave('anthropic')}
+                      className="btn-primary px-3 py-2 text-sm"
+                      disabled={!tempApiKeys.anthropic}
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Get your key from: https://console.anthropic.com/</p>
+                </div>
+
+                {/* Google Gemini API Key */}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Google Gemini API Key
+                      {userApiKeys.google && <span className="ml-2 text-xs text-green-600">✓ Configured</span>}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowKeys(prev => ({ ...prev, google: !prev.google }))}
+                      className="text-xs text-gray-500 hover:text-gray-700"
+                    >
+                      {showKeys.google ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  <div className="mt-1 flex space-x-2">
+                    <input 
+                      type={showKeys.google ? "text" : "password"} 
+                      className="input flex-1" 
+                      placeholder={userApiKeys.google ? userApiKeys.google : "AI..."}
+                      value={tempApiKeys.google}
+                      onChange={(e) => setTempApiKeys(prev => ({ ...prev, google: e.target.value }))}
+                    />
+                    <button 
+                      onClick={() => handleApiKeySave('google')}
+                      className="btn-primary px-3 py-2 text-sm"
+                      disabled={!tempApiKeys.google}
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Get your key from: https://aistudio.google.com/app/apikey</p>
+                </div>
+
+                {/* Security Notice */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-green-900">🔒 Secure Storage</h4>
+                      <p className="text-sm text-green-700 mt-1">
+                        Your API keys are encrypted and stored securely in our database. They are never exposed in your browser or logs.
+                        Keys have priority: Your Keys → Railway Environment → Demo Mode.
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
             {/* Available Providers Status */}
             <div className="mt-4 p-3 bg-gray-50 rounded-lg">

@@ -838,6 +838,135 @@ export class DatabaseService {
       throw error
     }
   }
+
+  // ==========================================
+  // USER API KEYS MANAGEMENT
+  // ==========================================
+
+  /**
+   * Store encrypted API key for user
+   * @param {string} userId - User ID
+   * @param {string} provider - AI provider (openai, anthropic, google)
+   * @param {object} keyData - Encrypted key data
+   */
+  static async setUserApiKey(userId, provider, keyData) {
+    try {
+      const query = `
+        INSERT INTO user_api_keys (user_id, provider, encrypted_key, key_name, is_active, created_at, updated_at)
+        VALUES ($1::UUID, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ON CONFLICT (user_id, provider) 
+        DO UPDATE SET 
+          encrypted_key = $3,
+          key_name = $4,
+          is_active = $5,
+          updated_at = CURRENT_TIMESTAMP
+        RETURNING id, provider
+      `
+      
+      const result = await db.query(query, [
+        userId,
+        provider,
+        keyData.encrypted_key,
+        keyData.key_name,
+        keyData.is_active
+      ])
+      
+      logger.logDatabase('upsert', 'user_api_keys', result.rows.length, { userId, provider })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database setUserApiKey', error, { userId, provider })
+      throw error
+    }
+  }
+
+  /**
+   * Get specific API key for user and provider
+   * @param {string} userId - User ID
+   * @param {string} provider - AI provider
+   */
+  static async getUserApiKey(userId, provider) {
+    try {
+      const query = `
+        SELECT * FROM user_api_keys 
+        WHERE user_id = $1::UUID AND provider = $2 AND is_active = true
+        ORDER BY updated_at DESC
+        LIMIT 1
+      `
+      
+      const result = await db.query(query, [userId, provider])
+      logger.logDatabase('select', 'user_api_keys', result.rows.length, { userId, provider })
+      return result.rows[0] || null
+    } catch (error) {
+      logger.logError('Database getUserApiKey', error, { userId, provider })
+      throw error
+    }
+  }
+
+  /**
+   * Get all API keys for user (for settings display)
+   * @param {string} userId - User ID
+   */
+  static async getUserApiKeys(userId) {
+    try {
+      const query = `
+        SELECT provider, key_name, is_active, last_used, created_at, updated_at
+        FROM user_api_keys 
+        WHERE user_id = $1::UUID AND is_active = true
+        ORDER BY provider ASC
+      `
+      
+      const result = await db.query(query, [userId])
+      logger.logDatabase('select', 'user_api_keys', result.rows.length, { userId })
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getUserApiKeys', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Delete API key for user and provider
+   * @param {string} userId - User ID
+   * @param {string} provider - AI provider
+   */
+  static async deleteUserApiKey(userId, provider) {
+    try {
+      const query = `
+        UPDATE user_api_keys 
+        SET is_active = false, updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = $1::UUID AND provider = $2
+        RETURNING id
+      `
+      
+      const result = await db.query(query, [userId, provider])
+      logger.logDatabase('update', 'user_api_keys', result.rows.length, { userId, provider })
+      return result.rowCount > 0
+    } catch (error) {
+      logger.logError('Database deleteUserApiKey', error, { userId, provider })
+      throw error
+    }
+  }
+
+  /**
+   * Update last_used timestamp for API key
+   * @param {string} userId - User ID
+   * @param {string} provider - AI provider
+   */
+  static async updateApiKeyLastUsed(userId, provider) {
+    try {
+      const query = `
+        UPDATE user_api_keys 
+        SET last_used = CURRENT_TIMESTAMP
+        WHERE user_id = $1::UUID AND provider = $2 AND is_active = true
+      `
+      
+      await db.query(query, [userId, provider])
+      logger.logDatabase('update', 'user_api_keys', 1, { userId, provider })
+    } catch (error) {
+      logger.logError('Database updateApiKeyLastUsed', error, { userId, provider })
+      // Don't throw for this non-critical operation
+    }
+  }
 }
 
 export default DatabaseService 

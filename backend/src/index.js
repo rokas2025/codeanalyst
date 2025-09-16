@@ -28,6 +28,7 @@ import aiRoutes from './routes/ai.js'
 import chatRoutes from './routes/chat.js'
 import contentAnalysisRoutes from './routes/contentAnalysis.js'
 import contentCreatorRoutes from './routes/contentCreator.js'
+import settingsRoutes from './routes/settings.js'
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js'
@@ -137,6 +138,7 @@ app.use('/api/ai', authMiddleware, aiRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/content-analysis', contentAnalysisRoutes)
 app.use('/api/content-creator', authMiddleware, contentCreatorRoutes)
+app.use('/api/settings', settingsRoutes)
 
 // Static file serving
 app.use('/uploads', express.static(join(__dirname, '../uploads')))

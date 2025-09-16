@@ -2,8 +2,14 @@ import { create } from 'zustand'
 import { storage } from '../utils/helpers'
 
 export interface SettingsState {
-  // AI Configuration - SECURITY: API keys are now server-side only
+  // AI Configuration
   preferredAiModel: string
+  // User API Keys (stored securely on backend, displayed here for management)
+  userApiKeys: {
+    openai: string
+    anthropic: string
+    google: string
+  }
   
   // GitHub Integration  
   githubToken: string
@@ -24,12 +30,19 @@ interface SettingsStore extends SettingsState {
   loadSettings: () => void
   resetSettings: () => void
   
-  // AI Provider availability (backend-based)
+  // AI Provider actions
+  setApiKey: (provider: 'openai' | 'anthropic' | 'google', key: string) => Promise<boolean>
   getAvailableProviders: () => string[]
+  validateApiKey: (provider: string, key: string) => boolean
 }
 
 const DEFAULT_SETTINGS: SettingsState = {
   preferredAiModel: 'gpt-4-turbo',
+  userApiKeys: {
+    openai: '',
+    anthropic: '',
+    google: ''
+  },
   githubToken: '',
   githubConnected: false,
   beenexApiUrl: 'https://api.beenex.com',
@@ -88,9 +101,63 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   },
 
   getAvailableProviders: () => {
-    // SECURITY: AI providers are determined by backend, not frontend API keys
-    // The backend will check environment variables and database for API keys
-    return ['openai', 'anthropic', 'google', 'local']
+    // Check which providers have API keys configured
+    const state = get()
+    const providers = []
+    
+    if (state.userApiKeys.openai) providers.push('openai')
+    if (state.userApiKeys.anthropic) providers.push('anthropic') 
+    if (state.userApiKeys.google) providers.push('google')
+    
+    // Always include backend providers
+    providers.push('backend') // For Railway environment keys
+    
+    return providers.length > 1 ? providers : ['backend', 'local']
+  },
+
+  setApiKey: async (provider, key) => {
+    try {
+      const token = localStorage.getItem('auth_token')
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      
+      const response = await fetch(`${baseUrl}/settings/api-keys`, {
+        method: 'PUT', 
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ provider, key })
+      })
+      
+      if (response.ok) {
+        set(state => ({
+          userApiKeys: {
+            ...state.userApiKeys,
+            [provider]: key.substring(0, 8) + '...' // Store masked version for display
+          }
+        }))
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error('Failed to save API key:', error)
+      return false
+    }
+  },
+
+  validateApiKey: (provider, key) => {
+    if (!key || key.length < 10) return false
+    
+    switch (provider) {
+      case 'openai':
+        return key.startsWith('sk-') && key.length > 40
+      case 'anthropic':
+        return key.startsWith('sk-ant-') && key.length > 40
+      case 'google':
+        return key.startsWith('AI') && key.length > 30
+      default:
+        return false
+    }
   },
 }))
 

@@ -17,6 +17,20 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- User API Keys table (encrypted storage)
+CREATE TABLE user_api_keys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    provider VARCHAR(50) NOT NULL, -- openai, anthropic, google
+    encrypted_key TEXT NOT NULL, -- AES encrypted API key
+    key_name VARCHAR(100), -- User-friendly name for the key
+    is_active BOOLEAN DEFAULT true,
+    last_used TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, provider) -- One key per provider per user
+);
+
 -- Projects table
 CREATE TABLE projects (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

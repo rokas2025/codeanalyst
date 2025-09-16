@@ -11,6 +11,51 @@ import { authMiddleware } from '../middleware/auth.js'
 const router = express.Router()
 
 /**
+ * Get troubleshooting suggestions based on error category
+ */
+function getSuggestions(category) {
+  const suggestions = {
+    browser_protocol: [
+      'The website is likely using anti-bot protection',
+      'Try again with a different URL',
+      'Contact support if this persists with multiple sites'
+    ],
+    timeout: [
+      'The website is slow to respond',
+      'Try again later when the site might be less busy',
+      'Check if the website loads normally in your browser'
+    ],
+    network: [
+      'Verify the URL is correct',
+      'Check if the website is accessible in your browser',
+      'The website might be temporarily down'
+    ],
+    navigation: [
+      'The website detected and blocked automated access',
+      'This is common with Google, Facebook, and other large sites',
+      'Try a different website or contact support'
+    ],
+    script_blocked: [
+      'The website has strong anti-automation protection',
+      'This indicates sophisticated bot detection',
+      'Try analyzing a different page or website'
+    ],
+    session_closed: [
+      'Browser session was terminated by anti-bot protection',
+      'The website actively blocks automated analysis',
+      'Consider using a different URL'
+    ],
+    server: [
+      'This appears to be a server-side issue',
+      'Please try again in a few minutes',
+      'Contact support if the problem persists'
+    ]
+  }
+  
+  return suggestions[category] || suggestions.server
+}
+
+/**
  * POST /api/url-analysis/analyze
  * Analyze a website URL with real content extraction
  */
@@ -165,31 +210,89 @@ router.post('/analyze', [
       logger.error(`URL analysis failed: ${analysisError.message}`, analysisError)
       await DatabaseService.updateUrlAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
       
+      // Enhanced error details for debugging 422 issues
+      const errorDetails = {
+        url,
+        analysisId,
+        timestamp: new Date().toISOString(),
+        error_type: analysisError.constructor.name,
+        error_message: analysisError.message,
+        error_stack: process.env.NODE_ENV === 'development' ? analysisError.stack : null,
+        user_agent: req.headers['user-agent'],
+        ip_address: req.ip || req.connection.remoteAddress,
+        request_headers: {
+          accept: req.headers.accept,
+          'accept-language': req.headers['accept-language'],
+          'sec-fetch-dest': req.headers['sec-fetch-dest'],
+          'sec-fetch-mode': req.headers['sec-fetch-mode']
+        },
+        environment: {
+          node_env: process.env.NODE_ENV,
+          platform: process.platform,
+          chrome_executable: process.env.CHROME_EXECUTABLE || 'auto-detect',
+          puppeteer_args: 'anti-detection-enabled'
+        }
+      }
+      
       // Determine appropriate error response based on error type
-      let errorType = 'Analysis failed'
+      let errorCode = 'ANALYSIS_FAILED'
       let statusCode = 500
       let userMessage = analysisError.message
+      let debugCategory = 'server'
 
       if (analysisError.message.includes('Protocol error') || analysisError.message.includes('Connection closed')) {
-        errorType = 'Website connection failed'
+        errorCode = 'BROWSER_PROTOCOL_ERROR'
         statusCode = 422 // Unprocessable Entity - website issue, not server issue
         userMessage = 'Unable to connect to the website. The site may be down, blocking automated analysis, or have connection issues.'
+        debugCategory = 'browser_protocol'
+        errorDetails.bot_detection_likely = true
       } else if (analysisError.message.includes('Timed out') || analysisError.message.includes('timeout')) {
-        errorType = 'Analysis timeout'
+        errorCode = 'ANALYSIS_TIMEOUT'
         statusCode = 422
         userMessage = 'Website analysis timed out. The site may be very slow or unresponsive.'
+        debugCategory = 'timeout'
+        errorDetails.timeout_duration = '30s'
       } else if (analysisError.message.includes('net::ERR_') || analysisError.message.includes('DNS')) {
-        errorType = 'Website not accessible'
+        errorCode = 'WEBSITE_NOT_ACCESSIBLE'
         statusCode = 422
         userMessage = 'Website could not be reached. Please check if the URL is correct and the site is accessible.'
+        debugCategory = 'network'
+      } else if (analysisError.message.includes('Navigation failed') || analysisError.message.includes('net::ERR_FAILED')) {
+        errorCode = 'NAVIGATION_FAILED'
+        statusCode = 422
+        userMessage = 'Failed to navigate to the website. This often indicates anti-bot protection.'
+        debugCategory = 'navigation'
+        errorDetails.bot_detection_likely = true
+      } else if (analysisError.message.includes('evaluateOnNewDocument') || analysisError.message.includes('Runtime.evaluate')) {
+        errorCode = 'BROWSER_SCRIPT_BLOCKED'
+        statusCode = 422
+        userMessage = 'Browser automation was detected and blocked by the website.'
+        debugCategory = 'script_blocked'
+        errorDetails.bot_detection_confirmed = true
+      } else if (analysisError.message.includes('Target closed') || analysisError.message.includes('Session closed')) {
+        errorCode = 'BROWSER_SESSION_CLOSED'
+        statusCode = 422
+        userMessage = 'Browser session was terminated unexpectedly.'
+        debugCategory = 'session_closed'
+        errorDetails.bot_detection_likely = true
       }
+      
+      // Add debug category to error details
+      errorDetails.debug_category = debugCategory
+      errorDetails.error_code = errorCode
       
       res.status(statusCode).json({
         success: false,
         analysisId,
-        error: errorType,
+        error: errorCode,
         message: userMessage,
-        technicalDetails: analysisError.message
+        technicalDetails: analysisError.message,
+        debugInfo: errorDetails,
+        troubleshooting: {
+          category: debugCategory,
+          suggestions: getSuggestions(debugCategory),
+          retry_recommended: statusCode === 422 && !errorDetails.bot_detection_confirmed
+        }
       })
     }
 
