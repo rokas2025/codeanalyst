@@ -181,12 +181,15 @@ export class WebsiteAnalyzer {
   async extractBasicData(url, options = {}) {
     // If browser is not available, use axios fallback
     if (!this.browserAvailable || !this.browser) {
+      logger.warn(`🔄 Using axios fallback for ${url} - browser not available`)
       return await this.extractBasicDataFallback(url, options)
     }
     
-    const page = await this.browser.newPage()
+    logger.info(`🌐 Using Puppeteer for ${url} - browser available`)
     
     try {
+      const page = await this.browser.newPage()
+    
       // Set viewport and user agent
       await page.setViewport({ width: 1920, height: 1080 })
       await page.setUserAgent(
@@ -297,8 +300,12 @@ export class WebsiteAnalyzer {
         finalUrl: page.url() // In case of redirects
       }
 
+    } catch (puppeteerError) {
+      logger.warn(`🔄 Puppeteer failed for ${url}, falling back to axios: ${puppeteerError.message}`)
+      await page?.close() // Close page if it exists
+      return await this.extractBasicDataFallback(url, options)
     } finally {
-      await page.close()
+      await page?.close() // Ensure page is closed
     }
   }
 
@@ -497,15 +504,8 @@ export class WebsiteAnalyzer {
       }
 
     } catch (error) {
-      logger.warn('Lighthouse analysis failed:', error.message)
-      return {
-        performance: 0,
-        seo: 0,
-        bestPractices: 0,
-        metrics: {},
-        opportunities: [],
-        error: error.message
-      }
+      logger.warn(`🔄 Lighthouse analysis failed for ${url}, using fallback: ${error.message}`)
+      return this.getFallbackPerformanceData(url)
     }
   }
 
@@ -606,13 +606,8 @@ export class WebsiteAnalyzer {
       }
 
     } catch (error) {
-      logger.warn('Accessibility analysis failed:', error.message)
-      return {
-        score: 0,
-        issues: { errors: 0, warnings: 0, notices: 0, total: 0 },
-        details: [],
-        error: error.message
-      }
+      logger.warn(`🔄 Accessibility analysis failed, using fallback: ${error.message}`)
+      return this.getFallbackAccessibilityData(url)
     }
   }
 
