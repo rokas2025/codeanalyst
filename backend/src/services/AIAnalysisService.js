@@ -290,12 +290,12 @@ Please respond in JSON format with the following structure:
         .update(prompt + JSON.stringify(options))
         .digest('hex')
       
-      // Check cache first
-      const cached = await DatabaseService.getCachedAIResponse(cacheKey)
-      if (cached && !options.skipCache) {
-        logger.info('📝 Using cached AI response')
-        return { response: cached.response_text, providerUsed: 'cache', model: 'cached' }
-      }
+      // Check cache first (disabled - missing table)
+      // const cached = await DatabaseService.getCachedAIResponse(cacheKey)
+      // if (cached && !options.skipCache) {
+      //   logger.info('📝 Using cached AI response')
+      //   return { response: cached.response_text, providerUsed: 'cache', model: 'cached' }
+      // }
 
       // Choose provider
       const provider = this.selectProvider(options.preferredProvider)
@@ -339,30 +339,30 @@ Please respond in JSON format with the following structure:
       
       const responseTime = Date.now() - startTime
       
-      // Cache the response
-      await DatabaseService.cacheAIResponse({
-        inputHash: cacheKey,
-        provider,
-        model: options.model || 'default',
-        promptText: prompt.substring(0, 1000), // Truncate for storage
-        responseText: response,
-        confidenceScore: 0.85,
-        tokenCount,
-        responseTimeMs: responseTime
-      })
+      // Cache the response (disabled - missing table)
+      // await DatabaseService.cacheAIResponse({
+      //   inputHash: cacheKey,
+      //   provider,
+      //   model: options.model || 'default',
+      //   promptText: prompt.substring(0, 1000), // Truncate for storage
+      //   responseText: response,
+      //   confidenceScore: 0.85,
+      //   tokenCount,
+      //   responseTimeMs: responseTime
+      // })
       
-      // Log usage
-      await DatabaseService.logAPIUsage({
-        userId: options.userId || '00000000-0000-0000-0000-000000000001',
-        analysisId: options.analysisId,
-        analysisType,
-        provider,
-        model: options.model || 'default',
-        tokensUsed: tokenCount,
-        costUsd: this.calculateCost(provider, tokenCount),
-        durationMs: responseTime,
-        success: true
-      })
+      // Log usage (disabled - missing table)
+      // await DatabaseService.logAPIUsage({
+      //   userId: options.userId || '00000000-0000-0000-0000-000000000001',
+      //   analysisId: options.analysisId,
+      //   analysisType,
+      //   provider,
+      //   model: options.model || 'default',
+      //   tokensUsed: tokenCount,
+      //   costUsd: this.calculateCost(provider, tokenCount),
+      //   durationMs: responseTime,
+      //   success: true
+      // })
       
       logger.info(`🤖 AI analysis completed using ${provider}`, {
         tokens: tokenCount,

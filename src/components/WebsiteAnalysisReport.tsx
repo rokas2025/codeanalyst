@@ -464,9 +464,14 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                     Technology Stack ({technologies.length} detected)
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {technologies.map((tech: string, index: number) => (
+                    {technologies.map((tech: any, index: number) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 text-center border hover:shadow-md transition-shadow">
-                        <div className="text-xs font-medium text-gray-900">{tech}</div>
+                        <div className="text-xs font-medium text-gray-900">
+                          {typeof tech === 'string' ? tech : tech.name || 'Unknown'}
+                        </div>
+                        {tech.version && typeof tech === 'object' && (
+                          <div className="text-xs text-gray-500 mt-1">v{tech.version}</div>
+                        )}
                       </div>
                     ))}
                   </div>

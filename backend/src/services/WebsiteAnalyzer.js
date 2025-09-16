@@ -303,17 +303,17 @@ export class WebsiteAnalyzer {
       // Navigate to page with optimized timeout and loading strategy
       const response = await page.goto(url, {
         waitUntil: 'domcontentloaded', // Faster than networkidle2
-        timeout: 60000 // Increased from 30s to 60s
+        timeout: 30000 // Reduced back to 30s to prevent client timeouts
       })
       
       // Wait for content to stabilize - important for sites with dynamic frames
       try {
-        await new Promise(resolve => setTimeout(resolve, 2000)) // Reduced wait time
-        await page.waitForSelector('body', { timeout: 5000 }) // Ensure body is loaded
+        await new Promise(resolve => setTimeout(resolve, 1000)) // Further reduced wait time
+        await page.waitForSelector('body', { timeout: 3000 }) // Ensure body is loaded
         
         // Wait for network to settle (important for preventing frame detachment)
         await page.waitForLoadState?.('networkidle')?.catch(() => {}) // Playwright style if available
-        await page.waitForFunction(() => document.readyState === 'complete', { timeout: 5000 }).catch(() => {})
+        await page.waitForFunction(() => document.readyState === 'complete', { timeout: 3000 }).catch(() => {})
       } catch (additionalWaitError) {
         logger.warn(`Additional content wait timeout for ${url}, proceeding with analysis`)
         // Continue even if additional waits fail
