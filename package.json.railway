@@ -1,0 +1,13 @@
+{
+  "name": "codeanalyst-railway",
+  "version": "1.0.0",
+  "description": "Railway deployment for CodeAnalyst backend",
+  "type": "module",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "build": "cd backend && npm install"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

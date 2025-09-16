@@ -1,8 +1,10 @@
 [build]
-command = "cd backend && npm install"
+command = "npm install"
+workingDirectory = "backend"
 
 [deploy]
-startCommand = "cd backend && npm start"
+startCommand = "npm start"
+workingDirectory = "backend"
 
 [env]
 NODE_ENV = "production"
