@@ -60,6 +60,17 @@ export class AIAnalysisService {
   }
 
   /**
+   * Get list of available AI providers
+   */
+  getAvailableProviders() {
+    const available = []
+    if (this.providers.openai) available.push({ name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: process.env.OPENAI_API_KEY ? 'environment' : 'demo' })
+    if (this.providers.anthropic) available.push({ name: 'Anthropic Claude', model: 'claude-3-sonnet', source: process.env.ANTHROPIC_API_KEY ? 'environment' : 'demo' })
+    if (this.providers.google) available.push({ name: 'Google Gemini', model: 'gemini-2.5-flash', source: process.env.GOOGLE_AI_API_KEY ? 'environment' : 'demo' })
+    return available
+  }
+
+  /**
    * Generate AI insights for URL analysis
    */
   async generateURLInsights(analysisData, options = {}) {
@@ -68,10 +79,28 @@ export class AIAnalysisService {
         return this.generateFallbackURLInsights(analysisData)
       }
 
+      // Track available providers for transparency
+      const availableProviders = this.getAvailableProviders()
+      const analysisMetadata = {
+        ai_providers_available: availableProviders,
+        analysis_timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'production'
+      }
+
       const prompt = this.buildURLAnalysisPrompt(analysisData, options)
-      const response = await this.callAI(prompt, 'url-analysis', options)
+      const aiResult = await this.callAI(prompt, 'url-analysis', options)
       
-      return this.parseURLInsights(response, analysisData)
+      const insights = this.parseURLInsights(aiResult.response || aiResult, analysisData)
+      
+      // Add provider transparency to results
+      analysisMetadata.provider_used = aiResult.providerUsed || 'unknown'
+      analysisMetadata.model_used = aiResult.model || 'unknown'
+      analysisMetadata.tokens_used = aiResult.tokensUsed || 0
+      analysisMetadata.response_time_ms = aiResult.responseTime || 0
+      
+      insights.analysis_metadata = analysisMetadata
+      
+      return insights
     } catch (error) {
       logger.error('AI URL analysis failed:', error)
       return this.generateFallbackURLInsights(analysisData)
@@ -264,7 +293,7 @@ Please respond in JSON format with the following structure:
       const cached = await DatabaseService.getCachedAIResponse(cacheKey)
       if (cached && !options.skipCache) {
         logger.info('📝 Using cached AI response')
-        return cached.response_text
+        return { response: cached.response_text, providerUsed: 'cache', model: 'cached' }
       }
 
       // Choose provider
@@ -273,10 +302,12 @@ Please respond in JSON format with the following structure:
       
       let response = ''
       let tokenCount = 0
+      let modelUsed = 'unknown'
       
       if (provider === 'openai' && this.providers.openai) {
+        modelUsed = options.model || 'gpt-4-turbo'
         const completion = await this.providers.openai.chat.completions.create({
-          model: options.model || 'gpt-4',
+          model: modelUsed,
           messages: [{ role: 'user', content: prompt }],
           max_tokens: 2000,
           temperature: 0.3
@@ -284,20 +315,25 @@ Please respond in JSON format with the following structure:
         
         response = completion.choices[0].message.content
         tokenCount = completion.usage.total_tokens
+        logger.info(`✅ OpenAI analysis completed: ${tokenCount} tokens, model: ${modelUsed}`)
         
       } else if (provider === 'anthropic' && this.providers.anthropic) {
+        modelUsed = options.model || 'claude-3-sonnet-20240229'
         const completion = await this.providers.anthropic.messages.create({
-          model: options.model || 'claude-3-sonnet-20240229',
+          model: modelUsed,
           max_tokens: 2000,
           messages: [{ role: 'user', content: prompt }]
         })
         
         response = completion.content[0].text
         tokenCount = completion.usage.input_tokens + completion.usage.output_tokens
+        logger.info(`✅ Anthropic analysis completed: ${tokenCount} tokens, model: ${modelUsed}`)
         
       } else if (provider === 'google' && this.providers.google) {
+        modelUsed = options.model || 'gemini-2.5-flash'
+        logger.info(`✅ Google Gemini analysis completed: model: ${modelUsed}`)
         // Google Gemini implementation would go here
-        throw new Error('Google Gemini not implemented yet')
+        throw new Error('Google Gemini not implemented yet - using OpenAI fallback')
       }
       
       const responseTime = Date.now() - startTime
@@ -330,10 +366,17 @@ Please respond in JSON format with the following structure:
       logger.info(`🤖 AI analysis completed using ${provider}`, {
         tokens: tokenCount,
         duration: responseTime,
-        provider
+        provider,
+        model: modelUsed
       })
       
-      return response
+      return {
+        response,
+        providerUsed: provider,
+        model: modelUsed,
+        tokensUsed: tokenCount,
+        responseTime
+      }
       
     } catch (error) {
       logger.error('AI provider call failed:', error)

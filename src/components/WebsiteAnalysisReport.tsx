@@ -109,6 +109,10 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
   const security = results.security || {}
   const technologies = Array.isArray(results.technologies) ? results.technologies : []
   const scores = results.scores || {}
+  
+  // Extract AI analysis metadata
+  const aiInsights = results.aiInsights || {}
+  const analysisMetadata = aiInsights.analysis_metadata || {}
 
   // Extract scores with proper fallbacks
   const performanceScore = parseScore(
@@ -184,6 +188,12 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                 <CpuChipIcon className="w-5 h-5" />
                 <span className="text-sm">{technologies.length} Technologies Detected</span>
               </div>
+              {analysisMetadata.provider_used && (
+                <div className="flex items-center space-x-2">
+                  <LightBulbIcon className="w-5 h-5" />
+                  <span className="text-sm">AI: {analysisMetadata.provider_used} ({analysisMetadata.model_used})</span>
+                </div>
+              )}
             </div>
           </div>
           <div className="text-right">
@@ -281,7 +291,8 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
               { id: 'seo', name: 'SEO', icon: MagnifyingGlassIcon },
               { id: 'accessibility', name: 'Accessibility', icon: EyeIcon },
               { id: 'security', name: 'Security', icon: ShieldCheckIcon },
-              { id: 'recommendations', name: 'Action Plan', icon: DocumentTextIcon }
+              { id: 'recommendations', name: 'Action Plan', icon: DocumentTextIcon },
+              { id: 'analysis-details', name: 'Analysis Details', icon: InformationCircleIcon }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -1310,6 +1321,163 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                   <div className="text-center p-4 bg-purple-50 rounded-lg">
                     <div className="text-2xl font-bold text-purple-600">+{Math.round(10 + (100 - performanceScore) * 0.2)}%</div>
                     <div className="text-sm text-gray-600">Conversion Rate</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Analysis Details Tab */}
+          {activeTab === 'analysis-details' && (
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold">Analysis Details & AI Transparency</h3>
+              
+              {/* AI Analysis Information */}
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
+                <h4 className="font-medium text-purple-900 mb-4 flex items-center">
+                  <LightBulbIcon className="w-5 h-5 mr-2" />
+                  AI Analysis Information
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">AI Provider Used:</span>
+                      <span className="text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                        {analysisMetadata.provider_used ? 
+                          analysisMetadata.provider_used.charAt(0).toUpperCase() + analysisMetadata.provider_used.slice(1) : 
+                          'Standard Analysis'
+                        }
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">Model Used:</span>
+                      <span className="text-sm text-gray-600">
+                        {analysisMetadata.model_used || 'Default'}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">Analysis Date:</span>
+                      <span className="text-sm text-gray-600">
+                        {analysisMetadata.analysis_timestamp ? 
+                          new Date(analysisMetadata.analysis_timestamp).toLocaleString() : 
+                          new Date().toLocaleString()
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {analysisMetadata.tokens_used && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-700">Tokens Used:</span>
+                        <span className="text-sm text-gray-600">{analysisMetadata.tokens_used.toLocaleString()}</span>
+                      </div>
+                    )}
+                    
+                    {analysisMetadata.response_time_ms && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-700">AI Response Time:</span>
+                        <span className="text-sm text-gray-600">{(analysisMetadata.response_time_ms / 1000).toFixed(2)}s</span>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">Environment:</span>
+                      <span className="text-sm text-gray-600">
+                        {analysisMetadata.environment || 'Production'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Available Providers */}
+                {analysisMetadata.ai_providers_available && analysisMetadata.ai_providers_available.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-purple-200">
+                    <h5 className="text-sm font-medium text-gray-700 mb-2">Available AI Providers:</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {analysisMetadata.ai_providers_available.map((provider: any, index: number) => (
+                        <span 
+                          key={index}
+                          className={`px-3 py-1 text-xs rounded-full ${
+                            provider.name?.includes(analysisMetadata.provider_used) 
+                              ? 'bg-green-100 text-green-800 font-medium' 
+                              : 'bg-gray-100 text-gray-600'
+                          }`}
+                        >
+                          {provider.name || provider} 
+                          {provider.source && <span className="ml-1">({provider.source})</span>}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Technical Analysis Details */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-medium text-gray-900 mb-4 flex items-center">
+                  <CpuChipIcon className="w-5 h-5 mr-2" />
+                  Technical Analysis Details
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h5 className="text-sm font-medium text-gray-700 mb-2">Analysis Components:</h5>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>✅ Performance (Lighthouse)</li>
+                      <li>✅ SEO Analysis</li>
+                      <li>✅ Accessibility Audit</li>
+                      <li>✅ Security Assessment</li>
+                      <li>✅ Technology Detection</li>
+                      {analysisMetadata.provider_used && <li>✅ AI-Powered Insights</li>}
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h5 className="text-sm font-medium text-gray-700 mb-2">Data Sources:</h5>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Google Lighthouse Engine</li>
+                      <li>• Wappalyzer Technology Detection</li>
+                      <li>• Accessibility Standards (WCAG)</li>
+                      <li>• Security Best Practices</li>
+                      <li>• Real Browser Analysis</li>
+                      {analysisMetadata.provider_used && <li>• AI Analysis & Recommendations</li>}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Score Methodology */}
+              <div className="bg-white border rounded-lg p-6">
+                <h4 className="font-medium text-gray-900 mb-4 flex items-center">
+                  <ChartBarIcon className="w-5 h-5 mr-2" />
+                  Score Methodology
+                </h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium">Overall Score Calculation:</span>
+                      <span className="text-sm text-gray-600">{overallScore}/100</span>
+                    </div>
+                    <div className="text-xs text-gray-500 space-y-1">
+                      <p>• Performance: {performanceScore}/100 (25% weight)</p>
+                      <p>• SEO: {seoScore}/100 (25% weight)</p>
+                      <p>• Accessibility: {accessibilityScore}/100 (25% weight)</p>
+                      <p>• Security: {securityScore}/100 (15% weight)</p>
+                      <p>• Best Practices: {bestPracticesScore}/100 (10% weight)</p>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t">
+                    <p className="text-xs text-gray-500">
+                      Scores are based on industry standards including Google Lighthouse metrics, 
+                      WCAG accessibility guidelines, and modern web best practices. 
+                      {analysisMetadata.provider_used && ' AI insights provide additional context and recommendations.'}
+                    </p>
                   </div>
                 </div>
               </div>
