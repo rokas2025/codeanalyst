@@ -1,0 +1,822 @@
+
+
+Turinio analitiko maketo reikalavimų analizė
+
+
+2025-04-25
+
+ 
+
+ 
+
+
+Turinys
+Turinys	2
+Reikalavimų analizės ir techninės užduoties rengimo darbų struktūra	3
+1. Įvadas	5
+2. Pagrindiniai naudotojų scenarijai (workflows)	8
+2.1 Įvadas	8
+2.2 Verslo savininkas (paprasta sistema) – naudotojo kelias	10
+2.3 Verslo savininkas (sudėtinga sistema) – naudotojo kelias	12
+2.4 Rinkodaros specialistas – naudotojo kelias	15
+2.5 Agentūra – naudotojo kelias	17
+2.6 IT / palaikymo komanda – naudotojo kelias	20
+2.7 Santrauka: naudotojų scenarijų analizės įžvalgos	23
+3. Funkciniai reikalavimai	24
+3.1 Turinio įkėlimo / analizės inicijavimo funkcijos	24
+3.2 AI analizės funkcijos	26
+3.3 Rezultatų peržiūros funkcijos	28
+3.4 Eksportavimo ir bendrinimo funkcijos (struktūruota pagal etapus)	29
+3.5 Paskyros ir naudotojų valdymas (struktūruota pagal etapus)	30
+3.6 Sisteminės sąlygos MVP etapui	30
+3.7 Funkcinių reikalavimų santrauka	31
+4. Ne-funkciniai reikalavimai	32
+5. MVP apimtis	37
+6. Roadmap: tolesnės versijos	37
+7. Rizikos	37
+
+
+
+
+
+ 
+Reikalavimų analizės ir techninės užduoties rengimo darbų struktūra
+
+Pateikiame planuojamą reikalavimų anazlizės ir techninės užduoties parengimo darbų struktūrą:
+1. Įvadas
+•	Techninės užduoties paskirtis
+•	Produkto kontekstas (remiantis rinkos analize)
+•	Tikslas: sukurti AI pagrįstą turinio analizės maketą
+
+2. Pagrindiniai naudotojų scenarijai (workflows)
+•	Produkto naudojimo etapai: parengimas (onboarding), naudojimas, pasitraukimas
+•	Verslo savininkas
+•	Rinkodaros specialistas
+•	Agentūra
+•	IT / palaikymo komanda
+
+3. MTEP komponentas: reikalavimų analizės neapibrėžtumų tyrimas
+Tikslas: šiame etape vykdoma MTEP veikla yra orientuota į esminių sprendimo komponentų tyrimą esant dideliam neapibrėžtumui. Reikalavimų analizė neatsiejama nuo mokslinių klausimų – ar įmanoma išvis suformuoti automatizuotą, dirbtiniu intelektu grįstą turinio kokybės vertinimo modelį, kurio rezultatais naudotojas galėtų pasitikėti realiame darbe.
+Neapibrėžtumo zonos:
+•	Kokybės kriterijų neapibrėžtumas:
+o	Kas laikoma „paviršutinišku“ turiniu skirtinguose kontekstuose?
+o	Koks tekstas vertinamas kaip „gilus“ arba „vertingas“ komunikacine prasme?
+o	Ar įmanoma šiuos kriterijus formalizuoti taip, kad AI galėtų juos atpažinti?
+•	LLM gebėjimų tyrimas šiems tikslams:
+o	Ar GPT ar kiti modeliai gali stabiliai ir nuosekliai atlikti semantinę, ne tik gramatinę ar SEO analizę?
+o	Ar galima gauti ne tik pastebėjimus, bet ir konkretų veiksmų planą?
+•	Paaiškinamumo poreikis:
+o	Kaip pateikti naudotojui suprantamą pagrindimą – kodėl puslapis vertinamas taip, o ne kitaip?
+•	Automatizacijos galimybės:
+o	Ar įmanoma šias AI išvadas struktūrizuoti taip, kad jos taptų pagrindu automatizuotiems sprendimams (pvz., turinio pašalinimo, perrašymo užduotims)?
+MTEP reikšmė:
+•	Atliekamas sisteminis tyrimas, siekiant sukurti naują metodinį požiūrį į svetainių turinio vertinimą.
+•	Vertinamas AI technologijos tinkamumas iki šiol neišspręstai problemai (kokybinis semantinis turinio auditas).
+•	Kuriamos ir tiriamos naujos analizės struktūros, kurios iki šiol neturėjo praktinio įgyvendinimo nei rinkoje, nei akademijoje.
+•	Šis etapas yra būtinas tolimesnių techninių sprendimų suformavimui ir MVP apibrėžimui.
+
+4. GPT eksperimentas
+•	Paruošiamas ChatGPT GPT.
+•	Paruošiami keli svetainių puslapių pavyzdžiai.
+•	Kuriami testiniai prompt’ai pagal analizės kriterijus.
+•	Įvertinamas AI atsakymų vertingumas, logika ir struktūra.
+•	Sprendžiama, kurios funkcijos galės būti įgyvendintos MVP stadijoje.
+
+5. Funkciniai reikalavimai
+•	Svetainės turinio analizė pagal įvestus URL arba sitemap.
+•	AI įžvalgų generavimas apie puslapio kokybę (gilumas, paskirtis ir kt.).
+•	Automatinis žymėjimas: išlaikyti / atnaujinti / pašalinti.
+•	Eksportas į CSV, Notion ar Excel.
+
+6. Ne-funkciniai reikalavimai
+•	Paprasta ir suprantama naudotojo sąsaja.
+•	Paaiškinamos rekomendacijos („kodėl“ pateikta išvada).
+•	Duomenų saugos užtikrinimas – jokių duomenų saugojimo be sutikimo.
+•	Produkto veikimas su svetainėmis iki ~500 puslapių.
+
+7. Techniniai komponentai
+•	GPT arba analogiškas LLM turinio analizei.
+•	Server-side apdorojimas, API-first struktūra.
+•	Lengvas valdymo sąsajos prototipas (interfeisas testavimui).
+•	Eksporto modulis į pasirinktus įrankius (CSV, Notion ir kt.).
+
+8. MVP apimtis
+•	Riboto masto svetainės analizė.
+•	Pagrindiniai analizės kriterijai (1–2 pradžiai).
+•	Paprasta naudotojo sąsaja su klasifikacija.
+•	Eksportas į pasirinktą formatą.
+
+9. Roadmap: tolesnės versijos
+•	Automatinis monitoringas laike.
+•	Režimai pagal svetainės paskirtį (pvz., paslaugų / e-komercijos).
+•	Agentūrų režimas su kelių svetainių palaikymu.
+•	CMS įskiepių kūrimas (WordPress ir pan.).
+
+10. Rizikos
+•	GPT gali būti per daug apibendrintas ar nenuoseklus.
+•	UX gali tapti sudėtingas be aiškios filtracijos.
+•	Naudotojai gali nepasitikėti AI išvadomis be aiškios logikos.
+•	Techniniai ribotumai analizuojant labai dideles svetaines.
+
+1. Įvadas
+1.1 Darbo paskirtis
+Šio dokumento paskirtis – pagrįsti ir struktūruotai aprašyti reikalavimų analizę bei parengti techninę užduotį kuriamam produktui AdoreIno – AI pagrįstam turinio analitikos įrankiui. Šis dokumentas veikia kaip perėjimo tiltas tarp rinkos analizės, vartotojų poreikių suvokimo ir faktinio techninio įgyvendinimo, todėl jame akcentuojamos ne tik funkcijos, bet ir technologinis neapibrėžtumas, metodiniai eksperimentai bei galimi plėtros scenarijai.
+Rengiamas dokumentas skirtas naudoti produkto komandai, AI sistemų kūrėjams, UX dizaineriams bei suinteresuotoms išorinėms institucijoms, vertinančioms sprendimo MTEP (mokslinių tyrimų ir eksperimentinės plėtros) pobūdį.
+
+1.2 Produkto kontekstas
+AdoreIno – tai kuriamas AI įrankis, skirtas sistemingai vertinti svetainės turinio kokybę, struktūrą ir semantinę vertę. Kitaip nei įprasti SEO audito ar tekstų generavimo sprendimai, AdoreIno orientuotas į sprendimų priėmimą dėl jau egzistuojančio turinio, atsakant į esminius klausimus:
+•	Ar šis puslapis yra informatyvus, gilus ir vertingas?
+•	Ar jis pasikartoja su kitais?
+•	Ar apskritai yra reikalingas šiai svetainei ir auditorijai?
+•	Ką daryti su šiuo turiniu – atnaujinti, pašalinti ar išlaikyti?
+Šis produktas pozicionuojamas kaip pagalbininkas verslui ir rinkodaros specialistams, leidžiantis struktūruotai spręsti apie turinio likimą be perteklinių auditų, ilgų strategijų ar brangių agentūrų konsultacijų.
+Produktas skirtas būti naudojamas plataus spektro vartotojų – nuo smulkaus verslo savininkų, kurie neturi laiko ar įgūdžių sistemingai analizuoti turinį, iki rinkodaros agentūrų ar IT skyrių, kurie tvarko dešimtis svetainių su tūkstančiais puslapių.
+
+1.3 Tikslas
+Šio darbo pagrindinis tikslas – parengti aiškią, realybėje pritaikomą ir technologiškai įgyvendinamą AdoreIno techninę specifikaciją, kuri apimtų:
+•	Naudotojų scenarijus ir darbo srautus (workflows),
+•	Funkcinius ir ne-funkcinius reikalavimus,
+•	Techninės architektūros kryptį,
+•	MVP sprendimo branduolį,
+•	Tyrimų (MTEP) aspektus – ypač vertinant AI tinkamumą šiai specifinei užduočiai,
+•	Rizikų žemėlapį ir galimos plėtros scenarijus (roadmap).
+„Tikslas nėra tik aprašyti „ką reikia sukurti“, bet ir išanalizuoti naudotojų elgseną, funkcines galimybes bei priimti sprendimus dėl pirmosios produkto versijos apimties. Turinio kokybės kriterijų formalizavimas ir GPT modelių tinkamumo tyrimai aprašomi atskirame dokumente, skirtame MTEP veiklai.“
+
+1.4 Konteksto šaltiniai
+Ši techninė užduotis grindžiama nuosekliai atlikta rinkos tyrimo analize, kurios struktūra atitinka produkto plėtros ir problemų validavimo logiką. Tyrimo išvados tiesiogiai formuoja tiek techninius, tiek funkcinius projekto aspektus. Naudota ši analizės struktūra:
+1.	Problemos analizė – apibrėžtos sisteminės turinio kokybės problemos, kurios kyla skirtingiems naudotojų tipams.
+2.	Naudotojų analizė – identifikuoti pagrindiniai naudotojų segmentai: savininkai, vidiniai darbuotojai, išoriniai tiekėjai, techninis palaikymas.
+3.	**Situacijų analizė („cases“) – konkretūs realūs pavyzdžiai, parodantys problemines sąlygas skirtinguose organizacijų ir darbo modeliuose.
+4.	Glaustas rinkos įvertinimas – nustatyti rinkos dydžiai, segmentai, augimo tempai ir geografinė aprėptis (Lietuva, Europa, JAV).
+5.	Analoginiai sprendimai ir pakaitalai – ištirta, kaip problema sprendžiama šiandien, kokie sprendimų tipai egzistuoja ir jų ribotumai.
+6.	Konkurentų analizė – įvertinti artimiausi tiesioginiai konkurentai, jų orientacija ir diferencijavimo galimybės.
+7.	Galimas konkurencinis pranašumas – išskirtiniai produkto aspektai, sunkiai kopijuojami komponentai, konkurencinė pozicija.
+8.	Distribucija ir kainodara – produkto pateikimo modeliai, kainodaros logika bei pritaikymo variantai pagal kaštus, rinką ir vertę.
+9.	Inovacijos ir tendencijų paieška – įtrauktos svarbiausios technologinės kryptys: LLM, AI agentai, no-code, SaaS, UX kaip konkurencinis veiksnys.
+10.	Siūlomas sprendimas – sintetinis išvados skyrius, kuris remiantis tyrimu suformulavo produkto idėją, funkcijas, MVP apimtį ir vystymo logiką.
+Remiantis šiais analitiniais blokais, ši techninė užduotis suformuota kaip loginė produkto vystymo tąsa, pereinanti iš žinių fazės į projektavimo ir testavimo etapą.
+
+1.5 Metodo gairės
+Ši užduotis bus formuojama Lean ir Agile principais, leidžiančiais:
+•	Remtis išoriniais tyrimo rezultatais (MTEP dokumentas), kuriuose analizuojamas GPT pritaikomumas ir kokybės kriterijų formalumas,
+•	Nuosekliai iteruoti funkcijas pagal naudotojų grįžtamąjį ryšį,
+•	Lankščiai atskirti MVP funkcionalumą nuo plėtros scenarijų.
+Rengiant šį dokumentą, ypatingas dėmesys skiriamas praktiniam įgyvendinamumui, aiškiems UI/UX sprendimams ir tam, kad AI sistemos sprendimai būtų ne tik tikslūs, bet ir suprantami galutiniam naudotojui.
+
+2. Pagrindiniai naudotojų scenarijai (workflows)
+2.1 Įvadas
+Šio skyriaus tikslas – išanalizuoti pagrindinius naudotojų scenarijus, kuriais vadovaujantis formuojami produkto funkcionalumo, UX struktūros ir integracijos sprendimai. Analizė grindžiama naudotojo kelio (user journey) modeliu, kuris padeda suprasti:
+•	Kaip ir kodėl naudotojas patenka į produktą,
+•	Kaip juda per sistemą ir priima sprendimus,
+•	Kokius veiksmus atlieka ir kokios sąveikos jam reikalingos,
+•	Kokie iššūkiai ar sprendimo taškai kyla kiekviename žingsnyje.
+Skirtingai nei tik funkcijų sąrašas ar srautų schema, naudotojo kelias pateikia visuminį požiūrį į patirtį: nuo pirminio poreikio iki veiksmų atlikimo, sprendimų įgyvendinimo ir galimo grįžimo.
+AdoreIno atveju tai ypač svarbu, nes:
+•	Produktas kuriamas skirtingiems naudotojų profiliams (verslo savininkai, rinkodaros specialistai, agentūros, IT palaikymas),
+•	Naudotojo sprendimai yra ne techniniai, o strateginiai – jie reikalauja pasitikėjimo, paaiškinimo ir vidinio logiškumo,
+•	Produkto sėkmė priklauso nuo to, kaip lengvai ir aiškiai naudotojas gali perprasti rezultatą bei imtis veiksmų.
+Analizėje remiamasi produkto naudojimo ciklo etapais:
+1.	Parengimas (onboarding): kaip naudotojas atsiduria sistemoje, kaip pateikia duomenis ir kokio rezultato tikisi.
+2.	Naudojimas: kaip vyksta pagrindinė sąveika – analizė, įžvalgų peržiūra, sprendimų priėmimas ir veiksmų delegavimas.
+3.	Pasitraukimas / grįžtamasis ryšys: ką naudotojas daro pasibaigus analizei, ar grįžta, kokio tipo vertės tikisi toliau.
+
+Norint sistemingai įvertinti visus aspektus, kiekvieno naudotojo kelio analizė grindžiama šiais 10 tipinių komponentų, padedančių fiksuoti tiek veiksmus, tiek jų logiką ir pasekmes:
+1.	Poreikio atsiradimas: situacija ar problema, dėl kurios naudotojas pradeda ieškoti sprendimo.
+2.	Sprendimo paieška: kaip ir kur naudotojas atranda produktą, kas jam padeda ar trukdo tai padaryti.
+3.	Prisijungimas ir įsitraukimas: pirmoji sąveika su įrankiu, onboarding žingsniai.
+4.	Duomenų suvedimas ar paruošimas: kaip naudotojas pateikia sistemai tai, kas bus analizuojama.
+5.	Analizės inicijavimas: sprendimas pradėti analizę, galimi pasirinkimai ar konfigūracijos.
+6.	Rezultatų peržiūra: kaip pateikiami rezultatai, ką naudotojas supranta ir ką turi nuspręsti.
+7.	Veiksmų atlikimas arba delegavimas: sprendimų įgyvendinimas – pats arba per kitus komandos narius.
+8.	Grįžtamasis ryšys / atnaujinimas: analizės peržiūra vėl, po pokyčių ar su nauju turiniu.
+9.	Pasitraukimas: kada ir kaip naudotojas palieka sistemą, ką pasilieka sau (ataskaitas, veiksmų planą ir pan.).
+10.	Grįžimas / kartotinis naudojimas: priežastys, dėl kurių naudotojas grįžta, kas lemia nuolatinį naudojimą.
+
+Kiekvienam naudotojo tipui bus pateikiamas:
+•	User Journey Map: žingsnis po žingsnio kelias nuo poreikio iki rezultato,
+•	Scenarijaus aprašymas: tipiniai veiksmai, sprendimo taškai, sąveika su kitais, naudojami įrankiai, pasikartojantys iššūkiai.
+Tokiu būdu formuojamas praktinis pagrindas tiek UX/UI sprendimams, tiek techninei specifikacijai, tiek ir testavimo planams vėlesnėje produkto vystymo stadijoje.
+
+
+2.2 Verslo savininkas (paprasta sistema) – naudotojo kelias
+Naudotojo tipas:
+Verslo savininkas, turintis mažą arba vidutinį verslą, su svetaine (dažnai WordPress), kurioje kaupiasi neprižiūrėtas ar chaotiškas turinys. Dažnai pats kuria turinį arba deleguoja pavieniui. Neturi rinkodaros komandos.
+
+Naudotojo kelias (User Journey – 10 žingsnių)
+1.	Poreikio atsiradimas
+Savininkas pastebi, kad jo svetainėje – daug puslapių, kurie atrodo nebeaktualūs, pasenę ar neskaitomi. Jaučia, kad svetainė neturi aiškios struktūros, o nauji lankytojai „nežino, nuo ko pradėti“. Taip pat SEO agentūra ar partneris užsimena apie „turinio auditą“.
+2.	Sprendimo paieška
+Ieško būdo, kaip įvertinti turinio kokybę – naršo forumus, klausia pažįstamų, randa AdoreIno per straipsnį ar rekomendaciją.
+3.	Prisijungimas ir įsitraukimas
+Prisijungia prie AdoreIno, įveda savo svetainės adresą, greitai peržiūri, kaip veikia sistema. Nori, kad būtų kuo mažiau konfigūracijos – nekenčia sudėtingų sistemų.
+4.	Duomenų suvedimas ar paruošimas
+Įkelia sitemap.xml arba nurodo pagrindinius URL (jei neturi sitemap). Sistemoje pateikiami aptikti puslapiai, galimybė patikslinti (pvz., nevertinti el. parduotuvės produkto puslapių).
+5.	Analizės inicijavimas
+Paspaudžia „analizuoti“ – sistema pradeda analizuoti puslapius. Savininkas stebi progresą – jam svarbu žinoti, kad „vyksta veiksmas“.
+6.	Rezultatų peržiūra
+Mato AI sugeneruotą lentelę: puslapiai su įvertinimu (vertingas / tvarkytinas / nereikalingas), su aiškia rekomendacija ir „kodėl“. Nori greitai matyti: kurie puslapiai blogi, ir ar yra „gėdos puslapių“, kuriuos pamiršo.
+7.	Veiksmų atlikimas arba delegavimas
+Pažymi, kuriuos puslapius pašalins pats, kuriuos atiduos koreguoti tekstų kūrėjui. Nori galimybės eksportuoti veiksmų planą – CSV ar Notion formatas.
+8.	Grįžtamasis ryšys / atnaujinimas
+Po savaitės atlieka pakeitimus ir vėl paleidžia analizę. Tikisi pamatyti, kaip pagerėjo situacija.
+9.	Pasitraukimas
+Baigia darbą, pasilieka kopiją veiksmų plano, nori kad informacija būtų prieinama vėliau be prenumeratos.
+10.	Grįžimas / kartotinis naudojimas
+Po kelių mėnesių, ruošiantis naujai kampanijai ar keisti dizainą, vėl grįžta prie įrankio – jį domina, ar turinys vis dar aktualus.
+
+Scenarijaus analizė: Verslo savininkas
+Elementas	Turinys
+Tikslas / lūkestis	Greitai ir aiškiai suprasti, kuris svetainės turinys yra vertingas, kuris nebe, ir ką su juo daryti.
+Tipinės veiklos	Įveda URL → peržiūri rezultatą → pažymi veiksmus → eksportuoja planą → dalinai pats įgyvendina.
+Sprendimo taškai	Ar AI rekomendacija logiška? Ką daryti su abejotinais puslapiais? Ar verta mokėti už pilną auditą?
+Sąveika su kitais	Gali pasidalinti su laisvai samdomu tekstų kūrėju arba dizaineriu. Kartais konsultuojasi su IT žmogumi.
+Skausmo taškai	Neturi laiko gilintis į detales. Neaiškūs terminai ar analitinės diagramos atbaido. Reikia aiškumo.
+Pageidaujamas rezultatas	Paprasta lentelė su rekomendacija ir „kodėl“. Galimybė greitai nuspręsti, ką daryti, be specialisto.
+Naudojami įrankiai	Naudoja el. paštą, Notion / Excel. Kartais moka naudotis WordPress admin.
+Grįžimo priežastys	Nauji projektai, SEO peržiūros, turinio atnaujinimas.
+Techniniai lūkesčiai	Jokio sudėtingo diegimo. Nereikia integracijos. Turi tiesiog veikti.
+Verslo savininkas, veikiantis su paprasta sistema (pvz., WordPress), dažnai pats prižiūri ar kuruoja svetainės turinį. Jo kelias AdoreIno sprendime yra tiesioginis, greitas ir orientuotas į aiškų veiksmą. Jam svarbiausia:
+•	Turėti aiškų vaizdą, kuris turinys yra vertingas, kuris – nebe,
+•	Priimti sprendimus greitai, remiantis patikimomis ir lengvai suprantamomis įžvalgomis,
+•	Išvengti perteklinio sudėtingumo – naudoti įrankį intuityviai, be papildomos pagalbos.
+Daugeliu atvejų jis veikia vienas arba su minimalia pagalba, todėl įrankio sėkmė priklauso nuo to, ar AdoreIno gali aiškiai, suprantamai ir pagrįstai pasiūlyti, ką daryti su turiniu.
+Išvada: produkto sėkmė šiam naudotojui priklauso nuo UX aiškumo, rekomendacijų pagrįstumo ir galimybės greitai pereiti nuo įžvalgų prie veiksmų – be vidinių procesų ar papildomų įrankių.
+
+
+2.3 Verslo savininkas (sudėtinga sistema) – naudotojo kelias
+Naudotojo tipas:
+Verslo savininkas arba įmonės vadovas, valdantis didesnę, kompleksinę svetainę (dažnai su unikalia infrastruktūra, keliomis kalbomis, keliais padaliniais). Neturi laiko gilintis į turinį, bet atsakingas už strateginius sprendimus. Dirba per IT partnerius, vidinę komandą ar agentūras.
+
+Naudotojo kelias (User Journey – 10 žingsnių)
+1.	Poreikio atsiradimas
+Verslo plėtros, pardavimų ar UX rezultatai rodo, kad svetainės turinys nebeefektyvus. Galbūt nauji produktai neatsispindi, arba senos paslaugos vis dar dominuoja. Vadovas gauna vidinės rinkodaros ar agentūros signalą: „reikia atlikti turinio auditą“.
+2.	Sprendimo paieška
+Ieško sprendimo ne pats, o per komandą – IT vadovas ar agentūra pateikia siūlymus, tarp jų – AdoreIno kaip būdas greitai išanalizuoti didelį kiekį turinio.
+3.	Prisijungimas ir įsitraukimas
+Prisijungia per kolegą ar gauna paruoštą analizę iš komandos. Gali pats inicijuoti paskyrą, bet dažniausiai deleguoja duomenų suvedimą ir stebi tik rezultatą.
+4.	Duomenų suvedimas ar paruošimas
+Komanda surenka sitemap, sudaro išimčių sąrašus (pvz., nelieskite dokumentacijos ar lokalizuotų versijų), paruošia duomenis analizei. Procesas struktūruotas, su vidaus patvirtinimais.
+5.	Analizės inicijavimas
+Komanda paleidžia analizę. Savininkas informuojamas, kad „procesas vyksta“, laukia ataskaitos su pagrindiniais įžvalgomis. Pabrėžia – reikia „rimtai pagrįstų rekomendacijų“.
+6.	Rezultatų peržiūra
+Vadovas gauna apibendrintą ataskaitą (pvz., PDF + dashboard). Tikisi matyti:
+•	kiek puslapių rekomenduojama pašalinti,
+•	kokie yra pagrindiniai probleminiai segmentai,
+•	kokia būtų turinio pertvarkymo apimtis ir vertė.
+7.	Veiksmų atlikimas arba delegavimas
+Sprendimus priima kartu su komanda: kurie puslapiai lieka, kuriuos reikia iš naujo kurti, ką peržiūrėti su SEO/UX ekspertais. Užduotys deleguojamos pagal sritis: turinio komandai, agentūrai, IT skyriui.
+8.	Grįžtamasis ryšys / atnaujinimas
+Po 4–6 savaičių grįžtama prie analizės: ar rekomendacijos buvo įgyvendintos? Ar AI keičia vertinimus? Ar sistemoje galima pažymėti įvykdytas užduotis?
+9.	Pasitraukimas
+Po užbaigto pertvarkymo – analizė archyvuojama, rezultatai įtraukiami į vidaus ataskaitas. Vadovas tikisi, kad įrankį galės naudoti ateityje, bet jam svarbiausia – kad jis paliko vertės.
+10.	Grįžimas / kartotinis naudojimas
+Grįžta vėl, kai vyksta naujas strateginis pokytis: brand refresh, tarptautinė plėtra, platformos migracija. Tada vėl aktualu peržiūrėti turinį sisteminiu būdu.
+
+Scenarijaus analizė: Verslo savininkas (sudėtinga sistema)
+Elementas	Turinys
+Tikslas / lūkestis	Gauti aiškią, patikimą, strategiškai naudingą turinio peržiūros analizę, padedančią planuoti pertvarkymą arba komunikacijos atnaujinimą.
+Tipinės veiklos	Inicijuoja auditą per komandą → gauna apibendrintą rezultatą → priima sprendimus → deleguoja įgyvendinimą.
+Sprendimo taškai	Ar analizė pagrįsta? Ar nereikia ekspertų patvirtinimo? Ar sistemai galima pasitikėti kaip verslo įrankiu?
+Sąveika su kitais	Agentūra, IT skyrius, rinkodaros vadovas, UX partneriai. Sprendimai kolektyviniai.
+Skausmo taškai	Neaiškus paaiškinimas, per techninė kalba, neapibrėžti kriterijai. Reikia „audito“, o ne „modelio nuomonės“.
+Pageidaujamas rezultatas	Vizualizuota, segmentuota analizė. Galimybė planuoti veiksmus ir sekti įgyvendinimą. Dokumentuojami sprendimų pagrindimai.
+Naudojami įrankiai	Google Drive, Notion, Confluence, PDF ataskaitos.
+Grįžimo priežastys	Strateginiai pokyčiai, restruktūrizacija, internacionalizacija.
+Techniniai lūkesčiai	Stabilumas, mastelio palaikymas, API, išvados paaiškinamos, aiškus eksportas ir dokumentavimas.
+
+Verslo savininkas ar vadovas, veikiantis su sudėtinga svetaine (unikalios architektūros, didelės apimties, kelių komandų aplinkoje), pats turinio nekontroliuoja detaliai, tačiau prisiima atsakomybę už strateginius sprendimus. Jo kelias AdoreIno įrankyje yra netiesioginis – dažnai vykdomas per komandą ar agentūrą. Šiam naudotojui svarbiausia:
+•	Gauti aiškią, strategiškai patikimą analizę, kuri galėtų būti priimta kaip pagrindas verslo veiksmams,
+•	Turėti galimybę pagrįsti sprendimus dokumentuotai, kad jie būtų priimtini įvairiems suinteresuotiems asmenims (IT, marketingui, partneriams),
+•	Pasitikėti, kad AI analizė nėra subjektyvi ar paviršutiniška – todėl reikia paaiškinamų kriterijų, audito pobūdžio ir rezultatų vizualizacijos.
+Naudotojo kelias yra kolektyvinis, procesinis, paremtas planavimu ir delegavimu.
+Išvada: šiam naudotojui svarbiausia – analizės patikimumas, dokumentavimas ir pritaikomumas komandinėje aplinkoje. Produkto vertė kyla ne tik iš įžvalgų, bet ir iš gebėjimo integruotis į organizacinius sprendimų priėmimo procesus.
+
+
+
+•	Produkto naudojimo etapai: parengimas (onboarding), naudojimas, pasitraukimas
+•	Verslo savininkas
+•	Rinkodaros specialistas
+•	Agentūra
+•	IT / palaikymo komanda
+
+2.4 Rinkodaros specialistas – naudotojo kelias
+Naudotojo tipas:
+Rinkodaros specialistas – dirbantis įmonės viduje ar samdomas laisvai, atsakingas už komunikaciją, turinio atnaujinimą, SEO. Dažnai paveldėjęs svetainę su neaiškia struktūra, senais puslapiais ir mažai dokumentuotu turiniu.
+
+Naudotojo kelias (User Journey – 10 žingsnių)
+1.	Poreikio atsiradimas
+Suplanuota kampanija ar SEO peržiūra reikalauja suprasti, kurie puslapiai svetainėje naudingi, kurie gali kenkti reitingams ar klaidinti lankytojus. Turinio kiekis didelis, paveldėtas.
+2.	Sprendimo paieška
+Ieško įrankio, kuris padėtų objektyviai įvertinti turinio kokybę, nes neturi laiko peržiūrėti šimtus puslapių rankiniu būdu. Susiduria su paviršutiniškais SEO auditais, kurių jam nepakanka.
+3.	Prisijungimas ir įsitraukimas
+Prisijungia prie AdoreIno, peržiūri demoversiją arba gauna kvietimą iš kolegos. Nori greito starto, be IT įsikišimo.
+4.	Duomenų suvedimas ar paruošimas
+Įkelia sitemap arba puslapių sąrašą iš turimos analizės (pvz., Screaming Frog ar Google Search Console). Pažymi, ką nori įtraukti, ką atmesti (pvz., produktų puslapiai).
+5.	Analizės inicijavimas
+Nustato, kokius analizės aspektus jam svarbu stebėti (pvz., aktualumas, dubliavimasis, SEO reikšmė) ir paleidžia analizę. Nori suprasti, kiek tai truks, ir ar gali dirbti toliau kol analizė vyksta.
+6.	Rezultatų peržiūra
+Matydamas rezultatus, filtruojasi pagal aktualumą, AI įvertinimus ir veiksmų siūlymus. Žiūri, ar yra „low value“ puslapių, pasikartojančių temų, arba nesuprantamų AI išvadų – šias žymi kaip „neaiškias“.
+7.	Veiksmų atlikimas arba delegavimas
+Sudaro sąrašą: ką pašalinti, ką perrašyti, ką palikti. Eksportuoja planą į Notion, padalina užduotis rašytojams, dizaineriams ar savo kolegai.
+8.	Grįžtamasis ryšys / atnaujinimas
+Peržiūri, kaip keitėsi struktūra po pirmųjų veiksmų. Paleidžia naują analizę arba peržiūri pasikeitusį vertinimą. Nori matyti progresą per laiką.
+9.	Pasitraukimas
+Baigia darbą projekto metu, analizę pasilieka kaip dokumentuotą „turinio tvarkymo“ ciklo dalį. Panaudoja ataskaitą prezentacijoje vadovams.
+10.	Grįžimas / kartotinis naudojimas
+Kiekvieną kartą, kai planuojama nauja kampanija, SEO peržiūra ar turinio atnaujinimas – įrankis vėl tampa naudingu diagnostiniu įrankiu.
+
+Scenarijaus analizė: Rinkodaros specialistas
+Elementas	Turinys
+Tikslas / lūkestis	Suprasti, kuris turinys vertingas, kuris pasenęs, kuris gali kenkti SEO ar vartotojo patirčiai.
+Tipinės veiklos	Įveda sitemap → analizuoja AI įžvalgas → formuoja veiksmų planą → deleguoja užduotis.
+Sprendimo taškai	Ar AI teisingai suprato kontekstą? Ar siūlymai pagrįsti? Ar turinys veikia SEO požiūriu?
+Sąveika su kitais	Komunikuoja su rašytojais, kūrybos komanda, IT / web palaikymu, vadovu.
+Skausmo taškai	Neturi laiko viskam peržiūrėti rankiniu būdu. Paviršutiniški įrankiai nepateikia veiksmingo plano.
+Pageidaujamas rezultatas	Filtruojama lentelė, galimybė planuoti ir deleguoti veiksmus. Aiškus rekomendacijos pagrindimas.
+Naudojami įrankiai	Notion, Trello, Google Drive, Slack, Search Console.
+Grįžimo priežastys	Naujos kampanijos, SEO pokyčiai, rebrendingas, metiniai planai.
+Techniniai lūkesčiai	Paprastas naudoti, eksportas į planavimo įrankius, konfigūruojamas AI išvadų detalumas.
+
+Rinkodaros specialistas, atsakingas už turinio kokybę, informacinę architektūrą ar SEO, ieško sprendimo, kuris padėtų greitai ir kokybiškai suprasti, ką daryti su egzistuojančiu turiniu. Skirtingai nuo verslo savininko, jis aktyviai naudoja įrankį kaip darbo priemonę, planuoja veiksmus, deleguoja ir grįžta prie rezultatų.
+Jo kelias labiausiai priklauso nuo:
+•	AI rekomendacijų pagrįstumo,
+•	filtruojamų įžvalgų,
+•	ir galimybės perkelti išvadas į turinio atnaujinimo planus.
+Išvada: šiam naudotojui AdoreIno turi būti ne tik vertinimo, bet ir darbo planavimo įrankis. Sprendimo naudą lemia įžvalgų struktūra, eksportavimo galimybės ir sąveika su kitais įrankiais bei komanda.
+
+2.5 Agentūra – naudotojo kelias
+Naudotojo tipas:
+Skaitmeninės rinkodaros, kūrybinė ar komunikacijos agentūra, kuri dirba su klientų svetainėmis, padeda kurti strategiją, atnaujinti ar valdyti turinį. Atsakinga už rekomendacijas, bet ne visada turi tiesioginę prieigą ar kompetenciją gilintis į kiekvieno kliento turinio kokybę.
+
+Naudotojo kelias (User Journey – 10 žingsnių)
+1.	Poreikio atsiradimas
+Pradedamas naujas projektas su klientu, kurio svetainė atrodo neaiški, apkrauta turiniu arba reikalingas perstruktūravimas. Agentūra turi pateikti analizę ir rekomendacijas dėl turinio. Laiko mažai, komandai trūksta kliento specifinių žinių.
+2.	Sprendimo paieška
+Ieškoma sprendimo, kuris padėtų greitai peržiūrėti visą turinį – ne tik skaitant rankiniu būdu. Svarbu, kad įrankis pateiktų objektyvias, pagrįstas išvadas. AdoreIno randamas kaip AI pagrindu veikiantis audito įrankis.
+3.	Prisijungimas ir įsitraukimas
+Agentūra sukuria paskyrą, įveda kliento svetainę, pasidalina prieiga su kolegomis. Vyksta testavimas: ar įrankis gali padėti pagreitinti turinio strategijos ruošimą.
+4.	Duomenų suvedimas ar paruošimas
+Surenkama kliento sitemap, kartais papildomai rankiniu būdu įtraukiami svarbiausi puslapiai. Nustatomos analizės gairės (pvz., tik tam tikras URL segmentas, tik viena kalba).
+5.	Analizės inicijavimas
+Paleidžiama analizė. Agentūra stebi progresą, nori peržiūrėti preliminarius rezultatus, kol klientas laukia. Vertina, ar sistema „pagauna“ esmines problemas.
+6.	Rezultatų peržiūra
+Peržiūrima viso turinio kokybė – lentelėje filtruojama pagal vertę, peržiūrimas dubliavimasis, tušti puslapiai, „catch-all“ kategorijos. Agentūra ruošia išvadų santrauką klientui.
+7.	Veiksmų atlikimas arba delegavimas
+Agentūra parengia rekomendacijų planą: ką klientas turėtų ištrinti, perrašyti, sujungti. Kai kuriais atvejais gali pasiūlyti atlikti darbus per savo rašytojus ar kūrėjus.
+8.	Grįžtamasis ryšys / atnaujinimas
+Po to, kai klientas įgyvendina dalį rekomendacijų, AdoreIno vėl naudojamas „priežiūros peržiūrai“ – ar pokyčiai pagerino svetainės struktūrą?
+9.	Pasitraukimas
+Kai projektas užbaigiamas – analizė archyvuojama. Rezultatai dažnai perkeliami į pristatymą arba naudojami strategijos dokumentuose.
+10.	Grįžimas / kartotinis naudojimas
+Agentūra grįžta prie įrankio naujo kliento ar projekto metu. Įrankis tampa vidiniu standartiniu įrankiu turinio „health check’ui“.
+
+Scenarijaus analizė: Agentūra
+Elementas	Turinys
+Tikslas / lūkestis	Gauti objektyvią, profesionaliai atrodančią turinio analizę, kurią galima pateikti klientui kaip strateginio darbo dalį.
+Tipinės veiklos	Įkelia sitemap → peržiūri rezultatus → ruošia išvadas → pateikia klientui → padeda įgyvendinti ar prižiūri procesą.
+Sprendimo taškai	Ar AI pakankamai tikslus? Ar galima pasitikėti išvadomis prieš klientą? Ar įrankis pateikia pakankamai aiškų pagrindimą?
+Sąveika su kitais	Dirba su kliento atstovais, vidine komanda, rašytojais, SEO ekspertais.
+Skausmo taškai	Trūksta laiko gilintis į kiekvieną puslapį. Klientas tikisi „išvadų iš karto“. Trūksta gilios ekspertizės kliento srityje.
+Pageidaujamas rezultatas	Lengvai eksportuojama analizė. Pateikiama aiškiai, vizualiai, su prioritetais.
+Naudojami įrankiai	Notion, Google Slides, Miro, klientų projektų valdymo sistemos.
+Grįžimo priežastys	Nauji klientai, turinio restruktūrizavimas, SEO ar UX auditas.
+Techniniai lūkesčiai	White-label / eksportas, galimybė analizuoti kelis klientus vienu metu, pagrįstos AI įžvalgos.
+
+Santrauka: agentūros naudotojo kelias
+Agentūros naudotojo kelias yra procesinis ir orientuotas į efektyvų rezultatų pateikimą klientui. Įrankis turi būti:
+•	greitas,
+•	vizualus,
+•	pagrįstas – kad agentūra galėtų atsistoti už AI išvadas kaip už savo darbo dalį.
+Tai reiškia, kad AdoreIno turi suteikti agentūrai profesinį pasitikėjimą – t. y. galimybę naudoti įrankio rezultatą kaip strateginės rekomendacijos pagrindą. Reikalingos eksportavimo, komentavimo, kelių svetainių valdymo funkcijos.
+Išvada: agentūrai AdoreIno vertė kyla tada, kai jis padeda profesionaliai ir greitai pateikti kokybišką išvadą – net be gilaus įsigilinimo į kliento turinį.
+
+Nors rinkodaros specialisto ir agentūros naudotojų keliai atrodo panašūs – abu analizuoja svetainės turinį ir formuoja veiksmų planus – jų vaidmenys ir sąveikos su įrankiu esmingai skiriasi:
+Aspektas	Rinkodaros specialistas (vidinis)	Agentūra (išorinis tiekėjas)
+Vaidmuo	Atlieka darbus įmonės viduje	Teikia paslaugą iš išorės, dažnai keliems klientams
+Sąlytis su turiniu	Gerai pažįsta turinį, kontekstą, istoriją	Turinio nežino giliai – vertina struktūriniu, objektyviu lygiu
+Tikslas	Suprasti, ką daryti su turiniu, ir įgyvendinti veiksmus	Parengti pagrįstą, profesionalią analizę ir rekomendacijas
+Sprendimų priėmimas	Gali imtis veiksmų pats arba su komanda	Sprendimus priima klientas – agentūra tik siūlo
+Naudojimo pobūdis	Dirba su ta pačia sistema nuolat	Naudoja projektiniu pagrindu, epizodiškai
+Rezultatų forma	Planavimo įrankiai (Notion, Trello), kasdienis valdymas	Pristatymo forma (PDF, slidės, white-label lentelės)
+Rizika / pasitikėjimas AI	Gali tikrinti, eksperimentuoti	Turi pasitikėti AI – analizė tampa kliento akyse „tiesa“
+Išvada: rinkodaros specialistas yra aktyvus produkto naudotojas, o agentūra – analitinės vertės perteikėja. Tai reiškia, kad AdoreIno turi prisitaikyti prie skirtingo pasitikėjimo lygmens, rezultatų formatų ir atsakomybės kontekstų.
+
+2.6 IT / palaikymo komanda – naudotojo kelias
+Naudotojo tipas:
+Asmuo ar komanda, atsakinga už svetainės techninį palaikymą: svetainės veikimo užtikrinimą, naujienų įkėlimą, techninių pakeitimų įgyvendinimą. Nepriima turinio sprendimų, bet dažnai įgyvendina tai, ką nusprendžia verslo ar rinkodaros komanda.
+
+Naudotojo kelias (User Journey – 10 žingsnių)
+1.	Poreikio atsiradimas
+Vadovas ar rinkodaros komanda kreipiasi: „Reikia peržiūrėti / pertvarkyti turinį“, „įkelk šį failą“, „ištrink puslapius pagal sąrašą“. Poreikis atkeliauja iš viršaus.
+2.	Sprendimo paieška
+Pats IT specialistas įrankio dažnai neieško, bet jį gauna kaip sprendimą: „naudosime AdoreIno, pateiksime analizę – tau reikės įgyvendinti“. Kartais patys atlieka testavimą, jei yra įtraukti anksti.
+3.	Prisijungimas ir įsitraukimas
+Prisijungia, kad peržiūrėtų analizės rezultatą, eksportuotą sąrašą ar gautą planą. Nori greitai suprasti – ką turi daryti, kur kas yra, ar nėra klaidų.
+4.	Duomenų suvedimas ar paruošimas
+Retesnis scenarijus – kai IT pats inicijuoja analizę (pvz., kai svetainė labai techninio pobūdžio arba rinkodaros komandos nėra). Paruošia sitemap, tikrina prieigą, atlieka testinį įkėlimą.
+5.	Analizės inicijavimas
+Jei analizę paleidžia pats – nori, kad viskas veiktų be klaidų, greitai ir būtų logiška. Dažniau laukia, kol analizę atlieka kiti.
+6.	Rezultatų peržiūra
+Gali būti supažindinamas su AI įžvalgomis, bet ne visada jas interpretuoja – jam svarbiausia konkretumas: „pašalinti šiuos URL“, „pakeisti šį turinį“, „patikrinti šį bloką“.
+7.	Veiksmų atlikimas arba delegavimas
+Atlieka konkretų veiksmą – trina, perkelia, sujungia puslapius. Kartais turi techninį klausimą dėl AI išvados (pvz., „ar šis puslapis tikrai nenaudojamas?“).
+8.	Grįžtamasis ryšys / atnaujinimas
+Informuoja kolegas apie įgyvendintus veiksmus, kartais padeda inicijuoti naują analizės iteraciją. Retai grįžta pats savo noru.
+9.	Pasitraukimas
+Užduotis atlikta – atsitraukia, kol vėl negauna konkretaus prašymo. Įrankio pats aktyviai nenaudoja.
+10.	Grįžimas / kartotinis naudojimas
+Grįžta, kai vėl gaunamas techninis užduočių paketas – turinio atnaujinimas, auditas, migracija į kitą platformą.
+
+Scenarijaus analizė: IT / palaikymo komanda
+Elementas	Turinys
+Tikslas / lūkestis	Gauti aiškias, konkrečias užduotis, kurias galima patikimai įgyvendinti be papildomų paaiškinimų.
+Tipinės veiklos	Peržiūri sąrašą → įgyvendina veiksmus svetainėje → atsako apie progresą.
+Sprendimo taškai	Ar informacija aiški? Ar nėra klaidų? Ar nepažeisime funkcionavimo?
+Sąveika su kitais	Rinkodaros komanda, vadovas, agentūra. Pats retai inicijuoja veiksmus.
+Skausmo taškai	Neaiškios instrukcijos, nepilnas puslapių sąrašas, nesuprantamos rekomendacijos („ką reiškia – ‘paviršutiniškas’?“).
+Pageidaujamas rezultatas	Veiksmų planas su aiškiais URL, sprendimais ir veiksmais: trinti / išsaugoti / atnaujinti.
+Naudojami įrankiai	Svetainės administravimo sistema (CMS), FTP, Git, Notion ar Excel su sąrašais.
+Grįžimo priežastys	Naujos užduotys, svetainės migracija, analizės iteracija.
+Techniniai lūkesčiai	Struktūrizuoti duomenys, eksportas į CSV / JSON, API galimybės, techninė tikslumo kontrolė.
+
+Santrauka: IT / palaikymo naudotojo kelias
+IT specialistas ar programuotojas nėra sprendimų priėmėjas, bet yra svarbiausias žmogus įgyvendinant AdoreIno išvadas. Jo patirtis priklauso nuo:
+•	duomenų aiškumo ir tikslumo,
+•	galimybės greitai suprasti užduotį,
+•	lengvo sąveikavimo su turinio valdymo sistemomis.
+IT naudotojui AdoreIno nėra vertės analizės įrankis, bet techninių užduočių generatorius, todėl produkto sėkmė šiuo atveju priklauso nuo aiškios logikos, struktūrizavimo ir eksportavimo funkcijų.
+Išvada: IT palaikymui AdoreIno turi veikti kaip tikslus, konkretus, techninei įgyvendinimo grandinei pritaikytas įrankis, o ne interpretacinė priemonė.
+
+2.7 Santrauka: naudotojų scenarijų analizės įžvalgos
+Analizavus pagrindinius AdoreIno naudotojų tipus ir jų elgseną, išryškėja aiškios grupės su skirtingais tikslais, atsakomybėmis ir sąveikos modeliais. Nors visų naudotojų kelias iš esmės seka tą pačią schemą (nuo poreikio atsiradimo iki grįžtamojo naudojimo), jų lūkesčiai, sprendimo priėmimo lygmuo ir funkcinių sąsajų poreikis – ženkliai skiriasi.
+Pagrindinės įžvalgos:
+•	Verslo savininkai vertina aiškumą ir veiksmų paprastumą – jiems svarbu greitai gauti atsakymą, ką daryti.
+•	Sudėtingesnių sistemų savininkai nori analitinio pagrįstumo, rezultatų struktūrizavimo ir galimybės juos integruoti į verslo procesus.
+•	Rinkodaros specialistai naudoja įrankį kaip planavimo ir delegavimo centrą – jie reikalauja gilios, filtruojamos informacijos ir lankstaus eksportavimo.
+•	Agentūros siekia profesionalaus, greito ir patikimo įrankio, kuris leistų pateikti klientui aukštos kokybės įžvalgas su minimalia papildoma analize.
+•	IT ar palaikymo komanda nori konkretaus veiksmų plano – jų lūkesčiai orientuoti į techninį tikslumą, struktūrizavimą ir mažą interpretacijos poreikį.
+Išvestos projektavimo gairės:
+1.	Reikia skirtingų rezultatų pateikimo formų pagal naudotoją:
+o	paprasta lentelė su aiškia rekomendacija,
+o	struktūruota analizė su komentarais,
+o	eksportas į Notion, CSV ar API.
+2.	Sprendimo pasitikėjimas priklauso nuo paaiškinamumo – visų naudotojų tipų pasitikėjimą stiprina skaidrūs „kodėl“ paaiškinimai, ne vien tik „ką daryti“.
+3.	Įrankio vertė skirtingoms grupėms kyla skirtingose vietose:
+o	savininkui – iš aiškaus atsakymo,
+o	rinkodarai – iš įžvalgų operatyvumo,
+o	agentūrai – iš profesionalaus pateikimo,
+o	IT – iš tikslumo ir struktūros.
+4.	Funkcionalumas turi remtis realiomis darbo praktikomis, o ne vien techniniu pajėgumu – planavimas, delegavimas, pažymėjimas kaip „įvykdyta“ ar „neaišku“ yra tiek pat svarbūs, kaip AI analizė.
+Išvada: AdoreIno turi būti ne vien analizės įrankis, bet sprendimų palaikymo sistema, kurios dizainas orientuotas į skirtingus naudotojų vaidmenis, darbo būdus ir jų „vertės centrą“.
+
+3. Funkciniai reikalavimai
+Šioje dalyje apibrėžiami pagrindiniai funkcionalumai, kurie būtini įgyvendinti pirminei (MVP) AdoreIno produkto versijai. Reikalavimai formuluojami remiantis pagrindinių naudotojų scenarijais, AI analizės tyrimais bei produkto paskirtimi – padėti naudotojui suprasti, įvertinti ir tvarkyti svetainės turinį.
+Reikalavimai pateikiami logiškais funkciniais blokais (moduliais), kuriuos galima toliau specifikuoti plėtros planavime.
+
+3.1 Turinio įkėlimo / analizės inicijavimo funkcijos
+1 etapas – bazinis turinio įkėlimo ir analizės inicijavimo funkcionalumas (MVP)
+1.	Svetainės adreso analizė
+Naudotojas turi galėti įvesti svetainės adresą (domeną), kurį sistema analizuos.
+2.	Sitemap ar URL sąrašo įkėlimas
+Naudotojas turi galėti:
+o	įkelti sitemap.xml failą,
+o	arba pateikti konkrečių URL sąrašą rankiniu būdu.
+3.	Failų įkėlimas rankiniu būdu
+Naudotojas turi turėti galimybę įkelti pavienius puslapius (ar turinio šaltinius) failų pavidalu:
+o	PDF, DOCX, XLSX, HTML.
+4.	Automatinis turinio nuskaitymas
+Sistema turi:
+o	nuskaityti tekstus iš pateiktų URL ar failų,
+o	identifikuoti puslapio turinį ir struktūrą,
+o	paruošti puslapius AI analizei.
+5.	Preliminari puslapių peržiūra ir filtravimas
+Prieš pradedant analizę, naudotojas turi galėti peržiūrėti:
+o	kiek puslapių bus analizuojama,
+o	galėti išjungti nereikalingus puslapius ar tipus (pvz., checkout, terms, blog’as).
+6.	Analizės inicijavimas ir eigos rodymas
+Naudotojas turi galėti rankiniu būdu paleisti analizę („Pradėti analizę“) ir matyti:
+o	eigos indikatorių (progreso juosta ar skaitinė pažanga),
+o	analizės sustabdymo / atšaukimo galimybę.
+
+2 etapas – pažangūs įkėlimo ir duomenų integravimo funkcionalumai
+7.	Integracija su Google Analytics (GA4)
+Sistema turi turėti galimybę naudotojui:
+o	rankiniu būdu įkelti išeksportuotus Analytics duomenis (pvz., CSV formatas),
+o	arba per API integraciją gauti:
+	įėjimo puslapius,
+	srautų šaltinius,
+	elgsenos metrikas (pvz., bounce rate, average time on page).
+8.	Duomenų derinimas su turinio analize
+Gauti GA duomenys turi būti integruojami į analizės rezultatus kaip papildomi indikatoriai, pvz.:
+o	„aukštas srautas, bet žema konversija“,
+o	„mažai lankomas puslapis, bet turinys aukštos kokybės“.
+9.	Papildomos analizės konfigūravimo parinktys
+Naudotojas turi galėti pasirinkti:
+o	ar į analizę bus įtraukiami tik matomi viešai puslapiai,
+o	ar tam tikri šablonai (pvz., blog’ų puslapiai) bus vertinami bendrai ar individualiai.
+10.	Papildomų analitinių įrankių informacijos pateikimas
+Sistema turi turėti galimybę naudotojui įkelti papildomus analitinius duomenis, gautus iš trečiųjų šalių įrankių:
+•	ekrano įrašus (pvz., per nuorodą ar failą),
+•	heatmap’ų suvestines (pvz., Hotjar ar Microsoft Clarity ištraukos: CSV, JPG, PDF),
+•	sesijos analizės ar konversijų srauto ataskaitas (pvz., Funnel, Mixpanel, Amplitude).
+Reikalavimai funkcijai:
+•	Galimybė įkelti failą (PDF, CSV, JPG) arba įklijuoti pastabą / pastebėjimą.
+•	Galimybė susieti įkeltą informaciją su konkrečiu puslapiu ar grupe.
+•	Galimybė pridėti papildomą komentarą ar naudotojo įžvalgą (pvz., „šiame puslapyje vartotojai sustoja, bet nespaudžia CTA“).
+Šie duomenys turėtų būti matomi analitiko peržiūros lange, bet neprivalomi, jei naudotojas jų neturi.
+
+3.2 AI analizės funkcijos
+1 etapas – esminės analizės funkcijos (MVP)
+1.	Turinio kokybės analizė pagal puslapius:
+o	kalbinės klaidos (gramatika, sintaksė, tipografija).
+o	turinio gilumas / paviršutiniškumas,
+o	aiškumas ir paskirties atitikimas,
+o	bendrinės / tuščios frazės.
+2.	Rekomendacijų sistema:
+o	kiekvienas puslapis priskiriamas vienai iš kategorijų:
+	išlaikyti,
+	atnaujinti,
+	pašalinti.
+o	pateikiamas pagrįstas paaiškinimas, kodėl tokia rekomendacija teikiama.
+3.	Puslapių analizės rezultatų suvestinė:
+o	filtravimas,
+o	rūšiavimas,
+o	būsenos žymėjimas („peržiūrėta“, „deleguota“, „įvykdyta“).
+4.	Eksportavimo galimybės:
+o	CSV (Excel),
+o	Notion (copy-paste lentelė),
+o	PDF su santrauka.
+5.	Rankinė analizės informacijos įkėlimas:
+o	naudotojas gali įkelti pastabas ar duomenis iš kitų analitikos šaltinių (pvz., heatmap’ai, screen recordings).
+
+2 etapas – pažangios analizės funkcijos (plėtra)
+6.	Visos svetainės turinio struktūros analizė:
+o	automatinis turinio tipų identifikavimas (pvz., paslaugos, blog’as, apie mus, produktai),
+o	trūkstamų turinio blokų nustatymas (pvz., sėkmės istorijų, DUK, atsiliepimų).
+7.	Puslapių tarpusavio ryšių analizė:
+o	navigacijos struktūros logikos vertinimas,
+o	perėjimų logika tarp puslapių (ar veikia kaip konversinis kelias).
+8.	Naudotojo kelio logikos analizė (pvz., AIDA):
+o	ar turinys išdėstytas pagal naršymo / sprendimo priėmimo logiką,
+9.	Svetainės tikslų pasiekimo vertinimas:
+o	Nuspėti koks yra svetainės tikslas (pvz.: registracijos ar prekių pardavimai)
+o	Įvertinti kaip efektyviai yra siekiami tikslai
+11.	Marketingo / rinkodaros konteksto analizė:
+•	jei prieinami duomenys – iš kur ateina lankytojai, kas konvertuoja, kur trūksta informacijos.
+•	jei duomenų nėra – hipotetinis AI įvertinimas: kurie puslapiai tinkami kampanijoms, kurie ne.
+10.	Vadovo režimas / strateginis santraukos lygmuo:
+•	svetainės „bendra būklė“,
+•	pagrindinės problemų sritys,
+•	santrauka „ką daryti toliau“ be gilios analizės.
+
+3.3 Rezultatų peržiūros funkcijos
+1 etapas – pagrindinės peržiūros funkcijos (MVP)
+1.	Analizės rezultatų lentelė
+Naudotojas turi matyti visų puslapių analizės suvestinę lentelės formatu, kurioje pateikiama:
+o	puslapio pavadinimas arba URL,
+o	pagrindinė AI įžvalga,
+o	rekomenduotas veiksmas,
+o	įžvalgos paaiškinimas.
+2.	Filtravimas ir rūšiavimas
+Naudotojas turi galėti filtruoti ir rūšiuoti analizės rezultatus pagal:
+o	puslapio tipą, URL,
+o	rekomendacijų tipą (išlaikyti / atnaujinti / pašalinti),
+o	prioritetą (jei taikoma).
+3.	Būsenų žymėjimas
+Naudotojas turi turėti galimybę žymėti kiekvieną įrašą:
+o	peržiūrėta,
+o	deleguota,
+o	įvykdyta.
+4.	Išsami įrašo peržiūra
+Spustelėjus įrašo eilutę, atveriamas detalesnis vaizdas su:
+o	AI paaiškinimu,
+o	naudotojo komentarų lauku,
+o	papildoma informacija (pvz., analitinių duomenų fragmentas).
+
+2 etapas – išplėstinės rezultatų interpretacijos funkcijos
+5.	Rekomendacijų prioritizavimas
+Sistema turi galėti pažymėti puslapius pagal jų įtaką svetainės tikslui (pvz., „kritinis“ / „vidutinis“ / „mažos įtakos“).
+6.	Komentavimo ir užduočių paskirstymo sistema
+Naudotojai turi galėti:
+o	pridėti komentarus,
+o	pažymėti atsakingą asmenį,
+o	sekti užduočių būseną (vidinis valdymas arba eksportas į kitą sistemą).
+7.	Santraukų generavimas pagal naudotojo tipą
+Sistema turi generuoti:
+o	apibendrintas ataskaitas vadovui („bendras vaizdas“),
+o	specifines išvadas turinio kūrėjui ar SEO specialistui.
+
+3.4 Eksportavimo ir bendrinimo funkcijos (struktūruota pagal etapus)
+1 etapas – pagrindinis eksportavimas ir peržiūra
+1.	Eksportas į CSV (Excel)
+Visi analizės rezultatai gali būti eksportuojami lentelės formatu (.csv).
+2.	Eksportas į Notion (rankiniu būdu)
+Sistema turi pateikti struktūruotą lentelę, kurią galima kopijuoti į Notion.
+3.	Eksportas į PDF
+Santrauka turi būti eksportuojama kaip paprastas PDF (naudojimui prezentacijose, susitikimuose).
+4.	Vieša peržiūros nuoroda
+Sistema generuoja „read-only“ nuorodą, kurią naudotojas gali bendrinti su komanda ar klientu.
+
+2 etapas – pažangi eksportavimo logika
+5.	Komentavimo / peržiūros režimas
+Bendrinama nuoroda leidžia palikti komentarus (kaip Google Docs ar Notion).
+6.	Eksportas į projektų valdymo sistemas
+Galimybė eksportuoti užduotis ir pastabas į Trello, Asana, ClickUp ar Monday.com.
+7.	Versijų istorija / peržiūrų palyginimas
+Sistema turi saugoti ankstesnes analizės versijas, leisti palyginti pokyčius laike.
+
+3.5 Paskyros ir naudotojų valdymas (struktūruota pagal etapus)
+1 etapas – minimali paskyros logika (MVP)
+1.	Prisijungimas arba laikina sesija
+Naudotojas gali dirbti prisijungęs arba su laikina sesija be paskyros kūrimo.
+2.	Rezultatų saugojimas sesijos metu
+Sistema išlaiko analizės duomenis sesijoje iki lango uždarymo ar išsaugojimo.
+
+2 etapas – išplėstinis naudotojų ir teisių valdymas
+3.	Komandinis naudojimas
+Galimybė turėti kelis naudotojus vienoje paskyroje, su skirtingomis rolėmis (skaitytojas, redaktorius, vadovas).
+4.	Prieigos teisių valdymas
+Admin naudotojai gali priskirti teises redaguoti, komentuoti, matyti rezultatus.
+5.	Analizių istorija
+Naudotojas gali matyti visų atliktų analizių sąrašą su datomis, eksportais ir pasiektais veiksmais.
+
+3.6 Sisteminės sąlygos MVP etapui
+1 etapas – veikimo sąlygos MVP versijoje
+1.	Puslapių analizės limitas
+Vienos analizės metu gali būti apdorojama iki X puslapių (pvz., 100–200).
+2.	AI analizės trukmės limitas
+Sistema turi riboti analizės laiką (pvz., max 3 min.) ir rodyti eigos indikatorius.
+3.	Asinchroninė analizė
+Analizė turi vykti foniniu režimu, kad naudotojas galėtų tęsti kitus veiksmus.
+
+2 etapas – mastelio didinimo ir stabilumo funkcijos
+4.	Eilių valdymas
+Sistema turi gebėti paskirstyti analizės užduotis pagal apkrovą ir naudotojų eilę.
+5.	Fono analizės apdorojimo optimizavimas
+Efektyvesnė analizės užklausų tvarka ir procesų paskirstymas (horizontal scaling).
+6.	Debesijos saugykla ir sinchronizacija
+Duomenys (analizės, eksportai, naudotojų konfigūracija) saugomi debesijoje, pasiekiami iš bet kurios paskyros.
+
+3.7 Funkcinių reikalavimų santrauka
+Funkcinių reikalavimų analizė parengta remiantis naudotojų scenarijais, produkto paskirtimi bei atliktais GPT testais. Reikalavimai suskirstyti etapais, atitinkančiais produkto vystymo logiką – nuo būtinojo funkcionalumo MVP stadijoje iki išplėstinių analitinių ir strateginių galimybių plėtojimo vėliau.
+1 etapas (MVP) apima pagrindines produkto funkcijas, leidžiančias:
+•	inicijuoti analizę naudojant URL, sitemap ar failus,
+•	atlikti AI pagrįstą turinio įvertinimą pagal kalbos kokybę, gilumą, aiškumą,
+•	gauti aiškias rekomendacijas („išlaikyti / atnaujinti / pašalinti“),
+•	peržiūrėti, filtruoti ir eksportuoti analizės rezultatus,
+•	papildyti analizę rankiniu būdu – įkeliant pastebėjimus ar duomenis iš išorinių šaltinių.
+2 etapas (plėtra) numato pažangesnes funkcijas:
+•	visos svetainės struktūros, navigacijos ir vartotojo kelio analizę,
+•	svetainės tikslų pasiekimo vertinimą ir AI gebėjimą tai paaiškinti,
+•	integraciją su Google Analytics ir kitais rinkodaros šaltiniais,
+•	agentūrų ir komandų režimus, versijų palyginimą, komentarų ir užduočių valdymą,
+•	strateginių išvadų generavimą vadovui.
+Šis struktūrizavimas užtikrina, kad produktas vystomas nuosekliai, pradedant nuo esminės vertės naudotojui ir plečiant funkcionalumą tik tada, kai pagrindinės analizės galimybės yra stabilios, suprantamos ir naudingos.
+Bendras principas: pirmiausia padedame „matyti, ką turi ir ką daryti“, o vėliau – „suprasti, kodėl taip yra ir kaip tai veikia strategiją“.
+
+4. Ne-funkciniai reikalavimai
+Ne-funkciniai reikalavimai apibrėžia su produkto kokybe, stabilumu, naudojamumu ir techninėmis ribomis susijusius aspektus. Jie būtini siekiant užtikrinti, kad AI analizės įrankis būtų prieinamas, patikimas, aiškus naudotojui ir pritaikytas realioms darbo aplinkoms.
+Reikalavimai suskirstyti pagal temines grupes.
+
+4.1 Naudojamumas (UX / UI)
+1.	Sąsaja turi būti paprasta ir suprantama ne techniniam naudotojui.
+– Terminai turi būti ne AI / SEO / IT specifiniai, o orientuoti į verslo ir turinio logiką.
+– Pavyzdžiui: „Rekomendacija: perrašyti“ vietoj „content entropy above threshold“.
+2.	Kiekvienas analizės rezultatas turi būti paaiškinamas.
+– Naudotojas turi matyti, kodėl pateikta konkreti išvada (pvz., „trūksta produkto aprašymo“, „pasikartojantis turinys“).
+3.	Navigacija turi būti intuityvi ir skirta konkrečiam sprendimo priėmimui.
+– Pagrindinė darbo eiga: peržiūra → žymėjimas → eksportas / veiksmas.
+4.	Naudotojui turi būti aišku, ką daryti toliau.
+– Visoje sąsajoje turi būti kontekstiniai nurodymai, rekomendacijos, žingsnių vedliai (kai reikalinga).
+5.	Sistema turi suprasti pagrindinius tikslus ir vertinti ar analizuojamas turinys pasiekie tuos tikslus.
+
+4.2 Našumas ir greitis
+5.	Analizės laikas turi būti ribojamas, bet optimalus (MVP ribose).
+– 100–200 puslapių analizė turi būti atlikta per ne daugiau kaip 2–5 minutes.
+6.	Sąsaja turi išlikti reaguojanti analizės metu.
+– Analizė turi būti vykdoma foniniu režimu, kad naudotojas galėtų naršyti kitus rezultatus, kol ji vyksta.
+
+4.3 Patikimumas ir stabilumas
+7.	Sistema turi veikti stabiliai įkėlus įvairių formatų duomenis.
+– PDF, HTML, DOCX, CSV – turi būti numatyti baziniai validacijos / konversijos procesai.
+8.	Turinio analizė turi būti atkuriama esant toms pačioms įvestims.
+– AI analizės rezultatų kokybė turi būti pakankamai stabili tarp kartotinių bandymų (nuokrypis ≤ 10 % interpretacijos lygmeniu).
+
+4.4 Saugumas ir privatumas
+9.	Duomenys neturi būti saugomi be naudotojo sutikimo.
+– Įkeltus failus, URL ar analizės rezultatus sistema gali saugoti tik su aiškiu naudotojo veiksmu („išsaugoti“).
+10.	Analizės duomenys turi būti laikomi laikinoje sesijoje, jei paskyra nesukurta.
+11.	Sistema turi būti parengta integruoti duomenų apsaugos funkcijas.
+– Pvz., eksportų anonimizavimas, privatumo režimas (be URL viešinimo).
+
+4.5 Pritaikomumas ir plėtra
+12.	Architektūra turi būti API-first (arba API-ready).
+– Tam, kad būtų galima integruoti: GA4, Notion, projektų valdymo sistemas (pvz., Trello, Asana).
+13.	Sistema turi būti plėtojama komponentiškai (modulių principu).
+– Kiekviena funkcija (analizė, eksportas, vartotojų valdymas) turi būti atskira logiškai izoliuota dalis.
+14.	UI komponentai turi būti parengti iteracijoms.
+– Pvz., analizės kortelė turi palaikyti papildomų duomenų įterpimą (GA, heatmap) be pertvarkymo.
+
+4.6 Techniniai limitai MVP etape
+15.	Puslapių limitas MVP versijoje – iki 100–200 puslapių per vieną analizę.
+16.	Failų dydžio limitas – iki 5 MB vienam failui (PDF, DOCX, HTML).
+17.	Vienas analizės seansas negali trukti ilgiau nei 5 min., po to sistema turi informuoti naudotoją apie analizės sustabdymą ar rekomenduoti mažesnį mastą.
+
+Išvada: šie ne-funkciniai reikalavimai sudaro sąlygas sukurti ne tik veikiantį, bet ir pasitikėjimo vertą produktą, kuris bus tinkamas naudoti tiek mažoms komandoms, tiek agentūroms, turinčioms aiškius procesus. Jie taip pat suformuoja pagrindą tolimesnėms UI / UX iteracijoms, architektūros pasirinkimams ir naudojimo saugumui.
+
+5. Techniniai komponentai
+Šiame skyriuje aprašomi pagrindiniai techniniai komponentai, būtini AdoreIno produkto veikimui. Jie apima tiek MVP stadijoje reikalingus sisteminius elementus, tiek esminius projektavimo principus, skirtus ateities plėtrai, integracijoms ir eksploataciniam stabilumui užtikrinti.
+5.1 Pagrindinės architektūrinės nuostatos
+1.	SaaS tipo architektūra
+Produktas kuriamas kaip žiniatinklio paslauga (SaaS), prieinama per naršyklę be diegimo naudotojo pusėje.
+2.	API-first dizainas
+Visos funkcijos turi būti suplanuotos taip, kad būtų lengvai prijungiamos prie kitų sistemų per API: Notion, GA4, Trello, elgsenos analizės įrankiai ir kt.
+3.	Modulinė (komponentinė) struktūra
+Sistemos branduolys turi būti suskaidytas į aiškias posistemes:
+o	Įkėlimo / duomenų priėmimo komponentas
+o	AI analizės posistemė
+o	Rezultatų valdymo sluoksnis
+o	Eksportavimo / bendrinimo moduliai
+o	Sesijos / naudotojų valdymas
+4.	Maketo ar ankstyvo prototipo kūrimas no-code / low-code aplinkoje (MVP stadijoje)
+o	MVP ar ankstyvų iteracijų prototipas gali būti sukurtas naudojant no-code / low-code sprendimus, leidžiančius greičiau realizuoti analizės eigą ir naudotojo sąveiką be pilno backend vystymo.
+Rekomenduojamos priemonės:
+•	n8n – užklausų paleidimas, analizės eigos suvaldymas, automatizavimas,
+•	Retool, Make.com – sąsajų maketavimui, duomenų surinkimui, įrašymui,
+•	Airtable / Google Sheets – kaip laikina duomenų saugykla ar rezultatų išvestis.
+No-code požiūris leidžia MVP lygmeniu greitai testuoti vertės pasiūlymą, prompt’us, analizės eigą ir naudotojo elgseną, neinvestuojant į pilnos apimties programinį kodą.
+
+5.2 Duomenų priėmimo komponentai
+4.	Palaikomi įkėlimo formatai:
+o	URL (svetainės analizė per domeną arba sitemap.xml)
+o	Failai: PDF, DOCX, HTML, CSV
+o	Rankiniai URL sąrašai
+5.	Duomenų validavimo ir išskaidymo posistemė
+– Užtikrina, kad gauta informacija būtų tinkamai interpretuojama (HTML išvalymas, koduotės tvarkymas, puslapio tipo identifikavimas).
+
+5.3 AI analizės posistemė
+6.	Integracija su LLM (GPT arba analogišku modeliu)
+– Reikalavimai:
+o	analizė asinchroninė,
+o	prompt’ai generuojami pagal puslapio tipą ir analizės tikslą,
+o	palaikoma grįžtamoji logika (kriterijų patikslinimas, peržiūra).
+7.	Prompt’ų tvarkymo sluoksnis
+– Centralizuotas prompt’ų valdymas, įgalinantis:
+o	keisti analizės kriterijus nepriklausomai nuo UI,
+o	pridėti specialius režimus (pvz., „vadovo santrauka“, „marketingo landing page“).
+8.	Rezultatų grąžinimo struktūra
+– AI grąžina:
+o	įžvalgą (diagnostiką),
+o	paaiškinimą,
+o	siūlomą veiksmą,
+o	pasitikėjimo lygį (jei taikoma).
+
+5.4 Duomenų išsaugojimas ir sesijos valdymas
+9.	Laikinoji sesijos saugykla (MVP)
+– Jei naudotojas neprisijungęs – analizė saugoma sesijoje (naršyklės atmintyje arba serverio talpykloje), kol nebaigiama.
+10.	Paskyros / naudotojų duomenų išsaugojimas (2 etapas)
+– Duomenys (analizės istorija, eksportai, komentarai) saugomi naudotojo profilyje, su galimybe palyginti skirtingas sesijas.
+
+5.5 Eksportavimo ir integracijų sluoksnis
+11.	Eksporto formatai:
+•	CSV / Excel
+•	PDF (paprastas išdėstymas, prioritetų grupavimas)
+•	Notion (rankiniu ar per API)
+12.	Analitikos duomenų įkėlimo modulis (2 etapas):
+•	Leidžia rankiniu būdu įkelti papildomus failus ar įžvalgas iš kitų sistemų:
+o	Heatmap’ų fragmentai,
+o	Ekrano įrašų ataskaitos,
+o	GA4 suvestinės (CSV, JSON).
+
+5.6 Sisteminis saugumas ir našumas
+13.	Duomenų saugumas
+– Visi įkėlimai turi būti laikomi privačiai, duomenys saugomi tik su naudotojo sutikimu.
+14.	Analizės trukmės ribojimas ir progresas
+– Maksimali analizės trukmė MVP etape: 3–5 min.
+– Vartotojui rodoma pažangos juosta / analizės eiga.
+15.	Mastelio palaikymas (2 etapas):
+– Sisteminis pasirengimas horizontaliai skalavimo architektūrai, kad būtų galima apdoroti šimtus / tūkstančius puslapių keliems naudotojams vienu metu.
+
+Išvada: šie komponentai formuoja techninį karkasą, ant kurio remiasi produkto funkcionalumas, naudojimo kokybė ir ilgalaikis plėtojimas. Jie leidžia MVP versijai būti lengvai paleidžiamai, o sistemai – aiškiai plėstis į sudėtingesnes integracijas bei naudotojų tipų poreikius.
+
+
+5. MVP apimtis
+•	Riboto masto svetainės analizė.
+•	Pagrindiniai analizės kriterijai (1–2 pradžiai).
+•	Paprasta naudotojo sąsaja su klasifikacija.
+•	Eksportas į pasirinktą formatą.
+
+6. Roadmap: tolesnės versijos
+•	Automatinis monitoringas laike.
+•	Režimai pagal svetainės paskirtį (pvz., paslaugų / e-komercijos).
+•	Agentūrų režimas su kelių svetainių palaikymu.
+•	CMS įskiepių kūrimas (WordPress ir pan.).
+
+7. Rizikos
+•	GPT gali būti per daug apibendrintas ar nenuoseklus.
+•	UX gali tapti sudėtingas be aiškios filtracijos.
+•	Naudotojai gali nepasitikėti AI išvadomis be aiškios logikos.
+•	Techniniai ribotumai analizuojant labai dideles svetaines.
+
+
+

@@ -1,0 +1,438 @@
+
+
+Turinio autokurejo maketo reikalavimu analize
+
+
+2025-04-28
+
+
+
+
+
+
+Turinys
+Turinys	2
+Santrauka	3
+1. Ivadas	4
+2. Pagrindiniai naudotoju scenarijai (workflows)	6
+3. Funkciniai reikalavimai	8
+4. Ne-funkciniai reikalavimai	12
+5. Techniniai komponentai	13
+6. MVP apimtis	16
+7. Roadmap: tolesnes versijos	18
+8. Rizikos	20
+
+
+
+
+
+
+Santrauka
+
+Projekto tikslas - sukurti dirbtiniu intelektu grista autokurejo funkcija, kuri leistu ivairiems vartotojams greitai, lengvai ir kokybiškai generuoti turini interneto svetainems, ji peržiureti, patvirtinti ir publikuoti. Funkcija yra viena iš kertiniu AdoreIno platformos daliu.
+Pagrindines ižvalgos iš rinkos tyrimo
+* Vartotojai neturi laiko, biudžeto ar kompetencijos kurti svetaines turinio.
+* Turinys dažnai paviršutiniškas, be strukturos ar lokalizacijos.
+* Truksta irankiu, kurie padetu ne tik generuoti, bet ir sistemingai publikuoti bei prižiureti turini.
+* Verte kuria ne "teksto mase", o pritaikymas, aiškumas ir publikavimo kontrole.
+Tiksliniai naudotojai
+* Verslo savininkai - nori greitai gauti teksta be papildomos pagalbos.
+* Rinkodaros specialistai - siekia kokybiško, SEO pritaikyto, strukturuoto turinio.
+* Agenturos - kuria dideli kieki turinio skirtingiems klientams.
+* IT palaikymo komanda - igyvendina pateikta turini svetaineje.
+Pagrindiniai funkcionalumo blokai
+1. Šablonu pasirinkimas pagal puslapio tipa (pvz., "Apie mus", "Paslaugos")
+2. Ivesties forma (tema, stilius, raktiniai žodžiai)
+3. AI sugeneruotas tekstas + keletas variantu
+4. Vizualu integracija (velesniuose etapuose)
+5. Preview-as-page peržiura
+6. Publikavimo režimai: demo ? patvirtinimas ? live
+7. Eksportas i HTML / Notion / WordPress / Prestashop
+Techniniai komponentai
+* Moduline API-first architektura
+* GPT arba analogiškas LLM turinio generavimui
+* Patvirtinimo ir kokybes tikrinimo sistema
+* CMS (WordPress / Prestashop) integracija per API ar eksporta
+* Preview peržiura + publikavimo patikra (automatine ir/ar rankine)
+MVP apimtis
+* Vieno puslapio generavimas (iš 5-7 šablonu)
+* Paprasta ivestis, viena GPT integracija
+* Rankinis tvirtinimas ir eksportas
+* "Demo" publikavimas prieš "live"
+* Peržiura kaip tinklapio blokas
+Roadmap (tolimesnes versijos)
+* Vaizdu generavimas
+* CMS publikavimo API
+* Komandine saveika (delegavimas, komentarai)
+* Agenturu režimas (keli klientai vienoje paskyroje)
+* Versiju lyginimas ir turinio monitoringas
+Rizikos
+* Nestabilus LLM generavimas
+* Vartotoju pasitikejimo stoka be aiškiu paaiškinimu
+* Integracijos su CMS ir publikavimo kokybes testavimas
+* UX sudetingumas mažai kompetentingiems naudotojams
+
+Išvada: Turinio autokurejo funkcija turi buti ne tik teksto generavimo irankis, bet pilna sprendimu kurimo sistema, leidžianti skirtingiems naudotojams sukurti, peržiureti, patvirtinti ir publikuoti turini be papildomu grandžiu. MVP versija turi atskleisti šios vertes pagrinda, o pletra - paversti funkcija svarbiausiu AI turinio operaciju centru skirtingiems verslo segmentams.
+
+1. Ivadas
+1.1 Reikalavimu analizes paskirtis
+Šios reikalavimu analizes užduoties tikslas - suformuluoti aiškius reikalavimus "AdoreIno" produkto turinio autokurejo funkcijai (1.4 modulis). Ši funkcija yra esmine bendros platformos dalis ir skirta automatizuotam, dirbtiniu intelektu gristam svetaines turinio kurimui, orientuotam i realius verslo naudotoju poreikius: greiti, kokybe, struktura, SEO ir vizualini vientisuma.
+Funkcija turi buti suprojektuota taip, kad programuotojai, dizaineriai ir AI integraciju inžinieriai galetu igyvendinti ja etapais, vadovaudamiesi apibrežtais vartotojo scenarijais, funkciniu bloku struktura ir saveika su kitomis platformos dalimis.
+1.2 Produkto kontekstas
+AdoreIno - tai AI pagrindu veikianti IT palaikymo ir turinio automatizavimo platforma, kuri skirta padeti smulkiam, vidutiniam ir agenturiniam verslui sistemingai kurti, analizuoti, atnaujinti ir valdyti interneto svetaines turini. Autokurejo funkcija (1.4) yra viena iš pagrindiniu produkto daliu, tiesiogiai reaguojanti i vartotoju rinkos tyrime išreikštus skausmo taškus:
+* Nera kam kurti turinio
+* Nera laiko ar biudžeto
+* Truksta kompetencijos rašyti kokybiškai
+* Svetaines tekstai yra neitaigus, lekšti, neaktualus
+* Truksta SEO, stiliaus, vizualu ir testinumo
+Autokurejo funkcija turi leisti naudotojui sukurti pilnaverti, publikuojama svetaines turini iš minimalaus ivesties kiekio - pasitelkiant iš anksto apgalvotus šablonus, dirbtini intelekta (GPT), lokalizacijos modelius ir vizualu valdyma.
+1.3 Tikslas
+1.4 funkcijos tikslas - suteikti naudotojui galimybe automatizuotai sukurti arba atnaujinti svetaines turini be profesionalaus tekstu kurejo ar dizainerio isikišimo, išlaikant kokybe, struktura, stilistini vientisuma ir pritaikomuma skirtingoms svetainems bei verslo sritims.
+Funkcija turi:
+* Palaikyti turinio šablonus pagal puslapiu tipus (pvz., "Apie mus", "Paslaugos", "Kontaktai", "Produktu aprašymai")
+* Leisti ivesti minimalu kieki informacijos (pvz., raktiniai žodžiai, paslaugos pavadinimas, niša, auditorija)
+* Sugeneruoti turini su pritaikytu stiliumi, tonu ir SEO elementais
+* Integruoti vizualinius pasiulymus arba placeholder'ius (vaizdo rekomendacijas)
+* Užtikrinti, kad turinys butu lokalizuotas, strukturuotas, be gramatiniu klaidu ir tinkamas publikavimui
+1.4 Santykis su kitomis funkcijomis
+Autokurejo funkcija veikia glaudžiai susijusi su šiomis kitomis produkto funkcijomis:
+* Turinio analitikas (1.2) - pateikia, kuriuos puslapius reikia atnaujinti, sukurti ar perrašyti. 1.4 funkcija tai igyvendina.
+* Vizualu generatorius (1.5) - siulo vaizdus ar stiliaus gaires, atitinkancias sukurta teksta.
+* Publikavimo modulis (1.6) - leidžia paruošta turini paskelbti svetaineje arba eksportuoti.
+Ši specifikacija apibrežia, ka konkreciai turi sugebeti ši funkcija, kaip ji turetu buti kuriama (MVP ir tolesnes versijos), ir kaip ja tures naudoti tikslines grupes (naudotojai aprašyti rinkos tyrimo 2 skyriuje).
+
+2. Pagrindiniai naudotoju scenarijai (workflows)
+Turinio autokurejo funkcija yra orientuota i keturias pagrindines naudotoju grupes, kurios turi skirtinga lygi kompetencijos, atsakomybiu bei turinio kurimo apimties. Visi šie naudotojai turi viena bendra tiksla - greitai, patogiai ir kokybiškai sukurti arba atnaujinti svetaines turini, taciau ju darbo pobudis ir saveika su irankiu skiriasi.
+2.1 Verslo savininkas (paprasta sistema)
+* Profilis: Mažo verslo savininkas, dažnai pats administruoja svetaine, neturi vidines rinkodaros komandos.
+* Poreikiai: Nori sukurti ar atnaujinti pagrindinius svetaines puslapius ("Apie mus", "Paslaugos", "Kontaktai") be rašytojo ar dizainerio pagalbos.
+* Elgsena: Tikisi minimalaus ivedimo (raktiniai žodžiai, paslaugos pavadinimas) ir greito rezultato. Vertina aiškuma, paprastuma, "copy-paste" paruošta turini.
+* Vertes centras: Greitas ir praktiškas rezultatas. Nereikia gilintis i procesus.
+2.2 Rinkodaros specialistas (vidinis darbuotojas)
+* Profilis: Imones viduje dirbantis žmogus, atsakingas už komunikacija, turinio kurima, SEO.
+* Poreikiai: Nori tureti priemone, kuri padetu sukurti strukturuota ir strategiškai pritaikyta turini, deranti su rinkodaros tikslais.
+* Elgsena: Dirba pagal plana - turi kurti kelis puslapius per savaite, ruošia kampanijas, atnaujina blog'a. Nori naudotis AI kaip "asistentu", o ne pilnai automatizuotu juodrašciu tiekeju.
+* Vertes centras: Kontroliuojama kokybe, aiški struktura, SEO integracija.
+2.3 Agentura (išorinis tiekejas)
+* Profilis: Agentura ar freelanceriu komanda, kurianti svetainiu turini savo klientams.
+* Poreikiai: Greitai sukurti profesionalu svetaines turini naujam klientui, dažnai neturint visos informacijos ar konteksto.
+* Elgsena: Naudoja autokureja kaip pradini kurybini impulsa, taupant laika, dirbant su 5+ klientu projektais vienu metu.
+* Vertes centras: Greitis, aiškus šablonas, tonas pagal kliento niša, galimybe greitai gauti keliu variantu teksta.
+2.4 IT / svetaines palaikymo darbuotojas
+* Profilis: Techninis darbuotojas, kuris nera atsakingas už turinio kurima, bet turi ikelti / atnaujinti tekstus svetaineje.
+* Poreikiai: Gauti strukturizuota, redaguojama teksta, kuri galima greitai ikelti i CMS be papildomu paaiškinimu.
+* Elgsena: Nekuria turinio, bet atlieka veiksmus pagal paruošta teksta. Retkarciais gali naudoti iranki, jei nera kam sukurti turinio.
+* Vertes centras: Aiškus rezultatas, techninis formatas, be "kurybinio triukšmo".
+
+Naudotoju apibendrinimas:
+NaudotojasKompetencijaPoreikisElgsenaVertes centrasVerslo savininkasŽemaGreitai sukurti svetaines tekstaIveda raktinius žodžius, kopijuoja tekstaLaikas ir paprastumasRinkodaros specialistasVidutineStrukturuotas, tikslingas turinysFormuoja strateginius puslapius, koreguojaKontrole, kokybe, SEOAgenturaAukštaSukurti turini daugeliui klientuDirba greitai, nori šablonu ir stiliausEfektyvumas ir profesionalumasIT / palaikymasTechnineGauti paruošta teksta ikelimuiIkelia, formatuoja, kartais tikrina turiniStruktura ir techninis tikslumas
+Išvada:
+Turinio autokurejas turi buti universalus, bet adaptuojamas: vieniems - maksimaliai paprastas, kitiems - redaguojamas ir profesionaliai valdomas. Sistemos projektavimas turi leisti:
+* Personalizuoti: pritaikyti tona, ilgi, tiksla.
+* Valdyti: matyti keleta variantu, atlikti korekcijas.
+* Taupyti laika: pateikti turini strukturoje, pritaikytoje publikavimui.
+* Integruoti: i kitas darbo priemones ar sistema (Notion, CMS ir pan.)
+
+3. Funkciniai reikalavimai
+Turinio autokurejo funkcionalumas susideda iš dvieju pagrindiniu grupiu:
+1. Reikalavimai pagal turinio kurimo procesa - šie funkcionalumai butini tam, kad naudotojas galetu nuosekliai, intuityviai ir efektyviai sukurti svetaines turini nuo idejos iki paruošto rezultato.
+2. Reikalavimai pagal turinio tipus - specifiniai funkcionalumai, reikalingi skirtingo pobudžio turiniui: tekstui, vizualams, produktu aprašymams, video.
+
+3.1 Funkciniai reikalavimai pagal turinio kurimo procesa
+Autokurejas turi remtis nuosekliu vartotojo veiksmu ciklu, kuris leidžia bet kuriam naudotojui - nepriklausomai nuo kompetencijos - sukurti svetaines turini nuo nulio. Žemiau pateikiami pagrindiniai reikalavimai kiekvienam proceso etapui:
+1. Turinio kurimo pradžia / poreikio nustatymas
+* Galimybe pasirinkti puslapio tipa iš šablonu sarašo (pvz., "Apie mus", "Paslaugos", "Kontaktai", "Produktas").
+* Galimybe importuoti poreiki iš analitiko (pvz., "Reikia atnaujinti puslapi X").
+* Galimybe nurodyti tiksla: informuoti, parduoti, supažindinti, padidinti konversija.
+2. Pradines informacijos ivedimas
+* Forma, kurioje naudotojas pateikia pagrindine informacija:
+o raktažodžius,
+o tema / paslauga / produkto pavadinima,
+o tiksline auditorija,
+o stiliu / tona (pvz., formalus, draugiškas, pardaviminis),
+o turinio apimti (trumpas, vidutinis, ilgas).
+3. Turinys generavimas
+* AI generuoja turini pagal šablona ir naudotojo ivesti.
+* Galimybe peržiureti bent 2-3 turinio versijas.
+* Kiekvienai versijai rodomas "paaiškinimas": kodel toks tonas, kokia struktura, kur integruoti raktažodžiai.
+* Kiekvienoje generacijoje galima:
+o redaguoti teksta rankiniu budu,
+o pakeisti tona / ilgi ir regeneruoti,
+o išsaugoti ar atmesti.
+4. Vizualo / komponentu integracija
+* Galimybe prideti vizualinius komponentus (pagal žemiau aprašytus tipo reikalavimus).
+* Galimybe naudoti AI pasiulytus paveiksleliu raktinius žodžius.
+* Galimybe integruoti vieta iliustracijoms / ikonoms / video.
+5. Peržiura ir strukturinis patikrinimas
+* Turinys rodomas su vizualine struktura (pvz., antraštes, paryškinimai, sarašai).
+* Galimybe tikrinti:
+o ar yra CTA (kvietimas veikti),
+o ar turinys atitinka strukturos reikalavimus (pvz., H1-H3, paragrafai),
+o ar tekstas atitinka lokalizacijos nustatymus.
+6. Eksportas / publikavimo paruošimas
+* Galimybe eksportuoti:
+o teksta i HTML, Markdown, Notion, WordPress, Prestashop ar el. laiško formata,
+o vizualu saraša (pvz., kartu su tekstu ZIP arba su nuorodomis).
+* Galimybe išsaugoti juodrašti.
+* Galimybe žymeti statusa: "pasiruošes", "reikia korekcijos", "publikuota".
+7. Publikavimas ir kokybes patikrinimas
+* Publikavimo režimai:
+o Automatinis publikavimas - turinys iškart keliamas i svetaine be papildomo tvirtinimo.
+o Rankinis publikavimas - turinys keliamas tik po naudotojo patvirtinimo.
+o Publikavimas i demonstracine versija - turinys pirmiausia ikeltas i demo/live preview versija, kurioje galima peržiureti rezultata.
+* Patvirtinimo sistema:
+o Prieš galutini publikavima naudotojui pateikiamas išankstinis peržiuros vaizdas su galimybe:
+* redaguoti,
+* atmesti,
+* patvirtinti.
+* Patikrinimo logika:
+o Sistema privalo atlikti automatini turinio tikrinima: ar puslapis isikele sekmingai, ar nera kritiniu klaidu (pvz., tušcias blokas, nutrukes HTML, klaidinga kalbos žyma).
+o Galimybe pasirinkti verifikavimo režima:
+* Automatinis testavimas - sistema patvirtina, kad turinys rodomas teisingai.
+* Rankinis peržiurejimas - naudotojas gauna pranešima ir turi patvirtinti.
+* Miksuotas režimas - sistema pirmiausia patikrina, o jei aptinkama neapibrežtu riziku - siuncia žmogui.
+* Statuso keitimas ir perejimas i LIVE:
+o Po patvirtinimo, turinys automatiškai keliamas i LIVE versija (pvz., WordPress, Prestashop ar kita CMS).
+o Sistemoje fiksuojama publikavimo data, atsakingas asmuo ir galimybe grižti i juodrašti, jei reikia.
+
+3.2 Funkciniai reikalavimai pagal turinio tipus
+Kiekvienas turinio tipas turi savo specifinius reikalavimus, atsižvelgiant i rinkos tyrime aprašytas problemas ir vartotoju lukescius.
+3.2.1 Tekstas
+* Generavimo šablonai pagal puslapio tipa: "Apie mus", "Paslaugos", "Produktai", "Kontaktai", "Tinklaraštis".
+* Tonu ir stiliu pasirinkimas (pvz., verslo, laisvas, SEO-friendly).
+* Strukturos patikrinimas: ar yra pavadinimas, ivadas, CTA, išvados.
+* Lokalizacijos palaikymas: automatine adaptacija EN, LT ir kt. kalbomis.
+* Gramatine ir stilistine analize.
+* SEO patarimai: kur naudoti raktinius žodžius, meta aprašymo sugeneravimas.
+3.2.2 Paveiksleliai
+* Galimybe generuoti AI iliustracijas pagal teksta ar raktinius žodžius.
+* Galimybe naudoti iš anksto ikelta vaizdu biblioteka.
+* Formato parinktys pagal platforma (web, social, banner).
+* Rekomendacijos paveiksleliu stiliui (ikonos, fonai, žmones, produktai).
+* Autoriu teisiu tikrinimas (jei integruojama su išoriniais šaltiniais).
+3.2.3 El. parduotuves prekiu turinys
+* Galimybe masiškai generuoti prekiu aprašymus pagal šablonus ir produkto atributus (pvz., pavadinimas, savybes, kaina, gamintojas).
+* Paruošti šablonai: techninis aprašymas, privalumu sarašas, emocinis tekstas.
+* Vienodu produktu variantu sujungimas arba diferenciacija.
+* SEO integracija: ilgauodegiai raktažodžiai, meta duomenys.
+* Eksportas i CSV ar JSON formata (sinchronizacijai su PIM / e. komercijos platformomis).
+3.2.4 Video (tekstinis paruošimas)
+* Galimybe sugeneruoti:
+o video scenariju (pvz., 30 sek., 1 min., 3 min.),
+o video titrus / tekstus / voiceover scenariju.
+* Skirtingi scenarijai: paslaugu pristatymas, produkto demo, "how-to" instrukcija.
+* Strukturiniai komponentai: intro, problema, sprendimas, CTA.
+* Galimybe eksportuoti teksta i video kurimo irankius (pvz., Pictory, Synthesia).
+* Video žanro pasirinkimas (prezentacija, naratyvas, instrukcija).
+
+Išvada
+Funkciniai reikalavimai turi buti igyvendinami etapais, pradedant nuo pagrindinio srauto: turinio kurimo tekstui, veliau papildant vaizdu integracija, produktu masiniu aprašymu ir video scenariju generatoriumi. Visi funkcionalumai turi veikti modulariai, buti iškeliami kaip atskiri komponentai su galimybe plestis.
+
+4. Ne-funkciniai reikalavimai
+Netechnologiniai reikalavimai yra susije su naudotojo patirtimi, turinio kokybes lukesciais, procesu aiškumu ir produkto naudojimo kultura. Šie reikalavimai butini siekiant, kad autokurejo funkcija butu ne tik funkcionali, bet ir naudotina, priimtina bei pasitikima tarp skirtingu vartotoju grupiu.
+4.1 Turinys turi buti patikimas, profesionalus ir reprezentatyvus
+* Stilistinis vientisumas: Sugeneruotas turinys turi atitikti kalbos normu reikalavimus (gramatika, stilius, logine struktura), kad jis galetu buti naudojamas be papildomos korekturos.
+* Tonas ir pozicionavimas: Teksto tonas turi buti aiškiai apibrežiamas pagal naudotojo pasirinkta stiliu - pvz., formaliai profesionalus, šiltai patikimas ar laisvas ir pardaviminis.
+* Aiški komunikacijos struktura: Turinys turi buti pateiktas pagal iprastus internetines komunikacijos reikalavimus - su antraštemis, pastraipomis, CTA, skaitomumu mobiliuose irenginiuose.
+4.2 Turinys turi buti publikuotinas "toks, koks yra" arba beveik be korekciju
+* "Ready to use" filosofija: Tikslas - turinys, kuri naudotojas galetu iš karto kopijuoti i svetaine be korekturos, dizainerio ar tekstu kurejo isikišimo.
+* Mažai priklausomas nuo konteksto: Sistemoje sukurtas turinys turi buti pakankamai bendras, kad tiktu daugumai tipiniu verslu, bet kartu pakankamai konkretus, kad nesijaustu šabloninis.
+* Minimalus "post-processing" poreikis: Turinys turi buti iškart tinkamas ne tik HTML formai, bet ir SEO prasme - su antraštemis, meta tekstais, aprašymais.
+4.3 Vartotojui turi buti aišku, ka ivesti ir ko tiketis
+* Intuityvus klausimynas: Vartotojas neturi jausti, kad pildo "forma" - turi jaustis, kad atsako i pokalbi ar vedli, kuris padeda kurti.
+* Ivesties pavyzdžiai: Kiekvienas ivesties laukas turi buti paaiškintas su pavyzdžiais (pvz., "Pateikite paslaugos aprašyma - pvz., 'veido valymas naturaliomis priemonemis'").
+* Rezultatu peržiuros kontekstas: Turinys turi buti rodomas ne kaip "tekstu laukas", o kaip realaus puslapio prototipas - taip padidinamas supratimas ir pasitikejimas.
+4.4 Sistemoje turi buti lengva dirbti be išankstiniu techniniu žiniu
+* Ne IT žmonems: Sprendimas turi buti pritaikytas naudotojams, kurie neturi jokiu žiniu apie HTML, SEO ar tekstu strukturizavima.
+* "Smart defaults" ir automatiniai pasiulymai: Sistemoje turetu veikti "protingi numatytieji" (pvz., pasiulymas iterpti CTA, sukurti SEO meta aprašyma, ikelti paveiksleli).
+* Minimali klaidu tikimybe: Naudotojas neturi galeti sugadinti strukturos ar sukelti netvarkos net ir padares netikslia ivesti.
+4.5 Turinys turi atitikti rinkodaros praktikos standartus
+* SEO orientacija: Tekstai turi buti optimizuoti naudoti svetainese - raktažodžiu tankis, antrašciu struktura, meta aprašymai.
+* Konversijos principai: Generuojami tekstai turi remtis konversijai svarbiais komponentais - itikinejimo struktura, išskirtinumo ivardijimas, pasitikejimo elementai (pvz., "klientai vertina...", "+1000 naudotoju").
+* Tonu ir auditoriju adaptacija: Tekstai turi buti tinkami verslui B2B, paslaugoms, kurybinems veikloms ar nišiniams sektoriams - be "vienos kalbos visiems".
+
+Išvada
+Autokurejo funkcija turi buti sukurta taip, kad naudotojas pasitiketu tuo, ka mato, ir galetu naudoti turini iš karto, nesvarbu, ar jis butu verslo savininkas, ar agentura. Tai reiškia, kad sistema turi veikti ne tik kaip tekstu generatorius, bet kaip turinio kurimo padejejas - suprantantis, aiškinantis, siulantis ir pateikiantis ne "žalia teksta", bet paruošta, logiška, komunikacijos tikslus atitinkanti turini.
+
+5. Techniniai komponentai
+
+Autokurejo funkcija reikalauja keliu glaudžiai susijusiu techniniu moduliu, kurie bendrai leidžia realizuoti visa turinio kurimo eiga - nuo duomenu ivedimo iki publikavimo su patikra. Ši funkcija remiasi API-first logika, moduline architektura ir asociatyviu veiksmu eigos valdymu, leidžianciu ja integruoti i skirtingus naudotojo scenarijus ir darbo aplinkas.
+5.1 Architekturines nuostatos
+* SaaS modelis / Web-based sasaja
+o Visi veiksmai atliekami naršykleje.
+o Irankis veikia kaip savarankiška aplikacija su galimybe veliau integruotis i kita platforma (pvz., klientu CMS ar turinio platforma).
+* API-first struktura
+o Visi moduliai - nuo šablonu valdymo iki publikavimo - turi buti pasiekiami per REST ar GraphQL API.
+o Tai užtikrina integracija su: CMS, el. parduotuvemis, projektu valdymo sistemomis, agenturu dashboard'ais.
+* Modulinis veikimo principas
+o Pagrindiniai komponentai vystomi kaip atskiros logines posistemos su galimybe buti naudojamais atskirai ar kartu:
+* Turinio šablonu tvarkykle
+* LLM (GPT) sasajos sluoksnis
+* Teksto analizes ir pataisu logika
+* Vizualu integracijos modulis
+* Eksporto / publikavimo modulis
+* Patikros / verifikacijos sluoksnis
+5.2 AI integracijos komponentas (LLM)
+* Modeliu tipas: OpenAI GPT arba analogiškas LLM.
+* Promptu valdymas: Centralizuota promptu tvarkykle leidžia:
+o kurti skirtingus režimus (pvz., "emociškai itraukus", "SEO draugiškas", "konversijoms skirtas"),
+o naudoti skirtingus turinio tipus (apie mus, produktas, paslauga, naujiena),
+o koreguoti generavimo rezultatu lygmeni be UI keitimu.
+* Konfiguracijos parametrai: temperatura, max tokens, modelio versija, kalbos nustatymai.
+* Post-processing sluoksnis:
+o Gramatinis ir stilistinis tikrinimas.
+o Raktažodžiu patikra ir integracija.
+o Strukturos verifikavimas (antraštes, CTA, sarašai).
+5.3 Vizualu integravimo komponentas
+* Vaizdu generavimas (AI / teminiai raktiniai žodžiai):
+o OpenAI DALL·E ar analogišku modeliu integracija.
+o Galimybe naudoti išorini šaltini (pvz., Pexels, Unsplash API).
+* Formatu palaikymas:
+o Web, kvadratiniai, social (16:9, 4:5, 1:1).
+* Automatine rekomendacija pagal teksta:
+o Pasiulyti paveikslelio idejas pagal antraštes, paslaugu pobudi, CTA tona.
+* Ikelimo / keitimo modulis:
+o Naudotojas gali keisti, trinti, pakeisti pozicija, pritaikyti filtrus ar išvestines.
+5.4 Publikavimo ir patvirtinimo komponentas
+* CMS integracija (WordPress\Prestashop MVP stadijoje):
+o Eksportas i HTML arba per WordPress\Prestashop REST API (jei igalinta).
+o Galimybe nurodyti publikavimo aplinka: preview / live.
+* Publikavimo scenariju tvarkymas:
+o Rankinis / automatinis / miksuotas režimas.
+o Nustatymai, ar reikia papildomo patvirtinimo.
+* Verifikacijos sistema:
+o Auto-testavimas (turinio rodymas, struktura, HTML validumas).
+o Žmogaus peržiuros žymejimas.
+o Sistemos notifikuojamas "viskas OK" statusas arba gražinimas korekcijai.
+5.5 Naudotojo sasajos komponentai
+* Turinio kurimo vedlys / klausimynas
+o Dinamine forma su AI pagalba, kuri keiciasi priklausomai nuo pasirinktu šablonu.
+* Peržiuros režimas (preview-as-real-page):
+o Rodo sukurta teksta ne "kaip lauko reikšme", o kaip svetaines bloka.
+o Itraukiami stiliai, vizualai, antraštes.
+* Busenu ir užduociu valdymas:
+o Žymejimas: "sukurta", "redaguojama", "publikuota", "nepatvirtinta".
+o Delegavimo funkcija (pvz., "siusti peržiurai", "priskirti korekcijai").
+5.6 Duomenu saugojimas ir saugumas
+* Laikinas turinio saugojimas: Sesijos metu (jei naudotojas neprisijunges).
+* Ilgalaikis saugojimas: Prisijungusiam naudotojui - analizes, tekstai, vaizdai, istorija.
+* Versiju valdymas: Galimybe išsaugoti kelias versijas, lyginti jas, grižti prie ankstesniu.
+
+Išvada
+Autokurejo technine architektura turi buti suprojektuota kaip lanksti, moduline, API-first sistema, integruojanti LLM modeliu galimybes, vizualu parinkimo logika, peržiuros UX ir publikavimo mechanizma su patikros sluoksniu. Tik toks požiuris leidžia pasiekti realiai naudotina ir profesionalu rezultata, kuri galima patiketi tiek mažam verslui, tiek agenturai.
+
+6. MVP apimtis
+Turinio autokurejo funkcijos MVP (Minimalus Veikiantis Produktas) turi užtikrinti, kad naudotojas galetu:
+* pasirinkti šablona (turinio tipa),
+* ivesti esmine informacija (tema, tikslas, stilius),
+* gauti kokybiškai sugeneruota teksta su minimaliu redagavimo poreikiu,
+* eksportuoti arba publikuoti turini, ir
+* peržiureti rezultata realiame kontekste (preview režimu).
+6.1 I funkcija itraukiami komponentai MVP etape
+KomponentasApimtis MVP versijojeŠablonu pasirinkimas5-7 baziniai puslapiu tipai: "Apie mus", "Paslaugos", "Kontaktai", "Produktas", "Blogas"Ivedimo forma (vedlys)Tema / raktiniai žodžiai / stilius / kalba / ilgisGPT integracijaVieno modelio (pvz., GPT-4) versija, centralizuotas promptas kiekvienam tipuiTeksto versijosSugeneruojamos 2 alternatyvos, viena parodoma kaip numatytojiPost-processing (tekstui)Gramatika, CTA patikrinimas, strukturos tikrinimasSEO komponentaiMeta pavadinimas, meta aprašymas, raktažodžiu sklaidaPeržiura"Preview-as-page" režimas su H1, paragrafais, CTAEksportasHTML / Notion (kopijuoti), WordPress\Prestashop copy-paste (rankinis)Publikavimo paruošimasŽymejimas: "pasiruošes" / "reikia patvirtinimo" / "publikuotas"Patvirtinimo logikaRankinis patvirtinimas prieš publikavimaDemo publikavimo režimasTurinys publikuojamas i "demo" režima prieš live versijaPapildomos funkcijosNaudotojo komentaru laukas, statuso perjungimas, analizes istorijos saugojimas
+6.2 Neitraukiami i MVP, bet numatomi veliau
+KomponentasPastabosVaizdu generavimas (AI / biblioteka)Planuojama kaip 2 etapo funkcionalumasAutomatinis publikavimas i CMS (API)Tik eksportas MVP etapePatikros automatika (autotestavimas)Pirmame etape naudojamas tik rankinis tvirtinimasDelegavimas ir komentavimas komandojePradžioje tik individualus naudotojasVersiju istorija / lyginimasNeigyvendinama MVP etapeAgenturu režimas (multi-project)Velesne pletros kryptis
+6.3 MVP sekmes kriterijai (vertes validacija)
+* Naudotojas be techniniu žiniu geba sukurti teksta ir naudoti ji savo svetaineje
+* Naudotojas aiškiai supranta, ka ivesti ir ka gavo
+* 70 % sugeneruoto turinio publikuojama be korekciju
+* Produkto komandai grižtamasis ryšys leidžia identifikuoti:
+o naudotoju tonu pageidavimus,
+o dažniausiai kuriamus puslapius,
+o pasitikejimo AI ribas.
+
+Išvada
+MVP versija turi buti tvirta, funkcionali, bet siauro fokuso - padedanti išspresti pagrindine naudotojo problema: "kaip greitai ir be rašytojo sukurti svetaines teksta, tinkama viešam publikavimui."
+MVP neturi bandyti "išspresti visko" - jos verte turi buti patikrinta per realia nauda naudotojui ir pasirengima eiti i rinka su esminiu sprendimu.
+
+7. Roadmap: tolesnes versijos
+Turinio autokurejo MVP suformuoja branduolini sprendima - galimybe sukurti ir publikuoti teksta i svetaine be profesionalaus turinio kurejo pagalbos. Velesnes versijos plecia produkto verte funkciniu, UX, techniniu ir verslo modelio lygmenimis.
+7.1 Pletros kryptys pagal funkcinius modulius
+1. Turinio kurimo pletra
+* Daugiau šablonu tipu (pvz., karjera, DUK, atsiliepimai, nišiniai landing'ai)
+* Interaktyvus turinio blokai (pvz., CTA su mygtukais, "susisiekite dabar" su formos integracija)
+* Rinkodaros tikslu režimai (pvz., SEO pozicijos gerinimui, social media srautui, konversiju kelimui)
+2. Vizualu generavimas ir valdymas
+* AI iliustracijos pagal teksta (pvz., DALL·E)
+* Automatizuoti paveiksleliu raktiniu žodžiu pasiulymai
+* Vizualu integracija i teksta su stilistikos nuoseklumu
+* Vaizdu publikavimas kartu su tekstu
+3. CMS integracijos
+* WordPress\Prestashop API publikavimas (per REST)
+* Shopify / Wix / Webflow eksportas
+* Vieno mygtuko publikavimas
+* Galimybe redaguoti teksta tiesiogiai CMS'e per iframe / plugin'a
+4. Publikavimo ir tvirtinimo logika
+* "Demo ? Live" perejimas su tiksliu pokyciu log'u
+* Patvirtinimo srautas su atsakingo asmens nurodymu
+* Automatinis testavimas (HTML, CSS, matomumas)
+* Analitinis grižtamasis ryšys: ar puslapis buvo sekmingai indeksuotas, peržiuretas, veike CTA
+5. Komandines funkcijos
+* Naudotoju roles: redaktorius, tvirtintojas, administratorius
+* Užduociu delegavimas (pvz., "pateikti korekcijas", "paruošti publikavimui")
+* Komentaru sistema tekstu peržiuroje
+* Turinio busenu valdymas komandoje
+6. Versiju istorija ir monitoringas
+* Kiekvieno sukurtos versijos saugojimas
+* Galimybe palyginti versijas: "kas pasikeite"
+* Periodinis turinio kokybes monitoringas (pvz., kas 6 men.)
+* "Ar šis turinys vis dar aktualus?" tipo notifikacijos
+7. Agenturu režimas
+* Keliu projektu / svetainiu valdymas vienoje paskyroje
+* Kliento-peržiuros režimas su white-label ataskaitomis
+* Agenturos naudotojo statistika: produktyvumas, korekciju kiekis, laikas per užduoti
+
+7.2 Technologines kryptys
+KryptisTikslasNo-code iskiepiu kurimasLeisti vartotojui naudotis tiesiogiai per WordPress / Prestashop / Shopify iskiepiusAI modeliu personalizavimasLeisti vartotojui "išmokyti" sistema savo stiliaus ir preferencijuPromptu redagavimo galimybesIrankis pažengusiems naudotojams koreguoti promptu struktura (admin)Automatiniai A/B tekstu testaiSukurti 2 versijas ir matuoti konversija (susiejus su analitika)
+7.3 Laiko horizontas (rekomenduojamas)
+EtapasLaikotarpisApimtisMVP (V1.0)2025 Q2Tekstas, preview, eksportas, rankinis publikavimasV1.12025 Q3CMS API, demo ? live, AI vaizdai, daugiau šablonuV1.22025 Q4Komandine saveika, komentarai, tvirtinimo grandineV2.0 (Agenturu režimas)2026 Q1Projektu valdymas, klientu sasajos, white-label
+Išvada
+Autokurejo funkcija turi aišku augimo kelia - nuo MVP, kuris išsprendžia esmine turinio kurimo problema, iki daugiafunkcines turinio valdymo platformos, veikiancios agenturose ir imonese kaip AI turinio operaciju centras.
+Kiekvienas išpletimas turi buti daromas tik po MVP validacijos, remiantis realiu naudotoju patirtimi ir grižtamuoju ryšiu.
+
+
+
+8. Rizikos
+8.1 AI generavimo kokybes rizikos
+* Per daug generiškas turinys: LLM (pvz., GPT) gali sugeneruoti bendrinius, "neužkabinanti" tekstus, ypac jei ivestis per trumpa ar abstrakti.
+o Valdymas: Idiegti stipresne promptu logika ir papildomas stiliaus personalizavimo parinktis.
+* Konteksto nesuvokimas: AI gali nesuprasti verslo specifikos, rinkos ar tikslines auditorijos.
+o Valdymas: Vartotojui siulomi "nišos profiliai" arba leidžiama naudoti atminti (per API) apie verslo veikla.
+* Gramatines ar stilistines klaidos: Nepaisant LLM galimybiu, gali buti likusiu klaidu, ypac lokalizuotame tekste.
+o Valdymas: Integruoti papildoma kalbos tikrinimo moduli (pvz., LanguageTool ar Grammarly API).
+
+8.2 UX / naudojimo rizikos
+* Neaišku, ka ivesti: Vartotojas nežino, kokia informacija reikia pateikti, kad gautu kokybiška rezultata.
+o Valdymas: Aiškus pavyzdžiai, vedlys su paaiškinimais, patarimai.
+* Nepasitikejimas AI rezultatu: Vartotojas gali abejoti, ar generuotas tekstas tinkamas naudoti profesionaliai.
+o Valdymas: Paaiškinimu blokas ("kodel sukurtas toks tekstas"), demo peržiura, atsiliepimu rinkimas.
+* Per sudetingas funkcionalumas paprastam naudotojui: Pvz., tvirtinimo / publikavimo žingsniu perteklius.
+o Valdymas: MVP etape siulomas tik supaprastintas darbo scenarijus su galimybe išjungti nereikalingas funkcijas.
+
+8.3 Technines rizikos
+* LLM atsakymu nestabilumas: Tas pats promptas gali gražinti skirtingus rezultatus, priklausomai nuo modelio ar sesijos.
+o Valdymas: Fiksuoti promptus, naudoti ribota temperatura, išsaugoti kiekviena versija.
+* Eksportavimo / publikavimo klaidos: Ikeltas tekstas gali neteisingai atvaizduotis CMS sistemoje.
+o Valdymas: Publikavimo testavimo sluoksnis su HTML validacija, demo preview mechanizmas.
+* Integraciju sudetingumas: Ne visos CMS leidžia lengva integracija be papildomu iskiepiu ar technines pagalbos.
+o Valdymas: MVP stadijoje naudoti copy-paste / HTML eksporta, o API integracijas vystyti kaip papildini.
+
+8.4 Verslo rizikos
+* Funkcija nesukuria pakankamos vertes MVP etape: Jei naudotojai nesugeba pritaikyti generuoto turinio realiam naudojimui.
+o Valdymas: Ankstyvas testavimas su beta naudotojais, rinkos validacija.
+* Konkurencinis spaudimas: Dideli žaidejai (pvz., Wix AI, Jasper, Writesonic) gali pasiulyti panašia funkcija greiciau.
+o Valdymas: Skirtis per UX paprastuma, lokalizacijos kokybe, integracijas su svetaine.
+* Naudotojo duomenu saugumo baime: Vartotojai gali bijoti i sistema ikelti jautru turini.
+o Valdymas: Skaidri duomenu politika, aiškus paaiškinimas, kad turinys nesiunciamas ar nesaugomas be sutikimo.
+
+8.5 Organizacines rizikos
+* Komandos resursu nepakankamumas MVP igyvendinimui pilna apimtimi
+o Valdymas: Aiškiai apibrežta MVP riba (žr. 6 skyriu), išskaidyta per iteracijas.
+* Promptu / turinio kokybes priežiuros poreikis auga greiciau nei komanda gali reaguoti
+o Valdymas: Idiegti atsiliepimu rinkimo ir automatinio vertinimo sistema, kad galetume greitai identifikuoti blogus rezultatus.
+
+Išvada
+AdoreIno autokurejo funkcija yra technologiškai imanoma ir rinkos poreikius atitinkanti, taciau norint, kad ji butu realiai naudojama, butina iš anksto suvaldyti pagrindines rizikas: nuo AI rezultatu patikimumo iki UX paprastumo. Todel testavimas, lankstus dizainas, aiškus pasirinkimai ir palaikomas grižtamasis ryšys bus kritiniai sekmei.
+
+
+
