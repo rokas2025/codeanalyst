@@ -4,22 +4,15 @@ import toast from 'react-hot-toast'
 
 export function Settings() {
   const {
-    openaiApiKey,
-    anthropicApiKey,
-    googleApiKey,
     preferredAiModel,
     beenexApiUrl,
     beenexApiKey,
     updateSetting,
     saveSettings,
-    isValidApiKey,
     getAvailableProviders
   } = useSettingsStore()
 
   const [showKeys, setShowKeys] = useState({
-    openai: false,
-    anthropic: false,
-    google: false,
     beenex: false
   })
 
@@ -27,19 +20,9 @@ export function Settings() {
     const success = saveSettings()
     if (success) {
       toast.success('Settings saved successfully!')
-      // Trigger a reload of the page to reinitialize AI service with new keys
-      setTimeout(() => {
-        window.location.reload()
-      }, 1000)
     } else {
       toast.error('Failed to save settings')
     }
-  }
-
-  const getKeyStatus = (provider: string, key: string) => {
-    if (!key) return { status: 'empty', color: 'text-gray-400', text: 'Not configured' }
-    if (isValidApiKey(provider, key)) return { status: 'valid', color: 'text-green-600', text: 'Valid' }
-    return { status: 'invalid', color: 'text-red-600', text: 'Invalid format' }
   }
 
   const availableProviders = getAvailableProviders()
@@ -69,82 +52,22 @@ export function Settings() {
               </select>
             </div>
             
-            {/* OpenAI API Key */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="block text-sm font-medium text-gray-700">OpenAI API Key</label>
-                <div className="flex items-center space-x-2">
-                  <span className={`text-xs ${getKeyStatus('openai', openaiApiKey).color}`}>
-                    {getKeyStatus('openai', openaiApiKey).text}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowKeys(prev => ({ ...prev, openai: !prev.openai }))}
-                    className="text-xs text-gray-500 hover:text-gray-700"
-                  >
-                    {showKeys.openai ? 'Hide' : 'Show'}
-                  </button>
+            {/* Security Notice */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-blue-900">🔒 Secure API Key Management</h4>
+                  <p className="text-sm text-blue-700 mt-1">
+                    For security reasons, AI API keys are now managed server-side and not stored in your browser. 
+                    Contact your administrator to configure OpenAI, Anthropic, and Google API keys on the backend.
+                  </p>
                 </div>
               </div>
-              <input 
-                type={showKeys.openai ? "text" : "password"} 
-                className="mt-1 input" 
-                placeholder="sk-..."
-                value={openaiApiKey}
-                onChange={(e) => updateSetting('openaiApiKey', e.target.value)}
-              />
-            </div>
-            
-            {/* Anthropic API Key */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="block text-sm font-medium text-gray-700">Anthropic API Key</label>
-                <div className="flex items-center space-x-2">
-                  <span className={`text-xs ${getKeyStatus('anthropic', anthropicApiKey).color}`}>
-                    {getKeyStatus('anthropic', anthropicApiKey).text}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowKeys(prev => ({ ...prev, anthropic: !prev.anthropic }))}
-                    className="text-xs text-gray-500 hover:text-gray-700"
-                  >
-                    {showKeys.anthropic ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-              </div>
-              <input 
-                type={showKeys.anthropic ? "text" : "password"} 
-                className="mt-1 input" 
-                placeholder="sk-ant-..."
-                value={anthropicApiKey}
-                onChange={(e) => updateSetting('anthropicApiKey', e.target.value)}
-              />
-            </div>
-            
-            {/* Google API Key */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="block text-sm font-medium text-gray-700">Google Gemini API Key</label>
-                <div className="flex items-center space-x-2">
-                  <span className={`text-xs ${getKeyStatus('google', googleApiKey).color}`}>
-                    {getKeyStatus('google', googleApiKey).text}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowKeys(prev => ({ ...prev, google: !prev.google }))}
-                    className="text-xs text-gray-500 hover:text-gray-700"
-                  >
-                    {showKeys.google ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-              </div>
-              <input 
-                type={showKeys.google ? "text" : "password"} 
-                className="mt-1 input" 
-                placeholder="AI..."
-                value={googleApiKey}
-                onChange={(e) => updateSetting('googleApiKey', e.target.value)}
-              />
             </div>
 
             {/* Available Providers Status */}
