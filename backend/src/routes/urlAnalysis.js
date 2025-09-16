@@ -186,12 +186,27 @@ router.post('/analyze', [
       await DatabaseService.updateUrlAnalysisStatus(analysisId, 'completed', 100)
       
       // Extract the actual website data for database storage
-      const dbData = websiteResult || {}
+      logger.info(`💾 Raw websiteResult:`, websiteResult)
+      
+      const dbData = {
+        title: websiteResult?.basic?.title || null,
+        technologies: websiteResult?.technologies || [],
+        html_content: websiteResult?.basic?.html || '',
+        basic_website_data: websiteResult?.basic || {},
+        performance_metrics: websiteResult?.lighthouse || websiteResult?.performance || {},
+        seo_analysis: websiteResult?.comprehensiveSEO || websiteResult?.seo || {},
+        accessibility_analysis: websiteResult?.accessibility || {},
+        security_analysis: websiteResult?.security || {}
+      }
+      
       logger.info(`💾 Storing analysis data:`, {
         hasTitle: !!dbData.title,
         hasTechnologies: !!(dbData.technologies && dbData.technologies.length),
         hasHtmlContent: !!dbData.html_content,
-        dataKeys: Object.keys(dbData)
+        dataKeys: Object.keys(dbData),
+        basicKeys: Object.keys(dbData.basic_website_data),
+        performanceKeys: Object.keys(dbData.performance_metrics),
+        seoKeys: Object.keys(dbData.seo_analysis)
       })
       
       await DatabaseService.updateUrlAnalysisData(analysisId, dbData)
