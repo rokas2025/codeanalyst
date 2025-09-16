@@ -402,22 +402,27 @@ class BackendService {
   }
 
   convertToAdoreInoFormatOld(urlResult: URLAnalysisResult): any {
+    // Calculate actual scores from the analysis result
+    const actualScores = urlResult.scores || {}
+    const performanceScore = actualScores.performance || urlResult.performance?.performance || urlResult.lighthouse?.performance || 0
+    const overallScore = actualScores.overall || Math.round((performanceScore + (actualScores.seo || 0) + (actualScores.accessibility || 0) + (actualScores.security || 0)) / 4)
+    
     return {
       systemOverview: {
         projectType: 'website',
-        overallScore: Math.round((urlResult.performance?.performance || 75) * 0.8)
+        overallScore: Math.round(overallScore * 0.8) // Apply 0.8 factor if needed for legacy compatibility
       },
       technicalStructure: {
         codeQuality: {
-          score: Math.round((urlResult.performance?.performance || 75) * 0.8),
+          score: Math.round(overallScore * 0.8),
           issues: []
         }
       },
       maintenanceNeeds: {
-        technicalDebt: Math.round((100 - (urlResult.performance?.performance || 75)) * 0.5),
+        technicalDebt: Math.round((100 - overallScore) * 0.5),
         codeSmells: [],
         refactoringOpportunities: [],
-        priorityLevel: 'medium'
+        priorityLevel: overallScore >= 70 ? 'low' : overallScore >= 50 ? 'medium' : 'high'
       },
       aiExplanations: urlResult.aiInsights || {},
       businessRecommendations: (urlResult.businessRecommendations || []).map((rec: any) => ({
