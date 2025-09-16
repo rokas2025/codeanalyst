@@ -19,28 +19,54 @@ export class WebsiteAnalyzer {
    */
   async initialize() {
     try {
-      // Try to launch Puppeteer browser with Railway-compatible configuration
+      // Try to launch Puppeteer browser with Railway-compatible configuration and stealth mode
       const puppeteerConfig = {
         headless: true, // Force headless in production
         timeout: 30000, // Reduce timeout for faster failures
         args: [
+          // Railway compatibility
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
           '--no-first-run',
           '--no-zygote',
           '--single-process',
           '--disable-gpu',
+          
+          // Anti-detection arguments
+          '--disable-web-security',
+          '--disable-features=VizDisplayCompositor,VizDisplayCompositor',
+          '--disable-extensions',
+          '--disable-plugins',
+          '--disable-default-apps',
+          '--disable-sync',
+          '--disable-translate',
+          '--hide-scrollbars',
+          '--mute-audio',
+          '--no-first-run',
           '--disable-background-timer-throttling',
           '--disable-backgrounding-occluded-windows',
           '--disable-renderer-backgrounding',
-          '--disable-extensions',
-          '--disable-plugins',
-          '--disable-web-security',
+          '--disable-ipc-flooding-protection',
+          '--password-store=basic',
+          '--use-mock-keychain',
+          '--disable-component-extensions-with-background-pages',
+          '--disable-background-networking',
+          '--disable-features=TranslateUI',
+          '--disable-blink-features=AutomationControlled',
+          '--enable-features=NetworkService,NetworkServiceLogging',
+          '--force-color-profile=srgb',
+          '--metrics-recording-only',
+          '--disable-prompt-on-repost',
+          '--disable-hang-monitor',
+          '--disable-client-side-phishing-detection',
+          '--disable-component-update',
+          '--no-default-browser-check',
+          '--autoplay-policy=user-gesture-required',
+          '--disable-domain-reliability',
+          '--disable-features=AudioServiceOutOfProcess',
           '--disable-features=VizDisplayCompositor',
-          '--run-all-compositor-stages-before-draw',
-          '--disable-ipc-flooding-protection'
+          '--run-all-compositor-stages-before-draw'
         ]
       }
 
@@ -191,11 +217,37 @@ export class WebsiteAnalyzer {
     try {
       page = await this.browser.newPage()
     
-      // Set viewport and user agent
+      // Set viewport and user agent with anti-detection measures
       await page.setViewport({ width: 1920, height: 1080 })
+      
+      // More realistic user agent (latest Chrome)
       await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       )
+
+      // Anti-detection: Remove webdriver properties
+      await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+          get: () => undefined,
+        })
+        
+        // Remove Puppeteer traces
+        window.chrome = {
+          runtime: {},
+        }
+        
+        Object.defineProperty(navigator, 'plugins', {
+          get: () => [1, 2, 3, 4, 5],
+        })
+        
+        Object.defineProperty(navigator, 'languages', {
+          get: () => ['en-US', 'en'],
+        })
+      })
+
+      // Add random delay to mimic human behavior (300-800ms)
+      const randomDelay = Math.floor(Math.random() * 500) + 300
+      await page.waitForTimeout(randomDelay)
 
       // Navigate to page with optimized timeout and loading strategy
       const response = await page.goto(url, {
