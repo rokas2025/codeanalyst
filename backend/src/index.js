@@ -82,27 +82,33 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }))
 // Logging
 app.use(morgan('combined', { stream: { write: (message) => logger.info(message.trim()) } }))
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'CodeAnalyst Backend API',
+    version: '1.0.0',
     timestamp: new Date().toISOString(),
-    version: process.env.npm_package_version || '1.0.0',
-    environment: process.env.NODE_ENV || 'development',
-    mode: 'development'
+    endpoints: {
+      health: '/health',
+      api: '/api',
+      auth: '/api/auth',
+      contentCreator: '/api/content-creator'
+    }
   })
 })
 
-// API Routes
-// Health check endpoint
+// Health check endpoints
 app.get('/health', (req, res) => {
   res.json({
     success: true,
     status: 'healthy',
     timestamp: new Date().toISOString(),
+    version: process.env.npm_package_version || '1.0.0',
+    environment: process.env.NODE_ENV || 'production',
     services: {
       database: 'connected',
-      queue: 'running',
+      queue: 'disabled (Railway free tier)',
       ai: 'available'
     }
   })
@@ -115,7 +121,7 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     services: {
       database: 'connected',
-      queue: 'running',
+      queue: 'disabled (Railway free tier)',
       ai: 'available'
     }
   })

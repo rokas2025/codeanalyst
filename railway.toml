@@ -1,8 +1,8 @@
 [build]
-command = "npm install --prefix backend"
+command = "cd backend && npm install"
 
 [deploy]
-startCommand = "npm start --prefix backend"
+startCommand = "cd backend && npm start"
 
 [env]
 NODE_ENV = "production"
