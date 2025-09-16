@@ -294,7 +294,7 @@ export class WebsiteAnalyzer {
 
       // Add random delay to mimic human behavior (300-800ms)
       const randomDelay = Math.floor(Math.random() * 500) + 300
-      await page.waitForTimeout(randomDelay)
+      await new Promise(resolve => setTimeout(resolve, randomDelay))
 
       // Navigate to page with optimized timeout and loading strategy
       const response = await page.goto(url, {
@@ -304,7 +304,7 @@ export class WebsiteAnalyzer {
       
       // Wait for additional content but don't block on slow resources
       try {
-        await page.waitForTimeout(3000) // Wait 3 seconds for initial dynamic content
+        await new Promise(resolve => setTimeout(resolve, 3000)) // Wait 3 seconds for initial dynamic content
         await page.waitForSelector('body', { timeout: 5000 }) // Ensure body is loaded
       } catch (additionalWaitError) {
         logger.warn(`Additional content wait timeout for ${url}, proceeding with analysis`)
@@ -897,7 +897,7 @@ export class WebsiteAnalyzer {
   async handleCookieBanners(page) {
     try {
       // Wait a moment for overlays to appear
-      await page.waitForTimeout(2000)
+      await new Promise(resolve => setTimeout(resolve, 2000))
 
       // Common cookie banner selectors
       const cookieSelectors = [
@@ -941,7 +941,7 @@ export class WebsiteAnalyzer {
           if (elements.length > 0) {
             logger.info(`🍪 Found cookie banner with selector: ${selector}`)
             await elements[0].click()
-            await page.waitForTimeout(1000) // Wait for animation
+            await new Promise(resolve => setTimeout(resolve, 1000)) // Wait for animation
             break
           }
         } catch (err) {
@@ -964,7 +964,7 @@ export class WebsiteAnalyzer {
           const element = await page.$(selector)
           if (element) {
             await element.click()
-            await page.waitForTimeout(500)
+            await new Promise(resolve => setTimeout(resolve, 500))
           }
         } catch (err) {
           // Continue

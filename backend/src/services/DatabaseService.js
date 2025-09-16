@@ -724,8 +724,7 @@ export class DatabaseService {
           technologies, html_content,
           basic_website_data, performance_metrics, seo_analysis, 
           accessibility_analysis, security_analysis,
-          ai_insights, business_recommendations, technical_recommendations, risk_assessment,
-          confidence_score
+          ai_insights, business_recommendations, technical_recommendations, risk_assessment
         FROM url_analyses 
         WHERE id = $1::UUID AND user_id = $2::UUID
       `
@@ -774,7 +773,7 @@ export class DatabaseService {
 
       const query = `
         SELECT 
-          id, url, title, status, created_at, completed_at, technologies, confidence_score
+          id, url, title, status, created_at, completed_at, technologies
         FROM url_analyses 
         WHERE user_id = $1::UUID 
         ORDER BY ${orderBy} ${order}

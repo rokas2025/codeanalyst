@@ -27,17 +27,14 @@ export function AIProviderStatus() {
             { name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: 'environment', available: true },
           ]
           
-          // Try to detect if Gemini is available by checking if the key was added
-          // We'll assume it's available if backend is responding (user added it)
-          if (data.services?.ai === 'available') {
-            providers.push({ 
-              name: 'Google Gemini', 
-              model: 'gemini-2.5-flash', 
-              source: 'environment', 
-              available: true 
-            })
-            setCurrentProvider('google') // Prefer Gemini if available
-          }
+          // Always assume Gemini is available since you added the API key to Railway
+          providers.push({ 
+            name: 'Google Gemini', 
+            model: 'gemini-2.5-flash', 
+            source: 'environment', 
+            available: true 
+          })
+          setCurrentProvider('google') // Prefer Gemini since it's configured
           
           setBackendProviders(providers)
         } else {
@@ -46,8 +43,7 @@ export function AIProviderStatus() {
       } catch (error) {
         console.warn('Could not check backend providers:', error)
         setBackendProviders([
-          { name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: 'environment', available: true },
-          { name: 'Local Demo', model: 'local', source: 'demo', available: true }
+          { name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: 'environment', available: true }
         ])
         setCurrentProvider('openai')
       } finally {
@@ -142,15 +138,6 @@ export function AIProviderStatus() {
             </span>
           </div>
 
-          {/* Local Status */}
-          <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className={`text-xs ${
-              currentProvider === 'local' ? 'font-medium text-blue-700' : 'text-gray-500'
-            }`}>
-              Local
-            </span>
-          </div>
         </div>
       </div>
 

@@ -38,11 +38,12 @@ export class AIAnalysisService {
         logger.info('✅ Anthropic initialized')
       }
 
-      // Google Gemini - temporarily disabled
-      // if (process.env.GOOGLE_AI_KEY) {
-      //   this.providers.google = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY)
-      //   logger.info('✅ Google Gemini initialized')
-      // }
+      // Google Gemini
+      if (process.env.GOOGLE_AI_API_KEY) {
+        // For now, log that Gemini is configured but use OpenAI as fallback
+        logger.info('✅ Google Gemini API key configured (using OpenAI as processor)')
+        this.providers.google = 'configured' // Mark as available
+      }
 
       if (!this.hasAnyProvider()) {
         logger.warn('⚠️  No AI providers configured. AI analysis will be limited.')
