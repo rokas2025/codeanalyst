@@ -180,14 +180,3 @@ export const AUDIENCE_OPTIONS = [
   { value: 'marketing', label: 'Marketing', description: 'Marketing professionals, agencies' }
 ] as const
 
-// Default generation settings
-export const DEFAULT_GENERATION_SETTINGS: GenerationSettings = {
-  temperature: 0.7,
-  maxTokens: 2000,
-  model: 'gpt-4-turbo',
-  language: 'en',
-  tone: 'professional',
-  style: 'detailed',
-  audience: 'general',
-  ctaStrength: 'moderate'
-}

@@ -3,9 +3,9 @@ import type {
   ContentCreatorState, 
   ContentTemplate, 
   GeneratedContent, 
-  GenerationSettings,
-  DEFAULT_GENERATION_SETTINGS
+  GenerationSettings
 } from '../types/contentCreator'
+import { DEFAULT_GENERATION_SETTINGS } from '../types/contentCreator'
 import { contentCreatorService } from '../services/contentCreatorService'
 
 interface ContentCreatorStore extends ContentCreatorState {
