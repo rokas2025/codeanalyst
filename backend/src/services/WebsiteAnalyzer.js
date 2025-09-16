@@ -56,8 +56,8 @@ export class WebsiteAnalyzer {
         
         for (const path of chromePaths) {
           try {
-            const fs = await import('fs')
-            if (fs.existsSync(path)) {
+            const { existsSync } = await import('fs')
+            if (existsSync(path)) {
               puppeteerConfig.executablePath = path
               logger.info(`🐳 Found Chrome at: ${path}`)
               break
@@ -353,7 +353,7 @@ export class WebsiteAnalyzer {
         paragraphCount,
         
         // Page info
-        finalUrl: response.request.res.responseUrl || url,
+        finalUrl: response.request?.responseURL || response.config?.url || url,
         
         // Meta information
         hasTitle: !!title,
