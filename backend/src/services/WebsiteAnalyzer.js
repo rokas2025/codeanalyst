@@ -246,7 +246,11 @@ export class WebsiteAnalyzer {
         })
         
         Object.defineProperty(navigator, 'languages', {
-          get: () => ['en-US', 'en'],
+          get: () => ['lt-LT', 'lt', 'en-US', 'en'],
+        })
+        
+        Object.defineProperty(navigator, 'language', {
+          get: () => 'lt-LT',
         })
         
         // Additional anti-detection measures (safely)
@@ -280,7 +284,7 @@ export class WebsiteAnalyzer {
       // Add realistic headers
       await page.setExtraHTTPHeaders({
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Language': 'lt-LT,lt;q=0.9,en-US;q=0.8,en;q=0.7',
         'Accept-Encoding': 'gzip, deflate, br',
         'DNT': '1',
         'Connection': 'keep-alive',
@@ -302,10 +306,14 @@ export class WebsiteAnalyzer {
         timeout: 60000 // Increased from 30s to 60s
       })
       
-      // Wait for additional content but don't block on slow resources
+      // Wait for content to stabilize - important for sites with dynamic frames
       try {
-        await new Promise(resolve => setTimeout(resolve, 3000)) // Wait 3 seconds for initial dynamic content
+        await new Promise(resolve => setTimeout(resolve, 2000)) // Reduced wait time
         await page.waitForSelector('body', { timeout: 5000 }) // Ensure body is loaded
+        
+        // Wait for network to settle (important for preventing frame detachment)
+        await page.waitForLoadState?.('networkidle')?.catch(() => {}) // Playwright style if available
+        await page.waitForFunction(() => document.readyState === 'complete', { timeout: 5000 }).catch(() => {})
       } catch (additionalWaitError) {
         logger.warn(`Additional content wait timeout for ${url}, proceeding with analysis`)
         // Continue even if additional waits fail
@@ -908,6 +916,14 @@ export class WebsiteAnalyzer {
         '[class*="consent" i] button',
         '[data-testid*="cookie" i]',
         '[data-testid*="consent" i]',
+        
+        // Lithuanian button texts
+        'button:has-text("Sutinku")',
+        'button:has-text("Priimti")', 
+        'button:has-text("Gerai")',
+        'button:has-text("Visus slapukus")',
+        '[aria-label*="Sutik"]',
+        '[aria-label*="Priim"]',
         
         // Common button texts (case insensitive)
         'button:has-text("Accept")',

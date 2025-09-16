@@ -240,42 +240,42 @@ router.post('/analyze', [
       let userMessage = analysisError.message
       let debugCategory = 'server'
 
-      if (analysisError.message.includes('Protocol error') || analysisError.message.includes('Connection closed')) {
-        errorCode = 'BROWSER_PROTOCOL_ERROR'
-        statusCode = 422 // Unprocessable Entity - website issue, not server issue
-        userMessage = 'Unable to connect to the website. The site may be down, blocking automated analysis, or have connection issues.'
-        debugCategory = 'browser_protocol'
-        errorDetails.bot_detection_likely = true
-      } else if (analysisError.message.includes('Timed out') || analysisError.message.includes('timeout')) {
-        errorCode = 'ANALYSIS_TIMEOUT'
-        statusCode = 422
-        userMessage = 'Website analysis timed out. The site may be very slow or unresponsive.'
-        debugCategory = 'timeout'
-        errorDetails.timeout_duration = '30s'
-      } else if (analysisError.message.includes('net::ERR_') || analysisError.message.includes('DNS')) {
-        errorCode = 'WEBSITE_NOT_ACCESSIBLE'
-        statusCode = 422
-        userMessage = 'Website could not be reached. Please check if the URL is correct and the site is accessible.'
-        debugCategory = 'network'
-      } else if (analysisError.message.includes('Navigation failed') || analysisError.message.includes('net::ERR_FAILED')) {
-        errorCode = 'NAVIGATION_FAILED'
-        statusCode = 422
-        userMessage = 'Failed to navigate to the website. This often indicates anti-bot protection.'
-        debugCategory = 'navigation'
-        errorDetails.bot_detection_likely = true
-      } else if (analysisError.message.includes('evaluateOnNewDocument') || analysisError.message.includes('Runtime.evaluate')) {
-        errorCode = 'BROWSER_SCRIPT_BLOCKED'
-        statusCode = 422
-        userMessage = 'Browser automation was detected and blocked by the website.'
-        debugCategory = 'script_blocked'
-        errorDetails.bot_detection_confirmed = true
-      } else if (analysisError.message.includes('Target closed') || analysisError.message.includes('Session closed')) {
-        errorCode = 'BROWSER_SESSION_CLOSED'
-        statusCode = 422
-        userMessage = 'Browser session was terminated unexpectedly.'
-        debugCategory = 'session_closed'
-        errorDetails.bot_detection_likely = true
-      }
+    if (analysisError.message.includes('Protocol error') || analysisError.message.includes('Connection closed') || analysisError.message.includes('detached Frame')) {
+      errorCode = 'BROWSER_PROTOCOL_ERROR'
+      statusCode = 502 // Bad Gateway - server/browser issue, not user input issue
+      userMessage = 'Website blocked our analysis or has dynamic content that interfered with scanning.'
+      debugCategory = 'browser_protocol'
+      errorDetails.bot_detection_likely = true
+    } else if (analysisError.message.includes('Timed out') || analysisError.message.includes('timeout')) {
+      errorCode = 'ANALYSIS_TIMEOUT'
+      statusCode = 502 // Server couldn't complete the request in time
+      userMessage = 'Website analysis timed out. The site may be very slow or unresponsive.'
+      debugCategory = 'timeout'
+      errorDetails.timeout_duration = '30s'
+    } else if (analysisError.message.includes('net::ERR_') || analysisError.message.includes('DNS')) {
+      errorCode = 'WEBSITE_NOT_ACCESSIBLE'
+      statusCode = 502 // Bad Gateway - can't reach target
+      userMessage = 'Website could not be reached. Please check if the URL is correct and the site is accessible.'
+      debugCategory = 'network'
+    } else if (analysisError.message.includes('Navigation failed') || analysisError.message.includes('net::ERR_FAILED')) {
+      errorCode = 'NAVIGATION_FAILED'
+      statusCode = 502 // Bad Gateway - navigation blocked
+      userMessage = 'Failed to navigate to the website. This often indicates anti-bot protection or the site is blocking automated access.'
+      debugCategory = 'navigation'
+      errorDetails.bot_detection_likely = true
+    } else if (analysisError.message.includes('evaluateOnNewDocument') || analysisError.message.includes('Runtime.evaluate')) {
+      errorCode = 'BROWSER_SCRIPT_BLOCKED'
+      statusCode = 502 // Bad Gateway - scripts blocked
+      userMessage = 'Browser automation was detected and blocked by the website.'
+      debugCategory = 'script_blocked'
+      errorDetails.bot_detection_confirmed = true
+    } else if (analysisError.message.includes('Target closed') || analysisError.message.includes('Session closed')) {
+      errorCode = 'BROWSER_SESSION_CLOSED'
+      statusCode = 502 // Bad Gateway - session terminated
+      userMessage = 'Browser session was terminated unexpectedly by anti-bot protection.'
+      debugCategory = 'session_closed'
+      errorDetails.bot_detection_likely = true
+    }
       
       // Add debug category to error details
       errorDetails.debug_category = debugCategory

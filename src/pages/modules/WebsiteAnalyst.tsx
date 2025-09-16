@@ -132,6 +132,8 @@ export function WebsiteAnalyst() {
             
           } catch (error) {
             console.error('Backend URL analysis failed:', error)
+            const errorMessage = error instanceof Error ? error.message : String(error)
+            console.error('Full error details:', errorMessage)
             
             // Check if it's a rate limit error (429)
             if (error instanceof Error && error.message.includes('429')) {
@@ -150,9 +152,17 @@ export function WebsiteAnalyst() {
               
               setIsAnalyzing(false)
               return // Stop completely - don't show fake data
+            } else if (errorMessage.includes('502') || errorMessage.includes('bot') || errorMessage.includes('blocked')) {
+              // Bot protection detected
+              toast.error(`🤖 Website blocked analysis: The site detected automated access. Try a different URL or wait before retrying.`, {
+                duration: 10000,
+                position: 'top-right',
+              })
+              setIsAnalyzing(false)
+              return
             } else {
               // For other errors, stop completely
-              toast.error(`Backend analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`, {
+              toast.error(`Backend analysis failed: ${errorMessage.includes('Request failed') ? 'Server error - please try again' : errorMessage}`, {
                 duration: 5000,
                 position: 'top-right',
               })
