@@ -187,8 +187,9 @@ export class WebsiteAnalyzer {
     
     logger.info(`🌐 Using Puppeteer for ${url} - browser available`)
     
+    let page = null
     try {
-      const page = await this.browser.newPage()
+      page = await this.browser.newPage()
     
       // Set viewport and user agent
       await page.setViewport({ width: 1920, height: 1080 })
