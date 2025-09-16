@@ -694,6 +694,150 @@ export class DatabaseService {
       throw error
     }
   }
+
+  /**
+   * Get URL analysis by ID
+   */
+  static async getUrlAnalysis(analysisId, userId) {
+    try {
+      const query = `
+        SELECT * FROM url_analyses 
+        WHERE id = $1::UUID AND user_id = $2::UUID
+      `
+      const result = await db.query(query, [analysisId, userId])
+      logger.logDatabase('select', 'url_analyses', result.rows.length, { analysisId })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database getUrlAnalysis', error, { analysisId })
+      throw error
+    }
+  }
+
+  /**
+   * Get URL analysis with complete results
+   */
+  static async getUrlAnalysisWithResults(analysisId, userId) {
+    try {
+      const query = `
+        SELECT 
+          id, url, title, status, progress, created_at, completed_at, error_message,
+          technologies, html_content,
+          basic_website_data, performance_metrics, seo_analysis, 
+          accessibility_analysis, security_analysis,
+          ai_insights, business_recommendations, technical_recommendations, risk_assessment,
+          confidence_score
+        FROM url_analyses 
+        WHERE id = $1::UUID AND user_id = $2::UUID
+      `
+      const result = await db.query(query, [analysisId, userId])
+      
+      if (result.rows.length === 0) {
+        return null
+      }
+
+      const analysis = result.rows[0]
+      
+      // Fix technology parsing - ensure technologies are parsed as objects, not JSON strings
+      if (analysis.technologies && Array.isArray(analysis.technologies)) {
+        analysis.technologies = analysis.technologies.map(tech => {
+          if (typeof tech === 'string') {
+            try {
+              // If it's a JSON string, parse it
+              return JSON.parse(tech)
+            } catch (e) {
+              // If parsing fails, treat as simple string name
+              return { name: tech, categories: [], confidence: 50 }
+            }
+          }
+          return tech // Already an object
+        })
+      }
+
+      logger.logDatabase('select', 'url_analyses', 1, { analysisId })
+      return analysis
+    } catch (error) {
+      logger.logError('Database getUrlAnalysisWithResults', error, { analysisId })
+      throw error
+    }
+  }
+
+  /**
+   * Get user's URL analysis history
+   */
+  static async getUserUrlAnalyses(userId, options = {}) {
+    try {
+      const page = options.page || 1
+      const limit = options.limit || 20
+      const offset = (page - 1) * limit
+      const orderBy = options.orderBy || 'created_at'
+      const order = options.order || 'DESC'
+
+      const query = `
+        SELECT 
+          id, url, title, status, created_at, completed_at, technologies, confidence_score
+        FROM url_analyses 
+        WHERE user_id = $1::UUID 
+        ORDER BY ${orderBy} ${order}
+        LIMIT $2 OFFSET $3
+      `
+      
+      const countQuery = `
+        SELECT COUNT(*) as total 
+        FROM url_analyses 
+        WHERE user_id = $1::UUID
+      `
+
+      const [result, countResult] = await Promise.all([
+        db.query(query, [userId, limit, offset]),
+        db.query(countQuery, [userId])
+      ])
+
+      const analyses = result.rows.map(analysis => {
+        // Fix technology parsing for history too
+        if (analysis.technologies && Array.isArray(analysis.technologies)) {
+          analysis.technologies = analysis.technologies.map(tech => {
+            if (typeof tech === 'string') {
+              try {
+                return JSON.parse(tech)
+              } catch (e) {
+                return { name: tech, categories: [], confidence: 50 }
+              }
+            }
+            return tech
+          })
+        }
+        return analysis
+      })
+
+      logger.logDatabase('select', 'url_analyses', analyses.length, { userId })
+      return {
+        analyses,
+        total: parseInt(countResult.rows[0].total)
+      }
+    } catch (error) {
+      logger.logError('Database getUserUrlAnalyses', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Delete URL analysis
+   */
+  static async deleteUrlAnalysis(analysisId, userId) {
+    try {
+      const query = `
+        DELETE FROM url_analyses 
+        WHERE id = $1::UUID AND user_id = $2::UUID
+        RETURNING id
+      `
+      const result = await db.query(query, [analysisId, userId])
+      logger.logDatabase('delete', 'url_analyses', result.rows.length, { analysisId })
+      return result.rows.length > 0
+    } catch (error) {
+      logger.logError('Database deleteUrlAnalysis', error, { analysisId })
+      throw error
+    }
+  }
 }
 
 export default DatabaseService 
