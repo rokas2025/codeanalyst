@@ -14,6 +14,7 @@ import { dirname, join } from 'path'
 // Import database and services
 import { initDatabase } from './database/connection.js'
 import { queueService } from './services/QueueService.js'
+import { autoSeed } from '../scripts/auto-seed.js'
 
 // Import workers
 import { startAnalysisWorker } from './workers/analysisWorker.js'
@@ -173,6 +174,15 @@ async function startServer() {
     logger.info('📦 Initializing database...')
     await initDatabase()
     logger.info('✅ Database initialized successfully')
+
+    // Auto-seed content templates
+    logger.info('🌱 Running auto-seeding for content templates...')
+    try {
+      await autoSeed()
+      logger.info('✅ Auto-seeding completed successfully')
+    } catch (error) {
+      logger.warn('⚠️ Auto-seeding failed (non-critical):', error.message)
+    }
 
     // Queue service disabled for Railway deployment
     logger.info('⚠️ Queue service disabled - Redis not available on Railway free tier')
