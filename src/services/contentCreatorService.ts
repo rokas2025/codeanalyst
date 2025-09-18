@@ -89,15 +89,31 @@ export class ContentCreatorService {
     try {
       console.log('🚀 Generating content with request:', request)
 
+      // Transform request to match backend API format
+      const backendRequest = {
+        template_id: request.templateId,
+        user_inputs: request.inputs,
+        generation_settings: request.settings
+      }
+
+      console.log('🔄 Transformed backend request:', backendRequest)
+
       const response = await fetch(`${this.baseUrl}/content-creator/generate`, {
         method: 'POST',
         headers: this.getHeaders(),
-        body: JSON.stringify(request)
+        body: JSON.stringify(backendRequest)
       })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('❌ HTTP Error:', response.status, response.statusText, errorText)
+        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`)
+      }
 
       const data = await response.json()
       
       if (!data.success) {
+        console.error('❌ Backend error:', data.error)
         throw new Error(data.error || 'Failed to generate content')
       }
 
@@ -106,7 +122,12 @@ export class ContentCreatorService {
     } catch (error) {
       console.error('❌ Error generating content:', error)
       
-      // Return mock response for development/demo
+      // For development, throw the error to see what's wrong
+      if (import.meta.env.DEV) {
+        throw error
+      }
+      
+      // Return mock response for production fallback
       return this.getMockGenerationResponse(request)
     }
   }
