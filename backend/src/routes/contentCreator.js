@@ -1,14 +1,31 @@
 // Content Creator Routes - AI-powered content generation
 import express from 'express'
+import { body, validationResult } from 'express-validator'
+import { v4 as uuidv4 } from 'uuid'
 import { logger } from '../utils/logger.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { ContentGenerationService } from '../services/ContentGenerationService.js'
+import { 
+  contentGenerationRateLimit, 
+  contentManagementRateLimit, 
+  templateRateLimit 
+} from '../middleware/rateLimiting.js'
+import { db } from '../database/connection.js'
 
 const router = express.Router()
 
-// Template data for development (will be moved to database later)
-const templates = [
-  {
-    id: 'about-us',
+// Initialize Content Generation Service
+const contentGenerationService = new ContentGenerationService()
+
+// Templates are now loaded from database - no hardcoded data
+// All template management is handled through database queries
+// Template management is now database-driven
+// Templates are loaded dynamically from content_templates table
+
+// Removed hardcoded templates array - data now comes from database
+// Example template structure for reference:
+// {
+//   id: 'about-us',
     name: 'About Us Page',
     description: 'Professional company introduction and story',
     category: 'website',
@@ -331,15 +348,14 @@ const templates = [
       audience: 'executive'
     },
     estimatedWords: 700,
-    difficulty: 'intermediate'
-  }
-]
+//   difficulty: 'intermediate'
+// }
 
 /**
  * GET /api/content-creator/templates
  * Get available content templates
  */
-router.get('/templates', async (req, res) => {
+router.get('/templates', templateRateLimit, authMiddleware, async (req, res) => {
   try {
     const { category } = req.query
     
@@ -349,37 +365,121 @@ router.get('/templates', async (req, res) => {
       timestamp: new Date().toISOString()
     })
 
-    let filteredTemplates = templates
-
-    // Filter by category if specified
+    // Build query with user settings integration
+    let query = `
+      SELECT 
+        ct.template_id as id,
+        ct.name,
+        ct.description,
+        ct.category,
+        ct.icon,
+        ct.input_fields,
+        ct.prompt_template,
+        ct.output_structure,
+        ct.default_settings,
+        ct.estimated_words,
+        ct.difficulty,
+        ct.sort_order,
+        ct.created_at,
+        ct.updated_at,
+        CASE 
+          WHEN ucs.favorite_templates IS NOT NULL 
+          AND ct.template_id = ANY(ucs.favorite_templates) 
+          THEN true 
+          ELSE false 
+        END as is_favorite,
+        CASE 
+          WHEN ucs.hidden_templates IS NOT NULL 
+          AND ct.template_id = ANY(ucs.hidden_templates) 
+          THEN true 
+          ELSE false 
+        END as is_hidden,
+        COUNT(gc.id) as usage_count
+      FROM content_templates ct
+      LEFT JOIN user_content_settings ucs ON ucs.user_id = $1
+      LEFT JOIN generated_content gc ON gc.template_id = ct.template_id AND gc.user_id = $1
+      WHERE ct.is_active = true
+    `
+    
+    const params = [req.user.id]
+    let paramIndex = 2
+    
     if (category && category !== 'all') {
-      filteredTemplates = templates.filter(template => template.category === category)
-      logger.info(`🔍 Filtered templates by category: ${category}`, { 
-        totalTemplates: templates.length,
-        filteredCount: filteredTemplates.length 
-      })
+      query += ` AND ct.category = $${paramIndex}`
+      params.push(category)
+      paramIndex++
     }
-
-    // Add user favorites (placeholder for now)
-    const templatesWithUserData = filteredTemplates.map(template => ({
-      ...template,
-      isFavorite: false, // TODO: Check user favorites from database
-      lastUsed: null     // TODO: Get last usage from database
+    
+    // Don't show hidden templates unless explicitly requested
+    query += ` 
+      AND (ucs.hidden_templates IS NULL OR NOT (ct.template_id = ANY(ucs.hidden_templates)))
+      GROUP BY ct.template_id, ct.name, ct.description, ct.category, ct.icon, 
+               ct.input_fields, ct.prompt_template, ct.output_structure, 
+               ct.default_settings, ct.estimated_words, ct.difficulty, 
+               ct.sort_order, ct.created_at, ct.updated_at, 
+               ucs.favorite_templates, ucs.hidden_templates, ucs.custom_template_order
+    `
+    
+    // Apply custom ordering if user has it set, otherwise use default
+    query += `
+      ORDER BY 
+        CASE 
+          WHEN ucs.custom_template_order IS NOT NULL 
+          THEN (
+            SELECT idx FROM (
+              SELECT unnest(ucs.custom_template_order) as template_id, 
+                     generate_subscripts(ucs.custom_template_order, 1) as idx
+            ) template_order 
+            WHERE template_order.template_id = ct.template_id
+          )
+          ELSE ct.sort_order 
+        END ASC NULLS LAST,
+        is_favorite DESC,
+        usage_count DESC,
+        ct.name ASC
+    `
+    
+    const result = await db.query(query, params)
+    
+    // Transform database response to match frontend expectations
+    const templates = result.rows.map(row => ({
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      category: row.category,
+      icon: row.icon,
+      inputFields: row.input_fields,
+      promptTemplate: row.prompt_template,
+      outputStructure: row.output_structure,
+      defaultSettings: row.default_settings,
+      estimatedWords: row.estimated_words,
+      difficulty: row.difficulty,
+      sortOrder: row.sort_order,
+      isFavorite: row.is_favorite,
+      isHidden: row.is_hidden,
+      usageCount: parseInt(row.usage_count) || 0,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at
     }))
-
+    
     res.json({
       success: true,
-      templates: templatesWithUserData,
-      meta: {
-        totalCount: filteredTemplates.length,
+      templates,
+      metadata: {
+        total: templates.length,
+        favorites: templates.filter(t => t.isFavorite).length,
         categories: [...new Set(templates.map(t => t.category))],
+        userHasCustomOrder: result.rows.length > 0 && result.rows[0].custom_template_order !== null,
         timestamp: new Date().toISOString()
       }
     })
 
     logger.info('✅ Templates fetched successfully', { 
-      count: filteredTemplates.length,
-      categories: [...new Set(filteredTemplates.map(t => t.category))]
+      count: templates.length,
+      category: category || 'all',
+      userId: req.user.id,
+      favorites: templates.filter(t => t.isFavorite).length,
+      mostUsed: templates.slice(0, 3).map(t => ({ name: t.name, usage: t.usageCount }))
     })
 
   } catch (error) {
@@ -396,7 +496,7 @@ router.get('/templates', async (req, res) => {
  * GET /api/content-creator/templates/:id
  * Get a specific template by ID
  */
-router.get('/templates/:id', async (req, res) => {
+router.get('/templates/:id', templateRateLimit, authMiddleware, async (req, res) => {
   try {
     const { id } = req.params
     
@@ -405,36 +505,119 @@ router.get('/templates/:id', async (req, res) => {
       userId: req.user?.id 
     })
 
-    const template = templates.find(t => t.id === id)
+    const query = `
+      SELECT 
+        ct.template_id as id,
+        ct.name,
+        ct.description,
+        ct.category,
+        ct.icon,
+        ct.input_fields,
+        ct.prompt_template,
+        ct.output_structure,
+        ct.default_settings,
+        ct.estimated_words,
+        ct.difficulty,
+        ct.sort_order,
+        ct.created_at,
+        ct.updated_at,
+        CASE 
+          WHEN ucs.favorite_templates IS NOT NULL 
+          AND ct.template_id = ANY(ucs.favorite_templates) 
+          THEN true 
+          ELSE false 
+        END as is_favorite,
+        COUNT(gc.id) as usage_count,
+        MAX(gc.created_at) as last_used_at,
+        -- User's generation settings for this template
+        ucs.default_temperature,
+        ucs.default_tone,
+        ucs.default_style,
+        ucs.default_audience,
+        ucs.default_content_length
+      FROM content_templates ct
+      LEFT JOIN user_content_settings ucs ON ucs.user_id = $2
+      LEFT JOIN generated_content gc ON gc.template_id = ct.template_id AND gc.user_id = $2
+      WHERE ct.template_id = $1 AND ct.is_active = true
+      GROUP BY ct.template_id, ct.name, ct.description, ct.category, ct.icon, 
+               ct.input_fields, ct.prompt_template, ct.output_structure, 
+               ct.default_settings, ct.estimated_words, ct.difficulty, 
+               ct.sort_order, ct.created_at, ct.updated_at, 
+               ucs.favorite_templates, ucs.default_temperature, ucs.default_tone,
+               ucs.default_style, ucs.default_audience, ucs.default_content_length
+    `
     
-    if (!template) {
-      logger.warn('⚠️ Template not found', { templateId: id })
+    const result = await db.query(query, [id, req.user.id])
+    
+    if (result.rows.length === 0) {
+      logger.warn('⚠️ Template not found', { templateId: id, userId: req.user.id })
       return res.status(404).json({
         success: false,
         error: 'Template not found',
-        message: `Template with ID '${id}' does not exist`
+        message: 'The requested template does not exist or is not available'
       })
     }
-
-    // Add user-specific data (placeholder for now)
-    const templateWithUserData = {
-      ...template,
-      isFavorite: false, // TODO: Check user favorites from database
-      lastUsed: null,    // TODO: Get last usage from database
-      usageCount: 0      // TODO: Get usage count from database
+    
+    const row = result.rows[0]
+    
+    // Merge user's default settings with template's default settings
+    const userSettings = {
+      temperature: row.default_temperature,
+      tone: row.default_tone,
+      style: row.default_style,
+      audience: row.default_audience,
+      contentLength: row.default_content_length
+    }
+    
+    // Remove null values from user settings
+    const cleanUserSettings = Object.fromEntries(
+      Object.entries(userSettings).filter(([_, value]) => value !== null)
+    )
+    
+    const template = {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      category: row.category,
+      icon: row.icon,
+      inputFields: row.input_fields,
+      promptTemplate: row.prompt_template,
+      outputStructure: row.output_structure,
+      defaultSettings: {
+        ...row.default_settings,
+        ...cleanUserSettings // User preferences override template defaults
+      },
+      estimatedWords: row.estimated_words,
+      difficulty: row.difficulty,
+      sortOrder: row.sort_order,
+      isFavorite: row.is_favorite,
+      usageCount: parseInt(row.usage_count) || 0,
+      lastUsedAt: row.last_used_at,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at
     }
 
     res.json({
       success: true,
-      template: templateWithUserData,
+      template,
+      userStats: {
+        usageCount: template.usageCount,
+        lastUsedAt: template.lastUsedAt,
+        isFavorite: template.isFavorite
+      },
       meta: {
+        hasUserCustomizations: Object.keys(cleanUserSettings).length > 0,
         timestamp: new Date().toISOString()
       }
     })
 
     logger.info('✅ Template fetched successfully', { 
       templateId: id,
-      templateName: template.name
+      name: template.name,
+      userId: req.user.id,
+      isFavorite: template.isFavorite,
+      usageCount: template.usageCount,
+      hasUserCustomizations: Object.keys(cleanUserSettings).length > 0
     })
 
   } catch (error) {
@@ -443,6 +626,2412 @@ router.get('/templates/:id', async (req, res) => {
       success: false,
       error: 'Failed to fetch template',
       message: 'An error occurred while retrieving the template'
+    })
+  }
+})
+
+/**
+ * POST /api/content-creator/generate
+ * Generate content using AI based on template and user inputs
+ */
+router.post('/generate', contentGenerationRateLimit, authMiddleware, [
+  body('template_id')
+    .notEmpty()
+    .withMessage('Template ID is required'),
+  body('user_inputs')
+    .isObject()
+    .withMessage('User inputs must be an object'),
+  body('generation_settings')
+    .optional()
+    .isObject()
+    .withMessage('Generation settings must be an object'),
+  body('generation_settings.temperature')
+    .optional()
+    .isFloat({ min: 0.0, max: 1.0 })
+    .withMessage('Temperature must be between 0.0 and 1.0'),
+  body('generation_settings.tone')
+    .optional()
+    .isIn(['professional', 'friendly', 'casual', 'formal', 'persuasive', 'conversational'])
+    .withMessage('Invalid tone option'),
+  body('generation_settings.style')
+    .optional()
+    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging'])
+    .withMessage('Invalid style option'),
+  body('generation_settings.audience')
+    .optional()
+    .isIn(['general', 'technical', 'business', 'consumer', 'executive'])
+    .withMessage('Invalid audience option')
+], async (req, res) => {
+  try {
+    logger.info('Content generation request received:', {
+      template_id: req.body.template_id,
+      userId: req.user?.id,
+      hasInputs: !!req.body.user_inputs
+    })
+
+    // Validation
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      logger.error('Content generation validation failed:', errors.array())
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      })
+    }
+
+    const { 
+      template_id, 
+      user_inputs = {}, 
+      generation_settings = {},
+      options = {}
+    } = req.body
+    const userId = req.user.id
+
+    // Get template from database
+    const templateResult = await db.query(
+      'SELECT * FROM content_templates WHERE template_id = $1 AND is_active = true',
+      [template_id]
+    )
+
+    if (templateResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Template not found',
+        message: `Template '${template_id}' not found or inactive`
+      })
+    }
+
+    const template = templateResult.rows[0]
+
+    // Validate required input fields
+    const requiredFields = template.input_fields.filter(field => field.required)
+    const missingFields = requiredFields.filter(field => !user_inputs[field.name])
+
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields',
+        missing_fields: missingFields.map(field => ({
+          name: field.name,
+          label: field.label
+        }))
+      })
+    }
+
+    // Merge with template default settings
+    const finalSettings = {
+      ...template.default_settings,
+      ...generation_settings
+    }
+
+    // Generate content using AI service
+    const generationResult = await contentGenerationService.generateContent(
+      template,
+      user_inputs,
+      finalSettings,
+      {
+        preferredProvider: options.ai_provider,
+        model: options.ai_model,
+        userId: userId
+      }
+    )
+
+    // Prepare content for database storage
+    const contentId = uuidv4()
+    const generationData = {
+      id: contentId,
+      user_id: userId,
+      template_id: template_id,
+      input_data: user_inputs,
+      generation_settings: finalSettings,
+      content_sections: generationResult.content.content_sections,
+      raw_content: generationResult.content.raw_content,
+      formatted_content: {
+        structured: generationResult.content.structured_content,
+        statistics: generationResult.content.statistics
+      },
+      ai_provider: generationResult.generation_metadata.ai_provider,
+      ai_model: generationResult.generation_metadata.ai_model,
+      token_count: generationResult.generation_metadata.token_count,
+      generation_time_ms: generationResult.generation_metadata.generation_time_ms,
+      cost_estimate: generationResult.generation_metadata.cost_estimate,
+      word_count: generationResult.content.statistics.word_count,
+      character_count: generationResult.content.statistics.character_count,
+      estimated_reading_time: generationResult.content.statistics.estimated_reading_time
+    }
+
+    // Update user's monthly generation count for rate limiting and billing
+    await db.query(`
+      UPDATE user_content_settings 
+      SET monthly_generation_count = monthly_generation_count + 1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE user_id = $1
+    `, [generationData.user_id])
+
+    // Store generated content in database
+    await db.query(`
+      INSERT INTO generated_content (
+        id, user_id, template_id, input_data, generation_settings,
+        content_sections, raw_content, formatted_content,
+        ai_provider, ai_model, token_count, generation_time_ms, cost_estimate,
+        word_count, character_count, estimated_reading_time,
+        status, created_at, updated_at
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'draft', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      )
+    `, [
+      generationData.id,
+      generationData.user_id,
+      generationData.template_id,
+      JSON.stringify(generationData.input_data),
+      JSON.stringify(generationData.generation_settings),
+      JSON.stringify(generationData.content_sections),
+      generationData.raw_content,
+      JSON.stringify(generationData.formatted_content),
+      generationData.ai_provider,
+      generationData.ai_model,
+      generationData.token_count,
+      generationData.generation_time_ms,
+      generationData.cost_estimate,
+      generationData.word_count,
+      generationData.character_count,
+      generationData.estimated_reading_time
+    ])
+
+    logger.info('Content generated and stored successfully:', {
+      contentId,
+      userId,
+      template_id,
+      provider: generationResult.generation_metadata.ai_provider,
+      tokens: generationResult.generation_metadata.token_count,
+      words: generationResult.content.statistics.word_count
+    })
+
+    // Return success response
+    res.json({
+      success: true,
+      content_id: contentId,
+      content: {
+        sections: generationResult.content.content_sections,
+        raw_content: generationResult.content.raw_content,
+        structured_content: generationResult.content.structured_content,
+        statistics: generationResult.content.statistics
+      },
+      metadata: {
+        template: {
+          id: template.template_id,
+          name: template.name,
+          category: template.category
+        },
+        generation: {
+          ai_provider: generationResult.generation_metadata.ai_provider,
+          ai_model: generationResult.generation_metadata.ai_model,
+          token_count: generationResult.generation_metadata.token_count,
+          cost_estimate: generationResult.generation_metadata.cost_estimate,
+          generation_time_ms: generationResult.generation_metadata.generation_time_ms,
+          generated_at: generationResult.generation_metadata.generated_at
+        },
+        user_inputs: user_inputs,
+        generation_settings: finalSettings
+      }
+    })
+
+  } catch (error) {
+    logger.error('Content generation failed:', error)
+    
+    // Return appropriate error response
+    if (error.message.includes('No AI provider available')) {
+      return res.status(503).json({
+        success: false,
+        error: 'AI service unavailable',
+        message: 'Content generation service is temporarily unavailable. Please try again later.'
+      })
+    }
+    
+    if (error.message.includes('API key')) {
+      return res.status(503).json({
+        success: false,
+        error: 'AI configuration error',
+        message: 'AI service configuration issue. Please contact support.'
+      })
+    }
+    
+    res.status(500).json({
+      success: false,
+      error: 'Content generation failed',
+      message: 'An error occurred while generating content. Please try again.'
+    })
+  }
+})
+
+/**
+ * GET/POST /api/content-creator/content/:id?
+ * Get specific content by ID or save/update content
+ */
+router.get('/content/:id', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.id
+
+    logger.info('Content retrieval request:', { contentId: id, userId })
+
+    // Get content from database with user ownership check
+    const contentResult = await db.query(`
+      SELECT 
+        gc.*,
+        ct.name as template_name,
+        ct.category as template_category,
+        ct.icon as template_icon
+      FROM generated_content gc
+      JOIN content_templates ct ON gc.template_id = ct.template_id
+      WHERE gc.id = $1 AND gc.user_id = $2
+    `, [id, userId])
+
+    if (contentResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content not found',
+        message: 'Content not found or you do not have permission to access it'
+      })
+    }
+
+    const content = contentResult.rows[0]
+
+    // Format response
+    res.json({
+      success: true,
+      content: {
+        id: content.id,
+        template: {
+          id: content.template_id,
+          name: content.template_name,
+          category: content.template_category,
+          icon: content.template_icon
+        },
+        title: content.title,
+        status: content.status,
+        version: content.version,
+        input_data: content.input_data,
+        generation_settings: content.generation_settings,
+        content_sections: content.content_sections,
+        raw_content: content.raw_content,
+        formatted_content: content.formatted_content,
+        statistics: {
+          word_count: content.word_count,
+          character_count: content.character_count,
+          estimated_reading_time: content.estimated_reading_time
+        },
+        generation_metadata: {
+          ai_provider: content.ai_provider,
+          ai_model: content.ai_model,
+          token_count: content.token_count,
+          generation_time_ms: content.generation_time_ms,
+          cost_estimate: content.cost_estimate
+        },
+        usage_stats: {
+          export_count: content.export_count,
+          view_count: content.view_count,
+          exported_formats: content.exported_formats
+        },
+        timestamps: {
+          created_at: content.created_at,
+          updated_at: content.updated_at,
+          last_edited_at: content.last_edited_at,
+          last_exported_at: content.last_exported_at
+        }
+      }
+    })
+
+    // Update view count
+    await db.query(
+      'UPDATE generated_content SET view_count = view_count + 1 WHERE id = $1',
+      [id]
+    )
+
+    logger.info('Content retrieved successfully:', { contentId: id, userId })
+
+  } catch (error) {
+    logger.error('Content retrieval failed:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Content retrieval failed',
+      message: 'An error occurred while retrieving the content'
+    })
+  }
+})
+
+/**
+ * PUT /api/content-creator/content/:id
+ * Update existing content (edit, change status, etc.)
+ */
+router.put('/content/:id', contentManagementRateLimit, authMiddleware, [
+  body('title')
+    .optional()
+    .isLength({ min: 1, max: 500 })
+    .withMessage('Title must be between 1 and 500 characters'),
+  body('status')
+    .optional()
+    .isIn(['draft', 'approved', 'published', 'archived'])
+    .withMessage('Invalid status'),
+  body('content_sections')
+    .optional()
+    .isArray()
+    .withMessage('Content sections must be an array'),
+  body('raw_content')
+    .optional()
+    .isString()
+    .withMessage('Raw content must be a string')
+], async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.id
+    const updates = req.body
+
+    logger.info('Content update request:', { contentId: id, userId, updateFields: Object.keys(updates) })
+
+    // Validation
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      })
+    }
+
+    // Check if content exists and belongs to user
+    const existingResult = await db.query(
+      'SELECT id, version, parent_content_id FROM generated_content WHERE id = $1 AND user_id = $2',
+      [id, userId]
+    )
+
+    if (existingResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content not found',
+        message: 'Content not found or you do not have permission to edit it'
+      })
+    }
+
+    const existingContent = existingResult.rows[0]
+
+    // Prepare update fields
+    const updateFields = []
+    const updateValues = []
+    let paramIndex = 1
+
+    // Handle different update types
+    if (updates.title !== undefined) {
+      updateFields.push(`title = $${paramIndex++}`)
+      updateValues.push(updates.title)
+    }
+
+    if (updates.status !== undefined) {
+      updateFields.push(`status = $${paramIndex++}`)
+      updateValues.push(updates.status)
+    }
+
+    if (updates.content_sections !== undefined) {
+      updateFields.push(`content_sections = $${paramIndex++}`)
+      updateValues.push(JSON.stringify(updates.content_sections))
+      
+      // Recalculate statistics if content changed
+      const newRawContent = updates.content_sections
+        .map(section => section.content)
+        .join('\n\n')
+      
+      const stats = contentGenerationService.calculateContentStats(newRawContent)
+      
+      updateFields.push(`raw_content = $${paramIndex++}`)
+      updateValues.push(newRawContent)
+      
+      updateFields.push(`word_count = $${paramIndex++}`)
+      updateValues.push(stats.word_count)
+      
+      updateFields.push(`character_count = $${paramIndex++}`)
+      updateValues.push(stats.character_count)
+      
+      updateFields.push(`estimated_reading_time = $${paramIndex++}`)
+      updateValues.push(stats.estimated_reading_time)
+    }
+
+    if (updates.raw_content !== undefined) {
+      updateFields.push(`raw_content = $${paramIndex++}`)
+      updateValues.push(updates.raw_content)
+      
+      // Recalculate statistics
+      const stats = contentGenerationService.calculateContentStats(updates.raw_content)
+      
+      updateFields.push(`word_count = $${paramIndex++}`)
+      updateValues.push(stats.word_count)
+      
+      updateFields.push(`character_count = $${paramIndex++}`)
+      updateValues.push(stats.character_count)
+      
+      updateFields.push(`estimated_reading_time = $${paramIndex++}`)
+      updateValues.push(stats.estimated_reading_time)
+    }
+
+    // Always update timestamps
+    updateFields.push(`updated_at = CURRENT_TIMESTAMP`)
+    updateFields.push(`last_edited_at = CURRENT_TIMESTAMP`)
+
+    // Add WHERE clause parameters
+    updateValues.push(id, userId)
+
+    // Execute update
+    const updateQuery = `
+      UPDATE generated_content 
+      SET ${updateFields.join(', ')}
+      WHERE id = $${paramIndex++} AND user_id = $${paramIndex++}
+      RETURNING *
+    `
+
+    const updateResult = await db.query(updateQuery, updateValues)
+    const updatedContent = updateResult.rows[0]
+
+    logger.info('Content updated successfully:', { 
+      contentId: id, 
+      userId,
+      updateFields: Object.keys(updates)
+    })
+
+    res.json({
+      success: true,
+      message: 'Content updated successfully',
+      content: {
+        id: updatedContent.id,
+        title: updatedContent.title,
+        status: updatedContent.status,
+        version: updatedContent.version,
+        updated_at: updatedContent.updated_at,
+        last_edited_at: updatedContent.last_edited_at
+      }
+    })
+
+  } catch (error) {
+    logger.error('Content update failed:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Content update failed',
+      message: 'An error occurred while updating the content'
+    })
+  }
+})
+
+/**
+ * DELETE /api/content-creator/content/:id
+ * Delete content (soft delete by setting status to archived)
+ */
+router.delete('/content/:id', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.id
+
+    logger.info('Content deletion request:', { contentId: id, userId })
+
+    // Check if content exists and belongs to user
+    const existingResult = await db.query(
+      'SELECT id, status FROM generated_content WHERE id = $1 AND user_id = $2',
+      [id, userId]
+    )
+
+    if (existingResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content not found',
+        message: 'Content not found or you do not have permission to delete it'
+      })
+    }
+
+    // Soft delete by setting status to archived
+    await db.query(`
+      UPDATE generated_content 
+      SET status = 'archived', updated_at = CURRENT_TIMESTAMP
+      WHERE id = $1 AND user_id = $2
+    `, [id, userId])
+
+    logger.info('Content archived successfully:', { contentId: id, userId })
+
+    res.json({
+      success: true,
+      message: 'Content archived successfully',
+      content_id: id
+    })
+
+  } catch (error) {
+    logger.error('Content deletion failed:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Content deletion failed',
+      message: 'An error occurred while deleting the content'
+    })
+  }
+})
+
+/**
+ * POST /api/content-creator/content/:id/duplicate
+ * Create a duplicate/copy of existing content
+ */
+router.post('/content/:id/duplicate', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.id
+
+    logger.info('Content duplication request:', { originalId: id, userId })
+
+    // Get original content
+    const originalResult = await db.query(
+      'SELECT * FROM generated_content WHERE id = $1 AND user_id = $2 AND status != $3',
+      [id, userId, 'archived']
+    )
+
+    if (originalResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content not found',
+        message: 'Original content not found or cannot be duplicated'
+      })
+    }
+
+    const original = originalResult.rows[0]
+
+    // Create duplicate with new ID
+    const duplicateId = uuidv4()
+    const duplicateTitle = original.title ? `${original.title} (Copy)` : null
+
+    await db.query(`
+      INSERT INTO generated_content (
+        id, user_id, template_id, input_data, generation_settings,
+        content_sections, raw_content, formatted_content, title,
+        ai_provider, ai_model, token_count, generation_time_ms, cost_estimate,
+        word_count, character_count, estimated_reading_time,
+        status, version, created_at, updated_at
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, 'draft', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      )
+    `, [
+      duplicateId,
+      userId,
+      original.template_id,
+      original.input_data,
+      original.generation_settings,
+      original.content_sections,
+      original.raw_content,
+      original.formatted_content,
+      duplicateTitle,
+      original.ai_provider,
+      original.ai_model,
+      original.token_count,
+      original.generation_time_ms,
+      original.cost_estimate,
+      original.word_count,
+      original.character_count,
+      original.estimated_reading_time
+    ])
+
+    logger.info('Content duplicated successfully:', { 
+      originalId: id, 
+      duplicateId, 
+      userId 
+    })
+
+    res.json({
+      success: true,
+      message: 'Content duplicated successfully',
+      original_id: id,
+      duplicate_id: duplicateId
+    })
+
+  } catch (error) {
+    logger.error('Content duplication failed:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Content duplication failed',
+      message: 'An error occurred while duplicating the content'
+    })
+  }
+})
+
+/**
+ * GET /api/content-creator/history
+ * Get user's content generation history with filtering and pagination
+ */
+router.get('/history', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const {
+      page = 1,
+      limit = 20,
+      status,
+      template_id,
+      sort_by = 'created_at',
+      sort_order = 'desc',
+      search
+    } = req.query
+
+    logger.info('Content history request:', { 
+      userId, 
+      page, 
+      limit, 
+      status, 
+      template_id, 
+      search 
+    })
+
+    // Validate pagination parameters
+    const pageNum = Math.max(1, parseInt(page))
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit))) // Max 100 items per page
+    const offset = (pageNum - 1) * limitNum
+
+    // Validate sort parameters
+    const validSortFields = ['created_at', 'updated_at', 'title', 'status', 'template_id', 'word_count']
+    const validSortOrders = ['asc', 'desc']
+    const sortField = validSortFields.includes(sort_by) ? sort_by : 'created_at'
+    const sortOrderValue = validSortOrders.includes(sort_order.toLowerCase()) ? sort_order.toLowerCase() : 'desc'
+
+    // Build WHERE conditions
+    const conditions = ['gc.user_id = $1']
+    const params = [userId]
+    let paramIndex = 2
+
+    // Filter by status
+    if (status && ['draft', 'approved', 'published', 'archived'].includes(status)) {
+      conditions.push(`gc.status = $${paramIndex++}`)
+      params.push(status)
+    }
+
+    // Filter by template
+    if (template_id) {
+      conditions.push(`gc.template_id = $${paramIndex++}`)
+      params.push(template_id)
+    }
+
+    // Search in title and raw content
+    if (search && search.trim()) {
+      conditions.push(`(
+        gc.title ILIKE $${paramIndex} OR 
+        gc.raw_content ILIKE $${paramIndex} OR
+        ct.name ILIKE $${paramIndex}
+      )`)
+      params.push(`%${search.trim()}%`)
+      paramIndex++
+    }
+
+    const whereClause = conditions.join(' AND ')
+
+    // Get total count for pagination
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM generated_content gc
+      JOIN content_templates ct ON gc.template_id = ct.template_id
+      WHERE ${whereClause}
+    `
+    const countResult = await db.query(countQuery, params)
+    const totalItems = parseInt(countResult.rows[0].total)
+    const totalPages = Math.ceil(totalItems / limitNum)
+
+    // Get paginated results
+    const dataQuery = `
+      SELECT 
+        gc.id,
+        gc.title,
+        gc.status,
+        gc.version,
+        gc.word_count,
+        gc.character_count,
+        gc.estimated_reading_time,
+        gc.ai_provider,
+        gc.ai_model,
+        gc.token_count,
+        gc.cost_estimate,
+        gc.export_count,
+        gc.view_count,
+        gc.created_at,
+        gc.updated_at,
+        gc.last_edited_at,
+        gc.last_exported_at,
+        ct.template_id,
+        ct.name as template_name,
+        ct.category as template_category,
+        ct.icon as template_icon,
+        ct.difficulty as template_difficulty
+      FROM generated_content gc
+      JOIN content_templates ct ON gc.template_id = ct.template_id
+      WHERE ${whereClause}
+      ORDER BY gc.${sortField} ${sortOrderValue.toUpperCase()}
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `
+    params.push(limitNum, offset)
+
+    const dataResult = await db.query(dataQuery, params)
+
+    // Format response data
+    const contentHistory = dataResult.rows.map(item => ({
+      id: item.id,
+      title: item.title || `Untitled ${item.template_name}`,
+      status: item.status,
+      version: item.version,
+      template: {
+        id: item.template_id,
+        name: item.template_name,
+        category: item.template_category,
+        icon: item.template_icon,
+        difficulty: item.template_difficulty
+      },
+      statistics: {
+        word_count: item.word_count,
+        character_count: item.character_count,
+        estimated_reading_time: item.estimated_reading_time
+      },
+      generation_metadata: {
+        ai_provider: item.ai_provider,
+        ai_model: item.ai_model,
+        token_count: item.token_count,
+        cost_estimate: parseFloat(item.cost_estimate) || 0
+      },
+      usage_stats: {
+        export_count: item.export_count || 0,
+        view_count: item.view_count || 0
+      },
+      timestamps: {
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+        last_edited_at: item.last_edited_at,
+        last_exported_at: item.last_exported_at
+      }
+    }))
+
+    // Calculate summary statistics
+    const summaryQuery = `
+      SELECT 
+        COUNT(*) as total_content,
+        SUM(CASE WHEN gc.status = 'draft' THEN 1 ELSE 0 END) as draft_count,
+        SUM(CASE WHEN gc.status = 'approved' THEN 1 ELSE 0 END) as approved_count,
+        SUM(CASE WHEN gc.status = 'published' THEN 1 ELSE 0 END) as published_count,
+        SUM(CASE WHEN gc.status = 'archived' THEN 1 ELSE 0 END) as archived_count,
+        SUM(gc.word_count) as total_words,
+        SUM(gc.cost_estimate) as total_cost,
+        AVG(gc.word_count) as avg_words_per_content
+      FROM generated_content gc
+      WHERE gc.user_id = $1
+    `
+    const summaryResult = await db.query(summaryQuery, [userId])
+    const summary = summaryResult.rows[0]
+
+    logger.info('Content history retrieved successfully:', { 
+      userId,
+      totalItems,
+      returnedItems: contentHistory.length,
+      page: pageNum
+    })
+
+    res.json({
+      success: true,
+      data: contentHistory,
+      pagination: {
+        current_page: pageNum,
+        per_page: limitNum,
+        total_items: totalItems,
+        total_pages: totalPages,
+        has_next_page: pageNum < totalPages,
+        has_prev_page: pageNum > 1
+      },
+      filters: {
+        status,
+        template_id,
+        search,
+        sort_by: sortField,
+        sort_order: sortOrderValue
+      },
+      summary: {
+        total_content: parseInt(summary.total_content),
+        status_breakdown: {
+          draft: parseInt(summary.draft_count),
+          approved: parseInt(summary.approved_count),
+          published: parseInt(summary.published_count),
+          archived: parseInt(summary.archived_count)
+        },
+        statistics: {
+          total_words: parseInt(summary.total_words) || 0,
+          total_cost: parseFloat(summary.total_cost) || 0,
+          average_words_per_content: Math.round(parseFloat(summary.avg_words_per_content)) || 0
+        }
+      }
+    })
+
+  } catch (error) {
+    logger.error('Content history retrieval failed:', error)
+    res.status(500).json({
+      success: false,
+      error: 'History retrieval failed',
+      message: 'An error occurred while retrieving your content history'
+    })
+  }
+})
+
+/**
+ * GET /api/content-creator/stats
+ * Get detailed analytics and statistics for user's content
+ */
+router.get('/stats', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { period = '30d' } = req.query
+
+    logger.info('Content stats request:', { userId, period })
+
+    // Define date range based on period
+    let dateFilter = ''
+    if (period === '7d') {
+      dateFilter = "AND gc.created_at >= CURRENT_DATE - INTERVAL '7 days'"
+    } else if (period === '30d') {
+      dateFilter = "AND gc.created_at >= CURRENT_DATE - INTERVAL '30 days'"
+    } else if (period === '90d') {
+      dateFilter = "AND gc.created_at >= CURRENT_DATE - INTERVAL '90 days'"
+    }
+    // 'all' period has no date filter
+
+    // Content generation trends
+    const trendsQuery = `
+      SELECT 
+        DATE(gc.created_at) as date,
+        COUNT(*) as content_count,
+        SUM(gc.word_count) as total_words,
+        SUM(gc.cost_estimate) as total_cost,
+        AVG(gc.generation_time_ms) as avg_generation_time
+      FROM generated_content gc
+      WHERE gc.user_id = $1 ${dateFilter}
+      GROUP BY DATE(gc.created_at)
+      ORDER BY date DESC
+      LIMIT 30
+    `
+
+    // Template usage statistics
+    const templateStatsQuery = `
+      SELECT 
+        ct.template_id,
+        ct.name as template_name,
+        ct.category,
+        ct.icon,
+        COUNT(gc.id) as usage_count,
+        SUM(gc.word_count) as total_words,
+        SUM(gc.cost_estimate) as total_cost,
+        AVG(gc.word_count) as avg_words,
+        AVG(gc.generation_time_ms) as avg_generation_time
+      FROM content_templates ct
+      LEFT JOIN generated_content gc ON ct.template_id = gc.template_id 
+        AND gc.user_id = $1 ${dateFilter}
+      GROUP BY ct.template_id, ct.name, ct.category, ct.icon
+      ORDER BY usage_count DESC, ct.sort_order
+    `
+
+    // AI provider performance
+    const aiStatsQuery = `
+      SELECT 
+        gc.ai_provider,
+        gc.ai_model,
+        COUNT(*) as usage_count,
+        SUM(gc.token_count) as total_tokens,
+        SUM(gc.cost_estimate) as total_cost,
+        AVG(gc.generation_time_ms) as avg_generation_time,
+        AVG(gc.word_count) as avg_words_generated
+      FROM generated_content gc
+      WHERE gc.user_id = $1 ${dateFilter}
+      GROUP BY gc.ai_provider, gc.ai_model
+      ORDER BY usage_count DESC
+    `
+
+    // Content performance metrics
+    const performanceQuery = `
+      SELECT 
+        AVG(gc.word_count) as avg_word_count,
+        AVG(gc.estimated_reading_time) as avg_reading_time,
+        AVG(gc.export_count) as avg_export_count,
+        AVG(gc.view_count) as avg_view_count,
+        SUM(gc.export_count) as total_exports,
+        SUM(gc.view_count) as total_views,
+        COUNT(CASE WHEN gc.status = 'published' THEN 1 END) as published_count,
+        COUNT(*) as total_content
+      FROM generated_content gc
+      WHERE gc.user_id = $1 ${dateFilter}
+    `
+
+    // Execute all queries
+    const [trendsResult, templateStatsResult, aiStatsResult, performanceResult] = await Promise.all([
+      db.query(trendsQuery, [userId]),
+      db.query(templateStatsQuery, [userId]),
+      db.query(aiStatsQuery, [userId]),
+      db.query(performanceQuery, [userId])
+    ])
+
+    const performance = performanceResult.rows[0]
+
+    logger.info('Content stats retrieved successfully:', { userId, period })
+
+    res.json({
+      success: true,
+      period,
+      statistics: {
+        overview: {
+          total_content: parseInt(performance.total_content) || 0,
+          published_content: parseInt(performance.published_count) || 0,
+          total_words: parseInt(performance.avg_word_count) * parseInt(performance.total_content) || 0,
+          total_exports: parseInt(performance.total_exports) || 0,
+          total_views: parseInt(performance.total_views) || 0,
+          avg_word_count: Math.round(parseFloat(performance.avg_word_count)) || 0,
+          avg_reading_time: Math.round(parseFloat(performance.avg_reading_time)) || 0,
+          avg_export_count: Math.round(parseFloat(performance.avg_export_count)) || 0,
+          avg_view_count: Math.round(parseFloat(performance.avg_view_count)) || 0
+        },
+        trends: trendsResult.rows.map(row => ({
+          date: row.date,
+          content_count: parseInt(row.content_count),
+          total_words: parseInt(row.total_words) || 0,
+          total_cost: parseFloat(row.total_cost) || 0,
+          avg_generation_time: Math.round(parseFloat(row.avg_generation_time)) || 0
+        })),
+        template_usage: templateStatsResult.rows.map(row => ({
+          template_id: row.template_id,
+          template_name: row.template_name,
+          category: row.category,
+          icon: row.icon,
+          usage_count: parseInt(row.usage_count) || 0,
+          total_words: parseInt(row.total_words) || 0,
+          total_cost: parseFloat(row.total_cost) || 0,
+          avg_words: Math.round(parseFloat(row.avg_words)) || 0,
+          avg_generation_time: Math.round(parseFloat(row.avg_generation_time)) || 0
+        })),
+        ai_performance: aiStatsResult.rows.map(row => ({
+          provider: row.ai_provider,
+          model: row.ai_model,
+          usage_count: parseInt(row.usage_count),
+          total_tokens: parseInt(row.total_tokens) || 0,
+          total_cost: parseFloat(row.total_cost) || 0,
+          avg_generation_time: Math.round(parseFloat(row.avg_generation_time)) || 0,
+          avg_words_generated: Math.round(parseFloat(row.avg_words_generated)) || 0
+        }))
+      },
+      generated_at: new Date().toISOString()
+    })
+
+  } catch (error) {
+    logger.error('Content stats retrieval failed:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Stats retrieval failed',
+      message: 'An error occurred while retrieving your content statistics'
+    })
+  }
+})
+
+/**
+ * GET /api/content-creator/settings
+ * Get user's content generation settings and preferences
+ */
+router.get('/settings', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    
+    logger.info('📋 Fetching user content settings', { userId })
+
+    const query = `
+      SELECT 
+        user_id,
+        default_ai_provider,
+        default_ai_model,
+        default_temperature,
+        default_tone,
+        default_style,
+        default_audience,
+        default_content_length,
+        favorite_templates,
+        hidden_templates,
+        custom_template_order,
+        preferred_export_formats,
+        auto_export_on_generation,
+        include_metadata_in_export,
+        show_advanced_settings,
+        show_word_count,
+        show_cost_estimates,
+        auto_save_drafts,
+        require_approval_before_export,
+        enable_version_tracking,
+        max_content_history,
+        notify_on_generation_complete,
+        notify_on_export_ready,
+        email_weekly_summary,
+        default_client_name,
+        brand_voice_notes,
+        content_approval_workflow,
+        monthly_generation_limit,
+        monthly_generation_count,
+        last_reset_date,
+        created_at,
+        updated_at
+      FROM user_content_settings
+      WHERE user_id = $1
+    `
+    
+    const result = await db.query(query, [userId])
+    
+    let settings
+    if (result.rows.length === 0) {
+      // Create default settings for new user
+      const defaultSettings = {
+        user_id: userId,
+        default_ai_provider: 'openai',
+        default_ai_model: 'gpt-4-turbo',
+        default_temperature: 0.7,
+        default_tone: 'professional',
+        default_style: 'detailed',
+        default_audience: 'general',
+        default_content_length: 'medium',
+        favorite_templates: [],
+        hidden_templates: [],
+        custom_template_order: null,
+        preferred_export_formats: ['html', 'text'],
+        auto_export_on_generation: false,
+        include_metadata_in_export: true,
+        show_advanced_settings: false,
+        show_word_count: true,
+        show_cost_estimates: true,
+        auto_save_drafts: true,
+        require_approval_before_export: false,
+        enable_version_tracking: true,
+        max_content_history: 50,
+        notify_on_generation_complete: true,
+        notify_on_export_ready: false,
+        email_weekly_summary: false,
+        default_client_name: null,
+        brand_voice_notes: null,
+        content_approval_workflow: null,
+        monthly_generation_limit: null,
+        monthly_generation_count: 0,
+        last_reset_date: new Date().toISOString().split('T')[0]
+      }
+      
+      const insertQuery = `
+        INSERT INTO user_content_settings (
+          user_id, default_ai_provider, default_ai_model, default_temperature,
+          default_tone, default_style, default_audience, default_content_length,
+          favorite_templates, hidden_templates, custom_template_order,
+          preferred_export_formats, auto_export_on_generation, include_metadata_in_export,
+          show_advanced_settings, show_word_count, show_cost_estimates, auto_save_drafts,
+          require_approval_before_export, enable_version_tracking, max_content_history,
+          notify_on_generation_complete, notify_on_export_ready, email_weekly_summary,
+          default_client_name, brand_voice_notes, content_approval_workflow,
+          monthly_generation_limit, monthly_generation_count, last_reset_date
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30
+        ) RETURNING *
+      `
+      
+      const insertResult = await db.query(insertQuery, [
+        defaultSettings.user_id, defaultSettings.default_ai_provider, defaultSettings.default_ai_model,
+        defaultSettings.default_temperature, defaultSettings.default_tone, defaultSettings.default_style,
+        defaultSettings.default_audience, defaultSettings.default_content_length, defaultSettings.favorite_templates,
+        defaultSettings.hidden_templates, defaultSettings.custom_template_order, defaultSettings.preferred_export_formats,
+        defaultSettings.auto_export_on_generation, defaultSettings.include_metadata_in_export, defaultSettings.show_advanced_settings,
+        defaultSettings.show_word_count, defaultSettings.show_cost_estimates, defaultSettings.auto_save_drafts,
+        defaultSettings.require_approval_before_export, defaultSettings.enable_version_tracking, defaultSettings.max_content_history,
+        defaultSettings.notify_on_generation_complete, defaultSettings.notify_on_export_ready, defaultSettings.email_weekly_summary,
+        defaultSettings.default_client_name, defaultSettings.brand_voice_notes, defaultSettings.content_approval_workflow,
+        defaultSettings.monthly_generation_limit, defaultSettings.monthly_generation_count, defaultSettings.last_reset_date
+      ])
+      
+      settings = insertResult.rows[0]
+      logger.info('✅ Created default content settings for new user', { userId })
+    } else {
+      settings = result.rows[0]
+    }
+    
+    // Transform response for frontend
+    const responseSettings = {
+      aiGeneration: {
+        provider: settings.default_ai_provider,
+        model: settings.default_ai_model,
+        temperature: parseFloat(settings.default_temperature),
+        tone: settings.default_tone,
+        style: settings.default_style,
+        audience: settings.default_audience,
+        contentLength: settings.default_content_length
+      },
+      templates: {
+        favorites: settings.favorite_templates || [],
+        hidden: settings.hidden_templates || [],
+        customOrder: settings.custom_template_order
+      },
+      export: {
+        preferredFormats: settings.preferred_export_formats || ['html', 'text'],
+        autoExportOnGeneration: settings.auto_export_on_generation,
+        includeMetadata: settings.include_metadata_in_export
+      },
+      ui: {
+        showAdvancedSettings: settings.show_advanced_settings,
+        showWordCount: settings.show_word_count,
+        showCostEstimates: settings.show_cost_estimates,
+        autoSaveDrafts: settings.auto_save_drafts
+      },
+      workflow: {
+        requireApproval: settings.require_approval_before_export,
+        enableVersionTracking: settings.enable_version_tracking,
+        maxContentHistory: settings.max_content_history
+      },
+      notifications: {
+        onGenerationComplete: settings.notify_on_generation_complete,
+        onExportReady: settings.notify_on_export_ready,
+        emailWeeklySummary: settings.email_weekly_summary
+      },
+      business: {
+        defaultClientName: settings.default_client_name,
+        brandVoiceNotes: settings.brand_voice_notes,
+        approvalWorkflow: settings.content_approval_workflow
+      },
+      usage: {
+        monthlyLimit: settings.monthly_generation_limit,
+        monthlyCount: settings.monthly_generation_count,
+        lastResetDate: settings.last_reset_date
+      }
+    }
+
+    res.json({
+      success: true,
+      settings: responseSettings,
+      meta: {
+        userId,
+        lastUpdated: settings.updated_at,
+        isNewUser: result.rows.length === 0
+      }
+    })
+
+    logger.info('✅ Content settings fetched successfully', { 
+      userId,
+      hasCustomizations: settings.favorite_templates?.length > 0 || settings.hidden_templates?.length > 0
+    })
+
+  } catch (error) {
+    logger.error('❌ Error fetching content settings:', {
+      userId: req.user?.id,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch content settings',
+      message: 'An error occurred while retrieving your content preferences'
+    })
+  }
+})
+
+/**
+ * PUT /api/content-creator/settings
+ * Update user's content generation settings and preferences
+ */
+router.put('/settings', contentManagementRateLimit, authMiddleware, [
+  body('aiGeneration.provider')
+    .optional()
+    .isIn(['openai', 'anthropic', 'google'])
+    .withMessage('Invalid AI provider'),
+  body('aiGeneration.model')
+    .optional()
+    .isString()
+    .withMessage('AI model must be a string'),
+  body('aiGeneration.temperature')
+    .optional()
+    .isFloat({ min: 0, max: 1 })
+    .withMessage('Temperature must be between 0 and 1'),
+  body('aiGeneration.tone')
+    .optional()
+    .isIn(['professional', 'friendly', 'casual', 'formal', 'conversational', 'persuasive'])
+    .withMessage('Invalid tone option'),
+  body('aiGeneration.style')
+    .optional()
+    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging'])
+    .withMessage('Invalid style option'),
+  body('aiGeneration.audience')
+    .optional()
+    .isIn(['general', 'technical', 'business', 'consumer', 'executive'])
+    .withMessage('Invalid audience option'),
+  body('templates.favorites')
+    .optional()
+    .isArray()
+    .withMessage('Favorites must be an array of template IDs'),
+  body('templates.hidden')
+    .optional()
+    .isArray()
+    .withMessage('Hidden templates must be an array of template IDs'),
+  body('export.preferredFormats')
+    .optional()
+    .isArray()
+    .withMessage('Preferred formats must be an array'),
+  body('ui.showAdvancedSettings')
+    .optional()
+    .isBoolean()
+    .withMessage('Show advanced settings must be boolean'),
+  body('workflow.maxContentHistory')
+    .optional()
+    .isInt({ min: 1, max: 200 })
+    .withMessage('Max content history must be between 1 and 200')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      })
+    }
+
+    const userId = req.user.id
+    const updates = req.body
+    
+    logger.info('📝 Updating user content settings', { 
+      userId,
+      updateKeys: Object.keys(updates)
+    })
+
+    // Build dynamic update query based on provided fields
+    const updateFields = []
+    const updateValues = [userId] // $1 is always userId
+    let paramIndex = 2
+
+    // AI Generation settings
+    if (updates.aiGeneration) {
+      const ai = updates.aiGeneration
+      if (ai.provider !== undefined) {
+        updateFields.push(`default_ai_provider = $${paramIndex}`)
+        updateValues.push(ai.provider)
+        paramIndex++
+      }
+      if (ai.model !== undefined) {
+        updateFields.push(`default_ai_model = $${paramIndex}`)
+        updateValues.push(ai.model)
+        paramIndex++
+      }
+      if (ai.temperature !== undefined) {
+        updateFields.push(`default_temperature = $${paramIndex}`)
+        updateValues.push(ai.temperature)
+        paramIndex++
+      }
+      if (ai.tone !== undefined) {
+        updateFields.push(`default_tone = $${paramIndex}`)
+        updateValues.push(ai.tone)
+        paramIndex++
+      }
+      if (ai.style !== undefined) {
+        updateFields.push(`default_style = $${paramIndex}`)
+        updateValues.push(ai.style)
+        paramIndex++
+      }
+      if (ai.audience !== undefined) {
+        updateFields.push(`default_audience = $${paramIndex}`)
+        updateValues.push(ai.audience)
+        paramIndex++
+      }
+      if (ai.contentLength !== undefined) {
+        updateFields.push(`default_content_length = $${paramIndex}`)
+        updateValues.push(ai.contentLength)
+        paramIndex++
+      }
+    }
+
+    // Template preferences
+    if (updates.templates) {
+      const templates = updates.templates
+      if (templates.favorites !== undefined) {
+        updateFields.push(`favorite_templates = $${paramIndex}`)
+        updateValues.push(templates.favorites)
+        paramIndex++
+      }
+      if (templates.hidden !== undefined) {
+        updateFields.push(`hidden_templates = $${paramIndex}`)
+        updateValues.push(templates.hidden)
+        paramIndex++
+      }
+      if (templates.customOrder !== undefined) {
+        updateFields.push(`custom_template_order = $${paramIndex}`)
+        updateValues.push(templates.customOrder)
+        paramIndex++
+      }
+    }
+
+    // Export settings
+    if (updates.export) {
+      const exportSettings = updates.export
+      if (exportSettings.preferredFormats !== undefined) {
+        updateFields.push(`preferred_export_formats = $${paramIndex}`)
+        updateValues.push(exportSettings.preferredFormats)
+        paramIndex++
+      }
+      if (exportSettings.autoExportOnGeneration !== undefined) {
+        updateFields.push(`auto_export_on_generation = $${paramIndex}`)
+        updateValues.push(exportSettings.autoExportOnGeneration)
+        paramIndex++
+      }
+      if (exportSettings.includeMetadata !== undefined) {
+        updateFields.push(`include_metadata_in_export = $${paramIndex}`)
+        updateValues.push(exportSettings.includeMetadata)
+        paramIndex++
+      }
+    }
+
+    // UI preferences
+    if (updates.ui) {
+      const ui = updates.ui
+      if (ui.showAdvancedSettings !== undefined) {
+        updateFields.push(`show_advanced_settings = $${paramIndex}`)
+        updateValues.push(ui.showAdvancedSettings)
+        paramIndex++
+      }
+      if (ui.showWordCount !== undefined) {
+        updateFields.push(`show_word_count = $${paramIndex}`)
+        updateValues.push(ui.showWordCount)
+        paramIndex++
+      }
+      if (ui.showCostEstimates !== undefined) {
+        updateFields.push(`show_cost_estimates = $${paramIndex}`)
+        updateValues.push(ui.showCostEstimates)
+        paramIndex++
+      }
+      if (ui.autoSaveDrafts !== undefined) {
+        updateFields.push(`auto_save_drafts = $${paramIndex}`)
+        updateValues.push(ui.autoSaveDrafts)
+        paramIndex++
+      }
+    }
+
+    // Workflow settings
+    if (updates.workflow) {
+      const workflow = updates.workflow
+      if (workflow.requireApproval !== undefined) {
+        updateFields.push(`require_approval_before_export = $${paramIndex}`)
+        updateValues.push(workflow.requireApproval)
+        paramIndex++
+      }
+      if (workflow.enableVersionTracking !== undefined) {
+        updateFields.push(`enable_version_tracking = $${paramIndex}`)
+        updateValues.push(workflow.enableVersionTracking)
+        paramIndex++
+      }
+      if (workflow.maxContentHistory !== undefined) {
+        updateFields.push(`max_content_history = $${paramIndex}`)
+        updateValues.push(workflow.maxContentHistory)
+        paramIndex++
+      }
+    }
+
+    // Notification settings
+    if (updates.notifications) {
+      const notifications = updates.notifications
+      if (notifications.onGenerationComplete !== undefined) {
+        updateFields.push(`notify_on_generation_complete = $${paramIndex}`)
+        updateValues.push(notifications.onGenerationComplete)
+        paramIndex++
+      }
+      if (notifications.onExportReady !== undefined) {
+        updateFields.push(`notify_on_export_ready = $${paramIndex}`)
+        updateValues.push(notifications.onExportReady)
+        paramIndex++
+      }
+      if (notifications.emailWeeklySummary !== undefined) {
+        updateFields.push(`email_weekly_summary = $${paramIndex}`)
+        updateValues.push(notifications.emailWeeklySummary)
+        paramIndex++
+      }
+    }
+
+    // Business settings
+    if (updates.business) {
+      const business = updates.business
+      if (business.defaultClientName !== undefined) {
+        updateFields.push(`default_client_name = $${paramIndex}`)
+        updateValues.push(business.defaultClientName)
+        paramIndex++
+      }
+      if (business.brandVoiceNotes !== undefined) {
+        updateFields.push(`brand_voice_notes = $${paramIndex}`)
+        updateValues.push(business.brandVoiceNotes)
+        paramIndex++
+      }
+      if (business.approvalWorkflow !== undefined) {
+        updateFields.push(`content_approval_workflow = $${paramIndex}`)
+        updateValues.push(JSON.stringify(business.approvalWorkflow))
+        paramIndex++
+      }
+    }
+
+    if (updateFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No valid fields to update',
+        message: 'Please provide at least one field to update'
+      })
+    }
+
+    // Add updated_at timestamp
+    updateFields.push('updated_at = CURRENT_TIMESTAMP')
+
+    const query = `
+      UPDATE user_content_settings 
+      SET ${updateFields.join(', ')}
+      WHERE user_id = $1
+      RETURNING *
+    `
+    
+    const result = await db.query(query, updateValues)
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'User settings not found',
+        message: 'Please fetch settings first to initialize your preferences'
+      })
+    }
+
+    const updatedSettings = result.rows[0]
+
+    res.json({
+      success: true,
+      message: 'Content settings updated successfully',
+      settings: {
+        // Return same structure as GET endpoint
+        aiGeneration: {
+          provider: updatedSettings.default_ai_provider,
+          model: updatedSettings.default_ai_model,
+          temperature: parseFloat(updatedSettings.default_temperature),
+          tone: updatedSettings.default_tone,
+          style: updatedSettings.default_style,
+          audience: updatedSettings.default_audience,
+          contentLength: updatedSettings.default_content_length
+        },
+        templates: {
+          favorites: updatedSettings.favorite_templates || [],
+          hidden: updatedSettings.hidden_templates || [],
+          customOrder: updatedSettings.custom_template_order
+        },
+        export: {
+          preferredFormats: updatedSettings.preferred_export_formats || ['html', 'text'],
+          autoExportOnGeneration: updatedSettings.auto_export_on_generation,
+          includeMetadata: updatedSettings.include_metadata_in_export
+        },
+        ui: {
+          showAdvancedSettings: updatedSettings.show_advanced_settings,
+          showWordCount: updatedSettings.show_word_count,
+          showCostEstimates: updatedSettings.show_cost_estimates,
+          autoSaveDrafts: updatedSettings.auto_save_drafts
+        },
+        workflow: {
+          requireApproval: updatedSettings.require_approval_before_export,
+          enableVersionTracking: updatedSettings.enable_version_tracking,
+          maxContentHistory: updatedSettings.max_content_history
+        },
+        notifications: {
+          onGenerationComplete: updatedSettings.notify_on_generation_complete,
+          onExportReady: updatedSettings.notify_on_export_ready,
+          emailWeeklySummary: updatedSettings.email_weekly_summary
+        },
+        business: {
+          defaultClientName: updatedSettings.default_client_name,
+          brandVoiceNotes: updatedSettings.brand_voice_notes,
+          approvalWorkflow: updatedSettings.content_approval_workflow
+        }
+      },
+      meta: {
+        updatedAt: updatedSettings.updated_at,
+        fieldsUpdated: updateFields.length - 1 // Exclude updated_at field
+      }
+    })
+
+    logger.info('✅ Content settings updated successfully', { 
+      userId,
+      fieldsUpdated: updateFields.length - 1,
+      updateKeys: Object.keys(updates)
+    })
+
+  } catch (error) {
+    logger.error('❌ Error updating content settings:', {
+      userId: req.user?.id,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update content settings',
+      message: 'An error occurred while saving your preferences'
+    })
+  }
+})
+
+/**
+ * POST /api/content-creator/settings/templates/favorite
+ * Add template to user's favorites
+ */
+router.post('/settings/templates/favorite', contentManagementRateLimit, authMiddleware, [
+  body('templateId')
+    .notEmpty()
+    .withMessage('Template ID is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      })
+    }
+
+    const userId = req.user.id
+    const { templateId } = req.body
+    
+    logger.info('⭐ Adding template to favorites', { userId, templateId })
+
+    // Verify template exists
+    const templateCheck = await db.query(
+      'SELECT template_id FROM content_templates WHERE template_id = $1 AND is_active = true',
+      [templateId]
+    )
+    
+    if (templateCheck.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Template not found',
+        message: 'The specified template does not exist or is not active'
+      })
+    }
+
+    // Add to favorites (using array append, avoiding duplicates)
+    const query = `
+      UPDATE user_content_settings 
+      SET favorite_templates = CASE 
+        WHEN favorite_templates IS NULL THEN ARRAY[$2]
+        WHEN $2 = ANY(favorite_templates) THEN favorite_templates
+        ELSE array_append(favorite_templates, $2)
+      END,
+      updated_at = CURRENT_TIMESTAMP
+      WHERE user_id = $1
+      RETURNING favorite_templates
+    `
+    
+    const result = await db.query(query, [userId, templateId])
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'User settings not found',
+        message: 'Please initialize your settings first'
+      })
+    }
+
+    res.json({
+      success: true,
+      message: 'Template added to favorites',
+      templateId,
+      favorites: result.rows[0].favorite_templates || []
+    })
+
+    logger.info('✅ Template added to favorites', { userId, templateId })
+
+  } catch (error) {
+    logger.error('❌ Error adding template to favorites:', {
+      userId: req.user?.id,
+      templateId: req.body?.templateId,
+      error: error.message
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to add template to favorites',
+      message: 'An error occurred while updating your favorites'
+    })
+  }
+})
+
+/**
+ * DELETE /api/content-creator/settings/templates/favorite/:templateId
+ * Remove template from user's favorites
+ */
+router.delete('/settings/templates/favorite/:templateId', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { templateId } = req.params
+    
+    logger.info('⭐ Removing template from favorites', { userId, templateId })
+
+    // Remove from favorites array
+    const query = `
+      UPDATE user_content_settings 
+      SET favorite_templates = array_remove(favorite_templates, $2),
+      updated_at = CURRENT_TIMESTAMP
+      WHERE user_id = $1
+      RETURNING favorite_templates
+    `
+    
+    const result = await db.query(query, [userId, templateId])
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'User settings not found',
+        message: 'Please initialize your settings first'
+      })
+    }
+
+    res.json({
+      success: true,
+      message: 'Template removed from favorites',
+      templateId,
+      favorites: result.rows[0].favorite_templates || []
+    })
+
+    logger.info('✅ Template removed from favorites', { userId, templateId })
+
+  } catch (error) {
+    logger.error('❌ Error removing template from favorites:', {
+      userId: req.user?.id,
+      templateId: req.params?.templateId,
+      error: error.message
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to remove template from favorites',
+      message: 'An error occurred while updating your favorites'
+    })
+  }
+})
+
+/**
+ * GET /api/content-creator/content/:id/versions
+ * Get all versions of a specific content item
+ */
+router.get('/content/:id/versions', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { id } = req.params
+    
+    logger.info('📚 Fetching content versions', { userId, contentId: id })
+
+    // First, verify the user owns this content
+    const ownershipCheck = await db.query(
+      'SELECT id FROM generated_content WHERE id = $1 AND user_id = $2',
+      [id, userId]
+    )
+    
+    if (ownershipCheck.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content not found',
+        message: 'The requested content does not exist or you do not have access to it'
+      })
+    }
+
+    // Get the root content ID (content without parent_content_id)
+    const rootQuery = `
+      WITH RECURSIVE content_tree AS (
+        -- Start with the requested content
+        SELECT id, parent_content_id, version, 1 as level
+        FROM generated_content 
+        WHERE id = $1 AND user_id = $2
+        
+        UNION ALL
+        
+        -- Recursively find the root (parent_content_id IS NULL)
+        SELECT gc.id, gc.parent_content_id, gc.version, ct.level + 1
+        FROM generated_content gc
+        JOIN content_tree ct ON gc.id = ct.parent_content_id
+        WHERE gc.user_id = $2
+      )
+      SELECT id as root_id
+      FROM content_tree 
+      WHERE parent_content_id IS NULL
+      LIMIT 1
+    `
+    
+    const rootResult = await db.query(rootQuery, [id, userId])
+    
+    let rootId = id
+    if (rootResult.rows.length > 0) {
+      rootId = rootResult.rows[0].root_id
+    }
+
+    // Get all versions in the content family (root + all its versions)
+    const versionsQuery = `
+      SELECT 
+        gc.id,
+        gc.title,
+        gc.version,
+        gc.status,
+        gc.parent_content_id,
+        gc.word_count,
+        gc.character_count,
+        gc.estimated_reading_time,
+        gc.ai_provider,
+        gc.ai_model,
+        gc.generation_settings,
+        gc.last_edited_at,
+        gc.export_count,
+        gc.created_at,
+        gc.updated_at,
+        CASE WHEN gc.id = $1 THEN true ELSE false END as is_current
+      FROM generated_content gc
+      WHERE (gc.id = $2 OR gc.parent_content_id = $2) 
+        AND gc.user_id = $3
+      ORDER BY gc.version DESC, gc.created_at DESC
+    `
+    
+    const versionsResult = await db.query(versionsQuery, [id, rootId, userId])
+    
+    if (versionsResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'No versions found',
+        message: 'No content versions found for this item'
+      })
+    }
+
+    // Transform results for frontend
+    const versions = versionsResult.rows.map(row => ({
+      id: row.id,
+      title: row.title,
+      version: row.version,
+      status: row.status,
+      isCurrent: row.is_current,
+      isRoot: row.parent_content_id === null,
+      statistics: {
+        wordCount: row.word_count,
+        characterCount: row.character_count,
+        estimatedReadingTime: row.estimated_reading_time
+      },
+      generation: {
+        aiProvider: row.ai_provider,
+        aiModel: row.ai_model,
+        settings: row.generation_settings
+      },
+      meta: {
+        lastEditedAt: row.last_edited_at,
+        exportCount: row.export_count,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at
+      }
+    }))
+
+    // Get version statistics
+    const stats = {
+      totalVersions: versions.length,
+      latestVersion: Math.max(...versions.map(v => v.version)),
+      currentVersion: versions.find(v => v.isCurrent)?.version,
+      rootContentId: rootId,
+      totalEdits: versions.reduce((sum, v) => sum + (v.meta.exportCount || 0), 0)
+    }
+
+    res.json({
+      success: true,
+      versions,
+      statistics: stats,
+      meta: {
+        requestedContentId: id,
+        rootContentId: rootId,
+        userId
+      }
+    })
+
+    logger.info('✅ Content versions fetched successfully', { 
+      userId, 
+      contentId: id,
+      rootId,
+      versionsCount: versions.length,
+      latestVersion: stats.latestVersion
+    })
+
+  } catch (error) {
+    logger.error('❌ Error fetching content versions:', {
+      userId: req.user?.id,
+      contentId: req.params?.id,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch content versions',
+      message: 'An error occurred while retrieving content version history'
+    })
+  }
+})
+
+/**
+ * POST /api/content-creator/content/:id/versions
+ * Create a new version of existing content (content iteration)
+ */
+router.post('/content/:id/versions', contentManagementRateLimit, authMiddleware, [
+  body('title')
+    .optional()
+    .isLength({ min: 1, max: 500 })
+    .withMessage('Title must be between 1 and 500 characters'),
+  body('changes')
+    .optional()
+    .isString()
+    .withMessage('Changes description must be a string'),
+  body('regenerateWithNewSettings')
+    .optional()
+    .isBoolean()
+    .withMessage('Regenerate flag must be boolean'),
+  body('newSettings')
+    .optional()
+    .isObject()
+    .withMessage('New settings must be an object')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      })
+    }
+
+    const userId = req.user.id
+    const { id } = req.params
+    const { title, changes, regenerateWithNewSettings = false, newSettings } = req.body
+    
+    logger.info('🔄 Creating new content version', { 
+      userId, 
+      originalId: id,
+      regenerate: regenerateWithNewSettings 
+    })
+
+    // Get the original content
+    const originalQuery = `
+      SELECT 
+        gc.*,
+        ct.name as template_name
+      FROM generated_content gc
+      JOIN content_templates ct ON gc.template_id = ct.template_id
+      WHERE gc.id = $1 AND gc.user_id = $2
+    `
+    
+    const originalResult = await db.query(originalQuery, [id, userId])
+    
+    if (originalResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content not found',
+        message: 'The original content does not exist or you do not have access to it'
+      })
+    }
+
+    const original = originalResult.rows[0]
+
+    // Determine the root content ID and next version number
+    const rootId = original.parent_content_id || original.id
+    
+    // Get the highest version number in this content family
+    const versionQuery = `
+      SELECT COALESCE(MAX(version), 0) + 1 as next_version
+      FROM generated_content 
+      WHERE (id = $1 OR parent_content_id = $1) AND user_id = $2
+    `
+    
+    const versionResult = await db.query(versionQuery, [rootId, userId])
+    const nextVersion = versionResult.rows[0].next_version
+
+    let newContentSections = original.content_sections
+    let newGenerationSettings = original.generation_settings
+    let newRawContent = original.raw_content
+    let generationTime = 0
+    
+    // If regenerating with new settings, call AI service
+    if (regenerateWithNewSettings && newSettings) {
+      const startTime = Date.now()
+      
+      // Merge new settings with original settings
+      const mergedSettings = {
+        ...original.generation_settings,
+        ...newSettings
+      }
+      
+      logger.info('🤖 Regenerating content with new settings', {
+        userId,
+        originalId: id,
+        newSettings
+      })
+      
+      try {
+        // Call content generation service
+        const generationResult = await contentGenerationService.generateContent({
+          template_id: original.template_id,
+          user_inputs: original.input_data,
+          generation_settings: mergedSettings,
+          user_id: userId
+        })
+        
+        if (generationResult.success) {
+          newContentSections = generationResult.content.sections
+          newRawContent = generationResult.content.raw_content
+          newGenerationSettings = mergedSettings
+          generationTime = Date.now() - startTime
+          
+          logger.info('✅ Content regenerated successfully', {
+            userId,
+            originalId: id,
+            generationTime: `${generationTime}ms`
+          })
+        } else {
+          logger.warn('⚠️ Content regeneration failed, using original content', {
+            userId,
+            originalId: id,
+            error: generationResult.error
+          })
+        }
+      } catch (genError) {
+        logger.error('❌ Content regeneration error, using original content:', {
+          userId,
+          originalId: id,
+          error: genError.message
+        })
+      }
+    }
+
+    // Create the new version
+    const newVersionId = uuidv4()
+    const newTitle = title || `${original.title || `Generated ${original.template_name}`} (v${nextVersion})`
+    
+    // Calculate content statistics
+    const rawText = typeof newContentSections === 'object' 
+      ? Object.values(newContentSections).join(' ') 
+      : newRawContent || ''
+    const wordCount = rawText.split(/\s+/).filter(word => word.length > 0).length
+    const characterCount = rawText.length
+    
+    const insertQuery = `
+      INSERT INTO generated_content (
+        id, user_id, template_id, input_data, generation_settings,
+        content_sections, raw_content, formatted_content, title,
+        status, version, parent_content_id,
+        ai_provider, ai_model, token_count, generation_time_ms, cost_estimate,
+        word_count, character_count, estimated_reading_time,
+        created_at, updated_at
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      ) RETURNING id, created_at, version
+    `
+    
+    const insertResult = await db.query(insertQuery, [
+      newVersionId,
+      userId,
+      original.template_id,
+      original.input_data,
+      JSON.stringify(newGenerationSettings),
+      JSON.stringify(newContentSections),
+      newRawContent,
+      original.formatted_content,
+      newTitle,
+      'draft',
+      nextVersion,
+      rootId,
+      original.ai_provider || 'openai',
+      original.ai_model || 'gpt-4-turbo',
+      original.token_count || 500,
+      generationTime || 0,
+      original.cost_estimate || 0.02,
+      wordCount,
+      characterCount,
+      Math.ceil(wordCount / 200)
+    ])
+
+    const newVersion = insertResult.rows[0]
+
+    // Log the version creation
+    if (changes) {
+      logger.info('📝 Version created with changes note:', {
+        userId,
+        originalId: id,
+        newVersionId: newVersion.id,
+        version: newVersion.version,
+        changes
+      })
+    }
+
+    res.json({
+      success: true,
+      message: 'New content version created successfully',
+      version: {
+        id: newVersion.id,
+        version: newVersion.version,
+        title: newTitle,
+        parentId: rootId,
+        createdAt: newVersion.created_at,
+        regenerated: regenerateWithNewSettings,
+        changes: changes || null
+      },
+      statistics: {
+        wordCount,
+        characterCount,
+        estimatedReadingTime: Math.ceil(wordCount / 200),
+        generationTime
+      },
+      meta: {
+        originalId: id,
+        userId,
+        templateId: original.template_id
+      }
+    })
+
+    logger.info('✅ Content version created successfully', {
+      userId,
+      originalId: id,
+      newVersionId: newVersion.id,
+      version: newVersion.version,
+      regenerated: regenerateWithNewSettings
+    })
+
+  } catch (error) {
+    logger.error('❌ Error creating content version:', {
+      userId: req.user?.id,
+      contentId: req.params?.id,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create content version',
+      message: 'An error occurred while creating a new version of your content'
+    })
+  }
+})
+
+/**
+ * POST /api/content-creator/content/:id/restore/:versionId
+ * Restore a specific version as the current content
+ */
+router.post('/content/:id/restore/:versionId', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { id, versionId } = req.params
+    
+    logger.info('⏪ Restoring content version', { userId, currentId: id, restoreVersionId: versionId })
+
+    // Verify user owns both content items
+    const verificationQuery = `
+      SELECT 
+        current.id as current_id,
+        current.title as current_title,
+        current.version as current_version,
+        restore.id as restore_id,
+        restore.title as restore_title,
+        restore.version as restore_version,
+        restore.content_sections,
+        restore.raw_content,
+        restore.formatted_content,
+        restore.generation_settings,
+        restore.input_data,
+        restore.template_id,
+        restore.ai_provider,
+        restore.ai_model,
+        restore.token_count,
+        restore.cost_estimate,
+        restore.word_count,
+        restore.character_count,
+        restore.estimated_reading_time
+      FROM generated_content current
+      CROSS JOIN generated_content restore
+      WHERE current.id = $1 AND current.user_id = $3
+        AND restore.id = $2 AND restore.user_id = $3
+        AND (restore.id = current.id OR restore.parent_content_id = current.id OR 
+             current.parent_content_id = restore.id OR 
+             (current.parent_content_id IS NOT NULL AND current.parent_content_id = restore.parent_content_id))
+    `
+    
+    const verificationResult = await db.query(verificationQuery, [id, versionId, userId])
+    
+    if (verificationResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content or version not found',
+        message: 'The content items do not exist, are not related, or you do not have access to them'
+      })
+    }
+
+    const { current_version, restore_version, restore_title } = verificationResult.rows[0]
+    const restoreData = verificationResult.rows[0]
+
+    // Update the current content with the restored version's data
+    const updateQuery = `
+      UPDATE generated_content SET
+        content_sections = $1,
+        raw_content = $2,
+        formatted_content = $3,
+        generation_settings = $4,
+        title = $5,
+        last_edited_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = $6 AND user_id = $7
+      RETURNING title, version, updated_at
+    `
+    
+    const updateResult = await db.query(updateQuery, [
+      restoreData.content_sections,
+      restoreData.raw_content,
+      restoreData.formatted_content,
+      restoreData.generation_settings,
+      `${restore_title} (Restored from v${restore_version})`,
+      id,
+      userId
+    ])
+
+    if (updateResult.rows.length === 0) {
+      return res.status(500).json({
+        success: false,
+        error: 'Restore failed',
+        message: 'Failed to restore the content version'
+      })
+    }
+
+    const updated = updateResult.rows[0]
+
+    res.json({
+      success: true,
+      message: `Content restored from version ${restore_version}`,
+      restoration: {
+        currentContentId: id,
+        restoredFromVersionId: versionId,
+        previousVersion: current_version,
+        restoredFromVersion: restore_version,
+        newTitle: updated.title,
+        restoredAt: updated.updated_at
+      },
+      statistics: {
+        wordCount: restoreData.word_count,
+        characterCount: restoreData.character_count,
+        estimatedReadingTime: restoreData.estimated_reading_time
+      },
+      meta: {
+        userId,
+        action: 'version_restore'
+      }
+    })
+
+    logger.info('✅ Content version restored successfully', {
+      userId,
+      currentId: id,
+      restoredFromVersionId: versionId,
+      previousVersion: current_version,
+      restoredFromVersion: restore_version
+    })
+
+  } catch (error) {
+    logger.error('❌ Error restoring content version:', {
+      userId: req.user?.id,
+      currentId: req.params?.id,
+      versionId: req.params?.versionId,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to restore content version',
+      message: 'An error occurred while restoring the content version'
+    })
+  }
+})
+
+/**
+ * GET /api/content-creator/content/:id/compare/:versionId
+ * Compare two versions of content
+ */
+router.get('/content/:id/compare/:versionId', contentManagementRateLimit, authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { id, versionId } = req.params
+    
+    logger.info('🔍 Comparing content versions', { userId, baseId: id, compareId: versionId })
+
+    // Get both versions with full content
+    const compareQuery = `
+      SELECT 
+        base.id as base_id,
+        base.title as base_title,
+        base.version as base_version,
+        base.content_sections as base_content,
+        base.raw_content as base_raw,
+        base.generation_settings as base_settings,
+        base.word_count as base_word_count,
+        base.character_count as base_char_count,
+        base.created_at as base_created,
+        base.updated_at as base_updated,
+        
+        compare.id as compare_id,
+        compare.title as compare_title,
+        compare.version as compare_version,
+        compare.content_sections as compare_content,
+        compare.raw_content as compare_raw,
+        compare.generation_settings as compare_settings,
+        compare.word_count as compare_word_count,
+        compare.character_count as compare_char_count,
+        compare.created_at as compare_created,
+        compare.updated_at as compare_updated
+        
+      FROM generated_content base
+      CROSS JOIN generated_content compare
+      WHERE base.id = $1 AND base.user_id = $3
+        AND compare.id = $2 AND compare.user_id = $3
+        AND (compare.id = base.id OR compare.parent_content_id = base.id OR 
+             base.parent_content_id = compare.id OR 
+             (base.parent_content_id IS NOT NULL AND base.parent_content_id = compare.parent_content_id))
+    `
+    
+    const compareResult = await db.query(compareQuery, [id, versionId, userId])
+    
+    if (compareResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Content versions not found',
+        message: 'The content versions do not exist, are not related, or you do not have access to them'
+      })
+    }
+
+    const data = compareResult.rows[0]
+
+    // Process content sections for comparison
+    const baseContent = data.base_content || {}
+    const compareContent = data.compare_content || {}
+    
+    // Find all unique section IDs
+    const allSectionIds = [...new Set([
+      ...Object.keys(baseContent),
+      ...Object.keys(compareContent)
+    ])]
+
+    // Compare each section
+    const sectionComparisons = allSectionIds.map(sectionId => {
+      const baseSection = baseContent[sectionId]
+      const compareSection = compareContent[sectionId]
+      
+      return {
+        sectionId,
+        sectionName: baseSection?.name || compareSection?.name || sectionId,
+        base: {
+          content: baseSection?.content || '',
+          exists: !!baseSection
+        },
+        compare: {
+          content: compareSection?.content || '',
+          exists: !!compareSection
+        },
+        hasChanges: (baseSection?.content || '') !== (compareSection?.content || ''),
+        isNew: !baseSection && !!compareSection,
+        isRemoved: !!baseSection && !compareSection
+      }
+    })
+
+    // Compare generation settings
+    const baseSettings = data.base_settings || {}
+    const compareSettings = data.compare_settings || {}
+    
+    const settingsComparison = {
+      temperature: {
+        base: baseSettings.temperature,
+        compare: compareSettings.temperature,
+        changed: baseSettings.temperature !== compareSettings.temperature
+      },
+      tone: {
+        base: baseSettings.tone,
+        compare: compareSettings.tone,
+        changed: baseSettings.tone !== compareSettings.tone
+      },
+      style: {
+        base: baseSettings.style,
+        compare: compareSettings.style,
+        changed: baseSettings.style !== compareSettings.style
+      },
+      audience: {
+        base: baseSettings.audience,
+        compare: compareSettings.audience,
+        changed: baseSettings.audience !== compareSettings.audience
+      }
+    }
+
+    // Calculate comparison statistics
+    const statistics = {
+      base: {
+        wordCount: data.base_word_count,
+        characterCount: data.base_char_count,
+        sectionsCount: Object.keys(baseContent).length
+      },
+      compare: {
+        wordCount: data.compare_word_count,
+        characterCount: data.compare_char_count,
+        sectionsCount: Object.keys(compareContent).length
+      },
+      differences: {
+        wordCountDiff: (data.compare_word_count || 0) - (data.base_word_count || 0),
+        characterCountDiff: (data.compare_char_count || 0) - (data.base_char_count || 0),
+        sectionsChanged: sectionComparisons.filter(s => s.hasChanges).length,
+        sectionsAdded: sectionComparisons.filter(s => s.isNew).length,
+        sectionsRemoved: sectionComparisons.filter(s => s.isRemoved).length,
+        settingsChanged: Object.values(settingsComparison).filter(s => s.changed).length
+      }
+    }
+
+    res.json({
+      success: true,
+      comparison: {
+        base: {
+          id: data.base_id,
+          title: data.base_title,
+          version: data.base_version,
+          createdAt: data.base_created,
+          updatedAt: data.base_updated
+        },
+        compare: {
+          id: data.compare_id,
+          title: data.compare_title,
+          version: data.compare_version,
+          createdAt: data.compare_created,
+          updatedAt: data.compare_updated
+        },
+        sections: sectionComparisons,
+        settings: settingsComparison,
+        statistics
+      },
+      meta: {
+        userId,
+        comparisonType: data.base_version > data.compare_version ? 'newer_to_older' : 'older_to_newer',
+        hasChanges: statistics.differences.sectionsChanged > 0 || statistics.differences.settingsChanged > 0
+      }
+    })
+
+    logger.info('✅ Content versions compared successfully', {
+      userId,
+      baseId: id,
+      compareId: versionId,
+      sectionsChanged: statistics.differences.sectionsChanged,
+      settingsChanged: statistics.differences.settingsChanged
+    })
+
+  } catch (error) {
+    logger.error('❌ Error comparing content versions:', {
+      userId: req.user?.id,
+      baseId: req.params?.id,
+      compareId: req.params?.versionId,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to compare content versions',
+      message: 'An error occurred while comparing the content versions'
     })
   }
 })

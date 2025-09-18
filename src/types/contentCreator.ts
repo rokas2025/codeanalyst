@@ -115,6 +115,13 @@ export interface ContentCreatorState {
   showAdvancedSettings: boolean
   previewMode: 'formatted' | 'html' | 'markdown'
   
+  // Error handling
+  generationError: string | null
+  validationErrors: Record<string, string>
+  
+  // Generation metadata
+  lastGenerationMetadata: any | null
+  
   // Templates and history
   templates: ContentTemplate[]
   contentHistory: GeneratedContent[]

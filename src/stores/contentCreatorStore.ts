@@ -25,6 +25,14 @@ interface ContentCreatorStore extends ContentCreatorState {
   removeFromFavorites: (templateId: string) => void
   loadContentHistory: () => Promise<void>
   updateDefaultSettings: (settings: Partial<GenerationSettings>) => void
+  
+  // Error handling
+  clearErrors: () => void
+  setValidationErrors: (errors: Record<string, string>) => void
+  
+  // Content management
+  updateContentSection: (sectionId: string, content: string) => void
+  reorderContentSections: (sectionIds: string[]) => void
 }
 
 export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => ({
@@ -39,6 +47,13 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
   currentStep: 'template',
   showAdvancedSettings: false,
   previewMode: 'formatted',
+  
+  // Error handling
+  generationError: null,
+  validationErrors: {},
+  
+  // Generation metadata
+  lastGenerationMetadata: null,
   
   // Data
   templates: [],
@@ -108,7 +123,7 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
       return
     }
 
-    set({ isGenerating: true, currentStep: 'preview' })
+    set({ isGenerating: true, currentStep: 'preview', generationError: null })
     
     try {
       console.log('🤖 Generating content...')
@@ -117,15 +132,22 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
       console.log('Settings:', settings)
 
       const response = await contentCreatorService.generateContent({
-        templateId: selectedTemplate.id,
+        templateId: selectedTemplate.template_id || selectedTemplate.id,
         inputs,
         settings
       })
 
       if (response.success && response.content) {
         set({ 
-          generatedContent: response.content,
-          isGenerating: false 
+          generatedContent: {
+            id: response.content.id || `temp_${Date.now()}`,
+            content: response.content.sections || response.content.content_sections || [],
+            metadata: response.metadata || response.generation_metadata,
+            rawContent: response.content.raw_content,
+            formattedContent: response.content.formatted_content
+          },
+          isGenerating: false,
+          lastGenerationMetadata: response.metadata
         })
         console.log('✅ Content generated successfully')
       } else {
@@ -133,7 +155,10 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
       }
     } catch (error) {
       console.error('❌ Content generation failed:', error)
-      set({ isGenerating: false })
+      set({ 
+        isGenerating: false, 
+        generationError: error instanceof Error ? error.message : 'Generation failed'
+      })
     }
   },
 
@@ -204,7 +229,10 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
       inputs: {},
       generatedContent: null,
       currentStep: 'template',
-      settings: { ...get().defaultSettings }
+      settings: { ...get().defaultSettings },
+      generationError: null,
+      validationErrors: {},
+      lastGenerationMetadata: null
     })
   },
 
@@ -255,6 +283,58 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
     
     // Save to localStorage
     localStorage.setItem('contentCreator_defaultSettings', JSON.stringify(updatedDefaults))
+  },
+
+  // Error handling methods
+  clearErrors: () => {
+    set({ 
+      generationError: null, 
+      validationErrors: {} 
+    })
+  },
+
+  setValidationErrors: (errors: Record<string, string>) => {
+    set({ validationErrors: errors })
+  },
+
+  // Content management methods
+  updateContentSection: (sectionId: string, content: string) => {
+    const { generatedContent } = get()
+    if (!generatedContent || !generatedContent.content) return
+
+    const updatedSections = generatedContent.content.map(section =>
+      section.id === sectionId ? { ...section, content } : section
+    )
+
+    set({
+      generatedContent: {
+        ...generatedContent,
+        content: updatedSections
+      }
+    })
+  },
+
+  reorderContentSections: (sectionIds: string[]) => {
+    const { generatedContent } = get()
+    if (!generatedContent || !generatedContent.content) return
+
+    // Create a map for quick lookup
+    const sectionMap = new Map(
+      generatedContent.content.map(section => [section.id, section])
+    )
+
+    // Reorder sections based on the provided order
+    const reorderedSections = sectionIds
+      .map(id => sectionMap.get(id))
+      .filter(Boolean)
+      .map((section, index) => ({ ...section!, order: index + 1 }))
+
+    set({
+      generatedContent: {
+        ...generatedContent,
+        content: reorderedSections
+      }
+    })
   }
 }))
 
