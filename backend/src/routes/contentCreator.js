@@ -370,20 +370,17 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
       template_id: template_id,
       input_data: user_inputs,
       generation_settings: finalSettings,
-      content_sections: generationResult.content.content_sections,
+      content_sections: generationResult.content.sections,
       raw_content: generationResult.content.raw_content,
-      formatted_content: {
-        structured: generationResult.content.structured_content,
-        statistics: generationResult.content.statistics
-      },
-      ai_provider: generationResult.generation_metadata.ai_provider,
-      ai_model: generationResult.generation_metadata.ai_model,
-      token_count: generationResult.generation_metadata.token_count,
-      generation_time_ms: generationResult.generation_metadata.generation_time_ms,
-      cost_estimate: generationResult.generation_metadata.cost_estimate,
-      word_count: generationResult.content.statistics.word_count,
-      character_count: generationResult.content.statistics.character_count,
-      estimated_reading_time: generationResult.content.statistics.estimated_reading_time
+      formatted_content: generationResult.content.formatted_content,
+      ai_provider: generationResult.metadata.provider,
+      ai_model: generationResult.metadata.model,
+      token_count: generationResult.metadata.tokenCount,
+      generation_time_ms: generationResult.metadata.generationTime,
+      cost_estimate: generationResult.metadata.costEstimate,
+      word_count: generationResult.metadata.wordCount,
+      character_count: generationResult.metadata.characterCount,
+      estimated_reading_time: generationResult.metadata.estimatedReadingTime
     }
 
     // Update user's monthly generation count for rate limiting and billing (optional)
@@ -441,9 +438,9 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
       contentId,
       userId,
       template_id,
-      provider: generationResult.generation_metadata.ai_provider,
-      tokens: generationResult.generation_metadata.token_count,
-      words: generationResult.content.statistics.word_count
+      provider: generationResult.metadata.provider,
+      tokens: generationResult.metadata.tokenCount,
+      words: generationResult.metadata.wordCount
     })
 
     // Return success response
@@ -451,10 +448,14 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
       success: true,
       content_id: contentId,
       content: {
-        sections: generationResult.content.content_sections,
+        sections: generationResult.content.sections,
         raw_content: generationResult.content.raw_content,
-        structured_content: generationResult.content.structured_content,
-        statistics: generationResult.content.statistics
+        structured_content: generationResult.content.formatted_content,
+        statistics: {
+          word_count: generationResult.metadata.wordCount,
+          character_count: generationResult.metadata.characterCount,
+          estimated_reading_time: generationResult.metadata.estimatedReadingTime
+        }
       },
       metadata: {
         template: {
@@ -463,12 +464,12 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
           category: template.category
         },
         generation: {
-          ai_provider: generationResult.generation_metadata.ai_provider,
-          ai_model: generationResult.generation_metadata.ai_model,
-          token_count: generationResult.generation_metadata.token_count,
-          cost_estimate: generationResult.generation_metadata.cost_estimate,
-          generation_time_ms: generationResult.generation_metadata.generation_time_ms,
-          generated_at: generationResult.generation_metadata.generated_at
+          ai_provider: generationResult.metadata.provider,
+          ai_model: generationResult.metadata.model,
+          token_count: generationResult.metadata.tokenCount,
+          cost_estimate: generationResult.metadata.costEstimate,
+          generation_time_ms: generationResult.metadata.generationTime,
+          generated_at: generationResult.metadata.generatedAt
         },
         user_inputs: user_inputs,
         generation_settings: finalSettings
