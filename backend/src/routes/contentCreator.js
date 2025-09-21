@@ -2661,4 +2661,79 @@ router.get('/content/:id/compare/:versionId', contentManagementRateLimit, authMi
   }
 })
 
+// Debug endpoint to test content generation
+router.post('/debug-generate', async (req, res) => {
+  try {
+    console.log('🐛 DEBUG: Content generation test')
+    
+    // Test OpenAI configuration
+    console.log('OpenAI API Key exists:', !!process.env.OPENAI_API_KEY)
+    console.log('OpenAI API Key prefix:', process.env.OPENAI_API_KEY?.substring(0, 8) + '...')
+    
+    // Test database connection
+    const templateResult = await db.query(
+      'SELECT * FROM content_templates WHERE template_id = $1 AND is_active = true',
+      ['about-us']
+    )
+    console.log('Template found:', templateResult.rows.length > 0)
+    
+    if (templateResult.rows.length === 0) {
+      return res.json({
+        success: false,
+        error: 'Template not found',
+        debug: {
+          openai_key_exists: !!process.env.OPENAI_API_KEY,
+          template_found: false
+        }
+      })
+    }
+    
+    // Test ContentGenerationService
+    const template = templateResult.rows[0]
+    const userInputs = {
+      companyName: 'Debug Test Company',
+      industry: 'Technology',
+      mission: 'Testing content generation'
+    }
+    const generationSettings = {
+      temperature: 0.7,
+      tone: 'professional',
+      style: 'detailed',
+      audience: 'general'
+    }
+    
+    console.log('Attempting content generation...')
+    const result = await contentGenerationService.generateContent(
+      template,
+      userInputs,
+      generationSettings,
+      { userId: 'debug-user' }
+    )
+    
+    res.json({
+      success: true,
+      debug: {
+        openai_key_exists: !!process.env.OPENAI_API_KEY,
+        template_found: true,
+        content_generated: true,
+        content_length: result.content?.raw_content?.length || 0,
+        ai_provider: result.generation_metadata?.ai_provider,
+        token_count: result.generation_metadata?.token_count
+      },
+      message: 'Content generation successful'
+    })
+    
+  } catch (error) {
+    console.error('🐛 DEBUG ERROR:', error)
+    res.json({
+      success: false,
+      debug: {
+        openai_key_exists: !!process.env.OPENAI_API_KEY,
+        error_message: error.message,
+        error_stack: error.stack?.split('\n').slice(0, 3).join('\n')
+      }
+    })
+  }
+})
+
 export default router
