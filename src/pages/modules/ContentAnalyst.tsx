@@ -63,7 +63,7 @@ export function ContentAnalyst() {
     
     try {
       const token = localStorage.getItem('auth_token')
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       
       const response = await fetch(`${baseUrl}/content-analysis/analyze`, {
         method: 'POST',

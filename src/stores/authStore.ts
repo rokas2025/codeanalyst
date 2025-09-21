@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   loginWithGitHub: async () => {
     set({ loading: true })
     try {
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       console.log('GitHub login: calling', `${baseUrl}/auth/github`)
       
       const response = await fetch(`${baseUrl}/auth/github`, {
@@ -84,7 +84,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const storedState = localStorage.getItem('github_oauth_state')
       if (state !== storedState) throw new Error('Invalid OAuth state parameter')
 
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       const response = await fetch(`${baseUrl}/auth/github/callback`, {
         method: 'POST',
         headers: { 

@@ -283,7 +283,7 @@ export function AutoProgrammer() {
   const fetchAnalyses = async () => {
     try {
       const token = localStorage.getItem('auth_token')
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       
       const response = await fetch(`${baseUrl}/code-analysis/history`, {
         headers: {
@@ -310,7 +310,7 @@ export function AutoProgrammer() {
     
     try {
       const token = localStorage.getItem('auth_token')
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       
       const response = await fetch(`${baseUrl}/code-analysis/${analysis.id}`, {
         headers: {
@@ -472,7 +472,7 @@ The file structure isn't available for this analysis, but I can still help you w
     setIsLoading(true)
 
     try {
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       const response = await fetch(`${baseUrl}/chat`, {
         method: 'POST',
         headers: getAuthHeaders(),

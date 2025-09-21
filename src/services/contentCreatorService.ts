@@ -11,7 +11,7 @@ export class ContentCreatorService {
   private baseUrl: string
   
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+    this.baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
   }
 
   /**

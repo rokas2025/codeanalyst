@@ -118,7 +118,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   setApiKey: async (provider, key) => {
     try {
       const token = localStorage.getItem('auth_token')
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       
       const response = await fetch(`${baseUrl}/settings/api-keys`, {
         method: 'PUT', 

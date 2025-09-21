@@ -39,7 +39,7 @@ export interface WebsiteAnalysisResult {
 }
 
 export class AnalysisService {
-  private baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002/api'
+  private baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
 
   /**
    * Get user's analysis history
