@@ -13,6 +13,7 @@ import {
   PaperAirplaneIcon,
   ArrowLeftIcon
 } from '@heroicons/react/24/outline'
+import { MessageRenderer } from '../../components/MessageRenderer'
 
 // Types
 interface ChatMessage {
@@ -594,8 +595,13 @@ The file structure isn't available for this analysis, but I can still help you w
     sendMessage(input)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
+    
+    // Auto-resize textarea
+    const textarea = e.target
+    textarea.style.height = 'auto'
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`
   }
 
   const toggleFolder = (path: string) => {
@@ -671,13 +677,32 @@ The file structure isn't available for this analysis, but I can still help you w
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
-  const renderMessageContent = (content: string) => {
-    let processedContent = content
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/\n/g, '<br/>')
-    
-    return <div dangerouslySetInnerHTML={{ __html: processedContent }} />
+  const handleFileClick = (filePath: string) => {
+    // Try to find the file in the file tree and select it
+    const findFileInTree = (nodes: FileNode[], path: string): FileNode | null => {
+      for (const node of nodes) {
+        if (node.path === path || node.name === path) {
+          return node
+        }
+        if (node.children) {
+          const found = findFileInTree(node.children, path)
+          if (found) return found
+        }
+      }
+      return null
+    }
+
+    if (fileTree) {
+      const foundFile = findFileInTree(fileTree, filePath)
+      if (foundFile && foundFile.type === 'file') {
+        setSelectedFile(foundFile)
+        toast.success(`Opened ${foundFile.name}`)
+      } else {
+        // If not found, try to load the file content
+        toast.info(`Attempting to open ${filePath}...`)
+        // You could implement file loading logic here
+      }
+    }
   }
 
   return (
@@ -770,22 +795,36 @@ The file structure isn't available for this analysis, but I can still help you w
             ) : (
               <div className="space-y-4 pb-2">
                 {messages.map((message, index) => (
-                  <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-3xl ${message.role === 'user' ? 'ml-12' : 'mr-12'}`}>
-                      <div className={`p-4 rounded-2xl ${
+                  <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-6`}>
+                    <div className={`max-w-4xl ${message.role === 'user' ? 'ml-8' : 'mr-8'}`}>
+                      {/* User role indicator for assistant messages */}
+                      {message.role === 'assistant' && (
+                        <div className="flex items-center mb-2">
+                          <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-2">
+                            <CodeBracketIcon className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-xs font-medium text-gray-500">AutoProgrammer</span>
+                        </div>
+                      )}
+                      
+                      <div className={`p-4 shadow-sm ${
                         message.role === 'user' 
-                          ? 'bg-blue-600 text-white' 
-                          : 'bg-gray-100 text-gray-900'
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl rounded-br-md' 
+                          : 'bg-white border border-gray-200 text-gray-900 rounded-2xl rounded-tl-md'
                       }`}>
-                        <div className="text-sm">
+                        <div className={message.role === 'user' ? 'text-sm' : ''}>
                           {message.role === 'user' ? (
-                            message.content
+                            <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
                           ) : (
-                            renderMessageContent(message.content)
+                            <MessageRenderer 
+                              content={message.content} 
+                              onFileClick={handleFileClick}
+                            />
                           )}
                         </div>
                       </div>
-                      <div className={`mt-1 text-xs text-gray-400 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
+                      
+                      <div className={`mt-2 text-xs text-gray-400 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
                         {formatTime(message.timestamp)}
                       </div>
                     </div>
@@ -793,16 +832,22 @@ The file structure isn't available for this analysis, but I can still help you w
                 ))}
                 
                 {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="max-w-3xl mr-12">
-                      <div className="bg-gray-100 p-4 rounded-2xl">
-                        <div className="flex items-center space-x-2">
-                          <div className="animate-pulse flex space-x-1">
-                            <div className="h-2 w-2 bg-gray-400 rounded-full"></div>
-                            <div className="h-2 w-2 bg-gray-400 rounded-full"></div>
-                            <div className="h-2 w-2 bg-gray-400 rounded-full"></div>
+                  <div className="flex justify-start mb-6">
+                    <div className="max-w-4xl mr-8">
+                      <div className="flex items-center mb-2">
+                        <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-2">
+                          <CodeBracketIcon className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="text-xs font-medium text-gray-500">AutoProgrammer</span>
+                      </div>
+                      <div className="bg-white border border-gray-200 p-4 rounded-2xl rounded-tl-md shadow-sm">
+                        <div className="flex items-center space-x-3">
+                          <div className="flex space-x-1">
+                            <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce"></div>
+                            <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                           </div>
-                          <span className="text-sm text-gray-500">Thinking...</span>
+                          <span className="text-sm text-gray-600 font-medium">Analyzing your code...</span>
                         </div>
                       </div>
                     </div>
@@ -814,26 +859,39 @@ The file structure isn't available for this analysis, but I can still help you w
           </div>
 
           {/* Chat Input - ALWAYS VISIBLE at bottom */}
-          <div className="px-4 py-2 border-t border-gray-200 bg-white" style={{ flexShrink: 0, backgroundColor: '#fff', position: 'sticky', bottom: 0, zIndex: 10 }}>
-            <form onSubmit={handleSubmit} className="flex items-center space-x-2">
+          <div className="px-6 py-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-white" style={{ flexShrink: 0, position: 'sticky', bottom: 0, zIndex: 10 }}>
+            <form onSubmit={handleSubmit} className="flex items-end space-x-3">
               <div className="flex-1 relative">
-                <input
-                  type="text"
+                <textarea
                   value={input}
                   onChange={handleInputChange}
-                  placeholder={selectedProject ? "Ask me anything about your code..." : "Select a project first..."}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  placeholder={selectedProject ? "Ask me anything about your code... (Shift+Enter for new line)" : "Select a project first..."}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none bg-white shadow-sm"
                   disabled={isLoading || !selectedProject}
+                  rows={1}
+                  style={{ minHeight: '44px', maxHeight: '120px' }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      handleSubmit(e)
+                    }
+                  }}
                 />
               </div>
               <button
                 type="submit"
                 disabled={isLoading || !input.trim() || !selectedProject}
-                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95"
               >
                 <PaperAirplaneIcon className="h-4 w-4" />
               </button>
             </form>
+            
+            {selectedProject && (
+              <div className="mt-2 text-xs text-gray-500 text-center">
+                Connected to <span className="font-medium text-blue-600">{getProjectName(selectedProject)}</span>
+              </div>
+            )}
           </div>
         </div>
 
