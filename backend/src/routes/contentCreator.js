@@ -2661,7 +2661,7 @@ router.get('/content/:id/compare/:versionId', contentManagementRateLimit, authMi
   }
 })
 
-// Debug endpoint to test content generation
+// Debug endpoint to test content generation (no auth required)
 router.post('/debug-generate', async (req, res) => {
   try {
     console.log('🐛 DEBUG: Content generation test')
