@@ -19,9 +19,11 @@ export class ContentCreatorService {
    */
   private getHeaders(): HeadersInit {
     const token = localStorage.getItem('auth_token')
+    // Fallback to dev token if no auth token (for testing)
+    const authToken = token || 'dev-token-content-creator'
     return {
       'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : '',
+      'Authorization': `Bearer ${authToken}`,
       'ngrok-skip-browser-warning': 'true'
     }
   }
