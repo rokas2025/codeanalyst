@@ -276,15 +276,15 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
     .withMessage('Temperature must be between 0.0 and 1.0'),
   body('generation_settings.tone')
     .optional()
-    .isIn(['professional', 'friendly', 'casual', 'formal', 'persuasive', 'conversational'])
+    .isIn(['professional', 'friendly', 'casual', 'formal', 'persuasive', 'conversational', 'creative', 'authoritative'])
     .withMessage('Invalid tone option'),
   body('generation_settings.style')
     .optional()
-    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging'])
+    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging', 'conversational', 'formal', 'narrative', 'list-based'])
     .withMessage('Invalid style option'),
   body('generation_settings.audience')
     .optional()
-    .isIn(['general', 'technical', 'business', 'consumer', 'executive'])
+    .isIn(['general', 'technical', 'business', 'consumer', 'executive', 'academic', 'marketing'])
     .withMessage('Invalid audience option')
 ], async (req, res) => {
   try {
@@ -1470,15 +1470,15 @@ router.put('/settings', contentManagementRateLimit, authMiddleware, [
     .withMessage('Temperature must be between 0 and 1'),
   body('aiGeneration.tone')
     .optional()
-    .isIn(['professional', 'friendly', 'casual', 'formal', 'conversational', 'persuasive'])
+    .isIn(['professional', 'friendly', 'casual', 'formal', 'conversational', 'persuasive', 'creative', 'authoritative'])
     .withMessage('Invalid tone option'),
   body('aiGeneration.style')
     .optional()
-    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging'])
+    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging', 'conversational', 'formal', 'narrative', 'list-based'])
     .withMessage('Invalid style option'),
   body('aiGeneration.audience')
     .optional()
-    .isIn(['general', 'technical', 'business', 'consumer', 'executive'])
+    .isIn(['general', 'technical', 'business', 'consumer', 'executive', 'academic', 'marketing'])
     .withMessage('Invalid audience option'),
   body('templates.favorites')
     .optional()
