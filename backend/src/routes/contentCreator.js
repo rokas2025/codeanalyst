@@ -386,43 +386,56 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
       estimated_reading_time: generationResult.content.statistics.estimated_reading_time
     }
 
-    // Update user's monthly generation count for rate limiting and billing
-    await db.query(`
-      UPDATE user_content_settings 
-      SET monthly_generation_count = monthly_generation_count + 1,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE user_id = $1
-    `, [generationData.user_id])
+    // Update user's monthly generation count for rate limiting and billing (optional)
+    try {
+      await db.query(`
+        UPDATE user_content_settings 
+        SET monthly_generation_count = monthly_generation_count + 1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = $1
+      `, [generationData.user_id])
+    } catch (settingsError) {
+      logger.warn('Could not update user content settings (user might not exist):', settingsError.message)
+    }
 
     // Store generated content in database
-    await db.query(`
-      INSERT INTO generated_content (
-        id, user_id, template_id, input_data, generation_settings,
-        content_sections, raw_content, formatted_content,
-        ai_provider, ai_model, token_count, generation_time_ms, cost_estimate,
-        word_count, character_count, estimated_reading_time,
-        status, created_at, updated_at
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'draft', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-      )
-    `, [
-      generationData.id,
-      generationData.user_id,
-      generationData.template_id,
-      JSON.stringify(generationData.input_data),
-      JSON.stringify(generationData.generation_settings),
-      JSON.stringify(generationData.content_sections),
-      generationData.raw_content,
-      JSON.stringify(generationData.formatted_content),
-      generationData.ai_provider,
-      generationData.ai_model,
-      generationData.token_count,
-      generationData.generation_time_ms,
-      generationData.cost_estimate,
-      generationData.word_count,
-      generationData.character_count,
-      generationData.estimated_reading_time
-    ])
+    try {
+      await db.query(`
+        INSERT INTO generated_content (
+          id, user_id, template_id, input_data, generation_settings,
+          content_sections, raw_content, formatted_content,
+          ai_provider, ai_model, token_count, generation_time_ms, cost_estimate,
+          word_count, character_count, estimated_reading_time,
+          status, created_at, updated_at
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'draft', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        )
+      `, [
+        generationData.id,
+        generationData.user_id,
+        generationData.template_id,
+        JSON.stringify(generationData.input_data),
+        JSON.stringify(generationData.generation_settings),
+        JSON.stringify(generationData.content_sections),
+        generationData.raw_content,
+        JSON.stringify(generationData.formatted_content),
+        generationData.ai_provider,
+        generationData.ai_model,
+        generationData.token_count,
+        generationData.generation_time_ms,
+        generationData.cost_estimate,
+        generationData.word_count,
+        generationData.character_count,
+        generationData.estimated_reading_time
+      ])
+    } catch (dbError) {
+      logger.error('Database insert failed:', {
+        error: dbError.message,
+        userId: generationData.user_id,
+        templateId: generationData.template_id
+      })
+      throw new Error(`Content generation completed but could not save: ${dbError.message}`)
+    }
 
     logger.info('Content generated and stored successfully:', {
       contentId,
