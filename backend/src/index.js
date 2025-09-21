@@ -116,6 +116,77 @@ app.get('/health', (req, res) => {
   })
 })
 
+// Debug endpoint to check OpenAI configuration (no auth required)
+app.post('/api/debug-openai', async (req, res) => {
+  try {
+    console.log('🐛 DEBUG: Checking OpenAI configuration on Railway...')
+    
+    // Test OpenAI configuration
+    const hasOpenAI = !!process.env.OPENAI_API_KEY
+    const keyPrefix = process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 8) + '...' : 'NOT SET'
+    
+    console.log('OpenAI API Key exists:', hasOpenAI)
+    console.log('OpenAI API Key prefix:', keyPrefix)
+    
+    let openaiTest = 'not tested'
+    let dbTest = 'not tested'
+    
+    // Test database connection
+    try {
+      const result = await db.query('SELECT COUNT(*) FROM content_templates WHERE is_active = true')
+      dbTest = `${result.rows[0].count} templates found`
+      console.log('Database test:', dbTest)
+    } catch (dbError) {
+      dbTest = `Database error: ${dbError.message}`
+      console.error('Database test failed:', dbError)
+    }
+    
+    // Test OpenAI if key exists
+    if (hasOpenAI) {
+      try {
+        const OpenAI = (await import('openai')).default
+        const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+        
+        const testResponse = await client.chat.completions.create({
+          model: 'gpt-3.5-turbo',
+          messages: [{ role: 'user', content: 'Say "OpenAI working" in exactly 2 words.' }],
+          max_tokens: 10,
+          temperature: 0
+        })
+        
+        openaiTest = `Success: ${testResponse.choices[0].message.content}`
+        console.log('OpenAI test:', openaiTest)
+      } catch (openaiError) {
+        openaiTest = `OpenAI error: ${openaiError.message}`
+        console.error('OpenAI test failed:', openaiError)
+      }
+    }
+    
+    res.json({
+      success: true,
+      debug: {
+        environment: process.env.NODE_ENV,
+        openai_key_exists: hasOpenAI,
+        openai_key_prefix: keyPrefix,
+        openai_test: openaiTest,
+        database_test: dbTest,
+        timestamp: new Date().toISOString()
+      }
+    })
+    
+  } catch (error) {
+    console.error('🐛 DEBUG ERROR:', error)
+    res.json({
+      success: false,
+      error: error.message,
+      debug: {
+        openai_key_exists: !!process.env.OPENAI_API_KEY,
+        error_stack: error.stack?.split('\n').slice(0, 3).join('\n')
+      }
+    })
+  }
+})
+
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
