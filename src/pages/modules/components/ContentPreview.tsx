@@ -39,6 +39,7 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
   const [editedContent, setEditedContent] = useState<string>('')
   const [localContent, setLocalContent] = useState<ContentSection[]>([])
   const [showGenerationOptions, setShowGenerationOptions] = useState(false)
+  const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit')
   
   const editTextareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -407,10 +408,132 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
                     Generate Content
                   </button>
                 </div>
-              ) : previewMode === 'formatted' ? (
-                <div className="space-y-6">
-                  {localContent.map((section) => (
-                    <div key={section.id} className="group relative">
+              ) : (
+                <div>
+                  {/* View Mode Toggle */}
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="flex bg-gray-100 rounded-lg p-1">
+                      <button
+                        onClick={() => setViewMode('edit')}
+                        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                          viewMode === 'edit'
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        <PencilIcon className="h-4 w-4" />
+                        Edit Mode
+                      </button>
+                      <button
+                        onClick={() => setViewMode('preview')}
+                        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                          viewMode === 'preview'
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        <EyeIcon className="h-4 w-4" />
+                        Website Preview
+                      </button>
+                    </div>
+                    
+                    {viewMode === 'edit' && (
+                      <button
+                        onClick={() => setPreviewMode(previewMode === 'formatted' ? 'raw' : 'formatted')}
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                      >
+                        {previewMode === 'formatted' ? (
+                          <>
+                            <CodeBracketIcon className="h-4 w-4" />
+                            Show Raw
+                          </>
+                        ) : (
+                          <>
+                            <DocumentTextIcon className="h-4 w-4" />
+                            Show Formatted
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+
+                  {viewMode === 'preview' ? (
+                    // Website Preview Mode - Beautiful, clean design
+                    <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                      {/* Mock Browser Header */}
+                      <div className="bg-gray-50 border-b border-gray-200 px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <div className="flex gap-1.5">
+                            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                            <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                          </div>
+                          <div className="flex-1 mx-4">
+                            <div className="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-600 text-center">
+                              {inputs.companyName || 'your-website'}.com
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Website Content */}
+                      <div className="p-8 max-w-4xl mx-auto">
+                        <article className="prose prose-lg max-w-none">
+                          {localContent.map((section, index) => {
+                            if (section.type === 'heading') {
+                              return (
+                                <h1 key={section.id} className="text-3xl font-bold text-gray-900 mb-6 leading-tight">
+                                  {section.content}
+                                </h1>
+                              )
+                            } else if (section.type === 'subheading') {
+                              return (
+                                <h2 key={section.id} className="text-2xl font-semibold text-gray-800 mt-8 mb-4 leading-tight">
+                                  {section.content}
+                                </h2>
+                              )
+                            } else if (section.type === 'list') {
+                              return (
+                                <ul key={section.id} className="list-disc list-inside space-y-2 mb-6 text-gray-700">
+                                  {section.content.split('\n').filter(item => item.trim()).map((item, itemIndex) => (
+                                    <li key={itemIndex} className="leading-relaxed">
+                                      {item.replace(/^[•\-\*]\s*/, '')}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )
+                            } else if (section.type === 'cta') {
+                              return (
+                                <div key={section.id} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-6 text-center my-8 shadow-lg">
+                                  <p className="text-lg font-semibold mb-4">{section.content}</p>
+                                  <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors shadow-md">
+                                    Get Started
+                                  </button>
+                                </div>
+                              )
+                            } else if (section.type === 'quote') {
+                              return (
+                                <blockquote key={section.id} className="border-l-4 border-blue-500 pl-6 py-4 bg-blue-50 rounded-r-lg my-6">
+                                  <p className="text-lg italic text-gray-700 leading-relaxed">
+                                    "{section.content}"
+                                  </p>
+                                </blockquote>
+                              )
+                            } else {
+                              return (
+                                <p key={section.id} className="text-gray-700 leading-relaxed mb-4 text-lg">
+                                  {section.content}
+                                </p>
+                              )
+                            }
+                          })}
+                        </article>
+                      </div>
+                    </div>
+                  ) : viewMode === 'edit' && previewMode === 'formatted' ? (
+                    <div className="space-y-6">
+                      {localContent.map((section) => (
+                        <div key={section.id} className="group relative">
                       {/* Section Header */}
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="text-sm font-medium text-gray-700">{section.name}</h4>
@@ -498,11 +621,13 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono">
-                    {getFormattedContent()}
-                  </pre>
+                  ) : (
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono">
+                        {getFormattedContent()}
+                      </pre>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
