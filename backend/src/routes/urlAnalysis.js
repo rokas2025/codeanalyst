@@ -7,8 +7,16 @@ import { DatabaseService } from '../services/DatabaseService.js'
 // import { queueService } from '../services/QueueService.js'
 import { logger } from '../utils/logger.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { PageSpeedService } from '../services/PageSpeedService.js'
+import { MozillaObservatoryService } from '../services/MozillaObservatoryService.js'
+import { SSLLabsService } from '../services/SSLLabsService.js'
 
 const router = express.Router()
+
+// Initialize services
+const pageSpeedService = new PageSpeedService()
+const mozillaObservatoryService = new MozillaObservatoryService()
+const sslLabsService = new SSLLabsService()
 
 /**
  * Get troubleshooting suggestions based on error category
@@ -512,6 +520,164 @@ router.delete('/:analysisId', authMiddleware, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to delete analysis'
+    })
+  }
+})
+
+/**
+ * POST /api/url-analysis/pagespeed
+ * Analyze URL with Google PageSpeed Insights
+ */
+router.post('/pagespeed', authMiddleware, [
+  body('url').isURL().withMessage('Valid URL is required'),
+  body('strategy').optional().isIn(['mobile', 'desktop']).withMessage('Strategy must be mobile or desktop')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { url, strategy = 'mobile' } = req.body
+
+    logger.info(`PageSpeed analysis requested for: ${url} (${strategy})`)
+
+    const result = await pageSpeedService.analyzeUrl(url, strategy)
+
+    res.json(result)
+
+  } catch (error) {
+    logger.error('PageSpeed analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'PageSpeed analysis failed'
+    })
+  }
+})
+
+/**
+ * POST /api/url-analysis/pagespeed/both
+ * Analyze URL with both mobile and desktop strategies
+ */
+router.post('/pagespeed/both', authMiddleware, [
+  body('url').isURL().withMessage('Valid URL is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { url } = req.body
+
+    logger.info(`PageSpeed analysis (both strategies) requested for: ${url}`)
+
+    const result = await pageSpeedService.analyzeWithBothStrategies(url)
+
+    res.json(result)
+
+  } catch (error) {
+    logger.error('PageSpeed analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'PageSpeed analysis failed'
+    })
+  }
+})
+
+/**
+ * POST /api/url-analysis/security
+ * Analyze URL with Mozilla Observatory
+ */
+router.post('/security', authMiddleware, [
+  body('url').isURL().withMessage('Valid URL is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { url } = req.body
+
+    logger.info(`Security analysis requested for: ${url}`)
+
+    const result = await mozillaObservatoryService.analyzeSecurity(url)
+
+    res.json(result)
+
+  } catch (error) {
+    logger.error('Security analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Security analysis failed'
+    })
+  }
+})
+
+/**
+ * POST /api/url-analysis/ssl
+ * Analyze SSL/TLS with SSL Labs (rate limited!)
+ */
+router.post('/ssl', authMiddleware, [
+  body('hostname').notEmpty().withMessage('Hostname is required'),
+  body('fromCache').optional().isBoolean()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { hostname, fromCache = true } = req.body
+
+    logger.info(`SSL analysis requested for: ${hostname}`)
+
+    const result = await sslLabsService.analyzeSSL(hostname, fromCache)
+
+    res.json(result)
+
+  } catch (error) {
+    logger.error('SSL analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'SSL analysis failed'
+    })
+  }
+})
+
+/**
+ * GET /api/url-analysis/ssl/rate-limit-info/:hostname
+ * Check SSL Labs rate limit status for a hostname
+ */
+router.get('/ssl/rate-limit-info/:hostname', authMiddleware, async (req, res) => {
+  try {
+    const { hostname } = req.params
+
+    const info = sslLabsService.getCachedScanInfo(hostname)
+
+    res.json({
+      success: true,
+      ...info
+    })
+
+  } catch (error) {
+    logger.error('SSL rate limit check error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to check rate limit status'
     })
   }
 })

@@ -1,10 +1,18 @@
 import express from 'express'
 import OpenAI from 'openai'
 import { authMiddleware } from '../middleware/auth.js'
+import { body, validationResult } from 'express-validator'
 import fetch from 'node-fetch'
 import * as cheerio from 'cheerio'
+import { ReadabilityService } from '../services/ReadabilityService.js'
+import { YoastSEOService } from '../services/YoastSEOService.js'
+import { logger } from '../utils/logger.js'
 
 const router = express.Router()
+
+// Initialize services
+const readabilityService = new ReadabilityService()
+const yoastSEOService = new YoastSEOService()
 
 // OpenAI client will be initialized in the route handler
 let openai = null
@@ -520,6 +528,127 @@ Focus on:
     res.status(500).json({
       success: false,
       error: 'Content analysis failed'
+    })
+  }
+})
+
+/**
+ * POST /api/content-analysis/readability
+ * Analyze text readability (FREE - no API key needed!)
+ */
+router.post('/readability', authMiddleware, [
+  body('text').notEmpty().withMessage('Text content is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { text } = req.body
+
+    logger.info(`Readability analysis requested (${text.length} characters)`)
+
+    const result = readabilityService.analyzeText(text)
+
+    res.json(result)
+
+  } catch (error) {
+    logger.error('Readability analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Readability analysis failed'
+    })
+  }
+})
+
+/**
+ * POST /api/content-analysis/seo
+ * Analyze content for SEO with Yoast SEO (FREE!)
+ */
+router.post('/seo', authMiddleware, [
+  body('content').notEmpty().withMessage('Content is required'),
+  body('keyword').notEmpty().withMessage('Focus keyword is required'),
+  body('title').optional(),
+  body('metaDescription').optional(),
+  body('url').optional()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { content, keyword, title = '', metaDescription = '', url = '' } = req.body
+
+    logger.info(`SEO analysis requested for keyword: "${keyword}"`)
+
+    const result = yoastSEOService.analyzeSEO(content, keyword, title, metaDescription, url)
+
+    res.json(result)
+
+  } catch (error) {
+    logger.error('SEO analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'SEO analysis failed'
+    })
+  }
+})
+
+/**
+ * POST /api/content-analysis/complete
+ * Complete analysis: Readability + SEO together
+ */
+router.post('/complete', authMiddleware, [
+  body('content').notEmpty().withMessage('Content is required'),
+  body('keyword').notEmpty().withMessage('Focus keyword is required'),
+  body('title').optional(),
+  body('metaDescription').optional(),
+  body('url').optional()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      })
+    }
+
+    const { content, keyword, title = '', metaDescription = '', url = '' } = req.body
+
+    logger.info(`Complete content analysis requested`)
+
+    // Run both analyses
+    const readabilityResult = readabilityService.analyzeText(content)
+    const seoResult = yoastSEOService.analyzeSEO(content, keyword, title, metaDescription, url)
+
+    // Combine results
+    const combinedResult = {
+      success: true,
+      readability: readabilityResult,
+      seo: seoResult,
+      overallScore: Math.round((
+        (readabilityResult.success ? (readabilityResult.scores.fleschReadingEase.score || 0) : 0) + 
+        (seoResult.success ? seoResult.overallScore : 0)
+      ) / 2),
+      timestamp: new Date().toISOString()
+    }
+
+    res.json(combinedResult)
+
+  } catch (error) {
+    logger.error('Complete analysis error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Complete analysis failed'
     })
   }
 })

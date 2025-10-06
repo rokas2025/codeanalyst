@@ -6,6 +6,7 @@ import type {
   GenerationSettings,
   ContentExportOptions
 } from '../types/contentCreator'
+import { getAuthHeaders, checkTokenAndRedirect } from '../utils/tokenHelper'
 
 export class ContentCreatorService {
   private baseUrl: string
@@ -18,13 +19,16 @@ export class ContentCreatorService {
    * Get authentication headers
    */
   private getHeaders(): HeadersInit {
-    const token = localStorage.getItem('auth_token')
-    // Fallback to dev token if no auth token (for testing)
-    const authToken = token || 'dev-token-content-creator'
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authToken}`,
-      'ngrok-skip-browser-warning': 'true'
+    try {
+      return getAuthHeaders()
+    } catch (error) {
+      // Fallback to dev token for development/testing
+      const token = localStorage.getItem('auth_token') || 'dev-token-content-creator'
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'ngrok-skip-browser-warning': 'true'
+      }
     }
   }
 

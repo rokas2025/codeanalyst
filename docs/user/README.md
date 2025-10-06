@@ -243,8 +243,8 @@ Generate branded reports for clients or stakeholders:
 
 - 📧 **Email Support**: support@codeanalyst.com
 - 💬 **Live Chat**: Available in-app during business hours
-- 📚 **Knowledge Base**: Comprehensive help articles
-- 🐛 **Bug Reports**: GitHub issues for technical problems
+- 📚 **Knowledge Base**: Com prehensive help articles
+- 🐛 **Bug Reports**: GitHub issues fortechnical problems
 
 ### Performance Tips
 

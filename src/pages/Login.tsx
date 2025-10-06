@@ -1,13 +1,24 @@
-import React, { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import toast from 'react-hot-toast'
 
 export function Login() {
+  const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { login, loginWithGitHub, isAuthenticated } = useAuthStore()
+
+  // Show warning if redirected due to expired token
+  useEffect(() => {
+    if (searchParams.get('expired') === 'true') {
+      toast.error('Your session has expired. Please log in again.', {
+        duration: 5000,
+        icon: '⏰'
+      })
+    }
+  }, [searchParams])
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />
