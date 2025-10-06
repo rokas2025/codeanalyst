@@ -58,12 +58,17 @@ export const contentGenerationRateLimit = createRateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) => `content_gen_${req.user?.id || req.ip}`,
-  onLimitReached: (req, res) => {
+  handler: (req, res) => {
     logger.warn(`Content generation rate limit exceeded`, {
       userId: req.user?.id,
       ip: req.ip,
       plan: req.user?.plan,
       userAgent: req.get('User-Agent')
+    })
+    res.status(429).json({
+      success: false,
+      error: 'Rate limit exceeded',
+      message: req.rateLimit?.message || 'Too many requests'
     })
   }
 })
@@ -129,11 +134,16 @@ export const aiProviderRateLimit = createRateLimit({
     error: 'AI service limit exceeded',
     message: 'Too many AI requests. Please wait a moment before trying again.'
   },
-  onLimitReached: (req, res) => {
+  handler: (req, res) => {
     logger.warn(`AI provider rate limit exceeded`, {
       provider: req.body?.provider,
       userId: req.user?.id,
       ip: req.ip
+    })
+    res.status(429).json({
+      success: false,
+      error: 'AI service limit exceeded',
+      message: 'Too many AI requests. Please wait a moment before trying again.'
     })
   }
 })

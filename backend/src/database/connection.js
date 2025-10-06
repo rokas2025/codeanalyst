@@ -21,18 +21,13 @@ class DatabaseConnection {
       if (process.env.DATABASE_URL) {
         config = {
           connectionString: process.env.DATABASE_URL,
-          // Connection pool settings
-          max: 20, // Maximum number of clients in the pool
-          idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-          connectionTimeoutMillis: 5000, // Increase timeout
+          // Connection pool settings optimized for Supabase
+          max: 10, // Reduced max connections for Railway free tier
+          min: 2, // Keep minimum connections alive
+          idleTimeoutMillis: 60000, // Keep idle connections for 60 seconds
+          connectionTimeoutMillis: 10000, // Longer timeout for slow connections
           // SSL configuration for Supabase
-          ssl: { rejectUnauthorized: false },
-          // Use Supabase session pooler for external connections
-          host: 'aws-1-eu-west-1.pooler.supabase.com',
-          port: 5432,
-          database: 'postgres',
-          user: 'postgres.ecwpwmsqanlatfntzoul',
-          password: 'j7PLA9pc0FOvi20U'
+          ssl: { rejectUnauthorized: false }
         }
       } else {
         // Fallback to individual environment variables for local development
