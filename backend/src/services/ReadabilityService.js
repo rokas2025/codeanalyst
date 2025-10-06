@@ -4,14 +4,7 @@
  * 100% FREE, no API key required
  */
 
-import {
-  fleschReadingEase,
-  fleschKincaidGrade,
-  gunningFog,
-  smogIndex,
-  automatedReadabilityIndex,
-  colemanLiauIndex
-} from 'text-readability';
+import rs from 'text-readability';
 
 export class ReadabilityService {
   /**
@@ -37,7 +30,7 @@ export class ReadabilityService {
       };
     }
 
-    const fleschScore = fleschReadingEase(cleanText);
+    const fleschScore = rs.fleschReadingEase(cleanText);
     
     return {
       success: true,
@@ -49,34 +42,34 @@ export class ReadabilityService {
           grade: this.getFleschGrade(fleschScore)
         },
         fleschKincaidGrade: {
-          score: Math.round(fleschKincaidGrade(cleanText) * 10) / 10,
-          interpretation: `US Grade ${Math.round(fleschKincaidGrade(cleanText))}`,
+          score: Math.round(rs.fleschKincaidGrade(cleanText) * 10) / 10,
+          interpretation: `US Grade ${Math.round(rs.fleschKincaidGrade(cleanText))}`,
           description: 'US school grade level required to understand',
-          grade: this.getGradeLevel(fleschKincaidGrade(cleanText))
+          grade: this.getGradeLevel(rs.fleschKincaidGrade(cleanText))
         },
         gunningFog: {
-          score: Math.round(gunningFog(cleanText) * 10) / 10,
-          interpretation: `Grade ${Math.round(gunningFog(cleanText))} level`,
+          score: Math.round(rs.gunningFog(cleanText) * 10) / 10,
+          interpretation: `Grade ${Math.round(rs.gunningFog(cleanText))} level`,
           description: 'Years of formal education needed',
-          grade: this.getGradeLevel(gunningFog(cleanText))
+          grade: this.getGradeLevel(rs.gunningFog(cleanText))
         },
         smog: {
-          score: Math.round(smogIndex(cleanText) * 10) / 10,
-          interpretation: `Grade ${Math.round(smogIndex(cleanText))} level`,
+          score: Math.round(rs.smogIndex(cleanText) * 10) / 10,
+          interpretation: `Grade ${Math.round(rs.smogIndex(cleanText))} level`,
           description: 'Simple Measure of Gobbledygook',
-          grade: this.getGradeLevel(smogIndex(cleanText))
+          grade: this.getGradeLevel(rs.smogIndex(cleanText))
         },
         automatedReadability: {
-          score: Math.round(automatedReadabilityIndex(cleanText) * 10) / 10,
-          interpretation: `Grade ${Math.round(automatedReadabilityIndex(cleanText))}`,
+          score: Math.round(rs.automatedReadabilityIndex(cleanText) * 10) / 10,
+          interpretation: `Grade ${Math.round(rs.automatedReadabilityIndex(cleanText))}`,
           description: 'Based on characters per word and words per sentence',
-          grade: this.getGradeLevel(automatedReadabilityIndex(cleanText))
+          grade: this.getGradeLevel(rs.automatedReadabilityIndex(cleanText))
         },
         colemanLiau: {
-          score: Math.round(colemanLiauIndex(cleanText) * 10) / 10,
-          interpretation: `Grade ${Math.round(colemanLiauIndex(cleanText))}`,
+          score: Math.round(rs.colemanLiauIndex(cleanText) * 10) / 10,
+          interpretation: `Grade ${Math.round(rs.colemanLiauIndex(cleanText))}`,
           description: 'Coleman-Liau Index',
-          grade: this.getGradeLevel(colemanLiauIndex(cleanText))
+          grade: this.getGradeLevel(rs.colemanLiauIndex(cleanText))
         }
       },
       statistics: this.getTextStatistics(cleanText),
