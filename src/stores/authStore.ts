@@ -57,8 +57,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       console.log('GitHub login: calling', `${baseUrl}/auth/github`)
       
       const response = await fetch(`${baseUrl}/auth/github`, {
+        method: 'GET',
+        credentials: 'include', // Required for CORS with credentials
         headers: {
-          'ngrok-skip-browser-warning': 'true'
+          'ngrok-skip-browser-warning': 'true',
+          'Content-Type': 'application/json'
         }
       })
       const data = await response.json()
@@ -87,6 +90,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       const response = await fetch(`${baseUrl}/auth/github/callback`, {
         method: 'POST',
+        credentials: 'include', // Required for CORS with credentials
         headers: { 
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'true'
