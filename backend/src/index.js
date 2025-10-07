@@ -51,7 +51,7 @@ const app = express()
 const PORT = process.env.PORT || 3001
 
 // Security middleware
-app.use(helmet())
+// app.use(helmet()) // Temporarily disabled to test CORS
 app.use(cors({
   origin: [
     'https://codeanalyst.vercel.app',
