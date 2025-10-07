@@ -51,18 +51,7 @@ const app = express()
 const PORT = process.env.PORT || 3001
 
 // CORS must be configured BEFORE helmet to work properly
-app.use(cors({
-  origin: [
-    'https://codeanalyst.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://localhost:8080'
-  ],
-  credentials: true, // Required for GitHub OAuth cookies
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['Content-Range', 'X-Content-Range']
-}))
+app.use(cors({ origin: true, credentials: true }))
 
 // Security middleware - COMPLETELY DISABLED for testing
 // app.use(helmet())
