@@ -67,7 +67,7 @@ function getSuggestions(category) {
  * POST /api/url-analysis/analyze
  * Analyze a website URL with real content extraction
  */
-router.post('/analyze', [
+router.post('/analyze', authMiddleware, [
   body('url')
     .isURL({ require_protocol: true })
     .withMessage('Valid URL with protocol (http/https) is required'),
