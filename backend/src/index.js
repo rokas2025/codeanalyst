@@ -64,11 +64,8 @@ app.use(cors({
   exposedHeaders: ['Content-Range', 'X-Content-Range']
 }))
 
-// Security middleware - configured to allow CORS
-app.use(helmet({
-  crossOriginResourcePolicy: false,
-  contentSecurityPolicy: false
-}))
+// Security middleware - COMPLETELY DISABLED for testing
+// app.use(helmet())
 
 // Rate limiting (DISABLED FOR TESTING)
 /*
