@@ -160,16 +160,18 @@ export function CodeAnalyst() {
               result.analysisId,
               (progressResult) => {
                 setCurrentAnalysisResult(progressResult)
-                setAnalysisStep(`Analysis ${progressResult.progress}% complete...`)
+                const progress = progressResult.progress || 0
                 
                 if (progressResult.status === 'analyzing') {
-                  if (progressResult.progress < 30) {
-                    setAnalysisStep('Cloning repository...')
-                  } else if (progressResult.progress < 70) {
-                    setAnalysisStep('Analyzing code structure...')
+                  if (progress < 30) {
+                    setAnalysisStep(`Cloning repository... (${progress}% complete)`)
+                  } else if (progress < 70) {
+                    setAnalysisStep(`Analyzing code structure... (${progress}% complete)`)
                   } else {
-                    setAnalysisStep('Running AI analysis...')
+                    setAnalysisStep(`Running AI analysis... (${progress}% complete)`)
                   }
+                } else {
+                  setAnalysisStep(`Analysis ${progress}% complete...`)
                 }
               }
             )
