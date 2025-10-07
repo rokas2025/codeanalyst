@@ -50,8 +50,7 @@ const __dirname = dirname(__filename)
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Security middleware
-// app.use(helmet()) // Temporarily disabled to test CORS
+// CORS must be configured BEFORE helmet to work properly
 app.use(cors({
   origin: [
     'https://codeanalyst.vercel.app',
@@ -63,6 +62,12 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   exposedHeaders: ['Content-Range', 'X-Content-Range']
+}))
+
+// Security middleware - configured to allow CORS
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+  contentSecurityPolicy: false
 }))
 
 // Rate limiting (DISABLED FOR TESTING)
