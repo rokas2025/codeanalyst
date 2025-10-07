@@ -26,6 +26,15 @@ class DatabaseConnection {
           min: 2, // Keep minimum connections alive
           idleTimeoutMillis: 60000, // Keep idle connections for 60 seconds
           connectionTimeoutMillis: 10000, // Longer timeout for slow connections
+          
+          // Add keepalive to prevent connection termination during long operations
+          keepAlive: true,
+          keepAliveInitialDelayMillis: 10000, // Send keepalive every 10 seconds
+          
+          // Prevent statement timeout during long operations
+          statement_timeout: 300000, // 5 minutes max per query
+          query_timeout: 300000, // 5 minutes max
+          
           // SSL configuration for Supabase
           ssl: { rejectUnauthorized: false }
         }

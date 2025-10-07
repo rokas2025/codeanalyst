@@ -161,7 +161,7 @@ export class AnalysisService {
     onProgress?: (analysis: AnalysisResult) => void,
     repoUrl?: string
   ): Promise<AnalysisResult> {
-    const maxAttempts = 60 // 5 minutes max
+    const maxAttempts = 120 // 20 minutes max (increased for complex repository analysis)
     let attempts = 0
 
     return new Promise((resolve, reject) => {
