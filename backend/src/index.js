@@ -53,8 +53,16 @@ const PORT = process.env.PORT || 3001
 // Security middleware
 app.use(helmet())
 app.use(cors({
-  origin: '*', // Temporary - allow all origins for testing
-  credentials: false // Must be false when origin is '*'
+  origin: [
+    'https://codeanalyst.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:8080'
+  ],
+  credentials: true, // Required for GitHub OAuth cookies
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
 }))
 
 // Rate limiting (DISABLED FOR TESTING)
