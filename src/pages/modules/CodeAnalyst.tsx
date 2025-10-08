@@ -148,11 +148,8 @@ export function CodeAnalyst() {
     // Accept all file types - we filter inside based on extension
     maxSize: 50 * 1024 * 1024, // 50MB
     multiple: true,
-    validator: (file) => {
-      console.log('Dropzone validator checking file:', file.name, 'type:', file.type, 'size:', file.size)
-      // Accept all files - we'll filter inside onDrop
-      return null
-    }
+    noReject: true, // Don't reject any files - let onDrop handle it
+    noDrag: false
   })
 
   const handleAnalyze = async () => {
