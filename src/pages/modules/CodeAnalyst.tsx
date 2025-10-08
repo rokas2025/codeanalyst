@@ -64,32 +64,50 @@ export function CodeAnalyst() {
 
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    console.log('📁 Files dropped:', acceptedFiles.length, 'files')
     const files: { path: string; content: string; size: number }[] = []
     
-    for (const file of acceptedFiles) {
-      if (file.name.endsWith('.zip')) {
-        const zip = new JSZip()
-        const zipContent = await zip.loadAsync(file)
+    try {
+      for (const file of acceptedFiles) {
+        console.log('Processing file:', file.name, 'size:', file.size)
         
-        for (const [path, zipEntry] of Object.entries(zipContent.files)) {
-          if (!zipEntry.dir && shouldIncludeFile(path)) {
-            const content = await zipEntry.async('string')
-            files.push({ path, content, size: content.length })
+        if (file.name.endsWith('.zip')) {
+          console.log('📦 Extracting ZIP file...')
+          const zip = new JSZip()
+          const zipContent = await zip.loadAsync(file)
+          
+          for (const [path, zipEntry] of Object.entries(zipContent.files)) {
+            if (!zipEntry.dir && shouldIncludeFile(path)) {
+              const content = await zipEntry.async('string')
+              files.push({ path, content, size: content.length })
+            }
           }
+          console.log(`✅ Extracted ${files.length} files from ZIP`)
+        } else if (shouldIncludeFile(file.name)) {
+          const content = await file.text()
+          files.push({ path: file.name, content, size: file.size })
+          console.log('✅ Added file:', file.name)
         }
-      } else if (shouldIncludeFile(file.name)) {
-        const content = await file.text()
-        files.push({ path: file.name, content, size: file.size })
       }
-    }
-    
-    setUploadedFiles(files)
-    
-    // Show success toast for file upload
-    if (files.length > 0) {
-      toast.success(`Successfully uploaded ${files.length} files! 📁`, {
-        duration: 3000,
-        position: 'top-right',
+      
+      console.log('📊 Total files to upload:', files.length)
+      setUploadedFiles(files)
+      
+      // Show success toast for file upload
+      if (files.length > 0) {
+        toast.success(`Successfully uploaded ${files.length} files! 📁`, {
+          duration: 3000,
+          position: 'top-right',
+        })
+      } else {
+        toast.error('No valid files found in upload. Please check file types.', {
+          duration: 4000,
+        })
+      }
+    } catch (error) {
+      console.error('❌ File upload error:', error)
+      toast.error(`Failed to process files: ${error instanceof Error ? error.message : 'Unknown error'}`, {
+        duration: 5000,
       })
     }
   }, [])
