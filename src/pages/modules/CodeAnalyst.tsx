@@ -145,11 +145,14 @@ export function CodeAnalyst() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'application/zip': ['.zip'],
-      'text/*': ['.js', '.jsx', '.ts', '.tsx', '.php', '.html', '.css', '.json', '.md']
-    },
-    maxSize: 50 * 1024 * 1024 // 50MB
+    // Accept all file types - we filter inside based on extension
+    maxSize: 50 * 1024 * 1024, // 50MB
+    multiple: true,
+    validator: (file) => {
+      console.log('Dropzone validator checking file:', file.name, 'type:', file.type, 'size:', file.size)
+      // Accept all files - we'll filter inside onDrop
+      return null
+    }
   })
 
   const handleAnalyze = async () => {
