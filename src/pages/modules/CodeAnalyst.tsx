@@ -210,7 +210,9 @@ export function CodeAnalyst() {
           })
           
           if (!response.ok) {
-            throw new Error(`Upload failed: ${response.statusText}`)
+            const errorData = await response.json().catch(() => ({ error: response.statusText }))
+            console.error('Backend error response:', errorData)
+            throw new Error(`Upload failed (${response.status}): ${errorData.error || errorData.message || response.statusText}`)
           }
           
           const result = await response.json()
