@@ -119,15 +119,28 @@ export function CodeAnalyst() {
       'dist/',
       'build/',
       '.DS_Store',
-      '.env'
+      '.env',
+      '__MACOSX' // Mac OS metadata folder
     ]
     
     const includeExtensions = [
-      '.js', '.jsx', '.ts', '.tsx', '.php', '.html', '.css', '.scss', '.json', '.md'
+      '.js', '.jsx', '.ts', '.tsx', 
+      '.php', '.html', '.css', '.scss', '.sass', '.less',
+      '.json', '.md', '.txt',
+      '.py', '.java', '.cpp', '.c', '.h',
+      '.go', '.rs', '.rb', '.swift',
+      '.vue', '.svelte', '.astro',
+      '.yml', '.yaml', '.xml', '.toml', '.ini',
+      '.sql', '.sh', '.bat', '.ps1'
     ]
     
-    return !excludePatterns.some(pattern => path.includes(pattern)) &&
-           includeExtensions.some(ext => path.endsWith(ext))
+    // Allow any file in the include list and not in exclude patterns
+    const isExcluded = excludePatterns.some(pattern => path.includes(pattern))
+    const hasValidExtension = includeExtensions.some(ext => path.toLowerCase().endsWith(ext))
+    
+    console.log(`Checking file: ${path} - Excluded: ${isExcluded}, Valid extension: ${hasValidExtension}`)
+    
+    return !isExcluded && hasValidExtension
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
