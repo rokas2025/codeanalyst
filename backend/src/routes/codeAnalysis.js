@@ -236,7 +236,7 @@ router.post('/github', authMiddleware, [
  * POST /api/code-analysis/zip
  * Analyze uploaded ZIP file
  */
-router.post('/zip', upload.single('zipFile'), [
+router.post('/zip', authMiddleware, upload.single('zipFile'), [
   body('options.aiProfile')
     .optional()
     .isIn(['technical', 'business', 'mixed'])
