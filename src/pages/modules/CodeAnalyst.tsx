@@ -144,12 +144,17 @@ export function CodeAnalyst() {
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    // Accept all file types - we filter inside based on extension
-    maxSize: 50 * 1024 * 1024, // 50MB
-    multiple: true,
-    noReject: true, // Don't reject any files - let onDrop handle it
-    noDrag: false
+    onDrop: (acceptedFiles, rejectedFiles) => {
+      console.log('📦 Dropzone onDrop called!')
+      console.log('   Accepted files:', acceptedFiles.length)
+      console.log('   Rejected files:', rejectedFiles.length)
+      if (rejectedFiles.length > 0) {
+        console.log('   Rejection reasons:', rejectedFiles.map(f => ({ name: f.file.name, errors: f.errors })))
+      }
+      onDrop(acceptedFiles)
+    },
+    maxSize: 100 * 1024 * 1024, // Increased to 100MB
+    multiple: true
   })
 
   const handleAnalyze = async () => {
