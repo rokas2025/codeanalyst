@@ -171,6 +171,100 @@ export function CodeAnalyst() {
     setAnalysisStep('Initializing code analysis...')
     
     try {
+      // For ZIP uploads, send to backend for analysis
+      if (userProfile === 'zip' && uploadedFiles.length > 0) {
+        setAnalysisStep('Uploading files to backend for analysis...')
+        
+        try {
+          // Create FormData with the ZIP file
+          const formData = new FormData()
+          
+          // Create a new ZIP file from the uploaded files
+          const JSZip = (await import('jszip')).default
+          const zip = new JSZip()
+          
+          // Add all uploaded files to the ZIP
+          uploadedFiles.forEach(file => {
+            zip.file(file.path, file.content)
+          })
+          
+          // Generate the ZIP file
+          const zipBlob = await zip.generateAsync({ type: 'blob' })
+          formData.append('zipFile', zipBlob, 'code-analysis.zip')
+          formData.append('options', JSON.stringify({
+            aiProfile: 'mixed',
+            deepAnalysis: true,
+            aiAnalysis: true
+          }))
+          
+          const token = localStorage.getItem('auth_token')
+          const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
+          
+          const response = await fetch(`${baseUrl}/code-analysis/zip`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token || 'dev-token-zip-analyst'}`,
+              'ngrok-skip-browser-warning': 'true'
+            },
+            body: formData
+          })
+          
+          if (!response.ok) {
+            throw new Error(`Upload failed: ${response.statusText}`)
+          }
+          
+          const result = await response.json()
+          
+          toast.success(`✅ ZIP analysis started! ID: ${result.analysisId}`, {
+            duration: 5000,
+            position: 'top-right',
+          })
+          
+          setAnalysisStep(`ZIP analysis in progress... (${result.estimatedTime || '5-10 minutes'})`)
+          
+          // Start real polling for results
+          const finalResult = await analysisService.pollAnalysisStatus(
+            result.analysisId,
+            (progressResult) => {
+              setCurrentAnalysisResult(progressResult)
+              const progress = progressResult.progress || 0
+              
+              if (progressResult.status === 'analyzing') {
+                if (progress < 30) {
+                  setAnalysisStep(`Extracting files... (${progress}% complete)`)
+                } else if (progress < 70) {
+                  setAnalysisStep(`Analyzing code structure... (${progress}% complete)`)
+                } else {
+                  setAnalysisStep(`Running AI analysis... (${progress}% complete)`)
+                }
+              } else {
+                setAnalysisStep(`Analysis ${progress}% complete...`)
+              }
+            }
+          )
+          
+          setCurrentAnalysisResult(finalResult)
+          setIsAnalyzing(false)
+          
+          if (finalResult.status === 'completed') {
+            toast.success(`🎉 ZIP analysis completed!`, {
+              duration: 5000
+            })
+          } else {
+            toast.error(`Analysis failed: ${finalResult.errorMessage || 'Unknown error'}`, {
+              duration: 5000
+            })
+          }
+          return
+          
+        } catch (error) {
+          console.error('ZIP analysis failed:', error)
+          toast.error(`Failed to analyze ZIP: ${error instanceof Error ? error.message : 'Unknown error'}`)
+          setIsAnalyzing(false)
+          return
+        }
+      }
+      
       // For GitHub repositories, use backend analysis
       if (userProfile === 'github' && selectedRepository) {
         setAnalysisStep('Starting GitHub repository analysis...')
