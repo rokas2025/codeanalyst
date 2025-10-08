@@ -621,6 +621,24 @@ export class DatabaseService {
   }
 
   /**
+   * Get user by email
+   */
+  static async getUserByEmail(email) {
+    try {
+      const query = `
+        SELECT * FROM users 
+        WHERE LOWER(email) = LOWER($1::VARCHAR(255))
+      `
+      const result = await db.query(query, [email])
+      logger.logDatabase('select', 'users', 0, { email })
+      return result.rows[0] || null
+    } catch (error) {
+      logger.logError('Database getUserByEmail', error, { email })
+      throw error
+    }
+  }
+
+  /**
    * Create new user
    */
   static async createUser(userData) {

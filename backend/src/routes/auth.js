@@ -5,6 +5,7 @@ import { logger } from '../utils/logger.js'
 import { GitHubService } from '../services/GitHubService.js'
 import { DatabaseService } from '../services/DatabaseService.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { db } from '../database/connection.js'
 
 const router = express.Router()
 
@@ -164,8 +165,43 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({ success: false, error: 'Email and password required' })
-    const token = `dev-token-${Date.now()}`
-    res.json({ success: true, token, user: { id: 'dev-user-1', email, name: 'Development User', plan: 'free' } })
+    
+    // Check if user exists in database
+    const user = await DatabaseService.getUserByEmail(email)
+    
+    if (!user) {
+      return res.status(401).json({ success: false, error: 'Invalid email or password' })
+    }
+    
+    // Check password if user has a password hash
+    if (user.password_hash) {
+      // Verify password using PostgreSQL crypt function
+      const passwordCheckQuery = `SELECT (password_hash = crypt($1, password_hash)) AS password_match FROM users WHERE id = $2`
+      const result = await db.query(passwordCheckQuery, [password, user.id])
+      
+      if (!result.rows[0]?.password_match) {
+        return res.status(401).json({ success: false, error: 'Invalid email or password' })
+      }
+    }
+    
+    // Generate proper JWT token
+    const token = jwt.sign({
+      userId: user.id,
+      email: user.email,
+      name: user.name
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' })
+    
+    res.json({ 
+      success: true, 
+      token, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name, 
+        plan: user.plan || 'free',
+        avatarUrl: user.avatar_url
+      } 
+    })
   } catch (error) {
     logger.error('Login failed:', error)
     res.status(500).json({ success: false, error: 'Login failed' })

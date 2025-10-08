@@ -63,6 +63,8 @@ export function CodeAnalyst() {
 
 
 
+  const [originalZipFile, setOriginalZipFile] = useState<File | null>(null)
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     console.log('📁 Files dropped:', acceptedFiles.length, 'files')
     const files: { path: string; content: string; size: number }[] = []
@@ -72,7 +74,10 @@ export function CodeAnalyst() {
         console.log('Processing file:', file.name, 'size:', file.size)
         
         if (file.name.endsWith('.zip')) {
-          console.log('📦 Extracting ZIP file...')
+          console.log('📦 Storing original ZIP file for backend upload')
+          setOriginalZipFile(file) // Store the original ZIP
+          
+          console.log('📦 Extracting ZIP file for preview...')
           const zip = new JSZip()
           const zipContent = await zip.loadAsync(file)
           
@@ -176,21 +181,24 @@ export function CodeAnalyst() {
         setAnalysisStep('Uploading files to backend for analysis...')
         
         try {
-          // Create FormData with the ZIP file
+          // Create FormData with the ORIGINAL ZIP file
           const formData = new FormData()
           
-          // Create a new ZIP file from the uploaded files
-          const JSZip = (await import('jszip')).default
-          const zip = new JSZip()
-          
-          // Add all uploaded files to the ZIP
-          uploadedFiles.forEach(file => {
-            zip.file(file.path, file.content)
-          })
-          
-          // Generate the ZIP file
-          const zipBlob = await zip.generateAsync({ type: 'blob' })
-          formData.append('zipFile', zipBlob, 'code-analysis.zip')
+          if (originalZipFile) {
+            // Use the original ZIP file
+            formData.append('zipFile', originalZipFile, originalZipFile.name)
+          } else {
+            // Fallback: Create a new ZIP from extracted files (shouldn't happen normally)
+            const JSZip = (await import('jszip')).default
+            const zip = new JSZip()
+            
+            uploadedFiles.forEach(file => {
+              zip.file(file.path, file.content)
+            })
+            
+            const zipBlob = await zip.generateAsync({ type: 'blob' })
+            formData.append('zipFile', zipBlob, 'code-analysis.zip')
+          }
           formData.append('options', JSON.stringify({
             aiProfile: 'mixed',
             deepAnalysis: true,
