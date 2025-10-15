@@ -24,12 +24,27 @@ router.get('/github', (req, res) => {
     })
   }
 
-  // Get the frontend URL from request headers (referer or origin)
-  const frontendUrl = req.headers.referer || req.headers.origin || process.env.FRONTEND_URL || 'https://app.beenex.dev'
+  // Get the frontend URL from custom header, referer, origin, or fallback to env
+  const frontendUrl = req.headers['x-frontend-url'] || 
+                      req.headers.referer || 
+                      req.headers.origin || 
+                      process.env.FRONTEND_URL || 
+                      'https://app.beenex.dev'
   
   // Remove trailing slash and any path from the URL
   const cleanFrontendUrl = frontendUrl.replace(/\/$/, '').split('?')[0].split('#')[0]
-  const frontendOrigin = new URL(cleanFrontendUrl).origin
+  let frontendOrigin
+  try {
+    frontendOrigin = new URL(cleanFrontendUrl).origin
+  } catch (e) {
+    // If URL parsing fails, use the cleaned URL as-is
+    frontendOrigin = cleanFrontendUrl
+  }
+
+  logger.info('GitHub OAuth initiated:', { 
+    frontendOrigin, 
+    headerSource: req.headers['x-frontend-url'] ? 'custom' : (req.headers.referer ? 'referer' : (req.headers.origin ? 'origin' : 'env'))
+  })
 
   const scope = 'user:email,repo'
   // Include the frontend URL in the state parameter so we can redirect back to it

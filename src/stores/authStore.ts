@@ -54,14 +54,18 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ loading: true })
     try {
       const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
+      const currentUrl = window.location.origin // Get current frontend URL
+      
       console.log('GitHub login: calling', `${baseUrl}/auth/github`)
+      console.log('Current frontend URL:', currentUrl)
       
       const response = await fetch(`${baseUrl}/auth/github`, {
         method: 'GET',
         credentials: 'include', // Required for CORS with credentials
         headers: {
           'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-Frontend-URL': currentUrl // Send current URL to backend
         }
       })
       const data = await response.json()
