@@ -14,7 +14,7 @@
     "db:migrate": "node scripts/migrate.js",
     "db:seed": "node scripts/seed.js",
     "worker": "node src/workers/analysisWorker.js",
-    "build": "tsc",
+    "build": "echo 'No build step needed for JavaScript backend'",
     "lint": "eslint src/**/*.js",
     "docker:build": "docker build -t c-backend .",
     "docker:run": "docker run -p 3001:3001 codeanalyst-backend",
