@@ -1,0 +1,17 @@
+# Railway Configuration for Development Environment
+# This file configures the development Railway service
+
+[build]
+command = "npm install"
+workingDirectory = "backend"
+
+[deploy]
+startCommand = "npm start"
+workingDirectory = "backend"
+
+# Development environment variables
+[env]
+NODE_ENV = "development"
+
+# This service will deploy from the 'develop' branch
+
