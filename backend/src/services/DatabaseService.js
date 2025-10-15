@@ -21,7 +21,7 @@ export class DatabaseService {
         data.progress || 0,
         JSON.stringify(data.options || {})
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('insert', 'url_analyses', 0, { analysisId: data.id })
       return result.rows[0]
@@ -44,7 +44,7 @@ export class DatabaseService {
         RETURNING *
       `
       const values = [analysisId, status, progress, error]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'url_analyses', 0, { analysisId, status, progress })
       return result.rows[0]
@@ -98,7 +98,7 @@ export class DatabaseService {
         JSON.stringify(data.accessibility_analysis || {}),
         JSON.stringify(data.security_analysis || {})
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'url_analyses', 0, { analysisId })
       return result.rows[0]
@@ -131,7 +131,7 @@ export class DatabaseService {
         aiData.ai_provider,
         aiData.ai_model
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'url_analyses', 0, { analysisId })
       return result.rows[0]
@@ -150,7 +150,7 @@ export class DatabaseService {
       let techNames = []
       if (resultData.technologies) {
         if (Array.isArray(resultData.technologies)) {
-          techNames = resultData.technologies.map(tech => 
+          techNames = resultData.technologies.map(tech =>
             typeof tech === 'string' ? tech : tech.name || tech
           )
         } else if (resultData.technologies.technologies && Array.isArray(resultData.technologies.technologies)) {
@@ -246,7 +246,7 @@ export class DatabaseService {
         LIMIT $2 OFFSET $3
       `
       const result = await db.query(query, [userId, limit, offset])
-      
+
       logger.logDatabase('select', 'url_analyses', 0, { userId, page, limit })
       return {
         analyses: result.rows,
@@ -278,7 +278,7 @@ export class DatabaseService {
   }
 
   // CODE ANALYSIS METHODS
-  
+
   /**
    * Create code analysis record
    */
@@ -298,7 +298,7 @@ export class DatabaseService {
         data.progress || 0,
         JSON.stringify(data.metadata || {})
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('insert', 'code_analyses', 0, { analysisId: data.id })
       return result.rows[0]
@@ -321,7 +321,7 @@ export class DatabaseService {
         RETURNING *
       `
       const values = [analysisId, status, progress, error]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'code_analyses', 0, { analysisId, status, progress })
       return result.rows[0]
@@ -359,7 +359,7 @@ export class DatabaseService {
         JSON.stringify(data.build_results),
         JSON.stringify(data.static_analysis_results)
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'code_analyses', 0, { analysisId })
       return result.rows[0]
@@ -390,7 +390,7 @@ export class DatabaseService {
         JSON.stringify(aiData.business_recommendations),
         JSON.stringify(aiData.risk_assessment)
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'code_analyses', 0, { analysisId })
       return result.rows[0]
@@ -446,7 +446,7 @@ export class DatabaseService {
 
       let whereClause = 'WHERE user_id = $1'
       let params = [userId]
-      
+
       if (sourceType) {
         whereClause += ' AND source_type = $2'
         params.push(sourceType)
@@ -463,9 +463,9 @@ export class DatabaseService {
         LIMIT $${params.length + 1} OFFSET $${params.length + 2}
       `
       params.push(limit, offset)
-      
+
       const result = await db.query(query, params)
-      
+
       logger.logDatabase('select', 'code_analyses', 0, { userId, page, limit, sourceType })
       return {
         analyses: result.rows,
@@ -543,7 +543,7 @@ export class DatabaseService {
         data.tokenCount,
         data.responseTimeMs
       ]
-      
+
       const result = await db.query(query, values)
       return result.rows[0]
     } catch (error) {
@@ -575,7 +575,7 @@ export class DatabaseService {
         data.success,
         data.errorMessage
       ]
-      
+
       const result = await db.query(query, values)
       return result.rows[0]
     } catch (error) {
@@ -664,7 +664,7 @@ export class DatabaseService {
         userData.avatar_url,
         userData.plan || 'free'
       ]
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('insert', 'users', 0, { githubUsername: userData.github_username })
       return result.rows[0]
@@ -703,7 +703,7 @@ export class DatabaseService {
         WHERE id = $1::UUID
         RETURNING *
       `
-      
+
       const result = await db.query(query, values)
       logger.logDatabase('update', 'users', 0, { userId })
       return result.rows[0]
@@ -747,13 +747,13 @@ export class DatabaseService {
         WHERE id = $1::UUID AND user_id = $2::UUID
       `
       const result = await db.query(query, [analysisId, userId])
-      
+
       if (result.rows.length === 0) {
         return null
       }
 
       const analysis = result.rows[0]
-      
+
       // Fix technology parsing - ensure technologies are parsed as objects, not JSON strings
       if (analysis.technologies && Array.isArray(analysis.technologies)) {
         analysis.technologies = analysis.technologies.map(tech => {
@@ -797,7 +797,7 @@ export class DatabaseService {
         ORDER BY ${orderBy} ${order}
         LIMIT $2 OFFSET $3
       `
-      
+
       const countQuery = `
         SELECT COUNT(*) as total 
         FROM url_analyses 
@@ -879,7 +879,7 @@ export class DatabaseService {
           updated_at = CURRENT_TIMESTAMP
         RETURNING id, provider
       `
-      
+
       const result = await db.query(query, [
         userId,
         provider,
@@ -887,7 +887,7 @@ export class DatabaseService {
         keyData.key_name,
         keyData.is_active
       ])
-      
+
       logger.logDatabase('upsert', 'user_api_keys', result.rows.length, { userId, provider })
       return result.rows[0]
     } catch (error) {
@@ -909,7 +909,7 @@ export class DatabaseService {
         ORDER BY updated_at DESC
         LIMIT 1
       `
-      
+
       const result = await db.query(query, [userId, provider])
       logger.logDatabase('select', 'user_api_keys', result.rows.length, { userId, provider })
       return result.rows[0] || null
@@ -931,7 +931,7 @@ export class DatabaseService {
         WHERE user_id = $1::UUID AND is_active = true
         ORDER BY provider ASC
       `
-      
+
       const result = await db.query(query, [userId])
       logger.logDatabase('select', 'user_api_keys', result.rows.length, { userId })
       return result.rows
@@ -954,7 +954,7 @@ export class DatabaseService {
         WHERE user_id = $1::UUID AND provider = $2
         RETURNING id
       `
-      
+
       const result = await db.query(query, [userId, provider])
       logger.logDatabase('update', 'user_api_keys', result.rows.length, { userId, provider })
       return result.rowCount > 0
@@ -976,7 +976,7 @@ export class DatabaseService {
         SET last_used = CURRENT_TIMESTAMP
         WHERE user_id = $1::UUID AND provider = $2 AND is_active = true
       `
-      
+
       await db.query(query, [userId, provider])
       logger.logDatabase('update', 'user_api_keys', 1, { userId, provider })
     } catch (error) {
@@ -998,7 +998,7 @@ export class DatabaseService {
     try {
       const crypto = await import('crypto')
       const apiKey = crypto.randomUUID()
-      
+
       logger.logDatabase('generate', 'wordpress_api_key', 1, { userId })
       return apiKey
     } catch (error) {
@@ -1024,7 +1024,7 @@ export class DatabaseService {
         VALUES ($1::UUID, $2, $3, $4, $5, $6, $7, $8, $9, true, CURRENT_TIMESTAMP)
         RETURNING *
       `
-      
+
       const result = await db.query(query, [
         userId,
         apiKey,
@@ -1036,7 +1036,7 @@ export class DatabaseService {
         siteData.site_health ? JSON.stringify(siteData.site_health) : null,
         siteData.php_version || null
       ])
-      
+
       logger.logDatabase('insert', 'wordpress_connections', result.rows.length, { userId })
       return result.rows[0]
     } catch (error) {
@@ -1056,7 +1056,7 @@ export class DatabaseService {
         WHERE user_id = $1::UUID
         ORDER BY created_at DESC
       `
-      
+
       const result = await db.query(query, [userId])
       logger.logDatabase('select', 'wordpress_connections', result.rows.length, { userId })
       return result.rows
@@ -1076,20 +1076,22 @@ export class DatabaseService {
       const query = `
         UPDATE wordpress_connections
         SET 
-          site_name = COALESCE($2, site_name),
-          wordpress_version = COALESCE($3, wordpress_version),
-          active_theme = COALESCE($4, active_theme),
-          active_plugins = COALESCE($5, active_plugins),
-          site_health = COALESCE($6, site_health),
-          php_version = COALESCE($7, php_version),
+          site_url = COALESCE($2, site_url),
+          site_name = COALESCE($3, site_name),
+          wordpress_version = COALESCE($4, wordpress_version),
+          active_theme = COALESCE($5, active_theme),
+          active_plugins = COALESCE($6, active_plugins),
+          site_health = COALESCE($7, site_health),
+          php_version = COALESCE($8, php_version),
           last_sync = CURRENT_TIMESTAMP,
           updated_at = CURRENT_TIMESTAMP
         WHERE api_key = $1
         RETURNING *
       `
-      
+
       const result = await db.query(query, [
         apiKey,
+        siteData.site_url || null,
         siteData.site_name || null,
         siteData.wordpress_version || null,
         siteData.active_theme || null,
@@ -1097,7 +1099,7 @@ export class DatabaseService {
         siteData.site_health ? JSON.stringify(siteData.site_health) : null,
         siteData.php_version || null
       ])
-      
+
       logger.logDatabase('update', 'wordpress_connections', result.rows.length, { apiKey })
       return result.rows[0]
     } catch (error) {
@@ -1118,7 +1120,7 @@ export class DatabaseService {
         WHERE id = $1::UUID AND user_id = $2::UUID
         RETURNING id
       `
-      
+
       const result = await db.query(query, [connectionId, userId])
       logger.logDatabase('delete', 'wordpress_connections', result.rows.length, { connectionId, userId })
       return result.rowCount > 0
@@ -1138,9 +1140,9 @@ export class DatabaseService {
       const query = `
         SELECT id, user_id, site_url, is_connected
         FROM wordpress_connections
-        WHERE api_key = $1 AND is_connected = true
+        WHERE api_key = $1
       `
-      
+
       const result = await db.query(query, [apiKey])
       logger.logDatabase('select', 'wordpress_connections', result.rows.length, { apiKey: apiKey.substring(0, 8) + '...' })
       return result.rows.length > 0 ? result.rows[0] : null

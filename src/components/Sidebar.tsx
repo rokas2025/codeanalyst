@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { 
+import {
   HomeIcon,
   FolderIcon,
   CogIcon,
@@ -15,7 +15,7 @@ import {
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
-      { name: 'Analysis History', href: '/projects', icon: ClockIcon },
+  { name: 'Analysis History', href: '/projects', icon: ClockIcon },
   {
     name: 'AI Modules',
     children: [
@@ -60,10 +60,9 @@ export function Sidebar() {
                           key={child.name}
                           to={child.href}
                           className={({ isActive }) =>
-                            `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                              isActive
-                                ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
+                              ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             }`
                           }
                         >
@@ -77,10 +76,9 @@ export function Sidebar() {
                   <NavLink
                     to={item.href}
                     className={({ isActive }) =>
-                      `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                        isActive
-                          ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
+                        ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }`
                     }
                   >

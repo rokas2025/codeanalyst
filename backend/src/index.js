@@ -120,17 +120,17 @@ app.get('/health', (req, res) => {
 app.post('/api/debug-openai', async (req, res) => {
   try {
     console.log('🐛 DEBUG: Checking OpenAI configuration on Railway...')
-    
+
     // Test OpenAI configuration
     const hasOpenAI = !!process.env.OPENAI_API_KEY
     const keyPrefix = process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 8) + '...' : 'NOT SET'
-    
+
     console.log('OpenAI API Key exists:', hasOpenAI)
     console.log('OpenAI API Key prefix:', keyPrefix)
-    
+
     let openaiTest = 'not tested'
     let dbTest = 'not tested'
-    
+
     // Test database connection
     try {
       const result = await db.query('SELECT COUNT(*) FROM content_templates WHERE is_active = true')
@@ -140,20 +140,20 @@ app.post('/api/debug-openai', async (req, res) => {
       dbTest = `Database error: ${dbError.message}`
       console.error('Database test failed:', dbError)
     }
-    
+
     // Test OpenAI if key exists
     if (hasOpenAI) {
       try {
         const OpenAI = (await import('openai')).default
         const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-        
+
         const testResponse = await client.chat.completions.create({
           model: 'gpt-3.5-turbo',
           messages: [{ role: 'user', content: 'Say "OpenAI working" in exactly 2 words.' }],
           max_tokens: 10,
           temperature: 0
         })
-        
+
         openaiTest = `Success: ${testResponse.choices[0].message.content}`
         console.log('OpenAI test:', openaiTest)
       } catch (openaiError) {
@@ -161,7 +161,7 @@ app.post('/api/debug-openai', async (req, res) => {
         console.error('OpenAI test failed:', openaiError)
       }
     }
-    
+
     res.json({
       success: true,
       debug: {
@@ -173,7 +173,7 @@ app.post('/api/debug-openai', async (req, res) => {
         timestamp: new Date().toISOString()
       }
     })
-    
+
   } catch (error) {
     console.error('🐛 DEBUG ERROR:', error)
     res.json({
@@ -221,7 +221,7 @@ app.use(errorHandler)
 
 // 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     error: 'Not Found',
     message: 'The requested resource was not found on this server.',
     path: req.originalUrl
@@ -263,7 +263,7 @@ async function startServer() {
     // Analysis worker disabled for Railway deployment
     logger.info('⚠️ Analysis worker disabled - Redis not available on Railway free tier')
     logger.info('💡 Analysis requests will be processed synchronously')
-    
+
     // Start Express server
     app.listen(PORT, '0.0.0.0', () => {
       logger.info(`🚀 CodeAnalyst Backend Server running on port ${PORT}`)
@@ -276,7 +276,7 @@ async function startServer() {
       logger.info(`🤖 AI: OpenAI, Anthropic, Google Gemini integration`)
       logger.info(`📊 Analysis: Puppeteer, Lighthouse, Pa11y, GitHub, ZIP files`)
     })
-    
+
   } catch (error) {
     logger.error('Failed to start server:', error)
     process.exit(1)
