@@ -2,7 +2,6 @@
 # This file configures the production Railway service
 
 [build]
-command = "npm install"
 workingDirectory = "backend"
 
 [deploy]
