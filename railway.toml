@@ -1,3 +1,6 @@
+# Railway Configuration for Production Environment
+# This file configures the production Railway service
+
 [build]
 command = "npm install"
 workingDirectory = "backend"
@@ -6,5 +9,8 @@ workingDirectory = "backend"
 startCommand = "npm start"
 workingDirectory = "backend"
 
+# Production environment variables
 [env]
 NODE_ENV = "production"
+
+# This service will deploy from the 'main' branch
