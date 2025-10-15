@@ -8,3 +8,10 @@ workingDirectory = "backend"
 
 [env]
 NODE_ENV = "production"
+
+# Staging environment configuration
+[environments.staging]
+branch = "develop"
+
+[environments.staging.env]
+NODE_ENV = "staging"
