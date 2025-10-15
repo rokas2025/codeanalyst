@@ -30,6 +30,7 @@ import chatRoutes from './routes/chat.js'
 import contentAnalysisRoutes from './routes/contentAnalysis.js'
 import contentCreatorRoutes from './routes/contentCreator.js'
 import settingsRoutes from './routes/settings.js'
+import wordpressRoutes from './routes/wordpress.js'
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js'
@@ -210,6 +211,7 @@ app.use('/api/chat', chatRoutes)
 app.use('/api/content-analysis', contentAnalysisRoutes)
 app.use('/api/content-creator', authMiddleware, contentCreatorRoutes)
 app.use('/api/settings', settingsRoutes)
+app.use('/api/wordpress', wordpressRoutes)
 
 // Static file serving
 app.use('/uploads', express.static(join(__dirname, '../uploads')))

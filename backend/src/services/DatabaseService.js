@@ -984,6 +984,171 @@ export class DatabaseService {
       // Don't throw for this non-critical operation
     }
   }
+
+  // ==========================================
+  // WORDPRESS CONNECTIONS MANAGEMENT
+  // ==========================================
+
+  /**
+   * Generate unique API key for WordPress connection
+   * @param {string} userId - User ID
+   * @returns {string} Generated API key
+   */
+  static async generateWordPressApiKey(userId) {
+    try {
+      const crypto = await import('crypto')
+      const apiKey = crypto.randomUUID()
+      
+      logger.logDatabase('generate', 'wordpress_api_key', 1, { userId })
+      return apiKey
+    } catch (error) {
+      logger.logError('Database generateWordPressApiKey', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Create WordPress connection
+   * @param {string} userId - User ID
+   * @param {string} apiKey - Generated API key
+   * @param {object} siteData - WordPress site data
+   */
+  static async createWordPressConnection(userId, apiKey, siteData) {
+    try {
+      const query = `
+        INSERT INTO wordpress_connections (
+          user_id, api_key, site_url, site_name, wordpress_version,
+          active_theme, active_plugins, site_health, php_version,
+          is_connected, last_sync
+        )
+        VALUES ($1::UUID, $2, $3, $4, $5, $6, $7, $8, $9, true, CURRENT_TIMESTAMP)
+        RETURNING *
+      `
+      
+      const result = await db.query(query, [
+        userId,
+        apiKey,
+        siteData.site_url,
+        siteData.site_name || null,
+        siteData.wordpress_version || null,
+        siteData.active_theme || null,
+        siteData.active_plugins ? JSON.stringify(siteData.active_plugins) : null,
+        siteData.site_health ? JSON.stringify(siteData.site_health) : null,
+        siteData.php_version || null
+      ])
+      
+      logger.logDatabase('insert', 'wordpress_connections', result.rows.length, { userId })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database createWordPressConnection', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Get all WordPress connections for user
+   * @param {string} userId - User ID
+   */
+  static async getWordPressConnections(userId) {
+    try {
+      const query = `
+        SELECT * FROM wordpress_connections
+        WHERE user_id = $1::UUID
+        ORDER BY created_at DESC
+      `
+      
+      const result = await db.query(query, [userId])
+      logger.logDatabase('select', 'wordpress_connections', result.rows.length, { userId })
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getWordPressConnections', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Update WordPress connection data
+   * @param {string} apiKey - WordPress API key
+   * @param {object} siteData - Updated site data
+   */
+  static async updateWordPressConnection(apiKey, siteData) {
+    try {
+      const query = `
+        UPDATE wordpress_connections
+        SET 
+          site_name = COALESCE($2, site_name),
+          wordpress_version = COALESCE($3, wordpress_version),
+          active_theme = COALESCE($4, active_theme),
+          active_plugins = COALESCE($5, active_plugins),
+          site_health = COALESCE($6, site_health),
+          php_version = COALESCE($7, php_version),
+          last_sync = CURRENT_TIMESTAMP,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE api_key = $1
+        RETURNING *
+      `
+      
+      const result = await db.query(query, [
+        apiKey,
+        siteData.site_name || null,
+        siteData.wordpress_version || null,
+        siteData.active_theme || null,
+        siteData.active_plugins ? JSON.stringify(siteData.active_plugins) : null,
+        siteData.site_health ? JSON.stringify(siteData.site_health) : null,
+        siteData.php_version || null
+      ])
+      
+      logger.logDatabase('update', 'wordpress_connections', result.rows.length, { apiKey })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database updateWordPressConnection', error, { apiKey })
+      throw error
+    }
+  }
+
+  /**
+   * Delete WordPress connection
+   * @param {string} connectionId - Connection ID
+   * @param {string} userId - User ID
+   */
+  static async deleteWordPressConnection(connectionId, userId) {
+    try {
+      const query = `
+        DELETE FROM wordpress_connections
+        WHERE id = $1::UUID AND user_id = $2::UUID
+        RETURNING id
+      `
+      
+      const result = await db.query(query, [connectionId, userId])
+      logger.logDatabase('delete', 'wordpress_connections', result.rows.length, { connectionId, userId })
+      return result.rowCount > 0
+    } catch (error) {
+      logger.logError('Database deleteWordPressConnection', error, { connectionId, userId })
+      throw error
+    }
+  }
+
+  /**
+   * Verify WordPress API key and return user_id
+   * @param {string} apiKey - WordPress API key
+   * @returns {object|null} Connection data with user_id or null
+   */
+  static async verifyWordPressApiKey(apiKey) {
+    try {
+      const query = `
+        SELECT id, user_id, site_url, is_connected
+        FROM wordpress_connections
+        WHERE api_key = $1 AND is_connected = true
+      `
+      
+      const result = await db.query(query, [apiKey])
+      logger.logDatabase('select', 'wordpress_connections', result.rows.length, { apiKey: apiKey.substring(0, 8) + '...' })
+      return result.rows.length > 0 ? result.rows[0] : null
+    } catch (error) {
+      logger.logError('Database verifyWordPressApiKey', error)
+      throw error
+    }
+  }
 }
 
 export default DatabaseService 

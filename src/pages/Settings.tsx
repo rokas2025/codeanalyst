@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useSettingsStore } from '../stores/settingsStore'
+import { wordpressService } from '../services/wordpressService'
+import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 export function Settings() {
@@ -27,6 +29,9 @@ export function Settings() {
     anthropic: '',
     google: ''
   })
+
+  const [wordpressApiKey, setWordpressApiKey] = useState('')
+  const [generatingKey, setGeneratingKey] = useState(false)
 
   const handleSave = () => {
     const success = saveSettings()
@@ -56,6 +61,30 @@ export function Settings() {
       setTempApiKeys(prev => ({ ...prev, [provider]: '' }))
     } else {
       toast.error(`Failed to save ${provider} API key`)
+    }
+  }
+
+  const handleGenerateWordPressKey = async () => {
+    setGeneratingKey(true)
+    try {
+      const response = await wordpressService.generateApiKey()
+      if (response.success && response.apiKey) {
+        setWordpressApiKey(response.apiKey)
+        toast.success('WordPress API key generated successfully!')
+      } else {
+        toast.error(response.message || 'Failed to generate API key')
+      }
+    } catch (error) {
+      toast.error('Failed to generate API key')
+    } finally {
+      setGeneratingKey(false)
+    }
+  }
+
+  const handleCopyWordPressKey = () => {
+    if (wordpressApiKey) {
+      navigator.clipboard.writeText(wordpressApiKey)
+      toast.success('API key copied to clipboard!')
     }
   }
 
@@ -223,6 +252,67 @@ export function Settings() {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* WordPress Integration */}
+        <div className="card p-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">WordPress Integration</h3>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Connect your WordPress websites to CodeAnalyst for theme analysis and content management.
+            </p>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                API Key for WordPress Plugin
+              </label>
+              <div className="flex gap-2">
+                <input 
+                  type="text"
+                  value={wordpressApiKey}
+                  readOnly
+                  className="input flex-1 font-mono text-sm"
+                  placeholder="Generate an API key to connect WordPress sites"
+                />
+                <button 
+                  onClick={handleGenerateWordPressKey}
+                  disabled={generatingKey}
+                  className="btn-primary px-4 whitespace-nowrap"
+                >
+                  {generatingKey ? 'Generating...' : 'Generate Key'}
+                </button>
+                <button 
+                  onClick={handleCopyWordPressKey}
+                  disabled={!wordpressApiKey}
+                  className="btn-outline px-4"
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Use this key in the CodeAnalyst WordPress plugin to connect your site
+              </p>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">How to connect WordPress:</h4>
+              <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                <li>Download and install the CodeAnalyst Connector plugin on your WordPress site</li>
+                <li>Generate an API key above</li>
+                <li>Enter the API key in the WordPress plugin settings</li>
+                <li>Click "Connect to CodeAnalyst" in the plugin</li>
+              </ol>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <p className="text-sm text-gray-600">
+                View and manage your connected WordPress sites
+              </p>
+              <Link to="/connected-sites" className="btn-outline">
+                View Connected Sites →
+              </Link>
             </div>
           </div>
         </div>

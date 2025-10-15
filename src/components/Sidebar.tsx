@@ -9,7 +9,8 @@ import {
   CommandLineIcon,
   PlusCircleIcon,
   ClockIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  GlobeAltIcon
 } from '@heroicons/react/24/outline'
 
 const navigation = [
@@ -25,6 +26,7 @@ const navigation = [
       { name: 'Content Creator', href: '/modules/content-creator', icon: PlusCircleIcon },
     ],
   },
+  { name: 'Connected Sites', href: '/connected-sites', icon: GlobeAltIcon },
   { name: 'Settings', href: '/settings', icon: CogIcon },
 ]
 

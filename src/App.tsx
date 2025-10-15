@@ -14,6 +14,7 @@ import { ContentCreator } from './pages/modules/ContentCreator'
 import { Settings } from './pages/Settings'
 import { Projects } from './pages/Projects'
 import { AnalysisView } from './pages/AnalysisView'
+import { ConnectedSites } from './pages/ConnectedSites'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="content-creator" element={<ContentCreator />} />
           </Route>
           <Route path="settings" element={<Settings />} />
+          <Route path="connected-sites" element={<ConnectedSites />} />
           <Route path="analysis/:id" element={<AnalysisView />} />
           <Route path="analysis/website/:id" element={<AnalysisView />} />
           <Route path="workstation/:id" element={<WorkstationView />} />
