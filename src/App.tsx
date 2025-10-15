@@ -9,8 +9,8 @@ import { CodeAnalyst } from './pages/modules/CodeAnalyst'
 import { WorkstationView } from './pages/WorkstationView'
 import { WebsiteAnalyst } from './pages/modules/WebsiteAnalyst'
 import { ContentAnalyst } from './pages/modules/ContentAnalyst'
-import { AutoProgrammerComingSoon } from './pages/modules/AutoProgrammerComingSoon'
-import { ContentCreatorComingSoon } from './pages/modules/ContentCreatorComingSoon'
+import { AutoProgrammer } from './pages/modules/AutoProgrammer'
+import { ContentCreator } from './pages/modules/ContentCreator'
 import { Settings } from './pages/Settings'
 import { Projects } from './pages/Projects'
 import { AnalysisView } from './pages/AnalysisView'
@@ -29,8 +29,8 @@ function App() {
             <Route path="code-analyst" element={<CodeAnalyst />} />
             <Route path="website-analyst" element={<WebsiteAnalyst />} />
             <Route path="content-analyst" element={<ContentAnalyst />} />
-            <Route path="auto-programmer" element={<AutoProgrammerComingSoon />} />
-            <Route path="content-creator" element={<ContentCreatorComingSoon />} />
+            <Route path="auto-programmer" element={<AutoProgrammer />} />
+            <Route path="content-creator" element={<ContentCreator />} />
           </Route>
           <Route path="settings" element={<Settings />} />
           <Route path="analysis/:id" element={<AnalysisView />} />
