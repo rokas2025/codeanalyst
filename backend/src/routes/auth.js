@@ -24,8 +24,19 @@ router.get('/github', (req, res) => {
     })
   }
 
+  // Get the frontend URL from request headers (referer or origin)
+  const frontendUrl = req.headers.referer || req.headers.origin || process.env.FRONTEND_URL || 'https://app.beenex.dev'
+  
+  // Remove trailing slash and any path from the URL
+  const cleanFrontendUrl = frontendUrl.replace(/\/$/, '').split('?')[0].split('#')[0]
+  const frontendOrigin = new URL(cleanFrontendUrl).origin
+
   const scope = 'user:email,repo'
-  const state = jwt.sign({ timestamp: Date.now() }, process.env.JWT_SECRET, { expiresIn: '10m' })
+  // Include the frontend URL in the state parameter so we can redirect back to it
+  const state = jwt.sign({ 
+    timestamp: Date.now(),
+    frontendUrl: frontendOrigin
+  }, process.env.JWT_SECRET, { expiresIn: '10m' })
 
   const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}`
 
@@ -43,9 +54,14 @@ async function handleGitHubCallback(code, state, res) {
   try {
     if (!code) return res.status(400).json({ success: false, error: 'Authorization code required' })
 
-    // Verify state
-    try { jwt.verify(state, process.env.JWT_SECRET) } 
-    catch { return res.status(400).json({ success: false, error: 'Invalid state parameter' }) }
+    // Verify and decode state to get the frontend URL
+    let decodedState
+    try { 
+      decodedState = jwt.verify(state, process.env.JWT_SECRET)
+    } 
+    catch { 
+      return res.status(400).json({ success: false, error: 'Invalid state parameter' }) 
+    }
 
     // Exchange code for access token
     const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
@@ -120,7 +136,11 @@ async function handleGitHubCallback(code, state, res) {
       avatarUrl: user.avatar_url
     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' })
 
-    const redirectUrl = `${process.env.FRONTEND_URL}/auth/github/callback?token=${jwtToken}`
+    // Use the frontend URL from state, fallback to environment variable
+    const frontendUrl = decodedState?.frontendUrl || process.env.FRONTEND_URL || 'https://app.beenex.dev'
+    const redirectUrl = `${frontendUrl}/auth/github/callback?token=${jwtToken}`
+    
+    logger.info('Redirecting after GitHub auth:', { frontendUrl, redirectUrl })
     res.redirect(redirectUrl)
 
   } catch (error) {
