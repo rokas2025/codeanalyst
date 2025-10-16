@@ -21,10 +21,10 @@ define('CODEANALYST_VERSION', '1.0.0');
 define('CODEANALYST_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CODEANALYST_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-// Include required files
+// Include required files (admin functions must be loaded first)
+require_once CODEANALYST_PLUGIN_DIR . 'admin/settings-page.php';
 require_once CODEANALYST_PLUGIN_DIR . 'includes/api-client.php';
 require_once CODEANALYST_PLUGIN_DIR . 'includes/file-reader.php';
-require_once CODEANALYST_PLUGIN_DIR . 'admin/settings-page.php';
 
 /**
  * Main Plugin Class
