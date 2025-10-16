@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { 
+import {
   HomeIcon,
   FolderIcon,
   CogIcon,
@@ -9,12 +9,13 @@ import {
   CommandLineIcon,
   PlusCircleIcon,
   ClockIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  GlobeAltIcon
 } from '@heroicons/react/24/outline'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
-      { name: 'Analysis History', href: '/projects', icon: ClockIcon },
+  { name: 'Analysis History', href: '/projects', icon: ClockIcon },
   {
     name: 'AI Modules',
     children: [
@@ -25,6 +26,7 @@ const navigation = [
       { name: 'Content Creator', href: '/modules/content-creator', icon: PlusCircleIcon },
     ],
   },
+  { name: 'Connected Sites', href: '/connected-sites', icon: GlobeAltIcon },
   { name: 'Settings', href: '/settings', icon: CogIcon },
 ]
 
@@ -58,10 +60,9 @@ export function Sidebar() {
                           key={child.name}
                           to={child.href}
                           className={({ isActive }) =>
-                            `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                              isActive
-                                ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
+                              ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             }`
                           }
                         >
@@ -75,10 +76,9 @@ export function Sidebar() {
                   <NavLink
                     to={item.href}
                     className={({ isActive }) =>
-                      `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                        isActive
-                          ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
+                        ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }`
                     }
                   >

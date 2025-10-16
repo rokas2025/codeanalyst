@@ -173,6 +173,24 @@ CREATE TABLE analysis_history (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- WordPress Connections table
+CREATE TABLE wordpress_connections (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    api_key VARCHAR(64) UNIQUE NOT NULL,
+    site_url TEXT NOT NULL,
+    site_name VARCHAR(255),
+    wordpress_version VARCHAR(50),
+    active_theme VARCHAR(255),
+    active_plugins JSONB,
+    site_health JSONB,
+    php_version VARCHAR(50),
+    is_connected BOOLEAN DEFAULT true,
+    last_sync TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes for performance
 CREATE INDEX idx_projects_user_id ON projects(user_id);
 CREATE INDEX idx_url_analyses_project_id ON url_analyses(project_id);
@@ -180,6 +198,8 @@ CREATE INDEX idx_code_analyses_project_id ON code_analyses(project_id);
 CREATE INDEX idx_ai_cache_hash ON ai_response_cache(input_hash);
 CREATE INDEX idx_api_usage_user_date ON api_usage_logs(user_id, created_at);
 CREATE INDEX idx_analysis_history_project ON analysis_history(project_id, created_at);
+CREATE INDEX idx_wordpress_connections_user ON wordpress_connections(user_id);
+CREATE INDEX idx_wordpress_connections_api_key ON wordpress_connections(api_key);
 
 -- Functions for automatic timestamps
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -201,4 +221,7 @@ CREATE TRIGGER update_url_analyses_updated_at BEFORE UPDATE ON url_analyses
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
     
 CREATE TRIGGER update_code_analyses_updated_at BEFORE UPDATE ON code_analyses
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    
+CREATE TRIGGER update_wordpress_connections_updated_at BEFORE UPDATE ON wordpress_connections
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column(); 
