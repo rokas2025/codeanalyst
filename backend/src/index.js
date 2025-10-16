@@ -13,6 +13,7 @@ import { dirname, join } from 'path'
 
 // Import database and services
 import { initDatabase } from './database/connection.js'
+import { runMigrations } from './database/migrations.js'
 import { queueService } from './services/QueueService.js'
 import { autoSeed } from '../scripts/auto-seed.js'
 
@@ -246,6 +247,9 @@ async function startServer() {
     logger.info('📦 Initializing database...')
     await initDatabase()
     logger.info('✅ Database initialized successfully')
+
+    // Run database migrations
+    await runMigrations()
 
     // Auto-seed content templates
     logger.info('🌱 Running auto-seeding for content templates...')
