@@ -42,6 +42,25 @@ interface AnalysisResult {
   keywords: string[]
   urlInfo?: { url: string }
   contentSource?: 'html' | 'url' | 'text'
+  detectedLanguage?: string
+}
+
+// UI label translations
+const uiLabels = {
+  en: {
+    contentFactors: 'Content Factors:',
+    seoAnalysis: 'SEO Analysis',
+    grammarAnalysis: 'Grammar Analysis',
+    readabilityAnalysis: 'Readability Analysis',
+    keyTerms: 'Key Terms & Keywords'
+  },
+  lt: {
+    contentFactors: 'Turinio veiksniai:',
+    seoAnalysis: 'SEO analizė',
+    grammarAnalysis: 'Gramatikos analizė',
+    readabilityAnalysis: 'Skaitomumo analizė',
+    keyTerms: 'Pagrindiniai terminai ir raktažodžiai'
+  }
 }
 
 export function ContentAnalyst() {
@@ -50,6 +69,12 @@ export function ContentAnalyst() {
   const [inputType, setInputType] = useState<'text' | 'url'>('text')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
+  
+  // Get UI labels based on detected language
+  const getLabels = () => {
+    const lang = result?.detectedLanguage || 'en'
+    return uiLabels[lang as keyof typeof uiLabels] || uiLabels.en
+  }
 
   const analyzeContent = async () => {
     const inputContent = inputType === 'text' ? content : url
@@ -395,7 +420,7 @@ export function ContentAnalyst() {
             <div className="card p-6">
               <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
                 <CheckCircleIcon className="h-5 w-5 text-green-500 mr-2" />
-                Grammar Analysis
+                {getLabels().grammarAnalysis}
               </h4>
               <div className="space-y-3">
                 {result.grammar.issues.length > 0 ? (
@@ -419,7 +444,7 @@ export function ContentAnalyst() {
             <div className="card p-6">
               <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
                 <DocumentTextIcon className="h-5 w-5 text-blue-500 mr-2" />
-                Readability Analysis
+                {getLabels().readabilityAnalysis}
               </h4>
               <div className="space-y-3">
                 {result.readability.suggestions.map((suggestion, index) => (
@@ -447,13 +472,13 @@ export function ContentAnalyst() {
             <div className="card p-6">
               <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
                 <GlobeAltIcon className="h-5 w-5 text-purple-500 mr-2" />
-                SEO Analysis
+                {getLabels().seoAnalysis}
               </h4>
               
               {/* SEO Factors */}
               {result.seo.factors.length > 0 && (
                 <div className="mb-4">
-                  <h5 className="text-sm font-medium text-gray-700 mb-2">Content Factors:</h5>
+                  <h5 className="text-sm font-medium text-gray-700 mb-2">{getLabels().contentFactors}</h5>
                   <div className="space-y-2">
                     {result.seo.factors.map((factor, index) => (
                       <div key={index} className="flex items-center space-x-2">
@@ -479,7 +504,7 @@ export function ContentAnalyst() {
           {/* Keywords */}
           {result.keywords.length > 0 && (
             <div className="card p-6">
-              <h4 className="font-semibold text-gray-900 mb-4">Key Terms & Keywords</h4>
+              <h4 className="font-semibold text-gray-900 mb-4">{getLabels().keyTerms}</h4>
               <div className="flex flex-wrap gap-2">
                 {result.keywords.map((keyword, index) => (
                   <span

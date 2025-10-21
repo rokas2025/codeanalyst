@@ -457,9 +457,10 @@ export class SEOAnalyzer {
     const structureWeight = 0.3
     const uniquenessWeight = 0.3
 
-    const depthScore = analysis.depth.depthScore || 20
-    const structureScore = analysis.structure?.score || 50
-    const uniquenessScore = analysis.uniqueness?.score || 60
+    // Use minimum scores of 10 instead of 20/50/60 for more realistic scoring
+    const depthScore = analysis.depth?.depthScore || 10
+    const structureScore = analysis.structure?.score || 10
+    const uniquenessScore = analysis.uniqueness?.score || 10
 
     return Math.round(
       (depthScore * depthWeight) +
@@ -469,13 +470,106 @@ export class SEOAnalyzer {
   }
 
   calculateOnPageScore(factors) {
-    // Simplified calculation
-    return 65 // Average score for basic implementation
+    let score = 0
+    
+    // Title optimization (0-25 points)
+    if (factors.title?.optimal) {
+      score += 25
+    } else if (factors.title?.present) {
+      score += 15
+    } else {
+      score += 5
+    }
+    
+    // Meta description (0-20 points)
+    if (factors.metaDescription?.optimal) {
+      score += 20
+    } else if (factors.metaDescription?.present) {
+      score += 12
+    } else {
+      score += 3
+    }
+    
+    // Heading structure (0-20 points)
+    if (factors.headings?.wellStructured) {
+      score += 20
+    } else if (factors.headings?.present) {
+      score += 12
+    } else {
+      score += 5
+    }
+    
+    // Keyword usage (0-20 points)
+    if (factors.keywords?.optimal) {
+      score += 20
+    } else if (factors.keywords?.present) {
+      score += 10
+    } else {
+      score += 3
+    }
+    
+    // URL structure (0-15 points)
+    if (factors.url?.seoFriendly) {
+      score += 15
+    } else if (factors.url?.acceptable) {
+      score += 8
+    } else {
+      score += 3
+    }
+    
+    return Math.min(100, score)
   }
 
   calculateUXScore(signals) {
-    // Simplified calculation
-    return 60 // Average UX score
+    let score = 0
+    
+    // Mobile responsiveness (0-30 points)
+    if (signals.mobile?.responsive) {
+      score += 30
+    } else if (signals.mobile?.partial) {
+      score += 15
+    } else {
+      score += 5
+    }
+    
+    // Page speed (0-25 points)
+    const speedScore = signals.speed?.score || 0
+    if (speedScore >= 90) {
+      score += 25
+    } else if (speedScore >= 70) {
+      score += 20
+    } else if (speedScore >= 50) {
+      score += 12
+    } else {
+      score += 5
+    }
+    
+    // Navigation clarity (0-20 points)
+    if (signals.navigation?.clear) {
+      score += 20
+    } else if (signals.navigation?.acceptable) {
+      score += 12
+    } else {
+      score += 5
+    }
+    
+    // Content readability (0-15 points)
+    if (signals.readability?.good) {
+      score += 15
+    } else if (signals.readability?.acceptable) {
+      score += 10
+    } else {
+      score += 5
+    }
+    
+    // Interactive elements (0-10 points)
+    if (signals.interactive?.present) {
+      score += 10
+    } else {
+      score += 3
+    }
+    
+    return Math.min(100, score)
   }
 
   /**

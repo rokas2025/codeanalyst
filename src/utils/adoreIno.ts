@@ -111,24 +111,40 @@ export class AdoreInoAnalyzer {
     const totalLines = this.files.reduce((sum, file) => sum + (file.content ? file.content.split('\n').length : 0), 0)
     const avgFileSize = totalFiles > 0 ? this.files.reduce((sum, file) => sum + (file.size || 0), 0) / totalFiles : 0
 
-    // Simple scoring algorithm
-    let qualityScore = 70 // Base score
+    // Dynamic scoring based on actual metrics
+    let qualityScore = 50 // Start lower for more realistic range
     
-    // Adjust based on file organization
-    if (this.hasGoodStructure()) qualityScore += 15
-    if (this.hasTests()) qualityScore += 10
-    if (this.hasDocumentation()) qualityScore += 5
-    if (this.hasOutdatedDependencies()) qualityScore -= 20
-    if (this.hasSecurityIssues()) qualityScore -= 15
+    // File organization (0-20 points)
+    const structureScore = this.calculateStructureScore()
+    qualityScore += structureScore
+    
+    // Testing (0-15 points)
+    const testScore = this.calculateTestScore()
+    qualityScore += testScore
+    
+    // Documentation (0-10 points)
+    const docScore = this.calculateDocumentationScore()
+    qualityScore += docScore
+    
+    // Code quality (0-20 points)
+    const codeQualityScore = this.calculateCodeQualityScore()
+    qualityScore += codeQualityScore
+    
+    // Dependencies health (0-15 points)
+    const depScore = this.calculateDependencyScore()
+    qualityScore += depScore
+    
+    // Security (0-20 points)
+    const securityScore = this.calculateSecurityScore()
+    qualityScore += securityScore
 
-    // CRITICAL FIX: Apply risk-based penalties to ensure consistency
+    // Apply risk-based penalties
     const riskPenalties = this.calculateRiskPenalties()
     qualityScore = Math.max(0, qualityScore - riskPenalties)
 
-    // Enhanced quality rating logic that considers critical risks
+    // Enhanced quality rating logic
     let qualityRating: string
     if (this.hasSecurityIssues() || this.hasMultipleCriticalRisks()) {
-      // Critical risks prevent excellent/good ratings regardless of score
       qualityRating = qualityScore >= 60 ? 'fair' : 'poor'
     } else {
       qualityRating = qualityScore >= 85 ? 'excellent' : 
@@ -140,7 +156,7 @@ export class AdoreInoAnalyzer {
     const complexity = totalFiles > 100 ? 'high' : totalFiles > 30 ? 'medium' : 'low'
 
     return {
-      overallScore: Math.min(100, Math.max(0, qualityScore)),
+      overallScore: Math.min(100, Math.max(0, Math.round(qualityScore))),
       qualityRating,
       modernityScore,
       competitivenessRating: this.assessCompetitiveness(),
@@ -148,6 +164,96 @@ export class AdoreInoAnalyzer {
       projectType: this.projectType,
       estimatedComplexity: complexity
     }
+  }
+
+  private calculateStructureScore(): number {
+    if (!this.hasGoodStructure()) return 0
+    // Award more points for better structure
+    const hasComponents = this.files.some(f => f.path.includes('components/'))
+    const hasServices = this.files.some(f => f.path.includes('services/') || f.path.includes('api/'))
+    const hasUtils = this.files.some(f => f.path.includes('utils/') || f.path.includes('helpers/'))
+    const hasConfig = this.files.some(f => f.path.includes('config/') || f.path.match(/\.(config|rc)\./))
+    const hasPublicPrivate = this.files.some(f => f.path.includes('public/') || f.path.includes('private/'))
+    
+    let score = 10 // Base for having structure
+    if (hasComponents) score += 3
+    if (hasServices) score += 4
+    if (hasUtils) score += 2
+    if (hasConfig) score += 1
+    if (hasPublicPrivate) score += 0 // Bonus removed to keep max at 20
+    
+    return Math.min(20, score)
+  }
+
+  private calculateTestScore(): number {
+    if (!this.hasTests()) return 0
+    const testFiles = this.files.filter(f => 
+      f.path.includes('.test.') || 
+      f.path.includes('.spec.') || 
+      f.path.includes('__tests__')
+    )
+    const sourceFiles = this.files.filter(f => 
+      !f.path.includes('node_modules') &&
+      !f.path.includes('.test.') &&
+      !f.path.includes('.spec.') &&
+      (f.path.endsWith('.js') || f.path.endsWith('.ts') || f.path.endsWith('.jsx') || f.path.endsWith('.tsx'))
+    )
+    const testCoverage = sourceFiles.length > 0 ? (testFiles.length / sourceFiles.length) * 100 : 0
+    
+    if (testCoverage >= 50) return 15
+    if (testCoverage >= 30) return 12
+    if (testCoverage >= 10) return 8
+    return 5
+  }
+
+  private calculateDocumentationScore(): number {
+    if (!this.hasDocumentation()) return 0
+    const hasReadme = this.files.some(f => f.path.toLowerCase().includes('readme'))
+    const hasApiDocs = this.files.some(f => f.path.includes('docs/') || (f.path.includes('.md') && !f.path.toLowerCase().includes('readme')))
+    const hasComments = this.files.some(f => f.content && (f.content.includes('/**') || f.content.includes('///')))
+    const hasChangelog = this.files.some(f => f.path.toLowerCase().includes('changelog'))
+    
+    let score = 0
+    if (hasReadme) score += 4
+    if (hasApiDocs) score += 3
+    if (hasComments) score += 2
+    if (hasChangelog) score += 1
+    
+    return Math.min(10, score)
+  }
+
+  private calculateCodeQualityScore(): number {
+    // Analyze actual code patterns
+    let score = 10 // Base score
+    
+    const hasLinter = this.files.some(f => 
+      f.path.includes('.eslintrc') || 
+      f.path.includes('.prettierrc') ||
+      f.path.includes('eslint.config') ||
+      f.path.includes('.eslintignore')
+    )
+    const hasTypeScript = this.files.some(f => f.path.endsWith('.ts') || f.path.endsWith('.tsx'))
+    const hasModernJS = this.files.some(f => f.content && f.content.includes('const ') && f.content.includes('=>'))
+    const hasGitIgnore = this.files.some(f => f.path.includes('.gitignore'))
+    const hasEditorConfig = this.files.some(f => f.path.includes('.editorconfig'))
+    
+    if (hasLinter) score += 5
+    if (hasTypeScript) score += 3
+    if (hasModernJS) score += 2
+    if (hasGitIgnore) score += 0 // Standard practice, no bonus
+    if (hasEditorConfig) score += 0 // Nice to have
+    
+    return Math.min(20, score)
+  }
+
+  private calculateDependencyScore(): number {
+    if (this.hasOutdatedDependencies()) return 0
+    return 15 // Full points if dependencies are up to date
+  }
+
+  private calculateSecurityScore(): number {
+    if (this.hasSecurityIssues()) return 0
+    return 20 // Full points if no security issues
   }
 
   private analyzeTechnicalStructure(): TechnicalStructure {

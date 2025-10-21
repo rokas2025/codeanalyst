@@ -171,12 +171,20 @@ function calculateGrammarScore(content, grammarIssues) {
   const issueCount = grammarIssues.length
   const wordCount = content.split(/\s+/).length
   
-  // Base score starts high and decreases with issues
-  let score = 95
+  // Base score starts at 70 for more realistic scoring
+  let score = 70
   
   // Deduct points for grammar issues (more severe for shorter content)
   const issueRatio = issueCount / Math.max(wordCount / 100, 1) // Issues per 100 words
-  score -= Math.min(issueRatio * 15, 75) // Cap deduction at 75 points
+  
+  // Increase deduction per issue for more realistic scoring
+  score -= Math.min(issueRatio * 20, 60) // Cap deduction at 60 points
+  
+  // Consider issue severity if available
+  const criticalIssues = grammarIssues.filter(issue => 
+    issue.type === 'error' || issue.type === 'critical'
+  ).length
+  score -= criticalIssues * 3 // Extra deduction for critical issues
   
   return Math.max(10, Math.round(score))
 }
@@ -184,11 +192,47 @@ function calculateGrammarScore(content, grammarIssues) {
 /**
  * Calculate comprehensive SEO score for content
  */
-function calculateContentSEOScore(content) {
+function calculateContentSEOScore(content, language = 'en') {
   const words = content.split(/\s+/).filter(w => w.length > 0)
   const wordCount = words.length
   const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0)
   const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0)
+  
+  // Language-specific factor messages
+  const factorMessages = {
+    en: {
+      excellentLength: 'Excellent content length (1000+ words)',
+      goodLength: 'Good content length (500+ words)',
+      adequateLength: 'Adequate content length (300+ words)',
+      tooShort: 'Content too short (under 300 words)',
+      goodSentenceLength: 'Good sentence length',
+      sentencesTooLong: 'Sentences too long',
+      acceptableSentence: 'Acceptable sentence structure',
+      wellStructuredParagraphs: 'Well-structured paragraphs',
+      paragraphsNeedImprovement: 'Paragraph length could be improved',
+      moreParagraphs: 'Consider breaking into more paragraphs',
+      excellentVocabulary: 'Excellent vocabulary diversity',
+      goodVocabulary: 'Good vocabulary diversity',
+      limitedVocabulary: 'Limited vocabulary diversity'
+    },
+    lt: {
+      excellentLength: 'Puikus turinio ilgis (1000+ žodžių)',
+      goodLength: 'Geras turinio ilgis (500+ žodžių)',
+      adequateLength: 'Pakankamas turinio ilgis (300+ žodžių)',
+      tooShort: 'Turinys per trumpas (mažiau nei 300 žodžių)',
+      goodSentenceLength: 'Geras sakinių ilgis',
+      sentencesTooLong: 'Sakiniai per ilgi',
+      acceptableSentence: 'Priimtina sakinių struktūra',
+      wellStructuredParagraphs: 'Gerai struktūruoti paragrafai',
+      paragraphsNeedImprovement: 'Paragrafų ilgis galėtų būti pagerintas',
+      moreParagraphs: 'Apsvarstykite skaidymą į daugiau paragrafų',
+      excellentVocabulary: 'Puiki žodyno įvairovė',
+      goodVocabulary: 'Gera žodyno įvairovė',
+      limitedVocabulary: 'Ribota žodyno įvairovė'
+    }
+  }
+  
+  const messages = factorMessages[language] || factorMessages.en
   
   let score = 0
   const factors = []
@@ -196,29 +240,29 @@ function calculateContentSEOScore(content) {
   // Word count analysis (0-30 points)
   if (wordCount >= 1000) {
     score += 30
-    factors.push('Excellent content length (1000+ words)')
+    factors.push(messages.excellentLength)
   } else if (wordCount >= 500) {
     score += 25
-    factors.push('Good content length (500+ words)')
+    factors.push(messages.goodLength)
   } else if (wordCount >= 300) {
     score += 15
-    factors.push('Adequate content length (300+ words)')
+    factors.push(messages.adequateLength)
   } else {
     score += 5
-    factors.push('Content too short (under 300 words)')
+    factors.push(messages.tooShort)
   }
   
   // Content structure (0-25 points)
   const avgWordsPerSentence = sentences.length > 0 ? wordCount / sentences.length : 0
   if (avgWordsPerSentence <= 20 && avgWordsPerSentence >= 10) {
     score += 25
-    factors.push('Good sentence length')
+    factors.push(messages.goodSentenceLength)
   } else if (avgWordsPerSentence > 25) {
     score += 10
-    factors.push('Sentences too long')
+    factors.push(messages.sentencesTooLong)
   } else {
     score += 15
-    factors.push('Acceptable sentence structure')
+    factors.push(messages.acceptableSentence)
   }
   
   // Paragraph structure (0-20 points)
@@ -226,14 +270,14 @@ function calculateContentSEOScore(content) {
     const avgWordsPerParagraph = wordCount / paragraphs.length
     if (avgWordsPerParagraph <= 150 && avgWordsPerParagraph >= 50) {
       score += 20
-      factors.push('Well-structured paragraphs')
+      factors.push(messages.wellStructuredParagraphs)
     } else {
       score += 10
-      factors.push('Paragraph length could be improved')
+      factors.push(messages.paragraphsNeedImprovement)
     }
   } else {
     score += 5
-    factors.push('Consider breaking into more paragraphs')
+    factors.push(messages.moreParagraphs)
   }
   
   // Keyword density and variety (0-25 points)
@@ -242,13 +286,13 @@ function calculateContentSEOScore(content) {
   
   if (lexicalDiversity >= 0.6) {
     score += 25
-    factors.push('Excellent vocabulary diversity')
+    factors.push(messages.excellentVocabulary)
   } else if (lexicalDiversity >= 0.4) {
     score += 15
-    factors.push('Good vocabulary diversity')
+    factors.push(messages.goodVocabulary)
   } else {
     score += 5
-    factors.push('Limited vocabulary diversity')
+    factors.push(messages.limitedVocabulary)
   }
   
   return {
@@ -496,10 +540,16 @@ Focus on:
       }
     }
 
+    // Detect content language
+    const { LanguageDetector } = await import('../services/LanguageDetector.js')
+    const languageDetector = new LanguageDetector()
+    const languageDetection = languageDetector.detectLanguage(textToAnalyze, '')
+    const detectedLanguage = languageDetection.language
+    
     // Calculate real scores based on content analysis
     const grammarScore = calculateGrammarScore(textToAnalyze, analysisData.grammar.issues)
     const readabilityScore = calculateReadabilityScore(textToAnalyze)
-    const seoAnalysis = calculateContentSEOScore(textToAnalyze)
+    const seoAnalysis = calculateContentSEOScore(textToAnalyze, detectedLanguage)
     
     // Word count for summary
     const wordCount = textToAnalyze.split(/\s+/).filter(w => w.length > 0).length
@@ -526,7 +576,8 @@ Focus on:
       },
       keywords: analysisData.keywords || extractKeywords(textToAnalyze, analysisData.improved),
       urlInfo: urlInfo, // Include URL info if available
-      contentSource: contentSource // Track what type of content was analyzed
+      contentSource: contentSource, // Track what type of content was analyzed
+      detectedLanguage: detectedLanguage // Include detected language for frontend localization
     }
 
     res.json({

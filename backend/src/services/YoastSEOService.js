@@ -394,55 +394,79 @@ export class YoastSEOService {
    * Calculate overall SEO score
    */
   calculateSEOScore(paper) {
-    let score = 100;
+    let score = 70; // Start at 70 instead of 100 for more realistic scoring
     let passedChecks = 0;
     let failedChecks = 0;
 
-    // Title (15 points)
+    // Title (15 points) - Add points for good practices
     const title = paper.getTitle();
     const keyword = paper.getKeyword().toLowerCase();
-    if (title.length < 30 || title.length > 60) {
-      score -= 7;
-      failedChecks++;
-    } else passedChecks++;
-    
-    if (!title.toLowerCase().includes(keyword)) {
-      score -= 8;
-      failedChecks++;
-    } else passedChecks++;
-
-    // Content length (15 points)
-    const wordCount = paper.getWordCount();
-    if (wordCount < 300) {
-      score -= 15;
-      failedChecks++;
-    } else if (wordCount < 600) {
-      score -= 5;
+    if (title.length >= 30 && title.length <= 60) {
+      score += 7; // Add points for optimal length
       passedChecks++;
-    } else passedChecks++;
+    } else {
+      score -= 5; // Smaller deduction
+      failedChecks++;
+    }
+    
+    if (title.toLowerCase().includes(keyword)) {
+      score += 8; // Add points for keyword presence
+      passedChecks++;
+    } else {
+      score -= 6; // Smaller deduction
+      failedChecks++;
+    }
+
+    // Content length (15 points) - Weight critical factors more heavily
+    const wordCount = paper.getWordCount();
+    if (wordCount >= 1000) {
+      score += 15; // Excellent content length
+      passedChecks++;
+    } else if (wordCount >= 600) {
+      score += 10; // Good content length
+      passedChecks++;
+    } else if (wordCount >= 300) {
+      score += 5; // Adequate content length
+      passedChecks++;
+    } else {
+      score -= 10; // Critical issue
+      failedChecks++;
+    }
 
     // Meta description (10 points)
     const desc = paper.getDescription();
-    if (desc.length < 120 || desc.length > 160) {
-      score -= 5;
+    if (desc.length >= 120 && desc.length <= 160) {
+      score += 5; // Add points for optimal length
+      passedChecks++;
+    } else {
+      score -= 3; // Smaller deduction
       failedChecks++;
-    } else passedChecks++;
+    }
     
-    if (!desc.toLowerCase().includes(keyword)) {
-      score -= 5;
+    if (desc.toLowerCase().includes(keyword)) {
+      score += 5; // Add points for keyword presence
+      passedChecks++;
+    } else {
+      score -= 3; // Smaller deduction
       failedChecks++;
-    } else passedChecks++;
+    }
 
-    // Keyword density (15 points)
+    // Keyword density (15 points) - Consider content quality
     const content = paper.getText();
     const matches = (content.toLowerCase().match(new RegExp(keyword, 'gi')) || []).length;
     const density = (matches / wordCount) * 100;
-    if (density < 0.5 || density > 2.5) {
-      score -= 15;
+    if (density >= 0.5 && density <= 2.5) {
+      score += 10; // Optimal keyword density
+      passedChecks++;
+    } else if (density > 0 && density < 0.5) {
+      score += 3; // Some keyword presence
+      passedChecks++;
+    } else {
+      score -= 8; // Poor keyword optimization
       failedChecks++;
-    } else passedChecks++;
+    }
 
-    score = Math.max(0, score);
+    score = Math.max(0, Math.min(100, score)); // Cap at 0-100
     
     let grade = 'F';
     if (score >= 90) grade = 'A';
