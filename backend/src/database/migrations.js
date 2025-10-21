@@ -18,6 +18,15 @@ export async function runMigrations() {
   try {
     console.log('🔄 Checking for pending migrations...')
     
+    // Enable required PostgreSQL extensions
+    try {
+      await db.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
+      await db.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto"')
+      console.log('✅ PostgreSQL extensions enabled (uuid-ossp, pgcrypto)')
+    } catch (extError) {
+      console.warn('⚠️  Could not create extensions (may already exist or need superuser):', extError.message)
+    }
+    
     // Check if wordpress_connections table exists
     const checkTable = await db.query(`
       SELECT EXISTS (

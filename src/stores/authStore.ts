@@ -28,26 +28,23 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   login: async (email: string, password: string) => {
     set({ loading: true })
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: 'Demo User',
-        githubUsername: 'demo-user',
-        plan: 'pro',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-
-      set({
-        user: mockUser,
-        isAuthenticated: true,
-        loading: false
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
+      const response = await fetch(`${baseUrl}/auth/login-supabase`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       })
-
-      localStorage.setItem('auth_token', 'mock_token')
-      localStorage.setItem('user', JSON.stringify(mockUser))
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Login failed')
+      }
+      
+      localStorage.setItem('auth_token', data.token)
+      localStorage.setItem('user', JSON.stringify(data.user))
+      
+      set({ user: data.user, isAuthenticated: true, loading: false })
     } catch (error) {
       set({ loading: false })
       throw error
