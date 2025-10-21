@@ -434,12 +434,25 @@ Focus on:
 4. Extracting relevant keywords from the actual content
 `
 
+    // Detect content language
+    const { LanguageDetector } = await import('../services/LanguageDetector.js')
+    const languageDetector = new LanguageDetector()
+    const languageDetection = languageDetector.detectLanguage(content || '', textToAnalyze)
+    const detectedLanguage = languageDetection.language
+    
+    // Language-specific system messages
+    const languageInstructions = {
+      lt: 'Atsakyk lietuvių kalba. Naudok taisyklingą lietuvių kalbos gramatiką ir idiomas.',
+      en: 'Respond in English. Use proper English grammar and idioms.'
+    }
+    const languageInstruction = languageInstructions[detectedLanguage] || languageInstructions.en
+
     const response = await openaiClient.chat.completions.create({
       model: 'gpt-4',
       messages: [
         {
           role: 'system',
-          content: `You are a professional content editor and SEO specialist. Always respond with valid JSON. You are analyzing ${contentTypeDescription}.`
+          content: `You are a professional content editor and SEO specialist. ${languageInstruction} Always respond with valid JSON. You are analyzing ${contentTypeDescription}.`
         },
         {
           role: 'user',

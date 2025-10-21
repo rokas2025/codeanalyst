@@ -110,7 +110,7 @@ async function handleGitHubCallback(code, state, res) {
       return res.status(500).json({ success: false, error: 'Database error during authentication' })
     }
 
-    // Generate JWT
+    // Generate JWT with 30-day expiration
     const jwtToken = jwt.sign({ 
       userId: user.id, 
       githubId: githubUser.id, 
@@ -118,7 +118,7 @@ async function handleGitHubCallback(code, state, res) {
       name: user.name,
       email: user.email,
       avatarUrl: user.avatar_url
-    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' })
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '30d' })
 
     const redirectUrl = `${process.env.FRONTEND_URL}/auth/github/callback?token=${jwtToken}`
     res.redirect(redirectUrl)
@@ -184,12 +184,12 @@ router.post('/login', async (req, res) => {
       }
     }
     
-    // Generate proper JWT token
+    // Generate proper JWT token with 30-day expiration
     const token = jwt.sign({
       userId: user.id,
       email: user.email,
       name: user.name
-    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' })
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '30d' })
     
     res.json({ 
       success: true, 

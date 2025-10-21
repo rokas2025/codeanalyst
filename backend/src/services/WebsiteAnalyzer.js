@@ -5,6 +5,7 @@ import pa11y from 'pa11y'
 import axios from 'axios'
 import { TechnologyDetector } from './TechnologyDetector.js'
 import { SEOAnalyzer } from './SEOAnalyzer.js'
+import { LanguageDetector } from './LanguageDetector.js'
 import { logger } from '../utils/logger.js'
 
 export class WebsiteAnalyzer {
@@ -12,6 +13,7 @@ export class WebsiteAnalyzer {
     this.browser = null
     this.technologyDetector = new TechnologyDetector()
     this.seoAnalyzer = new SEOAnalyzer()
+    this.languageDetector = new LanguageDetector()
   }
 
   /**
@@ -398,6 +400,9 @@ export class WebsiteAnalyzer {
         })
       }
 
+      // Detect language
+      const languageDetection = this.languageDetector.detectLanguage(html, pageData.metaDescription || pageData.title)
+      
       return {
         ...pageData,
         html: html.substring(0, 50000), // Limit HTML size
@@ -405,7 +410,10 @@ export class WebsiteAnalyzer {
         statusCode: response.status(),
         loadTime: response.timing?.responseEnd || 0,
         screenshot,
-        finalUrl: page.url() // In case of redirects
+        finalUrl: page.url(), // In case of redirects
+        language: languageDetection.language,
+        languageConfidence: languageDetection.confidence,
+        languageDetectedBy: languageDetection.detectedBy
       }
 
     } catch (puppeteerError) {
@@ -452,6 +460,9 @@ export class WebsiteAnalyzer {
       const textContent = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
       const wordCount = textContent.split(/\s+/).length
 
+      // Detect language
+      const languageDetection = this.languageDetector.detectLanguage(html, description || title)
+
       return {
         title,
         description,
@@ -474,6 +485,11 @@ export class WebsiteAnalyzer {
         hasTitle: !!title,
         hasDescription: !!description,
         contentLength: html.length,
+        
+        // Language detection
+        language: languageDetection.language,
+        languageConfidence: languageDetection.confidence,
+        languageDetectedBy: languageDetection.detectedBy,
         
         // Note about limited analysis
         analysisMethod: 'axios-fallback',

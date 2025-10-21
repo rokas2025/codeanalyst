@@ -117,6 +117,9 @@ export class ContentGenerationService {
         // Validate inputs
         this.validateGenerationInputs(template, userInputs, generationSettings)
         
+        // Detect language if provided in options
+        const targetLanguage = options.language || generationSettings.language || 'en'
+        
         // Build the enhanced prompt
         const prompt = this.buildPromptFromTemplate(template, userInputs, generationSettings)
         
@@ -252,12 +255,20 @@ export class ContentGenerationService {
         promptLength: prompt.length
       })
       
+      // Add language instruction to system message
+      const targetLanguage = options.language || generationSettings.language || 'en'
+      const languageInstructions = {
+        lt: ' Generuok turinį lietuvių kalba. Naudok taisyklingą lietuvių kalbos gramatiką ir idiomas.',
+        en: ' Generate content in English. Use proper English grammar and idioms.'
+      }
+      const languageInstruction = languageInstructions[targetLanguage] || languageInstructions.en
+      
       const completion = await this.providers.openai.chat.completions.create({
         model: modelUsed,
         messages: [
           {
             role: 'system',
-            content: this.buildSystemMessage(template, generationSettings)
+            content: this.buildSystemMessage(template, generationSettings) + languageInstruction
           },
           {
             role: 'user',

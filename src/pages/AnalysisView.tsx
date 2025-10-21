@@ -147,7 +147,7 @@ export function AnalysisView() {
 
       {/* Analysis Report */}
       {(analysis.sourceType === 'url' || window.location.pathname.includes('/analysis/website/')) ? (
-        <WebsiteAnalysisReport results={analysis} />
+        <WebsiteAnalysisReport results={analysis.results || analysis} />
       ) : (
         <CodeAnalysisReport analysis={analysis} />
       )}

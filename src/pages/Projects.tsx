@@ -260,7 +260,10 @@ export function Projects() {
                             <span>⭐ {analysis.codeQualityScore}/100 quality</span>
                           )}
                           {analysis.languages && analysis.languages.length > 0 && (
-                            <span>💻 {analysis.languages.filter((l: string) => l && l.length > 1).map((l: string) => l.replace('.', '')).join(', ')}</span>
+                            <span>💻 {analysis.languages
+                              .filter((l: any) => l && (typeof l === 'string' ? l.length > 1 : true))
+                              .map((l: any) => typeof l === 'string' ? l.replace('.', '') : (l.name || String(l)))
+                              .join(', ')}</span>
                           )}
                         </>
                       )}

@@ -273,17 +273,22 @@ export class TechnologyDetector {
    */
   extractVersion(text, techName) {
     try {
+      // More specific patterns, prioritizing tech name + version
       const versionPatterns = [
-        new RegExp(`${techName.toLowerCase()}[\\s\\/\\-v]*([\\d\\.]+)`, 'i'),
-        new RegExp(`version[\\s\\-]*([\\d\\.]+)`, 'i'),
-        new RegExp(`v([\\d\\.]+)`, 'i'),
-        new RegExp(`([\\d]+\\.[\\d]+(?:\\.[\\d]+)?)`, 'g')
+        new RegExp(`${techName.toLowerCase()}[\\s\\/\\-v:]*([\\d]+\\.[\\d]+(?:\\.[\\d]+)?)`, 'i'),
+        new RegExp(`${techName.toLowerCase()}[\\s\\/\\-]*version[\\s\\-:]*([\\d]+\\.[\\d]+(?:\\.[\\d]+)?)`, 'i'),
+        new RegExp(`version[\\s\\-:]*([\\d]+\\.[\\d]+(?:\\.[\\d]+)?)`, 'i'),
+        new RegExp(`\\bv([\\d]+\\.[\\d]+(?:\\.[\\d]+)?)\\b`, 'i'),
       ]
 
       for (const pattern of versionPatterns) {
         const match = text.match(pattern)
         if (match && match[1]) {
-          return match[1]
+          // Validate version format (should be X.Y or X.Y.Z, not crazy numbers like 6497)
+          const version = match[1]
+          if (/^\d{1,2}\.\d{1,3}(?:\.\d{1,3})?$/.test(version)) {
+            return version
+          }
         }
       }
     } catch (error) {

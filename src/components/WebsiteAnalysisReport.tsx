@@ -1498,7 +1498,7 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
           Technical Data (Developer View)
         </summary>
         <pre className="mt-4 bg-white p-4 rounded border text-xs overflow-auto max-h-96 text-gray-600">
-          {JSON.stringify(results, null, 2)}
+          {results ? JSON.stringify(results, null, 2) : 'No technical data available'}
         </pre>
       </details>
     </div>

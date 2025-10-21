@@ -39,6 +39,121 @@ export async function runMigrations() {
       console.log('✅ WordPress connections table already exists')
     }
     
+    // Check if wordpress_files table exists
+    const checkFilesTable = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'wordpress_files'
+      )
+    `)
+    
+    if (!checkFilesTable.rows[0].exists) {
+      console.log('📦 Running WordPress files migration...')
+      
+      await db.query(`
+        CREATE TABLE wordpress_files (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          connection_id UUID REFERENCES wordpress_connections(id) ON DELETE CASCADE,
+          file_path TEXT NOT NULL,
+          file_type VARCHAR(50),
+          file_content TEXT,
+          file_size INTEGER,
+          uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        CREATE INDEX idx_wordpress_files_connection ON wordpress_files(connection_id);
+      `)
+      console.log('✅ WordPress files table created successfully!')
+    } else {
+      console.log('✅ WordPress files table already exists')
+    }
+    
+    // Check if wordpress_pages table exists (unified table for all editor types)
+    const checkPagesTable = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'wordpress_pages'
+      )
+    `)
+    
+    if (!checkPagesTable.rows[0].exists) {
+      console.log('📦 Running WordPress pages migration...')
+      
+      await db.query(`
+        CREATE TABLE wordpress_pages (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          connection_id UUID REFERENCES wordpress_connections(id) ON DELETE CASCADE,
+          post_id BIGINT NOT NULL,
+          post_title TEXT,
+          post_type VARCHAR(50),
+          editor_type VARCHAR(20) NOT NULL,
+          content TEXT,
+          elementor_data JSONB,
+          blocks JSONB,
+          block_count INTEGER,
+          page_url TEXT,
+          last_modified TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(connection_id, post_id)
+        );
+        
+        CREATE INDEX idx_wordpress_pages_connection ON wordpress_pages(connection_id);
+        CREATE INDEX idx_wordpress_pages_post_id ON wordpress_pages(post_id);
+        CREATE INDEX idx_wordpress_pages_editor_type ON wordpress_pages(editor_type);
+      `)
+      console.log('✅ WordPress pages table created successfully!')
+    } else {
+      console.log('✅ WordPress pages table already exists')
+    }
+    
+    // Migrate old wordpress_elementor_pages to new wordpress_pages table (if exists)
+    const checkOldElementorTable = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'wordpress_elementor_pages'
+      )
+    `)
+    
+    if (checkOldElementorTable.rows[0].exists) {
+      console.log('📦 Migrating old Elementor pages to unified pages table...')
+      
+      try {
+        await db.query(`
+          INSERT INTO wordpress_pages (
+            connection_id, post_id, post_title, editor_type, 
+            elementor_data, page_url, last_modified, created_at
+          )
+          SELECT 
+            connection_id, post_id, post_title, 'elementor',
+            elementor_data, page_url, last_modified, created_at
+          FROM wordpress_elementor_pages
+          ON CONFLICT (connection_id, post_id) DO NOTHING
+        `)
+        console.log('✅ Migrated old Elementor pages successfully!')
+      } catch (migrateError) {
+        console.log('⚠️  Migration of old Elementor pages skipped (may already be migrated)')
+      }
+    }
+    
+    // Add language field to url_analysis table if it doesn't exist
+    const checkLanguageColumn = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.columns 
+        WHERE table_name = 'url_analysis' AND column_name = 'detected_language'
+      )
+    `)
+    
+    if (!checkLanguageColumn.rows[0].exists) {
+      console.log('📦 Adding detected_language column to url_analysis table...')
+      
+      await db.query(`
+        ALTER TABLE url_analysis ADD COLUMN IF NOT EXISTS detected_language VARCHAR(10);
+      `)
+      console.log('✅ Language column added successfully!')
+    } else {
+      console.log('✅ Language column already exists')
+    }
+    
     console.log('🎉 All migrations complete!')
     
   } catch (error) {
@@ -48,4 +163,5 @@ export async function runMigrations() {
     // Server can still run for other features
   }
 }
+
 

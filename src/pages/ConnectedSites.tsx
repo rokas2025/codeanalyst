@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { wordpressService, WordPressConnection } from '../services/wordpressService'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon } from '@heroicons/react/24/outline'
 
 export function ConnectedSites() {
     const [connections, setConnections] = useState<WordPressConnection[]>([])
     const [loading, setLoading] = useState(true)
     const [deleting, setDeleting] = useState<string | null>(null)
+    const [uploading, setUploading] = useState<string | null>(null)
+    const [uploadProgress, setUploadProgress] = useState<number>(0)
+    const [expandedConnection, setExpandedConnection] = useState<string | null>(null)
+    const [filesData, setFilesData] = useState<Record<string, any>>({})
+    const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
     useEffect(() => {
         loadConnections()
@@ -57,6 +63,78 @@ export function ConnectedSites() {
         // Simple health check - can be enhanced
         if (!health) return 'gray'
         return 'green'
+    }
+
+    const handleFileSelect = async (connectionId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (!file) return
+
+        if (!file.name.endsWith('.zip')) {
+            toast.error('Please select a ZIP file')
+            return
+        }
+
+        setUploading(connectionId)
+        setUploadProgress(0)
+
+        try {
+            const response = await wordpressService.uploadZip(connectionId, file, (progress) => {
+                setUploadProgress(Math.round(progress))
+            })
+
+            if (response.success && response.data) {
+                toast.success(`Upload successful! ${response.data.themeFiles} theme files, ${response.data.elementorPages} Elementor pages`)
+                // Reload connection data
+                await loadConnectionFiles(connectionId)
+            } else {
+                toast.error(response.message || 'Upload failed')
+            }
+        } catch (error) {
+            toast.error('Failed to upload WordPress ZIP')
+        } finally {
+            setUploading(null)
+            setUploadProgress(0)
+            // Reset file input
+            if (fileInputRefs.current[connectionId]) {
+                fileInputRefs.current[connectionId]!.value = ''
+            }
+        }
+    }
+
+    const loadConnectionFiles = async (connectionId: string) => {
+        try {
+            const [filesResponse, pagesResponse] = await Promise.all([
+                wordpressService.getFiles(connectionId),
+                wordpressService.getElementorPages(connectionId)
+            ])
+
+            setFilesData(prev => ({
+                ...prev,
+                [connectionId]: {
+                    files: filesResponse.success ? filesResponse.files : [],
+                    pages: pagesResponse.success ? pagesResponse.pages : []
+                }
+            }))
+        } catch (error) {
+            console.error('Failed to load connection files:', error)
+        }
+    }
+
+    const toggleExpanded = async (connectionId: string) => {
+        if (expandedConnection === connectionId) {
+            setExpandedConnection(null)
+        } else {
+            setExpandedConnection(connectionId)
+            if (!filesData[connectionId]) {
+                await loadConnectionFiles(connectionId)
+            }
+        }
+    }
+
+    const formatFileSize = (bytes: number) => {
+        if (bytes < 1024) return bytes + ' B'
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
     }
 
     if (loading) {
@@ -161,6 +239,42 @@ export function ConnectedSites() {
                                 <div className="text-xs text-gray-500 mb-3">
                                     Last sync: {connection.last_sync ? formatDate(connection.last_sync) : 'Never'}
                                 </div>
+                                
+                                {/* Upload Section */}
+                                <div className="mb-3">
+                                    <input
+                                        type="file"
+                                        ref={el => fileInputRefs.current[connection.id] = el}
+                                        accept=".zip"
+                                        onChange={(e) => handleFileSelect(connection.id, e)}
+                                        className="hidden"
+                                        id={`file-upload-${connection.id}`}
+                                    />
+                                    <label
+                                        htmlFor={`file-upload-${connection.id}`}
+                                        className={`flex items-center justify-center gap-2 w-full px-3 py-2 text-sm border border-indigo-300 text-indigo-700 rounded-md hover:bg-indigo-50 cursor-pointer transition-colors ${uploading === connection.id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    >
+                                        <ArrowUpTrayIcon className="w-4 h-4" />
+                                        {uploading === connection.id ? `Uploading... ${uploadProgress}%` : 'Upload WordPress ZIP'}
+                                    </label>
+                                    {uploading === connection.id && (
+                                        <div className="mt-2 bg-gray-200 rounded-full h-2">
+                                            <div
+                                                className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                                                style={{ width: `${uploadProgress}%` }}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* View Files Button */}
+                                <button
+                                    onClick={() => toggleExpanded(connection.id)}
+                                    className="w-full px-3 py-2 text-sm border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 mb-2"
+                                >
+                                    {expandedConnection === connection.id ? 'Hide Files' : 'View Uploaded Files'}
+                                </button>
+
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => handleDelete(connection.id, connection.site_url)}
@@ -171,6 +285,62 @@ export function ConnectedSites() {
                                     </button>
                                 </div>
                             </div>
+
+                            {/* Expanded Files View */}
+                            {expandedConnection === connection.id && filesData[connection.id] && (
+                                <div className="mt-4 pt-4 border-t border-gray-200">
+                                    <div className="space-y-4">
+                                        {/* Theme Files */}
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <FolderIcon className="w-4 h-4 text-gray-600" />
+                                                <h4 className="text-sm font-medium text-gray-900">
+                                                    Theme Files ({filesData[connection.id].files?.length || 0})
+                                                </h4>
+                                            </div>
+                                            {filesData[connection.id].files?.length > 0 ? (
+                                                <div className="max-h-40 overflow-y-auto bg-gray-50 rounded p-2">
+                                                    {filesData[connection.id].files.slice(0, 10).map((file: any) => (
+                                                        <div key={file.id} className="text-xs text-gray-600 py-1 flex justify-between">
+                                                            <span className="truncate flex-1">{file.file_path}</span>
+                                                            <span className="text-gray-400 ml-2">{formatFileSize(file.file_size)}</span>
+                                                        </div>
+                                                    ))}
+                                                    {filesData[connection.id].files.length > 10 && (
+                                                        <div className="text-xs text-gray-500 italic mt-1">
+                                                            ...and {filesData[connection.id].files.length - 10} more files
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <p className="text-xs text-gray-500 italic">No files uploaded yet</p>
+                                            )}
+                                        </div>
+
+                                        {/* Elementor Pages */}
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <DocumentTextIcon className="w-4 h-4 text-gray-600" />
+                                                <h4 className="text-sm font-medium text-gray-900">
+                                                    Elementor Pages ({filesData[connection.id].pages?.length || 0})
+                                                </h4>
+                                            </div>
+                                            {filesData[connection.id].pages?.length > 0 ? (
+                                                <div className="max-h-40 overflow-y-auto bg-gray-50 rounded p-2">
+                                                    {filesData[connection.id].pages.map((page: any) => (
+                                                        <div key={page.id} className="text-xs text-gray-600 py-1">
+                                                            <span className="font-medium">{page.post_title}</span>
+                                                            <span className="text-gray-400 ml-2">(Post ID: {page.post_id})</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-xs text-gray-500 italic">No Elementor pages found</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="mt-3 text-xs text-gray-500 font-mono truncate">
                                 API Key: {connection.api_key}

@@ -1,9 +1,27 @@
 import express from 'express'
+import multer from 'multer'
 import { DatabaseService } from '../services/DatabaseService.js'
+import { WordPressService } from '../services/WordPressService.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { db } from '../database/connection.js'
 import logger from '../utils/logger.js'
 
 const router = express.Router()
+
+// Configure multer for file uploads (in-memory storage)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 100 * 1024 * 1024 // 100MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/zip' || file.mimetype === 'application/x-zip-compressed' || file.originalname.endsWith('.zip')) {
+      cb(null, true)
+    } else {
+      cb(new Error('Only ZIP files are allowed'))
+    }
+  }
+})
 
 /**
  * POST /api/wordpress/generate-key
@@ -310,6 +328,213 @@ router.post('/files/read', async (req, res) => {
       message: error.message
     })
   }
+})
+
+/**
+ * POST /api/wordpress/upload-zip
+ * Upload WordPress ZIP file with theme files and Elementor data
+ */
+router.post('/upload-zip/:connectionId', authMiddleware, upload.single('zipFile'), async (req, res) => {
+  try {
+    const { connectionId } = req.params
+    const userId = req.user.id
+
+    logger.info('📦 WordPress ZIP upload initiated', { userId, connectionId })
+
+    // Verify connection belongs to user
+    const connections = await DatabaseService.getWordPressConnections(userId)
+    const connection = connections.find(c => c.id === connectionId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found',
+        message: 'WordPress connection not found or does not belong to you'
+      })
+    }
+
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'No file uploaded',
+        message: 'Please upload a ZIP file'
+      })
+    }
+
+    logger.info(`📦 Processing ZIP file: ${req.file.originalname} (${req.file.size} bytes)`)
+
+    // Parse the ZIP file
+    const wpService = new WordPressService()
+    const zipData = await wpService.parseWordPressZip(req.file.buffer)
+
+    // Store theme files
+    if (zipData.themeFiles.length > 0) {
+      await wpService.storeWordPressFiles(connectionId, zipData.themeFiles, db)
+    }
+
+    // Extract and store WordPress pages (all editor types)
+    let pagesData = {
+      gutenbergPages: [],
+      elementorPages: [],
+      classicPages: [],
+      totalPages: 0
+    }
+    
+    if (zipData.xmlExport) {
+      logger.info('📄 Found WordPress XML export, extracting pages...')
+      pagesData = await wpService.extractWordPressPages(zipData.xmlExport)
+    } else if (zipData.sqlDump) {
+      logger.info('📄 Found SQL dump, extracting Elementor data...')
+      const elementorPages = await wpService.extractElementorDataFromSQL(zipData.sqlDump)
+      pagesData = { gutenbergPages: [], elementorPages, classicPages: [], totalPages: elementorPages.length }
+    }
+
+    if (pagesData.totalPages > 0) {
+      await wpService.storeWordPressPages(connectionId, pagesData, db)
+    }
+
+    // Return summary
+    res.json({
+      success: true,
+      message: 'WordPress ZIP uploaded successfully',
+      data: {
+        themeFiles: zipData.themeFiles.length,
+        elementorFiles: zipData.elementorFiles.length,
+        gutenbergPages: pagesData.gutenbergPages.length,
+        elementorPages: pagesData.elementorPages.length,
+        classicPages: pagesData.classicPages.length,
+        totalPages: pagesData.totalPages,
+        totalFiles: zipData.totalFiles,
+        totalSize: zipData.totalSize
+      }
+    })
+
+  } catch (error) {
+    logger.error('Failed to upload WordPress ZIP:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to upload ZIP',
+      message: error.message
+    })
+  }
+})
+
+/**
+ * GET /api/wordpress/files/:connectionId
+ * Get uploaded WordPress files for a connection
+ */
+router.get('/files/:connectionId', authMiddleware, async (req, res) => {
+  try {
+    const { connectionId } = req.params
+    const userId = req.user.id
+
+    // Verify connection belongs to user
+    const connections = await DatabaseService.getWordPressConnections(userId)
+    const connection = connections.find(c => c.id === connectionId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      })
+    }
+
+    // Get files from database
+    const result = await db.query(`
+      SELECT id, file_path, file_type, file_size, uploaded_at
+      FROM wordpress_files
+      WHERE connection_id = $1
+      ORDER BY file_path
+    `, [connectionId])
+
+    res.json({
+      success: true,
+      files: result.rows
+    })
+
+  } catch (error) {
+    logger.error('Failed to get WordPress files:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get files',
+      message: error.message
+    })
+  }
+})
+
+/**
+ * GET /api/wordpress/pages/:connectionId
+ * Get all WordPress pages for a connection (Gutenberg, Elementor, Classic)
+ */
+router.get('/pages/:connectionId', authMiddleware, async (req, res) => {
+  try {
+    const { connectionId } = req.params
+    const { editorType } = req.query // Optional filter
+    const userId = req.user.id
+
+    // Verify connection belongs to user
+    const connections = await DatabaseService.getWordPressConnections(userId)
+    const connection = connections.find(c => c.id === connectionId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      })
+    }
+
+    // Get pages from database with optional filter
+    let query = `
+      SELECT id, post_id, post_title, post_type, editor_type, 
+             content, elementor_data, blocks, block_count, 
+             page_url, last_modified, created_at
+      FROM wordpress_pages
+      WHERE connection_id = $1
+    `
+    const params = [connectionId]
+
+    if (editorType && ['gutenberg', 'elementor', 'classic'].includes(editorType)) {
+      query += ` AND editor_type = $2`
+      params.push(editorType)
+    }
+
+    query += ` ORDER BY post_id`
+
+    const result = await db.query(query, params)
+
+    // Group by editor type for summary
+    const summary = {
+      gutenberg: result.rows.filter(p => p.editor_type === 'gutenberg').length,
+      elementor: result.rows.filter(p => p.editor_type === 'elementor').length,
+      classic: result.rows.filter(p => p.editor_type === 'classic').length,
+      total: result.rows.length
+    }
+
+    res.json({
+      success: true,
+      pages: result.rows,
+      summary
+    })
+
+  } catch (error) {
+    logger.error('Failed to get WordPress pages:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get pages',
+      message: error.message
+    })
+  }
+})
+
+/**
+ * GET /api/wordpress/elementor-pages/:connectionId
+ * Legacy endpoint for backward compatibility
+ * @deprecated Use /api/wordpress/pages/:connectionId?editorType=elementor instead
+ */
+router.get('/elementor-pages/:connectionId', authMiddleware, async (req, res) => {
+  req.query.editorType = 'elementor'
+  return router.handle(req, res)
 })
 
 export default router

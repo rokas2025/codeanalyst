@@ -1,0 +1,41 @@
+# Railway CLI Commands to Copy Variables
+
+# Step 1: Login to Railway
+railway login
+
+# Step 2: Link to your project
+railway link
+# (Select your CodeAnalyst project from the list)
+
+# Step 3: Switch to production service and list variables
+railway service
+# (Select your PRODUCTION service)
+railway variables
+# (Copy all the variables you see)
+
+# Step 4: Switch to development service
+railway service
+# (Select your DEVELOPMENT service - the new one on develop branch)
+
+# Step 5: Set variables for development (one by one)
+# Replace <value> with actual values from production
+
+railway variables set NODE_ENV=development
+railway variables set DATABASE_URL=<copy-from-production>
+railway variables set JWT_SECRET=<copy-from-production>
+railway variables set OPENAI_API_KEY=<copy-from-production>
+railway variables set GITHUB_CLIENT_ID=Ov23liRkiQaCMrZxlYPM
+railway variables set GITHUB_CLIENT_SECRET=688e3bc5d899f8bdeda1f07e07f89a0e6e129fae
+railway variables set FRONTEND_URL=https://codeanalyst-git-develop-rokas-projects-bff726e7.vercel.app
+railway variables set PORT=3001
+
+# Optional variables (if they exist in production):
+railway variables set ANTHROPIC_API_KEY=<copy-from-production>
+railway variables set GOOGLE_AI_API_KEY=<copy-from-production>
+railway variables set REDIS_HOST=<copy-from-production>
+railway variables set REDIS_PORT=<copy-from-production>
+railway variables set REDIS_PASSWORD=<copy-from-production>
+
+# Step 6: Check deployment
+railway status
+

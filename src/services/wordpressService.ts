@@ -41,12 +41,51 @@ export interface DeleteResponse {
     error?: string
 }
 
+export interface UploadResponse {
+    success: boolean
+    message?: string
+    error?: string
+    data?: {
+        themeFiles: number
+        elementorFiles: number
+        elementorPages: number
+        totalFiles: number
+        totalSize: number
+    }
+}
+
+export interface WordPressFile {
+    id: string
+    file_path: string
+    file_type: string
+    file_size: number
+    uploaded_at: string
+}
+
+export interface ElementorPage {
+    id: string
+    post_id: number
+    post_title: string
+    elementor_data: any
+    page_url: string
+    last_modified: string
+    created_at: string
+}
+
 class WordPressService {
     private getAuthHeaders(): HeadersInit {
         const token = localStorage.getItem('auth_token')
         return {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
+        }
+    }
+
+    private getAuthHeadersForUpload(): HeadersInit {
+        const token = localStorage.getItem('auth_token')
+        return {
+            'Authorization': `Bearer ${token}`
+            // Don't set Content-Type for FormData - browser will set it with boundary
         }
     }
 
@@ -112,6 +151,106 @@ class WordPressService {
                 success: false,
                 error: 'Failed to delete connection',
                 message: error instanceof Error ? error.message : 'Unknown error'
+            }
+        }
+    }
+
+    /**
+     * Upload WordPress ZIP file
+     */
+    async uploadZip(connectionId: string, file: File, onProgress?: (progress: number) => void): Promise<UploadResponse> {
+        try {
+            const formData = new FormData()
+            formData.append('zipFile', file)
+
+            const xhr = new XMLHttpRequest()
+
+            return new Promise((resolve, reject) => {
+                // Track upload progress
+                if (onProgress) {
+                    xhr.upload.addEventListener('progress', (e) => {
+                        if (e.lengthComputable) {
+                            const percentComplete = (e.loaded / e.total) * 100
+                            onProgress(percentComplete)
+                        }
+                    })
+                }
+
+                xhr.addEventListener('load', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        const data = JSON.parse(xhr.responseText)
+                        resolve(data)
+                    } else {
+                        const error = JSON.parse(xhr.responseText)
+                        resolve({
+                            success: false,
+                            error: error.error || 'Upload failed',
+                            message: error.message || 'Unknown error'
+                        })
+                    }
+                })
+
+                xhr.addEventListener('error', () => {
+                    reject(new Error('Network error during upload'))
+                })
+
+                xhr.open('POST', `${API_BASE_URL}/wordpress/upload-zip/${connectionId}`)
+                
+                const token = localStorage.getItem('auth_token')
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+                }
+
+                xhr.send(formData)
+            })
+        } catch (error) {
+            console.error('Failed to upload WordPress ZIP:', error)
+            return {
+                success: false,
+                error: 'Failed to upload ZIP',
+                message: error instanceof Error ? error.message : 'Unknown error'
+            }
+        }
+    }
+
+    /**
+     * Get uploaded WordPress files
+     */
+    async getFiles(connectionId: string): Promise<{ success: boolean; files?: WordPressFile[]; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/files/${connectionId}`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to fetch WordPress files:', error)
+            return {
+                success: false,
+                error: 'Failed to fetch files'
+            }
+        }
+    }
+
+    /**
+     * Get Elementor pages
+     */
+    async getElementorPages(connectionId: string): Promise<{ success: boolean; pages?: ElementorPage[]; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/elementor-pages/${connectionId}`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to fetch Elementor pages:', error)
+            return {
+                success: false,
+                error: 'Failed to fetch pages'
             }
         }
     }
