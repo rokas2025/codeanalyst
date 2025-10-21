@@ -258,8 +258,11 @@ export class ContentGenerationService {
       // Add language instruction to system message
       const targetLanguage = options.language || generationSettings.language || 'en'
       const languageInstructions = {
+        en: ' Generate content in English. Use proper English grammar and idioms.',
         lt: ' Generuok turinį lietuvių kalba. Naudok taisyklingą lietuvių kalbos gramatiką ir idiomas.',
-        en: ' Generate content in English. Use proper English grammar and idioms.'
+        es: ' Genera contenido en español. Usa gramática e idiomas españoles adecuados.',
+        fr: ' Générez du contenu en français. Utilisez une grammaire et des idiomes français appropriés.',
+        de: ' Generieren Sie Inhalte auf Deutsch. Verwenden Sie korrekte deutsche Grammatik und Redewendungen.'
       }
       const languageInstruction = languageInstructions[targetLanguage] || languageInstructions.en
       

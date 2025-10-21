@@ -165,6 +165,37 @@ export async function runMigrations() {
       console.log('ℹ️  url_analysis table does not exist yet (will be created on first website analysis)')
     }
     
+    // Check if content_templates table exists and add translations column
+    const checkTemplatesTable = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'content_templates'
+      )
+    `)
+    
+    if (checkTemplatesTable.rows[0].exists) {
+      // Check if translations column exists
+      const checkTranslationsColumn = await db.query(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.columns
+          WHERE table_name = 'content_templates' AND column_name = 'translations'
+        )
+      `)
+      
+      if (!checkTranslationsColumn.rows[0].exists) {
+        console.log('📦 Adding translations column to content_templates table...')
+        
+        await db.query(`
+          ALTER TABLE content_templates ADD COLUMN IF NOT EXISTS translations JSONB DEFAULT '{}';
+        `)
+        console.log('✅ Translations column added successfully!')
+      } else {
+        console.log('✅ Translations column already exists')
+      }
+    } else {
+      console.log('ℹ️  content_templates table does not exist yet (will be created on first use)')
+    }
+    
     console.log('🎉 All migrations complete!')
     
   } catch (error) {

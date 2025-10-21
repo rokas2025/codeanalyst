@@ -21,14 +21,22 @@ export function ContentCreator() {
     selectedTemplate,
     isGenerating,
     generatedContent,
+    settings,
     loadTemplates,
     setCurrentStep,
-    clearGeneration
+    clearGeneration,
+    updateSettings
   } = useContentCreatorStore()
 
   useEffect(() => {
     loadTemplates()
-  }, [loadTemplates])
+    
+    // Load saved language preference
+    const savedLanguage = localStorage.getItem('contentCreator_language')
+    if (savedLanguage && ['en', 'lt', 'es', 'fr', 'de'].includes(savedLanguage)) {
+      updateSettings({ language: savedLanguage as 'en' | 'lt' | 'es' | 'fr' | 'de' })
+    }
+  }, [loadTemplates, updateSettings])
 
   const steps = [
     { id: 'template', name: 'Template', icon: DocumentTextIcon, description: 'Choose content type' },
@@ -56,16 +64,38 @@ export function ContentCreator() {
                 </p>
               </div>
               
-              {selectedTemplate && (
-                <div className="flex-shrink-0">
+              <div className="flex items-center gap-3 flex-shrink-0">
+                {/* Language Selector */}
+                <div className="flex items-center gap-2">
+                  <label htmlFor="language-select" className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                    Language:
+                  </label>
+                  <select
+                    id="language-select"
+                    value={settings.language}
+                    onChange={(e) => {
+                      updateSettings({ language: e.target.value as 'en' | 'lt' | 'es' | 'fr' | 'de' })
+                      localStorage.setItem('contentCreator_language', e.target.value)
+                    }}
+                    className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
+                  >
+                    <option value="en">🇬🇧 English</option>
+                    <option value="lt">🇱🇹 Lietuvių</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                  </select>
+                </div>
+                
+                {selectedTemplate && (
                   <button
                     onClick={clearGeneration}
                     className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                   >
                     Start Over
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
