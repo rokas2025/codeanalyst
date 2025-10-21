@@ -135,23 +135,34 @@ export async function runMigrations() {
       }
     }
     
-    // Add language field to url_analysis table if it doesn't exist
-    const checkLanguageColumn = await db.query(`
+    // Add language field to url_analysis table if it exists
+    const checkUrlAnalysisTable = await db.query(`
       SELECT EXISTS (
-        SELECT FROM information_schema.columns 
-        WHERE table_name = 'url_analysis' AND column_name = 'detected_language'
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'url_analysis'
       )
     `)
     
-    if (!checkLanguageColumn.rows[0].exists) {
-      console.log('📦 Adding detected_language column to url_analysis table...')
-      
-      await db.query(`
-        ALTER TABLE url_analysis ADD COLUMN IF NOT EXISTS detected_language VARCHAR(10);
+    if (checkUrlAnalysisTable.rows[0].exists) {
+      const checkLanguageColumn = await db.query(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.columns 
+          WHERE table_name = 'url_analysis' AND column_name = 'detected_language'
+        )
       `)
-      console.log('✅ Language column added successfully!')
+      
+      if (!checkLanguageColumn.rows[0].exists) {
+        console.log('📦 Adding detected_language column to url_analysis table...')
+        
+        await db.query(`
+          ALTER TABLE url_analysis ADD COLUMN IF NOT EXISTS detected_language VARCHAR(10);
+        `)
+        console.log('✅ Language column added successfully!')
+      } else {
+        console.log('✅ Language column already exists')
+      }
     } else {
-      console.log('✅ Language column already exists')
+      console.log('ℹ️  url_analysis table does not exist yet (will be created on first website analysis)')
     }
     
     console.log('🎉 All migrations complete!')
