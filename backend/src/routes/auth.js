@@ -6,6 +6,7 @@ import { GitHubService } from '../services/GitHubService.js'
 import { DatabaseService } from '../services/DatabaseService.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { db } from '../database/connection.js'
+import { supabase } from '../config/supabase.js'
 
 const router = express.Router()
 
@@ -210,16 +211,283 @@ router.post('/login', async (req, res) => {
 
 /**
  * POST /api/auth/register
+ * Register with email/password using Supabase Auth
  */
 router.post('/register', async (req, res) => {
   try {
+    // Check if Supabase is configured
+    if (!supabase) {
+      return res.status(503).json({ 
+        success: false, 
+        error: 'Email registration is not configured. Please use GitHub to sign in.' 
+      })
+    }
+
     const { email, password, name } = req.body
-    if (!email || !password || !name) return res.status(400).json({ success: false, error: 'Email, password and name required' })
-    const token = `dev-token-${Date.now()}`
-    res.json({ success: true, token, user: { id: 'dev-user-1', email, name, plan: 'free' } })
+    
+    // Validation
+    if (!email || !password || !name) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Email, password, and name are required' 
+      })
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Invalid email format' 
+      })
+    }
+    
+    // Password validation
+    if (password.length < 8) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Password must be at least 8 characters long' 
+      })
+    }
+    
+    // Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true, // Auto-confirm for now
+      user_metadata: { name }
+    })
+    
+    if (authError) {
+      logger.error('Supabase registration error:', authError)
+      return res.status(400).json({ 
+        success: false, 
+        error: authError.message 
+      })
+    }
+    
+    // Sync to our users table
+    const user = await DatabaseService.createUser({
+      id: authData.user.id, // Use Supabase user ID
+      email: authData.user.email,
+      name: name,
+      plan: 'free',
+      auth_provider: 'supabase'
+    })
+    
+    // Generate our custom JWT for consistency
+    const token = jwt.sign({
+      userId: user.id,
+      email: user.email,
+      name: user.name
+    }, process.env.JWT_SECRET, { expiresIn: '30d' })
+    
+    logger.info(`✅ User registered successfully: ${email}`)
+    
+    res.status(201).json({ 
+      success: true, 
+      token, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name, 
+        plan: user.plan 
+      } 
+    })
+    
   } catch (error) {
     logger.error('Registration failed:', error)
-    res.status(500).json({ success: false, error: 'Registration failed' })
+    res.status(500).json({ 
+      success: false, 
+      error: 'Registration failed. Please try again.' 
+    })
+  }
+})
+
+/**
+ * POST /api/auth/login-supabase
+ * Login with email/password using Supabase
+ */
+router.post('/login-supabase', async (req, res) => {
+  try {
+    if (!supabase) {
+      return res.status(503).json({ 
+        success: false, 
+        error: 'Email login is not configured. Please use GitHub to sign in.' 
+      })
+    }
+
+    const { email, password } = req.body
+    
+    if (!email || !password) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Email and password required' 
+      })
+    }
+    
+    // Sign in with Supabase
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+    
+    if (authError) {
+      return res.status(401).json({ 
+        success: false, 
+        error: 'Invalid email or password' 
+      })
+    }
+    
+    // Get user from our database
+    let user = await DatabaseService.getUserById(authData.user.id)
+    
+    // If user doesn't exist in our table (shouldn't happen, but safety check)
+    if (!user) {
+      user = await DatabaseService.createUser({
+        id: authData.user.id,
+        email: authData.user.email,
+        name: authData.user.user_metadata?.name || authData.user.email.split('@')[0],
+        plan: 'free',
+        auth_provider: 'supabase'
+      })
+    }
+    
+    // Update last login
+    await DatabaseService.updateUser(user.id, {
+      last_login: new Date().toISOString()
+    })
+    
+    // Generate our custom JWT
+    const token = jwt.sign({
+      userId: user.id,
+      email: user.email,
+      name: user.name
+    }, process.env.JWT_SECRET, { expiresIn: '30d' })
+    
+    res.json({ 
+      success: true, 
+      token, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name, 
+        plan: user.plan,
+        avatarUrl: user.avatar_url
+      } 
+    })
+    
+  } catch (error) {
+    logger.error('Supabase login failed:', error)
+    res.status(500).json({ 
+      success: false, 
+      error: 'Login failed' 
+    })
+  }
+})
+
+/**
+ * POST /api/auth/google
+ * Initiate Google OAuth with Supabase
+ */
+router.post('/google', async (req, res) => {
+  try {
+    if (!supabase) {
+      return res.status(503).json({ 
+        success: false, 
+        error: 'Google login is not configured. Please use GitHub to sign in.' 
+      })
+    }
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.FRONTEND_URL}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
+      }
+    })
+    
+    if (error) {
+      logger.error('Google OAuth error:', error)
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Google OAuth initialization failed' 
+      })
+    }
+    
+    res.json({ 
+      success: true, 
+      url: data.url 
+    })
+    
+  } catch (error) {
+    logger.error('Google OAuth failed:', error)
+    res.status(500).json({ 
+      success: false, 
+      error: 'Google OAuth failed' 
+    })
+  }
+})
+
+/**
+ * POST /api/auth/sync-supabase
+ * Sync Supabase OAuth user to our database
+ */
+router.post('/sync-supabase', async (req, res) => {
+  try {
+    const { supabaseUserId, email, name } = req.body
+    
+    if (!supabaseUserId || !email) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'User ID and email are required' 
+      })
+    }
+    
+    let user = await DatabaseService.getUserById(supabaseUserId)
+    
+    if (!user) {
+      user = await DatabaseService.createUser({
+        id: supabaseUserId,
+        email: email,
+        name: name || email.split('@')[0],
+        plan: 'free',
+        auth_provider: 'supabase'
+      })
+      logger.info(`✅ New Supabase user synced: ${email}`)
+    } else {
+      await DatabaseService.updateUser(user.id, {
+        last_login: new Date().toISOString()
+      })
+    }
+    
+    const token = jwt.sign({
+      userId: user.id,
+      email: user.email,
+      name: user.name
+    }, process.env.JWT_SECRET, { expiresIn: '30d' })
+    
+    res.json({ 
+      success: true, 
+      token, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name, 
+        plan: user.plan,
+        avatarUrl: user.avatar_url
+      } 
+    })
+    
+  } catch (error) {
+    logger.error('Supabase sync failed:', error)
+    res.status(500).json({ 
+      success: false, 
+      error: 'Sync failed' 
+    })
   }
 })
 

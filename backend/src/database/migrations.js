@@ -196,6 +196,35 @@ export async function runMigrations() {
       console.log('ℹ️  content_templates table does not exist yet (will be created on first use)')
     }
     
+    // Add auth_provider column to users table for hybrid auth
+    const checkUsersTable = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'users'
+      )
+    `)
+    
+    if (checkUsersTable.rows[0].exists) {
+      const checkAuthProviderColumn = await db.query(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.columns
+          WHERE table_name = 'users' AND column_name = 'auth_provider'
+        )
+      `)
+      
+      if (!checkAuthProviderColumn.rows[0].exists) {
+        console.log('📦 Adding auth_provider column to users table...')
+        
+        await db.query(`
+          ALTER TABLE users 
+          ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(20) DEFAULT 'custom';
+        `)
+        console.log('✅ Auth provider column added successfully!')
+      } else {
+        console.log('✅ Auth provider column already exists')
+      }
+    }
+    
     console.log('🎉 All migrations complete!')
     
   } catch (error) {

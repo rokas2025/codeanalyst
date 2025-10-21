@@ -25,6 +25,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.9.1",
     "@google-ai/generativelanguage": "^2.5.0",
+    "@supabase/supabase-js": "^2.76.1",
     "adm-zip": "^0.5.16",
     "axe-core": "^4.8.3",
     "axios": "^1.12.2",

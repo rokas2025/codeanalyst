@@ -4,7 +4,9 @@ import { Toaster } from 'react-hot-toast'
 import { Layout } from './components/Layout'
 import { Dashboard } from './pages/Dashboard'
 import { Login } from './pages/Login'
+import { Register } from './pages/Register'
 import { GitHubCallback } from './pages/GitHubCallback'
+import { AuthCallback } from './pages/AuthCallback'
 import { CodeAnalyst } from './pages/modules/CodeAnalyst'
 import { WorkstationView } from './pages/WorkstationView'
 import { WebsiteAnalyst } from './pages/modules/WebsiteAnalyst'
@@ -22,7 +24,9 @@ function App() {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/auth/github/callback" element={<GitHubCallback />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="projects" element={<Projects />} />

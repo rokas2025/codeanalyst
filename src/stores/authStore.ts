@@ -1,14 +1,18 @@
 import { create } from 'zustand'
 import { AuthState, User } from '../types'
+import { supabase } from '../lib/supabase'
 
 interface AuthStore extends AuthState {
   login: (email: string, password: string) => Promise<void>
+  register: (email: string, password: string, name: string) => Promise<void>
   loginWithGitHub: () => Promise<void>
+  loginWithGoogle: () => Promise<void>
   handleGitHubCallback: (code: string, state: string) => Promise<User>
   logout: () => void
   updateUser: (user: Partial<User>) => void
   checkAuth: () => Promise<void>
   set_token: (token: string) => void
+  setAuth: (isAuth: boolean, user: User) => void
 }
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
@@ -113,6 +117,58 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       localStorage.removeItem('github_oauth_state')
       throw error
     }
+  },
+
+  register: async (email: string, password: string, name: string) => {
+    set({ loading: true })
+    try {
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
+      const response = await fetch(`${baseUrl}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name })
+      })
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Registration failed')
+      }
+      
+      localStorage.setItem('auth_token', data.token)
+      localStorage.setItem('user', JSON.stringify(data.user))
+      
+      set({ user: data.user, isAuthenticated: true, loading: false })
+    } catch (error) {
+      set({ loading: false })
+      throw error
+    }
+  },
+
+  loginWithGoogle: async () => {
+    set({ loading: true })
+    try {
+      if (!supabase) {
+        throw new Error('Google login is not configured')
+      }
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+      
+      if (error) throw error
+      // Browser will redirect to Google, then back to /auth/callback
+    } catch (error) {
+      set({ loading: false })
+      throw error
+    }
+  },
+
+  setAuth: (isAuth: boolean, user: User) => {
+    set({ isAuthenticated: isAuth, user, loading: false })
   },
 
   logout: () => {
