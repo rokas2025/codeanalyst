@@ -533,8 +533,56 @@ router.get('/pages/:connectionId', authMiddleware, async (req, res) => {
  * @deprecated Use /api/wordpress/pages/:connectionId?editorType=elementor instead
  */
 router.get('/elementor-pages/:connectionId', authMiddleware, async (req, res) => {
+  // Redirect to the new endpoint with editorType filter
+  const { connectionId } = req.params
+  req.url = `/pages/${connectionId}?editorType=elementor`
   req.query.editorType = 'elementor'
-  return router.handle(req, res)
+  
+  // Forward to the main pages handler
+  try {
+    const userId = req.user.id
+    const connections = await DatabaseService.getWordPressConnections(userId)
+    const connection = connections.find(c => c.id === connectionId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      })
+    }
+
+    const query = `
+      SELECT id, post_id, post_title, post_type, editor_type, 
+             content, elementor_data, blocks, block_count, 
+             page_url, last_modified, created_at
+      FROM wordpress_pages
+      WHERE connection_id = $1 AND editor_type = $2
+      ORDER BY post_id
+    `
+    
+    const result = await db.query(query, [connectionId, 'elementor'])
+
+    const summary = {
+      gutenberg: 0,
+      elementor: result.rows.length,
+      classic: 0,
+      total: result.rows.length
+    }
+
+    res.json({
+      success: true,
+      pages: result.rows,
+      summary
+    })
+
+  } catch (error) {
+    logger.error('Failed to get Elementor pages:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get pages',
+      message: error.message
+    })
+  }
 })
 
 export default router

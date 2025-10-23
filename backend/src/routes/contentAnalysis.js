@@ -540,7 +540,8 @@ Focus on:
       }
     }
 
-    // Calculate real scores based on content analysis (language already detected above)
+    // Calculate real scores based on content analysis
+    // Note: detectedLanguage is already defined at line 485
     const grammarScore = calculateGrammarScore(textToAnalyze, analysisData.grammar.issues)
     const readabilityScore = calculateReadabilityScore(textToAnalyze)
     const seoAnalysis = calculateContentSEOScore(textToAnalyze, detectedLanguage)
