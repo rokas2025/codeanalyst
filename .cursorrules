@@ -1,0 +1,67 @@
+# Cursor AI Rules for CodeAnalyst Project
+
+## Platform: Windows
+- **OS**: Windows 10/11
+- **Shell**: PowerShell (not bash)
+- **No `&&` operator**: PowerShell doesn't support `&&` - use separate commands or `;` for same line
+- **Path separators**: Use backslashes `\` for Windows paths
+- **Line endings**: CRLF (Windows style)
+
+## Terminal Commands
+- Always use PowerShell-compatible syntax
+- Avoid bash-specific commands (grep, sed, awk, etc.) - use PowerShell equivalents
+- For multiple commands: Use separate `run_terminal_cmd` calls, NOT `&&`
+- Example: Instead of `cd dir && npm install`, use two separate commands
+
+## Project Structure
+- **Frontend**: React + TypeScript + Vite (deployed on Vercel)
+- **Backend**: Node.js + Express (deployed on Railway)
+- **Database**: PostgreSQL (Supabase)
+- **Auth**: Hybrid system (GitHub OAuth custom + Supabase Auth for email/Google)
+
+## Environment Variables
+### Backend (Railway):
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY` (secret, for admin operations)
+- `DATABASE_URL`
+- `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`
+- `JWT_SECRET`
+- `OPENAI_API_KEY`, `GOOGLE_AI_API_KEY`
+
+### Frontend (Vercel):
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY` (public, for client-side)
+- `VITE_API_URL`
+- `VITE_GITHUB_CLIENT_ID`
+- `VITE_FRONTEND_URL`
+
+## Authentication System
+- **GitHub OAuth**: Custom implementation (existing, keep as-is)
+- **Email/Password**: Supabase Auth
+- **Google OAuth**: Supabase Auth
+- All users synced to PostgreSQL `users` table
+- JWT tokens used for session management (30-day expiration)
+
+## Deployment
+- **Frontend**: Vercel (auto-deploy from main branch)
+- **Backend**: Railway (auto-deploy from main branch)
+- **Database**: Supabase PostgreSQL
+
+## CLI Tools Available
+- `railway` - Railway CLI (use `railway variables --set "KEY=value"`)
+- `vercel` - Vercel CLI (use `echo "value" | vercel env add KEY production`)
+- `git` - Git for version control
+- `npm` - Package manager
+
+## Code Style
+- TypeScript for frontend
+- ES modules for backend (`.js` with `"type": "module"` in package.json)
+- Use `logger` for backend logging (not `console.log`)
+- Follow existing patterns in the codebase
+
+## Important Notes
+- Never use `&&` in PowerShell commands
+- Always check if tools/CLIs are available before using
+- Use Windows-compatible paths
+- Test commands work on Windows before suggesting
+
