@@ -540,13 +540,7 @@ Focus on:
       }
     }
 
-    // Detect content language
-    const { LanguageDetector } = await import('../services/LanguageDetector.js')
-    const languageDetector = new LanguageDetector()
-    const languageDetection = languageDetector.detectLanguage(textToAnalyze, '')
-    const detectedLanguage = languageDetection.language
-    
-    // Calculate real scores based on content analysis
+    // Calculate real scores based on content analysis (language already detected above)
     const grammarScore = calculateGrammarScore(textToAnalyze, analysisData.grammar.issues)
     const readabilityScore = calculateReadabilityScore(textToAnalyze)
     const seoAnalysis = calculateContentSEOScore(textToAnalyze, detectedLanguage)
