@@ -90,6 +90,34 @@ class WordPressService {
     }
 
     /**
+     * Download WordPress plugin
+     */
+    async downloadPlugin(): Promise<void> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/plugin/download`, {
+                headers: this.getAuthHeaders()
+            })
+            
+            if (!response.ok) {
+                throw new Error('Failed to download plugin')
+            }
+            
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = 'codeanalyst-connector.zip'
+            document.body.appendChild(a)
+            a.click()
+            window.URL.revokeObjectURL(url)
+            document.body.removeChild(a)
+        } catch (error) {
+            console.error('Download plugin error:', error)
+            throw error
+        }
+    }
+
+    /**
      * Generate new WordPress API key
      */
     async generateApiKey(): Promise<GenerateKeyResponse> {

@@ -531,6 +531,73 @@ export class WordPressService {
   async storeElementorPages(connectionId, pages, db) {
     await this.storeWordPressPages(connectionId, { elementorPages: pages }, db)
   }
+
+  /**
+   * Fetch theme files from WordPress site via REST API
+   * @param {Object} connection - WordPress connection object with site_url and api_key
+   * @returns {Promise<Array>} - Array of theme files
+   */
+  async fetchThemeFiles(connection) {
+    try {
+      logger.info(`📁 Fetching theme files from ${connection.site_url}...`)
+      
+      const axios = (await import('axios')).default
+      
+      const response = await axios.get(
+        `${connection.site_url}/wp-json/codeanalyst/v1/theme-files`,
+        {
+          headers: {
+            'X-API-Key': connection.api_key
+          },
+          timeout: 30000
+        }
+      )
+      
+      if (response.data && response.data.success) {
+        logger.info(`✅ Fetched ${response.data.total_files} theme files from ${response.data.theme}`)
+        return response.data.files
+      } else {
+        throw new Error('Invalid response from WordPress REST API')
+      }
+    } catch (error) {
+      logger.error('Failed to fetch theme files:', error.message)
+      throw new Error(`Failed to fetch theme files: ${error.message}`)
+    }
+  }
+
+  /**
+   * Fetch specific theme file content from WordPress site via REST API
+   * @param {Object} connection - WordPress connection object with site_url and api_key
+   * @param {string} filePath - Relative path to the file
+   * @returns {Promise<Object>} - File data with content (base64 encoded)
+   */
+  async fetchThemeFileContent(connection, filePath) {
+    try {
+      logger.info(`📄 Fetching file content: ${filePath}`)
+      
+      const axios = (await import('axios')).default
+      
+      const response = await axios.get(
+        `${connection.site_url}/wp-json/codeanalyst/v1/theme-file/${encodeURIComponent(filePath)}`,
+        {
+          headers: {
+            'X-API-Key': connection.api_key
+          },
+          timeout: 30000
+        }
+      )
+      
+      if (response.data && response.data.success) {
+        logger.info(`✅ Fetched file content: ${filePath} (${response.data.size} bytes)`)
+        return response.data
+      } else {
+        throw new Error('Invalid response from WordPress REST API')
+      }
+    } catch (error) {
+      logger.error(`Failed to fetch file content for ${filePath}:`, error.message)
+      throw new Error(`Failed to fetch file content: ${error.message}`)
+    }
+  }
 }
 
 export default WordPressService

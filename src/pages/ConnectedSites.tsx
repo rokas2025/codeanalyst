@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { wordpressService, WordPressConnection } from '../services/wordpressService'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
-import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon } from '@heroicons/react/24/outline'
+import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 
 export function ConnectedSites() {
     const [connections, setConnections] = useState<WordPressConnection[]>([])
@@ -31,6 +31,18 @@ export function ConnectedSites() {
             toast.error('Failed to load WordPress connections')
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleDownloadPlugin = async () => {
+        try {
+            toast.loading('Downloading plugin...')
+            await wordpressService.downloadPlugin()
+            toast.dismiss()
+            toast.success('Plugin downloaded successfully!')
+        } catch (error) {
+            toast.dismiss()
+            toast.error('Failed to download plugin')
         }
     }
 
@@ -155,9 +167,18 @@ export function ConnectedSites() {
                     <h1 className="text-2xl font-bold text-gray-900">Connected WordPress Sites</h1>
                     <p className="mt-1 text-gray-600">Manage your WordPress site connections</p>
                 </div>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={handleDownloadPlugin}
+                        className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                    >
+                        <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
+                        Download Plugin
+                    </button>
                 <Link to="/settings" className="btn-outline">
                     ← Back to Settings
                 </Link>
+                </div>
             </div>
 
             {connections.length === 0 ? (

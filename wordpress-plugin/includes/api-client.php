@@ -63,13 +63,26 @@ class CodeAnalyst_API_Client {
      */
     private function make_request($endpoint, $method = 'GET', $data = array()) {
         $url = $this->get_backend_url() . $endpoint;
+        $api_key = get_option('codeanalyst_api_key');
+        $connection_id = get_option('codeanalyst_connection_id');
+        
+        $headers = array(
+            'Content-Type' => 'application/json'
+        );
+        
+        // Add authentication headers if available
+        if (!empty($api_key)) {
+            $headers['X-API-Key'] = $api_key;
+        }
+        
+        if (!empty($connection_id)) {
+            $headers['X-Connection-ID'] = $connection_id;
+        }
         
         $args = array(
             'method' => $method,
             'timeout' => 30,
-            'headers' => array(
-                'Content-Type' => 'application/json'
-            )
+            'headers' => $headers
         );
         
         if (!empty($data)) {

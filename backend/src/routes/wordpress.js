@@ -1,10 +1,15 @@
 import express from 'express'
 import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { DatabaseService } from '../services/DatabaseService.js'
 import { WordPressService } from '../services/WordPressService.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { db } from '../database/connection.js'
 import logger from '../utils/logger.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const router = express.Router()
 
@@ -20,6 +25,50 @@ const upload = multer({
     } else {
       cb(new Error('Only ZIP files are allowed'))
     }
+  }
+})
+
+/**
+ * GET /api/wordpress/plugin/download
+ * Download WordPress plugin ZIP file
+ */
+router.get('/plugin/download', authMiddleware, (req, res) => {
+  try {
+    logger.info('📥 Plugin download requested', { userId: req.user.id })
+    
+    // Path to the plugin ZIP file (in project root)
+    const zipPath = path.join(__dirname, '../../../codeanalyst-connector.zip')
+    
+    // Check if file exists
+    const fs = require('fs')
+    if (!fs.existsSync(zipPath)) {
+      logger.error('Plugin ZIP file not found', { zipPath })
+      return res.status(404).json({
+        success: false,
+        error: 'Plugin file not found. Please contact support.'
+      })
+    }
+    
+    // Send file for download
+    res.download(zipPath, 'codeanalyst-connector.zip', (err) => {
+      if (err) {
+        logger.error('Error sending plugin file', { error: err.message })
+        if (!res.headersSent) {
+          res.status(500).json({
+            success: false,
+            error: 'Failed to download plugin'
+          })
+        }
+      } else {
+        logger.info('✅ Plugin downloaded successfully', { userId: req.user.id })
+      }
+    })
+  } catch (error) {
+    logger.error('Plugin download error', { error: error.message })
+    res.status(500).json({
+      success: false,
+      error: 'Failed to download plugin'
+    })
   }
 })
 
@@ -581,6 +630,64 @@ router.get('/elementor-pages/:connectionId', authMiddleware, async (req, res) =>
       success: false,
       error: 'Failed to get pages',
       message: error.message
+    })
+  }
+})
+
+/**
+ * GET /api/wordpress/theme-files/:connectionId
+ * Fetch theme files from connected WordPress site via REST API
+ */
+router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
+  try {
+    const { connectionId } = req.params
+    const userId = req.user.id
+
+    logger.info('📁 Fetching theme files for connection', { connectionId, userId })
+
+    // Verify connection belongs to user
+    const connections = await DatabaseService.getWordPressConnections(userId)
+    const connection = connections.find(c => c.id === connectionId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      })
+    }
+
+    // Check if site is connected
+    if (!connection.is_connected) {
+      return res.status(400).json({
+        success: false,
+        error: 'WordPress site is not connected',
+        message: 'Please reconnect your WordPress site first'
+      })
+    }
+
+    // Fetch theme files using WordPressService
+    const wordpressService = new WordPressService()
+    const files = await wordpressService.fetchThemeFiles(connection)
+
+    logger.info(`✅ Successfully fetched ${files.length} theme files`)
+
+    res.json({
+      success: true,
+      files,
+      total_files: files.length,
+      connection: {
+        site_url: connection.site_url,
+        site_name: connection.site_name
+      }
+    })
+
+  } catch (error) {
+    logger.error('Failed to fetch theme files:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch theme files',
+      message: error.message,
+      details: error.response?.data || null
     })
   }
 })

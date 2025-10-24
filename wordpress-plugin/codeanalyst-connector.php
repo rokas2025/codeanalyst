@@ -25,6 +25,7 @@ define('CODEANALYST_PLUGIN_URL', plugin_dir_url(__FILE__));
 require_once CODEANALYST_PLUGIN_DIR . 'admin/settings-page.php';
 require_once CODEANALYST_PLUGIN_DIR . 'includes/api-client.php';
 require_once CODEANALYST_PLUGIN_DIR . 'includes/file-reader.php';
+require_once CODEANALYST_PLUGIN_DIR . 'includes/rest-api.php';
 
 /**
  * Main Plugin Class
@@ -80,6 +81,7 @@ class CodeAnalyst_Connector {
         add_option('codeanalyst_backend_url', 'https://codeanalyst-production.up.railway.app/api');
         add_option('codeanalyst_connected', false);
         add_option('codeanalyst_last_sync', '');
+        add_option('codeanalyst_connection_id', '');
     }
     
     /**
@@ -113,6 +115,7 @@ class CodeAnalyst_Connector {
         register_setting('codeanalyst_settings', 'codeanalyst_backend_url');
         register_setting('codeanalyst_settings', 'codeanalyst_connected');
         register_setting('codeanalyst_settings', 'codeanalyst_last_sync');
+        register_setting('codeanalyst_settings', 'codeanalyst_connection_id');
     }
     
     /**
@@ -139,6 +142,12 @@ class CodeAnalyst_Connector {
         if ($result['success']) {
             update_option('codeanalyst_connected', true);
             update_option('codeanalyst_last_sync', current_time('mysql'));
+            
+            // Store connection ID if provided
+            if (isset($result['connection_id'])) {
+                update_option('codeanalyst_connection_id', $result['connection_id']);
+            }
+            
             wp_send_json_success('Successfully connected to CodeAnalyst');
         } else {
             wp_send_json_error($result['message']);
