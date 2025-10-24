@@ -1,5 +1,6 @@
 // Website Analyzer Service - Real website content extraction and analysis
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import lighthouse from 'lighthouse'
 import pa11y from 'pa11y'
 import axios from 'axios'
@@ -21,6 +22,10 @@ export class WebsiteAnalyzer {
    */
   async initialize() {
     try {
+      // Use stealth plugin for advanced bot evasion
+      puppeteer.use(StealthPlugin())
+      logger.info('🥷 Stealth plugin enabled for advanced bot protection bypass')
+      
       // Try to launch Puppeteer browser with Railway-compatible configuration and stealth mode
       const puppeteerConfig = {
         headless: true, // Force headless in production
@@ -402,7 +407,7 @@ export class WebsiteAnalyzer {
 
       // Detect language
       const languageDetection = this.languageDetector.detectLanguage(html, pageData.metaDescription || pageData.title)
-      
+
       return {
         ...pageData,
         html: html.substring(0, 50000), // Limit HTML size
@@ -429,14 +434,35 @@ export class WebsiteAnalyzer {
    * Fallback method to extract basic data using axios when Puppeteer fails
    */
   async extractBasicDataFallback(url, options = {}) {
-    try {
-      logger.info(`🌐 Using axios fallback for basic data extraction: ${url}`)
+    const maxRetries = 2
+    let lastError = null
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) {
+          const delay = Math.pow(2, attempt) * 1000 // Exponential backoff: 2s, 4s
+          logger.info(`🔄 Retry attempt ${attempt}/${maxRetries} after ${delay}ms delay`)
+          await new Promise(resolve => setTimeout(resolve, delay))
+        }
+        
+        logger.info(`🌐 Using axios fallback for basic data extraction: ${url} (attempt ${attempt + 1}/${maxRetries + 1})`)
       
       const response = await axios.get(url, {
         timeout: 30000,
         maxRedirects: 5,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'lt-LT,lt;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Cache-Control': 'max-age=0'
         }
       })
 
@@ -497,7 +523,30 @@ export class WebsiteAnalyzer {
       }
 
     } catch (error) {
-      logger.error(`Failed axios fallback for ${url}:`, error)
+        lastError = error
+        
+        // Check if it's a bot block or network issue
+        if (error.response?.status === 403 || error.response?.status === 503) {
+          logger.warn(`🚫 Axios blocked by website (${error.response.status}): ${url}`)
+          if (attempt < maxRetries) continue // Retry on bot blocks
+        } else if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+          logger.error(`🌐 Network error for ${url}: ${error.code}`)
+          break // Don't retry on network errors
+        }
+        
+        if (attempt === maxRetries) {
+          logger.error(`❌ All axios fallback attempts failed for ${url}`)
+        }
+      }
+    }
+    
+    // If all retries failed, throw the last error
+    if (lastError) {
+      logger.error(`Failed axios fallback for ${url}:`, lastError)
+      
+      // Determine if it was a bot block or network issue
+      const isBotBlock = lastError.response?.status === 403 || lastError.response?.status === 503
+      const isNetworkError = lastError.code === 'ECONNREFUSED' || lastError.code === 'ENOTFOUND' || lastError.code === 'ETIMEDOUT'
       
       // Return minimal data structure to prevent complete failure
       return {
@@ -505,7 +554,7 @@ export class WebsiteAnalyzer {
         description: '',
         html: '',
         headers: {},
-        statusCode: 0,
+        statusCode: lastError.response?.status || 0,
         loadTime: 0,
         imageCount: 0,
         linkCount: 0,
@@ -518,7 +567,8 @@ export class WebsiteAnalyzer {
         contentLength: 0,
         analysisMethod: 'failed-fallback',
         limitedAnalysis: true,
-        error: error.message
+        error: lastError.message,
+        errorType: isBotBlock ? 'bot-blocked' : (isNetworkError ? 'network-error' : 'unknown')
       }
     }
   }

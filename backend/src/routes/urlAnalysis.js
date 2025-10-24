@@ -283,15 +283,17 @@ router.post('/analyze', authMiddleware, [
     } else if (analysisError.message.includes('Navigation failed') || analysisError.message.includes('net::ERR_FAILED')) {
       errorCode = 'NAVIGATION_FAILED'
       statusCode = 502 // Bad Gateway - navigation blocked
-      userMessage = 'Failed to navigate to the website. This often indicates anti-bot protection or the site is blocking automated access.'
+      userMessage = 'Failed to navigate to the website. Advanced stealth mode was attempted but the site is blocking automated access. Try using the axios fallback or manual analysis.'
       debugCategory = 'navigation'
       errorDetails.bot_detection_likely = true
+      errorDetails.stealth_mode_used = true
     } else if (analysisError.message.includes('evaluateOnNewDocument') || analysisError.message.includes('Runtime.evaluate')) {
       errorCode = 'BROWSER_SCRIPT_BLOCKED'
       statusCode = 502 // Bad Gateway - scripts blocked
-      userMessage = 'Browser automation was detected and blocked by the website.'
+      userMessage = 'Browser automation was detected and blocked by the website despite stealth mode. The site has advanced bot detection.'
       debugCategory = 'script_blocked'
       errorDetails.bot_detection_confirmed = true
+      errorDetails.stealth_mode_used = true
     } else if (analysisError.message.includes('Target closed') || analysisError.message.includes('Session closed')) {
       errorCode = 'BROWSER_SESSION_CLOSED'
       statusCode = 502 // Bad Gateway - session terminated
