@@ -358,18 +358,27 @@ router.post('/login-supabase', async (req, res) => {
       })
     }
     
-    // Get user from our database
-    let user = await DatabaseService.getUserById(authData.user.id)
+    // Get user from our database by email (since Supabase user ID might be different)
+    let user = await DatabaseService.getUserByEmail(authData.user.email)
     
     // If user doesn't exist in our table (shouldn't happen, but safety check)
     if (!user) {
-      user = await DatabaseService.createUser({
-        id: authData.user.id,
-        email: authData.user.email,
-        name: authData.user.user_metadata?.name || authData.user.email.split('@')[0],
-        plan: 'free',
-        auth_provider: 'supabase'
-      })
+      try {
+        user = await DatabaseService.createUser({
+          id: authData.user.id,
+          email: authData.user.email,
+          name: authData.user.user_metadata?.name || authData.user.email.split('@')[0],
+          plan: 'free',
+          auth_provider: 'supabase'
+        })
+      } catch (createError) {
+        // If user creation fails due to duplicate, try to fetch again
+        if (createError.code === '23505') {
+          user = await DatabaseService.getUserByEmail(authData.user.email)
+        } else {
+          throw createError
+        }
+      }
     }
     
     // Update last login
