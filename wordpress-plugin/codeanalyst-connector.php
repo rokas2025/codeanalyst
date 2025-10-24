@@ -90,6 +90,15 @@ class CodeAnalyst_Connector {
     public function deactivate() {
         // Clear scheduled events
         wp_clear_scheduled_hook('codeanalyst_daily_sync');
+        
+        // Clear any cached data
+        delete_transient('codeanalyst_connection_test');
+        delete_transient('codeanalyst_theme_files');
+        
+        // Log deactivation
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('CodeAnalyst Connector: Plugin deactivated');
+        }
     }
     
     /**
