@@ -32,20 +32,39 @@ const upload = multer({
  * GET /api/wordpress/plugin/download
  * Download WordPress plugin ZIP file
  */
-router.get('/plugin/download', authMiddleware, (req, res) => {
+router.get('/plugin/download', authMiddleware, async (req, res) => {
   try {
     logger.info('📥 Plugin download requested', { userId: req.user.id })
     
-    // Path to the plugin ZIP file (in project root)
-    const zipPath = path.join(__dirname, '../../../codeanalyst-connector.zip')
+    const fs = await import('fs')
     
-    // Check if file exists
-    const fs = require('fs')
-    if (!fs.existsSync(zipPath)) {
-      logger.error('Plugin ZIP file not found', { zipPath })
+    // Try multiple possible paths for the ZIP file
+    const possiblePaths = [
+      path.join(__dirname, '../../../codeanalyst-connector.zip'), // Project root (development)
+      path.join(__dirname, '../../codeanalyst-connector.zip'),    // Backend parent directory
+      path.join(process.cwd(), 'codeanalyst-connector.zip'),      // Current working directory (Railway)
+      path.join(process.cwd(), 'backend/codeanalyst-connector.zip') // Backend subdirectory
+    ]
+    
+    let zipPath = null
+    for (const testPath of possiblePaths) {
+      if (fs.existsSync(testPath)) {
+        zipPath = testPath
+        logger.info('✅ Found plugin ZIP at:', { zipPath })
+        break
+      }
+    }
+    
+    if (!zipPath) {
+      logger.error('❌ Plugin ZIP file not found in any location', { 
+        tried: possiblePaths,
+        cwd: process.cwd(),
+        __dirname 
+      })
       return res.status(404).json({
         success: false,
-        error: 'Plugin file not found. Please contact support.'
+        error: 'Plugin file not found. Please contact support.',
+        details: 'ZIP file not found on server'
       })
     }
     
@@ -64,10 +83,11 @@ router.get('/plugin/download', authMiddleware, (req, res) => {
       }
     })
   } catch (error) {
-    logger.error('Plugin download error', { error: error.message })
+    logger.error('Plugin download error', { error: error.message, stack: error.stack })
     res.status(500).json({
       success: false,
-      error: 'Failed to download plugin'
+      error: 'Failed to download plugin',
+      message: error.message
     })
   }
 })
