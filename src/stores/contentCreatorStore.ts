@@ -70,9 +70,10 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
   loadTemplates: async () => {
     try {
       console.log('📚 Loading content templates...')
-      const templates = await contentCreatorService.getTemplates()
+      const { settings } = get()
+      const templates = await contentCreatorService.getTemplates(undefined, settings.language)
       set({ templates })
-      console.log(`✅ Loaded ${templates.length} templates`)
+      console.log(`✅ Loaded ${templates.length} templates in language: ${settings.language}`)
     } catch (error) {
       console.error('❌ Failed to load templates:', error)
     }

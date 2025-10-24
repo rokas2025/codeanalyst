@@ -23,10 +23,11 @@ const contentGenerationService = new ContentGenerationService()
  */
 router.get('/templates', templateRateLimit, authMiddleware, async (req, res) => {
   try {
-    const { category } = req.query
+    const { category, language = 'en' } = req.query
     
-    logger.info('š“‹ Fetching content templates', { 
+    logger.info('Fetching content templates', {
       category: category || 'all',
+      language,
       userId: req.user?.id,
       timestamp: new Date().toISOString()
     })
@@ -46,6 +47,7 @@ router.get('/templates', templateRateLimit, authMiddleware, async (req, res) => 
         estimated_words,
         difficulty,
         sort_order,
+        translations,
         created_at,
         updated_at
       FROM content_templates 
@@ -66,26 +68,32 @@ router.get('/templates', templateRateLimit, authMiddleware, async (req, res) => 
     const result = await db.query(query, params)
     
     // Transform database response to match frontend expectations
-    const templates = result.rows.map(row => ({
-      id: row.id,
-      template_id: row.id, // Add compatibility field
-      name: row.name,
-      description: row.description,
-      category: row.category,
-      icon: row.icon,
-      inputFields: row.input_fields,
-      promptTemplate: row.prompt_template,
-      outputStructure: row.output_structure,
-      defaultSettings: row.default_settings,
-      estimatedWords: row.estimated_words,
-      difficulty: row.difficulty,
-      sortOrder: row.sort_order,
-      isFavorite: false, // Default values for simplified query
-      isHidden: false,
-      usageCount: 0,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at
-    }))
+    const templates = result.rows.map(row => {
+      // Apply translations if available and language is not English
+      const translations = row.translations || {}
+      const langTranslations = translations[language] || {}
+      
+      return {
+        id: row.id,
+        template_id: row.id, // Add compatibility field
+        name: langTranslations.name || row.name,
+        description: langTranslations.description || row.description,
+        category: row.category,
+        icon: row.icon,
+        inputFields: langTranslations.inputFields || row.input_fields,
+        promptTemplate: row.prompt_template,
+        outputStructure: row.output_structure,
+        defaultSettings: row.default_settings,
+        estimatedWords: row.estimated_words,
+        difficulty: row.difficulty,
+        sortOrder: row.sort_order,
+        isFavorite: false, // Default values for simplified query
+        isHidden: false,
+        usageCount: 0,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at
+      }
+    })
     
     res.json({
       success: true,
@@ -2751,3 +2759,6 @@ router.post('/debug-generate', async (req, res) => {
 })
 
 export default router
+
+
+

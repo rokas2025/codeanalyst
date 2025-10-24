@@ -35,11 +35,14 @@ export class ContentCreatorService {
   /**
    * Get available content templates
    */
-  async getTemplates(category?: string): Promise<ContentTemplate[]> {
+  async getTemplates(category?: string, language?: string): Promise<ContentTemplate[]> {
     try {
       const url = new URL(`${this.baseUrl}/content-creator/templates`)
       if (category) {
         url.searchParams.set('category', category)
+      }
+      if (language) {
+        url.searchParams.set('language', language)
       }
 
       const response = await fetch(url.toString(), {

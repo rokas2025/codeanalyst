@@ -73,9 +73,11 @@ export function ContentCreator() {
                   <select
                     id="language-select"
                     value={settings.language}
-                    onChange={(e) => {
-                      updateSettings({ language: e.target.value as 'en' | 'lt' | 'es' | 'fr' | 'de' })
-                      localStorage.setItem('contentCreator_language', e.target.value)
+                    onChange={async (e) => {
+                      const newLanguage = e.target.value as 'en' | 'lt' | 'es' | 'fr' | 'de'
+                      updateSettings({ language: newLanguage })
+                      localStorage.setItem('contentCreator_language', newLanguage)
+                      await loadTemplates() // Reload templates with new language
                     }}
                     className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
                   >
@@ -85,9 +87,9 @@ export function ContentCreator() {
                     <option value="fr">🇫🇷 Français</option>
                     <option value="de">🇩🇪 Deutsch</option>
                   </select>
-                </div>
-                
-                {selectedTemplate && (
+              </div>
+              
+              {selectedTemplate && (
                   <button
                     onClick={clearGeneration}
                     className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
@@ -95,7 +97,7 @@ export function ContentCreator() {
                     Start Over
                   </button>
                 )}
-              </div>
+                </div>
             </div>
           </div>
         </div>
