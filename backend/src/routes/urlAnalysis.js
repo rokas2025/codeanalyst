@@ -144,9 +144,35 @@ router.post('/analyze', authMiddleware, [
       await websiteAnalyzer.initialize()
       await DatabaseService.updateUrlAnalysisStatus(analysisId, 'processing', 30)
 
-      // Perform website analysis
+      // Perform website analysis with timeout protection
       logger.info(`🌐 Analyzing website: ${url}`)
-      const websiteResult = await websiteAnalyzer.analyzeWebsite(url, analysisOptions)
+      
+      let websiteResult
+      try {
+        // Set a hard timeout of 55 seconds (Railway has 60s timeout)
+        const analysisPromise = websiteAnalyzer.analyzeWebsite(url, analysisOptions)
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Analysis timeout - website took too long to respond')), 55000)
+        )
+        
+        websiteResult = await Promise.race([analysisPromise, timeoutPromise])
+      } catch (analysisError) {
+        logger.error(`❌ Website analysis failed: ${analysisError.message}`)
+        
+        // Return a graceful error response instead of crashing
+        return res.status(200).json({
+          success: false,
+          error: 'Website analysis failed',
+          message: analysisError.message.includes('timeout') 
+            ? 'The website took too long to respond. Please try again or try a different URL.'
+            : 'Failed to analyze website. The site may be blocking automated access.',
+          details: {
+            url,
+            errorType: analysisError.message.includes('timeout') ? 'timeout' : 'analysis-failed',
+            timestamp: new Date().toISOString()
+          }
+        })
+      }
       
       // Debug: Log the analysis result
       logger.info(`📊 Website analysis result:`, {

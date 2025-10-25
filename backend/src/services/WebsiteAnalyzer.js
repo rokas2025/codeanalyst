@@ -221,6 +221,39 @@ export class WebsiteAnalyzer {
     logger.info(`🌐 Using Puppeteer for ${url} - browser available`)
     
     let page = null
+    const puppeteerTimeout = 25000 // 25 seconds max for Puppeteer
+    
+    try {
+      // Wrap Puppeteer in a timeout to prevent hanging
+      const puppeteerPromise = this.extractWithPuppeteer(url, options)
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Puppeteer timeout')), puppeteerTimeout)
+      )
+      
+      return await Promise.race([puppeteerPromise, timeoutPromise])
+      
+    } catch (error) {
+      logger.error(`❌ Puppeteer failed for ${url}, falling back to axios:`, error.message)
+      
+      // Close page if it was opened
+      if (page) {
+        try {
+          await page.close()
+        } catch (e) {
+          logger.warn('Failed to close page:', e.message)
+        }
+      }
+      
+      // Fallback to axios
+      return await this.extractBasicDataFallback(url, options)
+    }
+  }
+
+  /**
+   * Extract data using Puppeteer with advanced bot evasion
+   */
+  async extractWithPuppeteer(url, options = {}) {
+    let page = null
     try {
       page = await this.browser.newPage()
     
@@ -422,11 +455,17 @@ export class WebsiteAnalyzer {
       }
 
     } catch (puppeteerError) {
-      logger.warn(`🔄 Puppeteer failed for ${url}, falling back to axios: ${puppeteerError.message}`)
-      await page?.close() // Close page if it exists
-      return await this.extractBasicDataFallback(url, options)
+      logger.error(`❌ Puppeteer extraction failed: ${puppeteerError.message}`)
+      throw puppeteerError // Throw to be caught by extractBasicData
     } finally {
-      await page?.close() // Ensure page is closed
+      // Always close the page
+      if (page) {
+        try {
+          await page.close()
+        } catch (e) {
+          logger.warn('Failed to close page:', e.message)
+        }
+      }
     }
   }
 
@@ -434,25 +473,44 @@ export class WebsiteAnalyzer {
    * Fallback method to extract basic data using axios when Puppeteer fails
    */
   async extractBasicDataFallback(url, options = {}) {
-    const maxRetries = 2
+    const maxRetries = 3 // Increased retries
     let lastError = null
+    
+    // Rotate user agents for better bot evasion
+    const userAgents = [
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15'
+    ]
     
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
+        // Add delay before retry (including first attempt for more human-like behavior)
         if (attempt > 0) {
-          const delay = Math.pow(2, attempt) * 1000 // Exponential backoff: 2s, 4s
+          const delay = Math.pow(2, attempt) * 1000 // Exponential backoff: 2s, 4s, 8s
           logger.info(`🔄 Retry attempt ${attempt}/${maxRetries} after ${delay}ms delay`)
           await new Promise(resolve => setTimeout(resolve, delay))
+        } else {
+          // Small random delay even on first attempt (300-800ms)
+          const initialDelay = Math.floor(Math.random() * 500) + 300
+          await new Promise(resolve => setTimeout(resolve, initialDelay))
         }
         
         logger.info(`🌐 Using axios fallback for basic data extraction: ${url} (attempt ${attempt + 1}/${maxRetries + 1})`)
       
+      // Rotate user agent on each attempt
+      const userAgent = userAgents[attempt % userAgents.length]
+      
       const response = await axios.get(url, {
         timeout: 30000,
         maxRedirects: 5,
+        validateStatus: (status) => status < 500, // Accept 4xx but not 5xx
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'User-Agent': userAgent,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'Accept-Language': 'lt-LT,lt;q=0.9,en-US;q=0.8,en;q=0.7',
             'Accept-Encoding': 'gzip, deflate, br',
             'DNT': '1',
@@ -462,7 +520,11 @@ export class WebsiteAnalyzer {
             'Sec-Fetch-Mode': 'navigate',
             'Sec-Fetch-Site': 'none',
             'Sec-Fetch-User': '?1',
-            'Cache-Control': 'max-age=0'
+            'Sec-Ch-Ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Cache-Control': 'max-age=0',
+            'Referer': new URL(url).origin // Add referer for better legitimacy
         }
       })
 
