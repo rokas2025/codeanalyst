@@ -21,11 +21,43 @@ define('CODEANALYST_VERSION', '1.0.0');
 define('CODEANALYST_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CODEANALYST_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-// Include required files (admin functions must be loaded first)
-require_once CODEANALYST_PLUGIN_DIR . 'admin/settings-page.php';
-require_once CODEANALYST_PLUGIN_DIR . 'includes/api-client.php';
-require_once CODEANALYST_PLUGIN_DIR . 'includes/file-reader.php';
-require_once CODEANALYST_PLUGIN_DIR . 'includes/rest-api.php';
+// Include required files with error checking
+$required_files = array(
+    'admin/settings-page.php',
+    'includes/api-client.php',
+    'includes/file-reader.php',
+    'includes/rest-api.php'
+);
+
+foreach ($required_files as $file) {
+    $file_path = CODEANALYST_PLUGIN_DIR . $file;
+    if (!file_exists($file_path)) {
+        // Show helpful error message instead of fatal error
+        wp_die(
+            sprintf(
+                '<h1>CodeAnalyst Connector - Installation Error</h1>' .
+                '<p><strong>Required file missing:</strong> <code>%s</code></p>' .
+                '<p>This usually means the plugin was not installed correctly.</p>' .
+                '<h3>How to Fix:</h3>' .
+                '<ol>' .
+                '<li>Go to <strong>Plugins</strong> in WordPress admin</li>' .
+                '<li>Find all folders starting with <code>codeanalyst-connector</code></li>' .
+                '<li>Delete them via FTP/File Manager from: <code>wp-content/plugins/</code></li>' .
+                '<li>Download a fresh copy of the plugin</li>' .
+                '<li>Upload and activate again</li>' .
+                '</ol>' .
+                '<p><strong>Plugin directory:</strong> <code>%s</code></p>' .
+                '<p><strong>Expected file:</strong> <code>%s</code></p>',
+                $file,
+                CODEANALYST_PLUGIN_DIR,
+                $file_path
+            ),
+            'CodeAnalyst Connector - Installation Error',
+            array('back_link' => true)
+        );
+    }
+    require_once $file_path;
+}
 
 /**
  * Main Plugin Class

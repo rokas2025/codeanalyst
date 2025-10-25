@@ -1,5 +1,32 @@
 # WordPress Plugin Reinstallation Guide
 
+## Quick Fix for Fatal Errors
+
+If you see **"Fatal error"** or **"Destination folder already exists"**, you need to delete ALL old plugin folders first.
+
+### Automated Cleanup (Windows - RECOMMENDED):
+
+1. Download the cleanup script: `wordpress-plugin-cleanup.ps1`
+2. Run PowerShell as Administrator
+3. Navigate to your project folder
+4. Run:
+   ```powershell
+   .\wordpress-plugin-cleanup.ps1
+   ```
+5. Enter your WordPress path when prompted
+6. Type `yes` to confirm deletion
+
+### Manual Cleanup (All Platforms):
+
+Delete **ALL** folders matching these patterns from `/wp-content/plugins/`:
+- `codeanalyst-connector/`
+- `codeanalyst-connector-1/`
+- `codeanalyst-connector-2/`
+- `codeanalyst-connector-3/`
+- Any other `codeanalyst-connector-*` folders
+
+---
+
 ## Issue: "Destination folder already exists"
 
 If you see this error when trying to install the plugin:
