@@ -68,6 +68,13 @@ router.get('/plugin/download', authMiddleware, async (req, res) => {
       })
     }
     
+    // Add cache-busting headers to prevent serving old cached versions
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+    res.setHeader('Pragma', 'no-cache')
+    res.setHeader('Expires', '0')
+    res.setHeader('X-Plugin-Version', '1.0.0')
+    res.setHeader('X-Build-Time', new Date().toISOString())
+    
     // Send file for download
     res.download(zipPath, 'codeanalyst-connector.zip', (err) => {
       if (err) {
