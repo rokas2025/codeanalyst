@@ -40,8 +40,19 @@ New-Item -ItemType Directory -Path $pluginFolder -Force | Out-Null
 # Copy plugin files into the codeanalyst-connector folder
 Copy-Item -Path "$pluginDir\*" -Destination $pluginFolder -Recurse -Exclude @('.git*', '.DS_Store', 'node_modules', '*.zip')
 
-# Create ZIP containing the codeanalyst-connector folder
-Compress-Archive -Path "$tempStaging\*" -DestinationPath $destination -Force
+# Create ZIP with proper folder structure using .NET System.IO.Compression
+# This creates REAL folders, not backslash paths
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+# Remove old zip if exists
+if (Test-Path $destination) {
+    Remove-Item $destination -Force
+}
+
+# Create ZIP with proper directory structure
+[System.IO.Compression.ZipFile]::CreateFromDirectory($tempStaging, $destination, 'Optimal', $false)
+
+Write-Host "ZIP created with proper folder structure" -ForegroundColor Green
 
 # Clean up staging directory
 Remove-Item $tempStaging -Recurse -Force
