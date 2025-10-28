@@ -632,6 +632,79 @@ export class WordPressService {
       throw new Error(`Failed to fetch site info: ${error.message}`)
     }
   }
+
+  /**
+   * Fetch list of all pages from WordPress site via REST API
+   * @param {Object} connection - WordPress connection object with site_url and api_key
+   * @returns {Promise<Array>} - Array of pages
+   */
+  async fetchPages(connection) {
+    try {
+      logger.info(`📄 Fetching pages from ${connection.site_url}...`)
+      
+      const axios = (await import('axios')).default
+      
+      const response = await axios.get(
+        `${connection.site_url}/wp-json/codeanalyst/v1/pages`,
+        {
+          headers: {
+            'X-API-Key': connection.api_key
+          },
+          timeout: 30000
+        }
+      )
+      
+      if (response.data && response.data.success) {
+        logger.info(`✅ Fetched ${response.data.total} pages`)
+        return response.data.pages
+      } else {
+        throw new Error('Invalid response from WordPress REST API')
+      }
+    } catch (error) {
+      logger.error('Failed to fetch pages:', error.message)
+      throw new Error(`Failed to fetch pages: ${error.message}`)
+    }
+  }
+
+  /**
+   * Fetch page content from WordPress site via REST API
+   * @param {Object} connection - WordPress connection object with site_url and api_key
+   * @param {string} pageId - Page ID or 'homepage' for homepage
+   * @returns {Promise<Object>} - Page content object
+   */
+  async fetchPageContent(connection, pageId) {
+    try {
+      logger.info(`📄 Fetching page content for page ${pageId} from ${connection.site_url}...`)
+      
+      const axios = (await import('axios')).default
+      
+      const response = await axios.get(
+        `${connection.site_url}/wp-json/codeanalyst/v1/page-content/${pageId}`,
+        {
+          headers: {
+            'X-API-Key': connection.api_key
+          },
+          timeout: 30000
+        }
+      )
+      
+      if (response.data && response.data.success) {
+        logger.info(`✅ Fetched page content: ${response.data.title}`)
+        return {
+          content: response.data.content,
+          title: response.data.title,
+          url: response.data.url,
+          excerpt: response.data.excerpt,
+          modified: response.data.modified
+        }
+      } else {
+        throw new Error('Invalid response from WordPress REST API')
+      }
+    } catch (error) {
+      logger.error('Failed to fetch page content:', error.message)
+      throw new Error(`Failed to fetch page content: ${error.message}`)
+    }
+  }
 }
 
 export default WordPressService

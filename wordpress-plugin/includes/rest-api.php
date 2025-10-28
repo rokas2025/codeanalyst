@@ -42,6 +42,20 @@ class CodeAnalyst_REST_API {
             'callback' => array($this, 'get_site_info'),
             'permission_callback' => array($this, 'check_permission')
         ));
+        
+        // Get list of all pages
+        register_rest_route('codeanalyst/v1', '/pages', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'get_pages'),
+            'permission_callback' => array($this, 'check_permission')
+        ));
+        
+        // Get page content by ID
+        register_rest_route('codeanalyst/v1', '/page-content/(?P<id>[\w-]+)', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'get_page_content'),
+            'permission_callback' => array($this, 'check_permission')
+        ));
     }
     
     /**
@@ -262,6 +276,87 @@ class CodeAnalyst_REST_API {
                 'memory_limit' => WP_MEMORY_LIMIT,
                 'max_upload_size' => size_format(wp_max_upload_size())
             )
+        ));
+    }
+    
+    /**
+     * Get list of all pages
+     */
+    public function get_pages($request) {
+        $args = array(
+            'post_type' => 'page',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'orderby' => 'title',
+            'order' => 'ASC'
+        );
+        
+        $pages = get_posts($args);
+        $page_list = array();
+        
+        foreach ($pages as $page) {
+            $page_list[] = array(
+                'id' => $page->ID,
+                'title' => $page->post_title,
+                'url' => get_permalink($page->ID),
+                'status' => $page->post_status,
+                'modified' => $page->post_modified
+            );
+        }
+        
+        return rest_ensure_response(array(
+            'success' => true,
+            'pages' => $page_list,
+            'total' => count($page_list)
+        ));
+    }
+    
+    /**
+     * Get page content by ID
+     */
+    public function get_page_content($request) {
+        $page_id = $request['id'];
+        
+        // Handle special 'homepage' identifier
+        if ($page_id === 'homepage') {
+            $page_id = get_option('page_on_front');
+            
+            // If no static homepage is set, get the latest posts
+            if (!$page_id) {
+                $page_id = get_option('page_for_posts');
+            }
+            
+            // If still no page, return site description
+            if (!$page_id) {
+                return rest_ensure_response(array(
+                    'success' => true,
+                    'content' => get_bloginfo('description'),
+                    'title' => get_bloginfo('name'),
+                    'url' => home_url(),
+                    'is_homepage' => true
+                ));
+            }
+        }
+        
+        $page = get_post($page_id);
+        
+        if (!$page) {
+            return rest_ensure_response(array(
+                'success' => false,
+                'error' => 'Page not found'
+            ));
+        }
+        
+        // Get the content with WordPress filters applied
+        $content = apply_filters('the_content', $page->post_content);
+        
+        return rest_ensure_response(array(
+            'success' => true,
+            'content' => $content,
+            'title' => $page->post_title,
+            'url' => get_permalink($page->ID),
+            'excerpt' => $page->post_excerpt,
+            'modified' => $page->post_modified
         ));
     }
 }

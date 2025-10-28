@@ -291,6 +291,69 @@ class WordPressService {
             }
         }
     }
+
+    /**
+     * Get theme files from WordPress site
+     */
+    async getThemeFiles(connectionId: string): Promise<{ success: boolean; files?: any[]; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/theme-files/${connectionId}`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to fetch theme files:', error)
+            return {
+                success: false,
+                error: 'Failed to fetch theme files'
+            }
+        }
+    }
+
+    /**
+     * Get all pages from WordPress site
+     */
+    async getPages(connectionId: string): Promise<{ success: boolean; pages?: any[]; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/pages/${connectionId}`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to fetch pages:', error)
+            return {
+                success: false,
+                error: 'Failed to fetch pages'
+            }
+        }
+    }
+
+    /**
+     * Get page content from WordPress site
+     */
+    async getPageContent(connectionId: string, pageId: string): Promise<{ success: boolean; content?: string; title?: string; url?: string; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/page-content/${connectionId}/${pageId}`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to fetch page content:', error)
+            return {
+                success: false,
+                error: 'Failed to fetch page content'
+            }
+        }
+    }
 }
 
 export const wordpressService = new WordPressService()

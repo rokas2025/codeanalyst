@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { GlobeAltIcon, ExclamationTriangleIcon, CheckCircleIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 import WebsiteAnalysisReport from '../../components/WebsiteAnalysisReport'
 import { AdoreInoReport } from '../../components/AdoreInoReport'
 import { AIProviderStatus } from '../../components/AIProviderStatus'
+import { WordPressSiteSelector } from '../../components/WordPressSiteSelector'
+import { WordPressConnection } from '../../services/wordpressService'
 import { urlFetcher } from '../../services/urlFetcher'
 import { backendService } from '../../services/backendService'
 import { AdoreInoAnalyzer } from '../../utils/adoreIno'
@@ -13,6 +16,7 @@ import { scanURL, convertURLScanToFileStructure } from '../../utils/urlScanner'
 import { realUrlConverter } from '../../utils/realUrlToFileConverter'
 
 export function WebsiteAnalyst() {
+  const location = useLocation()
   const [urlInput, setUrlInput] = useState<string>('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisStep, setAnalysisStep] = useState<string>('')
@@ -39,6 +43,30 @@ export function WebsiteAnalyst() {
     
     checkBackend()
   }, [])
+
+  // Handle prefilled URL from navigation (e.g., from Connected Sites)
+  useEffect(() => {
+    if (location.state?.prefilledUrl) {
+      const url = location.state.prefilledUrl
+      setUrlInput(url)
+      
+      // Auto-start analysis after a short delay
+      toast.success(`Analyzing ${url}...`)
+      setTimeout(() => {
+        handleAnalyze()
+      }, 500)
+    }
+  }, [location.state])
+
+  const handleWordPressSiteSelect = (site: WordPressConnection) => {
+    setUrlInput(site.site_url)
+    toast.success(`Selected ${site.site_name || site.site_url}. Starting analysis...`)
+    
+    // Auto-start analysis
+    setTimeout(() => {
+      handleAnalyze()
+    }, 500)
+  }
 
   const isValidUrl = (url: string): boolean => {
     try {
@@ -329,13 +357,32 @@ export function WebsiteAnalyst() {
       {/* AI Provider Status */}
       <AIProviderStatus />
 
+      {/* WordPress Site Selector */}
+      <div className="card p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Select Connected WordPress Site</h3>
+        <WordPressSiteSelector 
+          onSiteSelect={handleWordPressSiteSelect}
+          label="Choose a WordPress site to analyze"
+        />
+      </div>
+
+      {/* Divider */}
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-gray-50 text-gray-500">OR</span>
+        </div>
+      </div>
+
       {/* URL Input */}
       <div className="card p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Analyze Website</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Analyze Any Website</h3>
         <div className="space-y-4">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              🌐 Enter your website URL to get comprehensive analysis including performance metrics, SEO optimization, accessibility compliance, and security assessment.
+              🌐 Enter any website URL to get comprehensive analysis including performance metrics, SEO optimization, accessibility compliance, and security assessment.
             </p>
           </div>
           <div className="flex space-x-3">

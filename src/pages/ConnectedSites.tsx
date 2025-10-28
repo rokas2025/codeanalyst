@@ -103,13 +103,50 @@ export function ConnectedSites() {
     }
 
     const handleAnalyzeThemeCode = async (connectionId: string) => {
-        toast.error('Theme code analysis coming soon!')
-        // TODO: Implement theme code fetching and analysis
+        try {
+            toast.loading('Fetching theme files...')
+            const response = await wordpressService.getThemeFiles(connectionId)
+            toast.dismiss()
+            
+            if (response.success && response.files) {
+                navigate('/code-analyst', { 
+                    state: { 
+                        wordpressThemeFiles: response.files,
+                        connectionId 
+                    } 
+                })
+            } else {
+                toast.error(response.error || 'Failed to fetch theme files')
+            }
+        } catch (error) {
+            toast.dismiss()
+            toast.error('Failed to fetch theme files')
+        }
     }
 
-    const handleAnalyzeContent = (connectionId: string) => {
-        toast.error('Content analysis coming soon!')
-        // TODO: Implement page content analysis
+    const handleAnalyzeContent = async (connectionId: string) => {
+        try {
+            toast.loading('Fetching homepage content...')
+            // Fetch homepage (use 'homepage' as special identifier)
+            const response = await wordpressService.getPageContent(connectionId, 'homepage')
+            toast.dismiss()
+            
+            if (response.success && response.content) {
+                navigate('/content-analyst', { 
+                    state: { 
+                        wordpressContent: response.content,
+                        wordpressTitle: response.title,
+                        wordpressUrl: response.url,
+                        connectionId 
+                    } 
+                })
+            } else {
+                toast.error(response.error || 'Failed to fetch page content')
+            }
+        } catch (error) {
+            toast.dismiss()
+            toast.error('Failed to fetch page content')
+        }
     }
 
     const getHealthColor = (health: any) => {
