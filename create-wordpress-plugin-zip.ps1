@@ -27,18 +27,18 @@ $source = Get-Item -Path $pluginDir
 $destination = Join-Path -Path $PWD -ChildPath $outputFile
 
 # Create temporary staging directory
-# IMPORTANT: WordPress expects a FOLDER inside the ZIP with all plugin files
-# The folder name should match the plugin slug
+# IMPORTANT: WordPress extracts ZIP and creates folder from ZIP name
+# Files should be at ROOT of ZIP, not in a subfolder
 $tempStaging = Join-Path -Path $env:TEMP -ChildPath "codeanalyst-staging"
-$pluginFolder = Join-Path -Path $tempStaging -ChildPath "codeanalyst-connector"
 
 if (Test-Path $tempStaging) {
     Remove-Item $tempStaging -Recurse -Force
 }
-New-Item -ItemType Directory -Path $pluginFolder -Force | Out-Null
+New-Item -ItemType Directory -Path $tempStaging -Force | Out-Null
 
-# Copy plugin files into the codeanalyst-connector folder
-Copy-Item -Path "$pluginDir\*" -Destination $pluginFolder -Recurse -Exclude @('.git*', '.DS_Store', 'node_modules', '*.zip')
+# Copy plugin files DIRECTLY to staging root (no subfolder)
+# WordPress will create the codeanalyst-connector/ folder when extracting
+Copy-Item -Path "$pluginDir\*" -Destination $tempStaging -Recurse -Exclude @('.git*', '.DS_Store', 'node_modules', '*.zip')
 
 # Create ZIP with proper folder structure using .NET System.IO.Compression
 # CRITICAL: Manually create entries with FORWARD SLASHES for cross-platform compatibility
