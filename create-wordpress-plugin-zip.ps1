@@ -41,18 +41,51 @@ New-Item -ItemType Directory -Path $pluginFolder -Force | Out-Null
 Copy-Item -Path "$pluginDir\*" -Destination $pluginFolder -Recurse -Exclude @('.git*', '.DS_Store', 'node_modules', '*.zip')
 
 # Create ZIP with proper folder structure using .NET System.IO.Compression
-# This creates REAL folders, not backslash paths
+# CRITICAL: Manually create entries with FORWARD SLASHES for cross-platform compatibility
+# Windows CreateFromDirectory uses backslashes which breaks on Linux WordPress servers
 Add-Type -AssemblyName System.IO.Compression.FileSystem
+Add-Type -AssemblyName System.IO.Compression
 
 # Remove old zip if exists
 if (Test-Path $destination) {
     Remove-Item $destination -Force
 }
 
-# Create ZIP with proper directory structure
-[System.IO.Compression.ZipFile]::CreateFromDirectory($tempStaging, $destination, 'Optimal', $false)
+Write-Host "Creating ZIP with forward slash paths for cross-platform compatibility..." -ForegroundColor Yellow
 
-Write-Host "ZIP created with proper folder structure" -ForegroundColor Green
+# Create ZIP archive manually to control path separators
+$zipArchive = [System.IO.Compression.ZipFile]::Open($destination, 'Create')
+
+try {
+    # Get all files recursively from staging directory
+    $files = Get-ChildItem -Path $tempStaging -Recurse -File
+    
+    foreach ($file in $files) {
+        # Get relative path from staging directory
+        $relativePath = $file.FullName.Substring($tempStaging.Length + 1)
+        
+        # CRITICAL: Replace backslashes with forward slashes for ZIP standard
+        $zipEntryName = $relativePath -replace '\\', '/'
+        
+        Write-Host "  Adding: $zipEntryName" -ForegroundColor Gray
+        
+        # Create entry in ZIP with forward slash path
+        $entry = $zipArchive.CreateEntry($zipEntryName, 'Optimal')
+        
+        # Copy file contents to ZIP entry
+        $entryStream = $entry.Open()
+        $fileStream = [System.IO.File]::OpenRead($file.FullName)
+        $fileStream.CopyTo($entryStream)
+        $fileStream.Close()
+        $entryStream.Close()
+    }
+    
+    Write-Host "ZIP created with forward slash paths (cross-platform compatible)" -ForegroundColor Green
+}
+finally {
+    # Always close the ZIP archive
+    $zipArchive.Dispose()
+}
 
 # Clean up staging directory
 Remove-Item $tempStaging -Recurse -Force
