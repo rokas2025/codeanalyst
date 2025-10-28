@@ -90,6 +90,9 @@ class CodeAnalyst_Connector {
         // Settings
         add_action('admin_init', array($this, 'register_settings'));
         
+        // Add Settings link to plugin actions
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_plugin_action_links'));
+        
         // AJAX handlers
         add_action('wp_ajax_codeanalyst_connect', array($this, 'ajax_connect'));
         add_action('wp_ajax_codeanalyst_disconnect', array($this, 'ajax_disconnect'));
@@ -146,6 +149,15 @@ class CodeAnalyst_Connector {
             'dashicons-analytics',
             100
         );
+    }
+    
+    /**
+     * Add Settings link to plugin action links
+     */
+    public function add_plugin_action_links($links) {
+        $settings_link = '<a href="' . admin_url('admin.php?page=codeanalyst-connector') . '">' . __('Settings') . '</a>';
+        array_unshift($links, $settings_link);
+        return $links;
     }
     
     /**
