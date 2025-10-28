@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { 
   DocumentTextIcon,
@@ -9,6 +10,8 @@ import {
   LinkIcon,
   ClipboardDocumentIcon
 } from '@heroicons/react/24/outline'
+import { WordPressSiteSelector } from '../../components/WordPressSiteSelector'
+import { wordpressService } from '../../services/wordpressService'
 
 interface AnalysisResult {
   original: string
@@ -64,11 +67,26 @@ const uiLabels = {
 }
 
 export function ContentAnalyst() {
+  const location = useLocation()
   const [content, setContent] = useState('')
   const [url, setUrl] = useState('')
-  const [inputType, setInputType] = useState<'text' | 'url'>('text')
+  const [inputType, setInputType] = useState<'text' | 'url' | 'wordpress'>('text')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
+  
+  // Handle WordPress content from navigation
+  useEffect(() => {
+    if (location.state?.wordpressContent) {
+      setInputType('wordpress')
+      setContent(location.state.wordpressContent)
+      toast.success(`Loaded content from ${location.state.wordpressTitle || 'WordPress'}. Starting analysis...`)
+      
+      // Auto-start analysis
+      setTimeout(() => {
+        analyzeContent()
+      }, 500)
+    }
+  }, [location.state])
   
   // Get UI labels based on detected language
   const getLabels = () => {
@@ -77,10 +95,10 @@ export function ContentAnalyst() {
   }
 
   const analyzeContent = async () => {
-    const inputContent = inputType === 'text' ? content : url
+    const inputContent = (inputType === 'text' || inputType === 'wordpress') ? content : url
     
     if (!inputContent.trim()) {
-      toast.error(`Please provide ${inputType === 'text' ? 'content' : 'URL'} to analyze`)
+      toast.error(`Please provide ${(inputType === 'text' || inputType === 'wordpress') ? 'content' : 'URL'} to analyze`)
       return
     }
 
@@ -183,6 +201,17 @@ export function ContentAnalyst() {
         <span className="text-sm font-medium text-gray-700">Analyze:</span>
         <div className="flex rounded-lg border border-gray-300 p-1">
           <button
+            onClick={() => setInputType('wordpress')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              inputType === 'wordpress' 
+                ? 'bg-primary-600 text-white' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <GlobeAltIcon className="h-4 w-4 inline mr-2" />
+            WordPress Page
+          </button>
+          <button
             onClick={() => setInputType('text')}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               inputType === 'text' 
@@ -206,6 +235,38 @@ export function ContentAnalyst() {
           </button>
         </div>
       </div>
+
+      {/* WordPress Page Selector */}
+      {inputType === 'wordpress' && (
+        <div className="card p-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Select WordPress Site</h3>
+          <WordPressSiteSelector 
+            onSiteSelect={async (site) => {
+              try {
+                toast.loading('Fetching homepage content...')
+                const response = await wordpressService.getPageContent(site.id, 'homepage')
+                toast.dismiss()
+                
+                if (response.success && response.content) {
+                  setContent(response.content)
+                  toast.success(`Loaded content from ${response.title}. Starting analysis...`)
+                  
+                  // Auto-start analysis
+                  setTimeout(() => {
+                    analyzeContent()
+                  }, 500)
+                } else {
+                  toast.error(response.error || 'Failed to fetch page content')
+                }
+              } catch (error) {
+                toast.dismiss()
+                toast.error('Failed to fetch page content')
+              }
+            }}
+            label="Choose a WordPress site to analyze its homepage"
+          />
+        </div>
+      )}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

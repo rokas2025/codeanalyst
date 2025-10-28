@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { CodeBracketIcon, DocumentArrowUpIcon, ChartBarIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import { useDropzone } from 'react-dropzone'
 import JSZip from 'jszip'
@@ -10,12 +10,15 @@ import { AdoreInoAnalysis, AdoreInoResults } from '../../types'
 import { AdoreInoReport } from '../../components/AdoreInoReport'
 import { AIProviderStatus } from '../../components/AIProviderStatus'
 import { CodeAnalysisReport } from '../../components/CodeAnalysisReport'
+import { WordPressSiteSelector } from '../../components/WordPressSiteSelector'
+import { WordPressConnection, wordpressService } from '../../services/wordpressService'
 import { githubService, GitHubRepository } from '../../services/githubService'
 import { useAuthStore } from '../../stores/authStore'
 import { analysisService, AnalysisResult } from '../../services/analysisService'
 
 export function CodeAnalyst() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [selectedProject, setSelectedProject] = useState('')
   const [selectedRepository, setSelectedRepository] = useState<GitHubRepository | null>(null)
   const [repositories, setRepositories] = useState<GitHubRepository[]>([])
@@ -25,7 +28,7 @@ export function CodeAnalyst() {
   const [currentAnalysisResult, setCurrentAnalysisResult] = useState<AnalysisResult | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisStep, setAnalysisStep] = useState<string>('')
-  const [userProfile, setUserProfile] = useState<'github' | 'zip'>('zip')
+  const [userProfile, setUserProfile] = useState<'github' | 'zip' | 'wordpress'>('zip')
   const [aiProviderUsed, setAiProviderUsed] = useState<{ provider: string; model: string } | null>(null)
   const { user, isAuthenticated } = useAuthStore()
 
@@ -35,6 +38,21 @@ export function CodeAnalyst() {
       loadGitHubRepositories()
     }
   }, [userProfile, isAuthenticated, user?.githubUsername])
+
+  // Handle WordPress theme files from navigation
+  useEffect(() => {
+    if (location.state?.wordpressThemeFiles) {
+      const files = location.state.wordpressThemeFiles
+      setUserProfile('wordpress')
+      setUploadedFiles(files)
+      toast.success(`Loaded ${files.length} theme files. Starting analysis...`)
+      
+      // Auto-start analysis
+      setTimeout(() => {
+        handleAnalyze()
+      }, 500)
+    }
+  }, [location.state])
 
   const loadGitHubRepositories = async () => {
     if (!isAuthenticated || !user?.githubUsername) {
@@ -482,8 +500,9 @@ export function CodeAnalyst() {
       {/* Input Method Selection */}
       <div className="card p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Choose Input Method</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {[
+            { value: 'wordpress', label: 'WordPress Theme', desc: 'Analyze active theme from connected site' },
             { value: 'github', label: 'GitHub Repository', desc: 'Connect via OAuth and analyze repository' },
             { value: 'zip', label: 'ZIP Upload', desc: 'Upload code files as ZIP archive' }
           ].map(method => (
@@ -502,6 +521,38 @@ export function CodeAnalyst() {
           ))}
         </div>
       </div>
+
+      {/* WordPress Theme Selection */}
+      {userProfile === 'wordpress' && (
+        <div className="card p-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Select WordPress Site</h3>
+          <WordPressSiteSelector 
+            onSiteSelect={async (site) => {
+              try {
+                toast.loading('Fetching theme files...')
+                const response = await wordpressService.getThemeFiles(site.id)
+                toast.dismiss()
+                
+                if (response.success && response.files) {
+                  setUploadedFiles(response.files)
+                  toast.success(`Loaded ${response.files.length} theme files. Starting analysis...`)
+                  
+                  // Auto-start analysis
+                  setTimeout(() => {
+                    handleAnalyze()
+                  }, 500)
+                } else {
+                  toast.error(response.error || 'Failed to fetch theme files')
+                }
+              } catch (error) {
+                toast.dismiss()
+                toast.error('Failed to fetch theme files')
+              }
+            }}
+            label="Choose a WordPress site to analyze its theme"
+          />
+        </div>
+      )}
 
       {/* GitHub Repository Selection */}
       {userProfile === 'github' && (
