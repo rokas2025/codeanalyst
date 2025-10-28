@@ -147,7 +147,7 @@ CodeAnalyst Connector connects your WordPress site to the external CodeAnalyst p
 * List of active plugins (names and versions)
 * Site health information (memory limit, max upload size, MySQL version)
 
-This data is transmitted securely via HTTPS to the CodeAnalyst backend API at `https://codeanalyst-production.up.railway.app/api`.
+This data is transmitted securely via HTTPS to the CodeAnalyst backend API at `https://app.beenex.dev/api`.
 
 No personal user data, passwords, post content, or other sensitive information is transmitted.
 
@@ -158,7 +158,7 @@ For more information, see the [CodeAnalyst Privacy Policy](https://codeanalyst.v
 This plugin connects to the following external service:
 
 **CodeAnalyst Backend API**
-* Service URL: https://codeanalyst-production.up.railway.app/api
+* Service URL: https://app.beenex.dev/api
 * Purpose: Site analysis and data synchronization
 * Privacy Policy: https://codeanalyst.vercel.app/privacy
 * Terms of Service: https://codeanalyst.vercel.app/terms

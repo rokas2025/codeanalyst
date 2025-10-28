@@ -598,6 +598,40 @@ export class WordPressService {
       throw new Error(`Failed to fetch file content: ${error.message}`)
     }
   }
+
+  /**
+   * Fetch site information including page builders from WordPress site via REST API
+   * @param {Object} connection - WordPress connection object with site_url and api_key
+   * @returns {Promise<Object>} - Site information including builders, theme, versions
+   */
+  async fetchSiteInfo(connection) {
+    try {
+      logger.info(`ℹ️  Fetching site info from ${connection.site_url}...`)
+      
+      const axios = (await import('axios')).default
+      
+      const response = await axios.get(
+        `${connection.site_url}/wp-json/codeanalyst/v1/site-info`,
+        {
+          headers: {
+            'X-API-Key': connection.api_key
+          },
+          timeout: 30000
+        }
+      )
+      
+      if (response.data && response.data.success) {
+        const siteInfo = response.data.data
+        logger.info(`✅ Fetched site info: ${siteInfo.theme} with builders: ${siteInfo.builders.join(', ')}`)
+        return siteInfo
+      } else {
+        throw new Error('Invalid response from WordPress REST API')
+      }
+    } catch (error) {
+      logger.error('Failed to fetch site info:', error.message)
+      throw new Error(`Failed to fetch site info: ${error.message}`)
+    }
+  }
 }
 
 export default WordPressService

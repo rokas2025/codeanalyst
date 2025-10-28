@@ -204,6 +204,29 @@ router.post('/connect', async (req, res) => {
       site_url
     })
 
+    // Fetch and store site info (builders, theme, versions) in background
+    // Don't block the response if this fails
+    try {
+      const wpService = new WordPressService()
+      const siteInfo = await wpService.fetchSiteInfo(connection)
+      
+      // Store site info in database
+      await db.query(
+        `UPDATE wordpress_connections 
+         SET site_info = $1 
+         WHERE id = $2`,
+        [JSON.stringify(siteInfo), connection.id]
+      )
+      
+      logger.info('✅ Site info fetched and stored', {
+        connectionId: connection.id,
+        builders: siteInfo.builders
+      })
+    } catch (siteInfoError) {
+      logger.warn('⚠️  Failed to fetch site info (non-critical):', siteInfoError.message)
+      // Continue anyway - site info is optional
+    }
+
     res.json({
       success: true,
       connection: {

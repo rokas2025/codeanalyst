@@ -234,6 +234,26 @@ export async function runMigrations() {
       }
     }
     
+    // Add site_info column to wordpress_connections table
+    const checkSiteInfoColumn = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.columns 
+        WHERE table_name = 'wordpress_connections' 
+        AND column_name = 'site_info'
+      )
+    `)
+    
+    if (!checkSiteInfoColumn.rows[0].exists) {
+      console.log('📦 Adding site_info column to wordpress_connections...')
+      await db.query(`
+        ALTER TABLE wordpress_connections 
+        ADD COLUMN site_info JSONB DEFAULT '{}'::jsonb
+      `)
+      console.log('✅ Site info column added successfully!')
+    } else {
+      console.log('✅ Site info column already exists')
+    }
+    
     console.log('🎉 All migrations complete!')
     
   } catch (error) {

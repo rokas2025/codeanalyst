@@ -15,7 +15,7 @@ class CodeAnalyst_API_Client {
      * Get backend URL
      */
     private function get_backend_url() {
-        $url = get_option('codeanalyst_backend_url', 'https://codeanalyst-production.up.railway.app/api');
+        $url = get_option('codeanalyst_backend_url', 'https://app.beenex.dev/api');
         return trailingslashit($url);
     }
     

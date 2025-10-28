@@ -18,7 +18,7 @@ function codeanalyst_settings_page() {
     }
     
     $api_key = get_option('codeanalyst_api_key', '');
-    $backend_url = get_option('codeanalyst_backend_url', 'https://codeanalyst-production.up.railway.app/api');
+    $backend_url = get_option('codeanalyst_backend_url', 'https://app.beenex.dev/api');
     $connected = get_option('codeanalyst_connected', false);
     $last_sync = get_option('codeanalyst_last_sync', '');
     

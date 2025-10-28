@@ -39,7 +39,7 @@ The plugin will be available in the WordPress Plugin Directory soon.
 
 1. In your WordPress admin, go to **CodeAnalyst** in the sidebar
 2. Paste your API key in the **API Key** field
-3. Verify the **Backend URL** is set to: `https://codeanalyst-production.up.railway.app/api`
+3. Verify the **Backend URL** is set to: `https://app.beenex.dev/api`
 4. Click **Save Settings**
 5. Click **Connect to CodeAnalyst**
 
@@ -71,7 +71,7 @@ The plugin automatically syncs your site data with CodeAnalyst once daily. You c
 ### Connection Failed
 
 - **Check API Key:** Make sure you copied the full API key from CodeAnalyst Settings
-- **Check URL:** Verify the Backend URL is correct (should be `https://codeanalyst-production.up.railway.app/api`)
+- **Check URL:** Verify the Backend URL is correct (should be `https://app.beenex.dev/api`)
 - **Check Firewall:** Ensure your hosting provider allows outbound HTTPS connections
 - **Check SSL:** CodeAnalyst requires SSL/HTTPS connections
 

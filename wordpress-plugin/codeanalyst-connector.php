@@ -110,7 +110,7 @@ class CodeAnalyst_Connector {
         
         // Set default options
         add_option('codeanalyst_api_key', '');
-        add_option('codeanalyst_backend_url', 'https://codeanalyst-production.up.railway.app/api');
+        add_option('codeanalyst_backend_url', 'https://app.beenex.dev/api');
         add_option('codeanalyst_connected', false);
         add_option('codeanalyst_last_sync', '');
         add_option('codeanalyst_connection_id', '');
