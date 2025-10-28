@@ -18,6 +18,15 @@ export interface WordPressConnection {
     last_sync: string
     created_at: string
     api_key: string // Masked
+    site_info?: {
+        theme: string
+        theme_version: string
+        builders: string[]
+        builder_versions: Record<string, string>
+        wp_version: string
+        php_version: string
+        mysql_version: string
+    }
 }
 
 export interface GenerateKeyResponse {

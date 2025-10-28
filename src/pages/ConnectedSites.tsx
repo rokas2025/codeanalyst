@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { wordpressService, WordPressConnection } from '../services/wordpressService'
 import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
-import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
+import { Link, useNavigate } from 'react-router-dom'
+import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon, ArrowDownTrayIcon, GlobeAltIcon, CodeBracketIcon, DocumentCheckIcon } from '@heroicons/react/24/outline'
 
 export function ConnectedSites() {
+    const navigate = useNavigate()
     const [connections, setConnections] = useState<WordPressConnection[]>([])
     const [loading, setLoading] = useState(true)
     const [deleting, setDeleting] = useState<string | null>(null)
@@ -69,6 +70,46 @@ export function ConnectedSites() {
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleString()
+    }
+
+    const getBuilderBadgeColor = (builder: string) => {
+        const colors: Record<string, string> = {
+            'elementor': 'bg-pink-100 text-pink-700',
+            'gutenberg': 'bg-blue-100 text-blue-700',
+            'wpbakery': 'bg-purple-100 text-purple-700',
+            'divi': 'bg-green-100 text-green-700',
+            'beaver': 'bg-orange-100 text-orange-700',
+            'oxygen': 'bg-cyan-100 text-cyan-700',
+            'bricks': 'bg-red-100 text-red-700'
+        }
+        return colors[builder] || 'bg-gray-100 text-gray-700'
+    }
+
+    const getBuilderDisplayName = (builder: string) => {
+        const names: Record<string, string> = {
+            'elementor': 'Elementor',
+            'gutenberg': 'Gutenberg',
+            'wpbakery': 'WPBakery',
+            'divi': 'Divi',
+            'beaver': 'Beaver Builder',
+            'oxygen': 'Oxygen',
+            'bricks': 'Bricks'
+        }
+        return names[builder] || builder
+    }
+
+    const handleAnalyzeWebsite = (siteUrl: string) => {
+        navigate('/website-analyst', { state: { prefilledUrl: siteUrl } })
+    }
+
+    const handleAnalyzeThemeCode = async (connectionId: string) => {
+        toast.error('Theme code analysis coming soon!')
+        // TODO: Implement theme code fetching and analysis
+    }
+
+    const handleAnalyzeContent = (connectionId: string) => {
+        toast.error('Content analysis coming soon!')
+        // TODO: Implement page content analysis
     }
 
     const getHealthColor = (health: any) => {
@@ -236,6 +277,29 @@ export function ConnectedSites() {
                                 </div>
                             </div>
 
+                            {/* Page Builders */}
+                            {connection.site_info?.builders && connection.site_info.builders.length > 0 && (
+                                <div className="mt-4">
+                                    <h4 className="text-xs font-medium text-gray-700 mb-2">Page Builders</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {connection.site_info.builders.map((builder) => (
+                                            <span
+                                                key={builder}
+                                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBuilderBadgeColor(builder)}`}
+                                                title={connection.site_info?.builder_versions?.[builder] ? `Version ${connection.site_info.builder_versions[builder]}` : undefined}
+                                            >
+                                                {getBuilderDisplayName(builder)}
+                                                {connection.site_info?.builder_versions?.[builder] && (
+                                                    <span className="ml-1 opacity-75 text-[10px]">
+                                                        v{connection.site_info.builder_versions[builder]}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             {connection.site_health && (
                                 <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                                     <h4 className="text-xs font-medium text-gray-700 mb-2">Site Health</h4>
@@ -261,12 +325,43 @@ export function ConnectedSites() {
                                     Last sync: {connection.last_sync ? formatDate(connection.last_sync) : 'Never'}
                                 </div>
                                 
+                                {/* Quick Actions */}
+                                <div className="space-y-2 mb-3">
+                                    <h4 className="text-xs font-medium text-gray-700">Quick Actions</h4>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => handleAnalyzeWebsite(connection.site_url)}
+                                            className="flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs border border-blue-300 text-blue-700 rounded-md hover:bg-blue-50 transition-colors"
+                                            title="Analyze website with Website Analyst"
+                                        >
+                                            <GlobeAltIcon className="w-3.5 h-3.5" />
+                                            Analyze Site
+                                        </button>
+                                        <button
+                                            onClick={() => handleAnalyzeThemeCode(connection.id)}
+                                            className="flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs border border-purple-300 text-purple-700 rounded-md hover:bg-purple-50 transition-colors"
+                                            title="Analyze theme code with Code Analyst"
+                                        >
+                                            <CodeBracketIcon className="w-3.5 h-3.5" />
+                                            Theme Code
+                                        </button>
+                                        <button
+                                            onClick={() => handleAnalyzeContent(connection.id)}
+                                            className="flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs border border-green-300 text-green-700 rounded-md hover:bg-green-50 transition-colors col-span-2"
+                                            title="Analyze page content with Content Analyst"
+                                        >
+                                            <DocumentCheckIcon className="w-3.5 h-3.5" />
+                                            Analyze Content
+                                        </button>
+                                    </div>
+                                </div>
+
                                 {/* Upload Section */}
                                 <div className="mb-3">
                                     <input
                                         type="file"
                                         ref={el => fileInputRefs.current[connection.id] = el}
-                                        accept=".zip"
+                                        accept=".zip,.xml,.sql"
                                         onChange={(e) => handleFileSelect(connection.id, e)}
                                         className="hidden"
                                         id={`file-upload-${connection.id}`}
@@ -274,9 +369,10 @@ export function ConnectedSites() {
                                     <label
                                         htmlFor={`file-upload-${connection.id}`}
                                         className={`flex items-center justify-center gap-2 w-full px-3 py-2 text-sm border border-indigo-300 text-indigo-700 rounded-md hover:bg-indigo-50 cursor-pointer transition-colors ${uploading === connection.id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        title="Upload WordPress export (XML/SQL) to extract theme files and page content for analysis"
                                     >
                                         <ArrowUpTrayIcon className="w-4 h-4" />
-                                        {uploading === connection.id ? `Uploading... ${uploadProgress}%` : 'Upload WordPress ZIP'}
+                                        {uploading === connection.id ? `Uploading... ${uploadProgress}%` : 'Upload WP Export (XML/SQL)'}
                                     </label>
                                     {uploading === connection.id && (
                                         <div className="mt-2 bg-gray-200 rounded-full h-2">
