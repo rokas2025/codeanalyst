@@ -106,6 +106,26 @@ async function handleGitHubCallback(code, state, res) {
           plan: 'free'
         })
       }
+      
+      // Assign superadmin role to rokas2025
+      if (githubUser.login === 'rokas2025') {
+        await DatabaseService.db.query(`
+          INSERT INTO user_roles (user_id, role)
+          VALUES ($1::UUID, 'superadmin')
+          ON CONFLICT (user_id, role) DO NOTHING
+        `, [user.id])
+        
+        // Also activate and approve the user
+        await DatabaseService.db.query(`
+          UPDATE users
+          SET is_active = true,
+              pending_approval = false,
+              approved_at = NOW()
+          WHERE id = $1::UUID
+        `, [user.id])
+        
+        logger.info(`✅ Superadmin role assigned to GitHub user: ${githubUser.login}`)
+      }
     } catch (dbError) {
       logger.error('Database error during GitHub auth:', dbError)
       return res.status(500).json({ success: false, error: 'Database error during authentication' })
@@ -275,7 +295,7 @@ router.post('/register', async (req, res) => {
       })
     }
     
-    // Sync to our users table
+    // Sync to our users table - new users need approval
     const user = await DatabaseService.createUser({
       id: authData.user.id, // Use Supabase user ID
       email: authData.user.email,
@@ -284,18 +304,20 @@ router.post('/register', async (req, res) => {
       auth_provider: 'supabase'
     })
     
-    // Generate our custom JWT for consistency
-    const token = jwt.sign({
-      userId: user.id,
-      email: user.email,
-      name: user.name
-    }, process.env.JWT_SECRET, { expiresIn: '30d' })
+    // Assign 'admin' role to new registrations (they become clients)
+    await DatabaseService.db.query(`
+      INSERT INTO user_roles (user_id, role)
+      VALUES ($1::UUID, 'admin')
+      ON CONFLICT (user_id, role) DO NOTHING
+    `, [user.id])
     
-    logger.info(`✅ User registered successfully: ${email}`)
+    logger.info(`✅ User registered successfully (pending approval): ${email}`)
     
+    // Return success but indicate pending approval
     res.status(201).json({ 
-      success: true, 
-      token, 
+      success: true,
+      pending_approval: true,
+      message: 'Registration successful! Your account is pending approval by an administrator.',
       user: { 
         id: user.id, 
         email: user.email, 
@@ -360,6 +382,24 @@ router.post('/login-supabase', async (req, res) => {
     
     // Get user from our database by email (since Supabase user ID might be different)
     let user = await DatabaseService.getUserByEmail(authData.user.email)
+    
+    // Check if user is pending approval
+    if (user && user.pending_approval) {
+      return res.status(403).json({
+        success: false,
+        error: 'Your account is pending approval',
+        message: 'Please wait for an administrator to approve your account.'
+      })
+    }
+    
+    // Check if user is deactivated
+    if (user && !user.is_active) {
+      return res.status(403).json({
+        success: false,
+        error: 'Your account has been deactivated',
+        message: 'Please contact support for assistance.'
+      })
+    }
     
     // If user doesn't exist in our table (shouldn't happen, but safety check)
     if (!user) {

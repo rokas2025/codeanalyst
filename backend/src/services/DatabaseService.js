@@ -1151,6 +1151,486 @@ export class DatabaseService {
       throw error
     }
   }
+
+  // ============================================
+  // USER MANAGEMENT METHODS
+  // ============================================
+
+  /**
+   * Get user by ID
+   * @param {string} userId - User ID
+   * @returns {object|null} User object or null
+   */
+  static async getUserById(userId) {
+    try {
+      const query = `
+        SELECT u.*, ur.role
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        WHERE u.id = $1::UUID
+      `
+      const result = await db.query(query, [userId])
+      return result.rows.length > 0 ? result.rows[0] : null
+    } catch (error) {
+      logger.logError('Database getUserById', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Get user by email
+   * @param {string} email - User email
+   * @returns {object|null} User object or null
+   */
+  static async getUserByEmail(email) {
+    try {
+      const query = `
+        SELECT u.*, ur.role
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        WHERE LOWER(u.email) = LOWER($1)
+      `
+      const result = await db.query(query, [email])
+      return result.rows.length > 0 ? result.rows[0] : null
+    } catch (error) {
+      logger.logError('Database getUserByEmail', error, { email })
+      throw error
+    }
+  }
+
+  /**
+   * Get user's role
+   * @param {string} userId - User ID
+   * @returns {string} Role name (superadmin, admin, user)
+   */
+  static async getUserRole(userId) {
+    try {
+      const query = `SELECT get_user_role($1::UUID) as role`
+      const result = await db.query(query, [userId])
+      return result.rows[0]?.role || 'user'
+    } catch (error) {
+      logger.logError('Database getUserRole', error, { userId })
+      return 'user' // Default to user role on error
+    }
+  }
+
+  /**
+   * Get all users (superadmin only)
+   * @returns {array} Array of users with their roles
+   */
+  static async getAllUsers() {
+    try {
+      const query = `
+        SELECT u.id, u.email, u.name, u.github_username, u.auth_provider, 
+               u.is_active, u.pending_approval, u.approved_at, u.created_at,
+               ur.role
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        ORDER BY u.created_at DESC
+      `
+      const result = await db.query(query)
+      logger.logDatabase('select', 'users', result.rows.length)
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getAllUsers', error)
+      throw error
+    }
+  }
+
+  /**
+   * Approve a pending user
+   * @param {string} userId - User ID to approve
+   * @param {string} approvedBy - ID of approving superadmin
+   */
+  static async approveUser(userId, approvedBy) {
+    try {
+      const query = `
+        UPDATE users
+        SET is_active = true,
+            pending_approval = false,
+            approved_at = NOW(),
+            approved_by = $2::UUID
+        WHERE id = $1::UUID
+        RETURNING *
+      `
+      const result = await db.query(query, [userId, approvedBy])
+      
+      // Log the approval
+      await db.query(`
+        INSERT INTO user_activation_log (user_id, action, performed_by, reason)
+        VALUES ($1::UUID, 'approved', $2::UUID, 'User approved by superadmin')
+      `, [userId, approvedBy])
+      
+      logger.logDatabase('update', 'users', result.rows.length, { userId, action: 'approved' })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database approveUser', error, { userId, approvedBy })
+      throw error
+    }
+  }
+
+  /**
+   * Deactivate a user
+   * @param {string} userId - User ID to deactivate
+   * @param {string} deactivatedBy - ID of deactivating superadmin
+   * @param {string} reason - Reason for deactivation
+   */
+  static async deactivateUser(userId, deactivatedBy, reason = null) {
+    try {
+      const query = `
+        UPDATE users
+        SET is_active = false,
+            deactivated_at = NOW(),
+            deactivated_by = $2::UUID
+        WHERE id = $1::UUID
+        RETURNING *
+      `
+      const result = await db.query(query, [userId, deactivatedBy])
+      
+      // Log the deactivation
+      await db.query(`
+        INSERT INTO user_activation_log (user_id, action, performed_by, reason)
+        VALUES ($1::UUID, 'deactivated', $2::UUID, $3)
+      `, [userId, deactivatedBy, reason])
+      
+      logger.logDatabase('update', 'users', result.rows.length, { userId, action: 'deactivated' })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database deactivateUser', error, { userId, deactivatedBy })
+      throw error
+    }
+  }
+
+  /**
+   * Reactivate a user
+   * @param {string} userId - User ID to reactivate
+   * @param {string} reactivatedBy - ID of reactivating superadmin
+   */
+  static async reactivateUser(userId, reactivatedBy) {
+    try {
+      const query = `
+        UPDATE users
+        SET is_active = true,
+            deactivated_at = NULL,
+            deactivated_by = NULL
+        WHERE id = $1::UUID
+        RETURNING *
+      `
+      const result = await db.query(query, [userId])
+      
+      // Log the reactivation
+      await db.query(`
+        INSERT INTO user_activation_log (user_id, action, performed_by, reason)
+        VALUES ($1::UUID, 'activated', $2::UUID, 'User reactivated by superadmin')
+      `, [userId, reactivatedBy])
+      
+      logger.logDatabase('update', 'users', result.rows.length, { userId, action: 'reactivated' })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database reactivateUser', error, { userId, reactivatedBy })
+      throw error
+    }
+  }
+
+  // ============================================
+  // PROJECT MANAGEMENT METHODS
+  // ============================================
+
+  /**
+   * Create a new project
+   * @param {object} projectData - Project data (name, url, description, admin_id)
+   */
+  static async createProject(projectData) {
+    try {
+      const query = `
+        INSERT INTO projects (name, url, description, admin_id)
+        VALUES ($1, $2, $3, $4::UUID)
+        RETURNING *
+      `
+      const values = [
+        projectData.name,
+        projectData.url,
+        projectData.description || null,
+        projectData.admin_id
+      ]
+      
+      const result = await db.query(query, values)
+      logger.logDatabase('insert', 'projects', result.rows.length)
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database createProject', error, projectData)
+      throw error
+    }
+  }
+
+  /**
+   * Get all projects for an admin
+   * @param {string} adminId - Admin user ID
+   */
+  static async getAdminProjects(adminId) {
+    try {
+      const query = `
+        SELECT p.*, 
+               COUNT(DISTINCT pu.user_id) as user_count,
+               COUNT(DISTINCT wc.id) as wordpress_sites_count
+        FROM projects p
+        LEFT JOIN project_users pu ON p.id = pu.project_id AND pu.is_active = true
+        LEFT JOIN wordpress_connections wc ON p.id = wc.project_id
+        WHERE p.admin_id = $1::UUID AND p.is_active = true
+        GROUP BY p.id
+        ORDER BY p.created_at DESC
+      `
+      const result = await db.query(query, [adminId])
+      logger.logDatabase('select', 'projects', result.rows.length, { adminId })
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getAdminProjects', error, { adminId })
+      throw error
+    }
+  }
+
+  /**
+   * Get all projects a user has access to
+   * @param {string} userId - User ID
+   */
+  static async getUserProjects(userId) {
+    try {
+      const query = `
+        SELECT p.*, pu.invited_at
+        FROM projects p
+        INNER JOIN project_users pu ON p.id = pu.project_id
+        WHERE pu.user_id = $1::UUID AND pu.is_active = true AND p.is_active = true
+        ORDER BY pu.invited_at DESC
+      `
+      const result = await db.query(query, [userId])
+      logger.logDatabase('select', 'projects', result.rows.length, { userId })
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getUserProjects', error, { userId })
+      throw error
+    }
+  }
+
+  /**
+   * Check if user has access to a project
+   * @param {string} userId - User ID
+   * @param {string} projectId - Project ID
+   * @returns {boolean} True if user has access
+   */
+  static async checkProjectAccess(userId, projectId) {
+    try {
+      // Check if user is the project admin
+      const adminQuery = `
+        SELECT 1 FROM projects WHERE id = $1::UUID AND admin_id = $2::UUID AND is_active = true
+      `
+      const adminResult = await db.query(adminQuery, [projectId, userId])
+      if (adminResult.rows.length > 0) return true
+
+      // Check if user is invited to the project
+      const userQuery = `
+        SELECT 1 FROM project_users 
+        WHERE project_id = $1::UUID AND user_id = $2::UUID AND is_active = true
+      `
+      const userResult = await db.query(userQuery, [projectId, userId])
+      return userResult.rows.length > 0
+    } catch (error) {
+      logger.logError('Database checkProjectAccess', error, { userId, projectId })
+      return false
+    }
+  }
+
+  /**
+   * Invite a user to a project
+   * @param {string} projectId - Project ID
+   * @param {string} userId - User ID to invite
+   * @param {string} invitedBy - ID of user sending invitation
+   */
+  static async inviteUserToProject(projectId, userId, invitedBy) {
+    try {
+      const query = `
+        INSERT INTO project_users (project_id, user_id, invited_by)
+        VALUES ($1::UUID, $2::UUID, $3::UUID)
+        ON CONFLICT (project_id, user_id) 
+        DO UPDATE SET is_active = true, invited_at = NOW()
+        RETURNING *
+      `
+      const result = await db.query(query, [projectId, userId, invitedBy])
+      logger.logDatabase('insert', 'project_users', result.rows.length)
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database inviteUserToProject', error, { projectId, userId, invitedBy })
+      throw error
+    }
+  }
+
+  /**
+   * Remove a user from a project
+   * @param {string} projectId - Project ID
+   * @param {string} userId - User ID to remove
+   */
+  static async removeUserFromProject(projectId, userId) {
+    try {
+      const query = `
+        UPDATE project_users
+        SET is_active = false
+        WHERE project_id = $1::UUID AND user_id = $2::UUID
+        RETURNING *
+      `
+      const result = await db.query(query, [projectId, userId])
+      logger.logDatabase('update', 'project_users', result.rows.length)
+      return result.rowCount > 0
+    } catch (error) {
+      logger.logError('Database removeUserFromProject', error, { projectId, userId })
+      throw error
+    }
+  }
+
+  /**
+   * Get users in a project
+   * @param {string} projectId - Project ID
+   */
+  static async getProjectUsers(projectId) {
+    try {
+      const query = `
+        SELECT u.id, u.email, u.name, u.github_username, 
+               pu.invited_at, pu.invited_by, pu.is_active
+        FROM project_users pu
+        INNER JOIN users u ON pu.user_id = u.id
+        WHERE pu.project_id = $1::UUID
+        ORDER BY pu.invited_at DESC
+      `
+      const result = await db.query(query, [projectId])
+      logger.logDatabase('select', 'project_users', result.rows.length, { projectId })
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getProjectUsers', error, { projectId })
+      throw error
+    }
+  }
+
+  /**
+   * Set module permissions for a user in a project
+   * @param {string} projectId - Project ID
+   * @param {string} userId - User ID
+   * @param {array} modules - Array of module names with access flags
+   */
+  static async setModulePermissions(projectId, userId, modules) {
+    try {
+      const queries = modules.map(module => {
+        return db.query(`
+          INSERT INTO module_permissions (project_id, user_id, module_name, has_access)
+          VALUES ($1::UUID, $2::UUID, $3, $4)
+          ON CONFLICT (project_id, user_id, module_name)
+          DO UPDATE SET has_access = $4, updated_at = NOW()
+        `, [projectId, userId, module.name, module.hasAccess])
+      })
+      
+      await Promise.all(queries)
+      logger.logDatabase('upsert', 'module_permissions', modules.length, { projectId, userId })
+      return true
+    } catch (error) {
+      logger.logError('Database setModulePermissions', error, { projectId, userId, modules })
+      throw error
+    }
+  }
+
+  /**
+   * Get module permissions for a user in a project
+   * @param {string} projectId - Project ID
+   * @param {string} userId - User ID
+   */
+  static async getModulePermissions(projectId, userId) {
+    try {
+      const query = `
+        SELECT module_name, has_access
+        FROM module_permissions
+        WHERE project_id = $1::UUID AND user_id = $2::UUID
+      `
+      const result = await db.query(query, [projectId, userId])
+      logger.logDatabase('select', 'module_permissions', result.rows.length, { projectId, userId })
+      return result.rows
+    } catch (error) {
+      logger.logError('Database getModulePermissions', error, { projectId, userId })
+      throw error
+    }
+  }
+
+  /**
+   * Check if user has permission for a specific module
+   * @param {string} userId - User ID
+   * @param {string} projectId - Project ID
+   * @param {string} moduleName - Module name
+   * @returns {boolean} True if user has access
+   */
+  static async checkModulePermission(userId, projectId, moduleName) {
+    try {
+      // Check if user is the project admin (admins have all permissions)
+      const adminQuery = `
+        SELECT 1 FROM projects WHERE id = $1::UUID AND admin_id = $2::UUID AND is_active = true
+      `
+      const adminResult = await db.query(adminQuery, [projectId, userId])
+      if (adminResult.rows.length > 0) return true
+
+      // Check specific module permission
+      const query = `
+        SELECT has_access
+        FROM module_permissions
+        WHERE project_id = $1::UUID AND user_id = $2::UUID AND module_name = $3
+      `
+      const result = await db.query(query, [projectId, userId, moduleName])
+      return result.rows.length > 0 && result.rows[0].has_access
+    } catch (error) {
+      logger.logError('Database checkModulePermission', error, { userId, projectId, moduleName })
+      return false
+    }
+  }
+
+  /**
+   * Update project
+   * @param {string} projectId - Project ID
+   * @param {object} updates - Fields to update
+   */
+  static async updateProject(projectId, updates) {
+    try {
+      const query = `
+        UPDATE projects
+        SET name = COALESCE($2, name),
+            url = COALESCE($3, url),
+            description = COALESCE($4, description),
+            updated_at = NOW()
+        WHERE id = $1::UUID
+        RETURNING *
+      `
+      const values = [projectId, updates.name, updates.url, updates.description]
+      const result = await db.query(query, values)
+      logger.logDatabase('update', 'projects', result.rows.length, { projectId })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database updateProject', error, { projectId, updates })
+      throw error
+    }
+  }
+
+  /**
+   * Delete project (soft delete)
+   * @param {string} projectId - Project ID
+   */
+  static async deleteProject(projectId) {
+    try {
+      const query = `
+        UPDATE projects
+        SET is_active = false, updated_at = NOW()
+        WHERE id = $1::UUID
+        RETURNING *
+      `
+      const result = await db.query(query, [projectId])
+      logger.logDatabase('update', 'projects', result.rows.length, { projectId, action: 'soft_delete' })
+      return result.rowCount > 0
+    } catch (error) {
+      logger.logError('Database deleteProject', error, { projectId })
+      throw error
+    }
+  }
 }
 
 export default DatabaseService 

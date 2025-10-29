@@ -22,6 +22,7 @@ import { startAnalysisWorker } from './workers/analysisWorker.js'
 
 // Import routes
 import authRoutes from './routes/auth.js'
+import superadminRoutes from './routes/superadmin.js'
 import projectRoutes from './routes/projects.js'
 import analysisRoutes from './routes/analysis.js'
 import urlAnalysisRoutes from './routes/urlAnalysis.js'
@@ -203,7 +204,8 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes)
-app.use('/api/projects', authMiddleware, projectRoutes)
+app.use('/api/superadmin', superadminRoutes)
+app.use('/api/projects', projectRoutes)
 app.use('/api/analysis', authMiddleware, analysisRoutes)
 app.use('/api/url-analysis', authMiddleware, urlAnalysisRoutes)
 app.use('/api/code-analysis', authMiddleware, codeAnalysisRoutes)
