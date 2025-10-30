@@ -833,6 +833,62 @@ The file structure isn't available for this analysis, but I can still help you w
   }
 
   const generatePreviewHTML = (files: FileNode[], projectType: any): string => {
+    const flatFiles = flattenFiles(files)
+    
+    // Check if this is a React/Vite project
+    const isReactProject = flatFiles.some(f => 
+      f.path.includes('package.json') && f.content?.includes('"react"')
+    ) || flatFiles.some(f => f.path.includes('vite.config'))
+    
+    if (isReactProject) {
+      // For React projects, show a helpful message with deployment link
+      const deploymentUrl = selectedProject?.sourceReference || ''
+      const githubUrl = deploymentUrl.includes('github.com') ? deploymentUrl : ''
+      
+      return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>React Project Preview</title>
+<style>
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .container { background: white; border-radius: 12px; padding: 2rem; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
+  h1 { font-size: 1.5rem; color: #1f2937; margin-bottom: 1rem; }
+  p { color: #6b7280; margin-bottom: 1.5rem; line-height: 1.6; }
+  .icon { font-size: 3rem; margin-bottom: 1rem; }
+  .info { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 1rem; margin: 1rem 0; text-align: left; }
+  .info-title { font-weight: 600; color: #1e40af; margin-bottom: 0.5rem; font-size: 0.875rem; }
+  .info-text { color: #1e3a8a; font-size: 0.875rem; line-height: 1.5; }
+  .btn { display: inline-block; background: #3b82f6; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; margin-top: 1rem; font-weight: 500; transition: background 0.2s; }
+  .btn:hover { background: #2563eb; }
+  .note { font-size: 0.75rem; color: #9ca3af; margin-top: 1rem; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">⚛️</div>
+    <h1>React Project Detected</h1>
+    <p>This is a React/Vite project that requires compilation and a build process to preview.</p>
+    
+    <div class="info">
+      <div class="info-title">💡 Why can't I see the preview?</div>
+      <div class="info-text">React projects use JSX and need to be compiled to JavaScript. The source code can't be rendered directly in an iframe.</div>
+    </div>
+    
+    <div class="info">
+      <div class="info-title">🎯 How to preview this project:</div>
+      <div class="info-text">
+        1. Deploy it to Vercel, Netlify, or GitHub Pages<br>
+        2. Run it locally with <code>npm run dev</code><br>
+        3. Use the "Files" tab to explore the code structure
+      </div>
+    </div>
+    
+    ${githubUrl ? `<a href="${githubUrl}" target="_blank" class="btn">View on GitHub →</a>` : ''}
+    
+    <div class="note">Use the "Files" tab to browse components and the AI chat to make changes!</div>
+  </div>
+</body></html>`
+    }
+    
+    // For simple HTML projects
     const htmlFile = findMainHTMLFile(files)
     if (!htmlFile) return generatePlaceholderHTML('No HTML file found in project')
     
