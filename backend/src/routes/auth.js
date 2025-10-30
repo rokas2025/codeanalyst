@@ -131,6 +131,19 @@ async function handleGitHubCallback(code, state, res) {
       return res.status(500).json({ success: false, error: 'Database error during authentication' })
     }
 
+    // Get user role from user_roles table
+    let userRole = 'user' // default
+    try {
+      const roleResult = await db.query(`
+        SELECT role FROM user_roles WHERE user_id = $1::UUID LIMIT 1
+      `, [user.id])
+      if (roleResult.rows.length > 0) {
+        userRole = roleResult.rows[0].role
+      }
+    } catch (roleError) {
+      logger.error('Failed to get user role:', roleError)
+    }
+
     // Generate JWT with 30-day expiration
     const jwtToken = jwt.sign({ 
       userId: user.id, 
@@ -138,7 +151,8 @@ async function handleGitHubCallback(code, state, res) {
       githubUsername: githubUser.login,
       name: user.name,
       email: user.email,
-      avatarUrl: user.avatar_url
+      avatarUrl: user.avatar_url,
+      role: userRole
     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '30d' })
 
     const redirectUrl = `${process.env.FRONTEND_URL}/auth/github/callback?token=${jwtToken}`
