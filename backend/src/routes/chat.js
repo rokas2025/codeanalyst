@@ -74,7 +74,7 @@ Use this context to provide specific, relevant suggestions for THIS codebase. Re
     // Add structured code change format instructions
     systemContent += `
 
-IMPORTANT: When suggesting code changes, use this structured format for better preview generation:
+CRITICAL: When the user asks for help with code, you MUST provide actual code changes in this structured format:
 
 FILE: path/to/file.tsx
 ACTION: create|modify|delete
@@ -111,7 +111,7 @@ export function Button({ label, onClick }: ButtonProps) {
 
 This creates a reusable Button component with TypeScript props for better type safety.
 
-Use this format whenever you suggest creating, modifying, or deleting files. This enables visual preview of changes before applying them.`
+DO NOT just provide recommendations or suggestions without actual code. Always include specific, actionable code changes in the FILE/ACTION/CODE format above. This enables visual preview of changes before applying them.`
 
     // Convert UI messages to OpenAI format
     const openaiMessages = [

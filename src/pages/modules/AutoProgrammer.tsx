@@ -64,12 +64,14 @@ function AutoProgrammerContent() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'structure' | 'preview' | 'changes'>('structure')
   const [showPreview, setShowPreview] = useState(false)
+  const [apiEndpoints, setApiEndpoints] = useState<Array<{method: string, path: string, description?: string}>>([])
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const projectPreviewRef = useRef<HTMLIFrameElement>(null)
 
   // Function definitions moved to top to avoid hoisting issues
   const getProjectName = (analysis: any) => {
@@ -285,6 +287,31 @@ function AutoProgrammerContent() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Generate preview when project is selected
+  useEffect(() => {
+    if (!selectedProject || !fileTree.length) return
+    
+    const projectType = detectProjectType(selectedProject)
+    
+    if (projectType === 'web') {
+      // Generate HTML preview for web projects
+      const html = generatePreviewHTML(fileTree, projectType)
+      if (projectPreviewRef.current) {
+        const iframe = projectPreviewRef.current
+        const doc = iframe.contentDocument || iframe.contentWindow?.document
+        if (doc) {
+          doc.open()
+          doc.write(html)
+          doc.close()
+        }
+      }
+    } else if (projectType === 'backend') {
+      // Extract API endpoints for backend projects
+      const endpoints = extractAPIEndpoints(fileTree)
+      setApiEndpoints(endpoints)
+    }
+  }, [selectedProject, fileTree])
 
   const fetchAnalyses = async () => {
     try {
@@ -772,6 +799,93 @@ The file structure isn't available for this analysis, but I can still help you w
     }
   }
 
+  // Helper functions for preview generation
+  const flattenFiles = (files: FileNode[]): FileNode[] => {
+    const result: FileNode[] = []
+    const traverse = (nodes: FileNode[]) => {
+      for (const node of nodes) {
+        if (node.type === 'file') result.push(node)
+        if (node.children) traverse(node.children)
+      }
+    }
+    traverse(files)
+    return result
+  }
+
+  const findMainHTMLFile = (files: FileNode[]): FileNode | null => {
+    const flatFiles = flattenFiles(files)
+    return flatFiles.find(f => f.path.toLowerCase().endsWith('index.html')) ||
+           flatFiles.find(f => f.path.toLowerCase().endsWith('.html')) ||
+           null
+  }
+
+  const findFilesByExtension = (files: FileNode[], extensions: string[]): FileNode[] => {
+    const flatFiles = flattenFiles(files)
+    return flatFiles.filter(f => extensions.some(ext => f.path.toLowerCase().endsWith(ext)))
+  }
+
+  const generatePlaceholderHTML = (message: string): string => {
+    return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Preview</title></head>
+<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f3f4f6;">
+<div style="text-align:center;color:#6b7280;"><h1 style="font-size:1.5rem;margin-bottom:0.5rem;">Preview</h1><p>${message}</p></div>
+</body></html>`
+  }
+
+  const generatePreviewHTML = (files: FileNode[], projectType: any): string => {
+    const htmlFile = findMainHTMLFile(files)
+    if (!htmlFile) return generatePlaceholderHTML('No HTML file found in project')
+    
+    const cssFiles = findFilesByExtension(files, ['.css', '.scss'])
+    const cssContent = cssFiles.map(f => f.content || '').join('\n')
+    
+    let html = htmlFile.content || ''
+    if (cssContent) {
+      html = html.replace('</head>', `<style>${cssContent}</style></head>`)
+    }
+    
+    return html
+  }
+
+  const extractAPIEndpoints = (files: FileNode[]): Array<{method: string, path: string, description?: string}> => {
+    const endpoints: Array<{method: string, path: string, description?: string}> = []
+    const flatFiles = flattenFiles(files)
+    
+    // Look for route files (Express, NestJS, etc.)
+    const routeFiles = flatFiles.filter(f => 
+      f.path.includes('route') || 
+      f.path.includes('controller') || 
+      f.path.includes('api')
+    )
+    
+    routeFiles.forEach(file => {
+      if (!file.content) return
+      
+      // Extract Express routes: router.get('/path', ...)
+      const expressRegex = /router\.(get|post|put|delete|patch)\(['"]([^'"]+)['"]/g
+      let match
+      while ((match = expressRegex.exec(file.content)) !== null) {
+        endpoints.push({
+          method: match[1].toUpperCase(),
+          path: match[2],
+          description: `From ${file.name}`
+        })
+      }
+      
+      // Extract NestJS decorators: @Get('/path')
+      const nestRegex = /@(Get|Post|Put|Delete|Patch)\(['"]([^'"]+)['"]\)/g
+      while ((match = nestRegex.exec(file.content)) !== null) {
+        endpoints.push({
+          method: match[1].toUpperCase(),
+          path: match[2],
+          description: `From ${file.name}`
+        })
+      }
+    })
+    
+    return endpoints
+  }
+
   return (
     <div className="h-screen max-h-screen bg-gray-50 flex overflow-hidden">
       {/* Project Sidebar */}
@@ -981,7 +1095,7 @@ The file structure isn't available for this analysis, but I can still help you w
               <nav className="flex">
                 {[
                   { id: 'structure', name: 'Files', icon: FolderIcon },
-                  { id: 'preview', name: 'Preview', icon: DocumentIcon },
+                  { id: 'preview', name: 'Website Preview', icon: EyeIcon },
                   { id: 'changes', name: 'Changes', icon: CodeBracketIcon }
                 ].map((tab) => (
                   <button
@@ -1025,94 +1139,59 @@ The file structure isn't available for this analysis, but I can still help you w
               )}
 
               {activeTab === 'preview' && (
-                <div className="h-full overflow-y-auto">
-                  {selectedFile ? (
-                    <div className="p-4">
-                      {/* File Header */}
-                      <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-                        <div>
-                          <h3 className="font-semibold text-gray-900">{selectedFile.name}</h3>
-                          <p className="text-xs text-gray-500 mt-1">{selectedFile.path}</p>
-                        </div>
-                        {selectedFile.size && (
-                          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                            {Math.round(selectedFile.size / 1024)}KB
-                          </span>
-                        )}
+                <div className="h-full overflow-hidden">
+                  {isWebProject(selectedProject) ? (
+                    <div className="h-full flex flex-col">
+                      <div className="p-3 border-b border-gray-200 bg-gray-50">
+                        <h4 className="text-sm font-semibold text-gray-800">Current Project State</h4>
+                        <p className="text-xs text-gray-500 mt-1">Preview before making changes</p>
                       </div>
-
-                      {/* Functions Overview */}
-                      {selectedFile.functions && selectedFile.functions.length > 0 && (
-                        <div className="mb-6">
-                          <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-                            <CodeBracketIcon className="h-4 w-4 mr-2 text-blue-500" />
-                            Functions & Methods ({selectedFile.functions.length})
-                          </h4>
-                          <div className="space-y-2">
-                            {selectedFile.functions.map((func, index) => (
-                              <div key={index} className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center">
-                                    <span className="font-mono text-sm font-semibold text-blue-700">{func.name}</span>
-                                    <span className="ml-2 text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">
-                                      {func.type}
-                                    </span>
-                                  </div>
-                                  <span className="text-xs text-gray-500">Line {func.startLine}</span>
-                                </div>
-                                {func.signature && (
-                                  <pre className="text-xs text-gray-600 mt-2 bg-white p-2 rounded border overflow-x-auto">
-                                    {func.signature}
-                                  </pre>
-                                )}
-                              </div>
-                            ))}
-                          </div>
+                      <div className="flex-1 overflow-auto bg-gray-100 p-4">
+                        <div className="bg-white rounded-lg shadow-lg overflow-hidden mx-auto" style={{ maxWidth: '100%' }}>
+                          <iframe
+                            ref={projectPreviewRef}
+                            className="w-full h-full border-0"
+                            style={{ minHeight: '600px' }}
+                            sandbox="allow-same-origin allow-scripts"
+                            title="Project Preview"
+                          />
                         </div>
-                      )}
-
-                      {/* Code Preview */}
-                      {selectedFile.content && (
-                        <div>
-                          <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-                            <DocumentIcon className="h-4 w-4 mr-2 text-green-500" />
-                            Code Preview
-                          </h4>
-                          <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
-                            <div className="bg-gray-100 px-3 py-2 border-b border-gray-200">
-                              <div className="flex items-center space-x-2">
-                                <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                                <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                                <span className="text-xs text-gray-600 ml-2">{selectedFile.name}</span>
-                              </div>
-                            </div>
-                            <pre className="text-xs text-gray-800 p-4 overflow-x-auto bg-white" style={{ maxHeight: '300px' }}>
-                              {selectedFile.content.split('\n').slice(0, 50).map((line, index) => (
-                                <div key={index} className="flex">
-                                  <span className="text-gray-400 mr-4 select-none" style={{ minWidth: '2rem' }}>
-                                    {(index + 1).toString().padStart(2, ' ')}
-                                  </span>
-                                  <span>{line}</span>
-                                </div>
-                              ))}
-                              {selectedFile.content.split('\n').length > 50 && (
-                                <div className="text-gray-500 italic mt-2">
-                                  ... {selectedFile.content.split('\n').length - 50} more lines
-                                </div>
-                              )}
-                            </pre>
-                          </div>
-                        </div>
-                      )}
+                      </div>
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                      <div className="text-center">
-                        <DocumentIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                        <p className="text-sm">Select a file to preview</p>
-                        <p className="text-xs text-gray-400 mt-1">Click on any file in the structure to see its content</p>
+                    <div className="h-full overflow-y-auto p-4">
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold text-gray-800 mb-2">API Endpoints</h4>
+                        <p className="text-xs text-gray-500">Detected endpoints in this project</p>
                       </div>
+                      {apiEndpoints.length > 0 ? (
+                        <div className="space-y-2">
+                          {apiEndpoints.map((endpoint, index) => (
+                            <div key={index} className="bg-white border border-gray-200 rounded-lg p-3">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-xs font-mono px-2 py-0.5 rounded ${
+                                  endpoint.method === 'GET' ? 'bg-green-100 text-green-700' :
+                                  endpoint.method === 'POST' ? 'bg-blue-100 text-blue-700' :
+                                  endpoint.method === 'PUT' ? 'bg-yellow-100 text-yellow-700' :
+                                  'bg-red-100 text-red-700'
+                                }`}>
+                                  {endpoint.method}
+                                </span>
+                                <span className="text-sm font-mono text-gray-700">{endpoint.path}</span>
+                              </div>
+                              {endpoint.description && (
+                                <p className="text-xs text-gray-500 mt-1">{endpoint.description}</p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <CodeBracketIcon className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                          <p className="text-sm">No API endpoints detected</p>
+                          <p className="text-xs mt-1">Analyzing project structure...</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
