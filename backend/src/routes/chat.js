@@ -71,6 +71,48 @@ When the user asks for help, analyze this specific file and provide targeted sug
 Use this context to provide specific, relevant suggestions for THIS codebase. Reference actual file names, functions, and patterns you can see in the project structure.`
     }
 
+    // Add structured code change format instructions
+    systemContent += `
+
+IMPORTANT: When suggesting code changes, use this structured format for better preview generation:
+
+FILE: path/to/file.tsx
+ACTION: create|modify|delete
+CODE:
+\`\`\`typescript
+// Your actual code here
+export function MyComponent() {
+  return <div>Hello</div>
+}
+\`\`\`
+
+Then explain what the change does and how it will improve the project.
+
+Example:
+FILE: src/components/Button.tsx
+ACTION: create
+CODE:
+\`\`\`typescript
+import React from 'react'
+
+interface ButtonProps {
+  label: string
+  onClick: () => void
+}
+
+export function Button({ label, onClick }: ButtonProps) {
+  return (
+    <button onClick={onClick} className="btn-primary">
+      {label}
+    </button>
+  )
+}
+\`\`\`
+
+This creates a reusable Button component with TypeScript props for better type safety.
+
+Use this format whenever you suggest creating, modifying, or deleting files. This enables visual preview of changes before applying them.`
+
     // Convert UI messages to OpenAI format
     const openaiMessages = [
       {

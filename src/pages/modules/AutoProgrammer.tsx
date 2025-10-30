@@ -11,10 +11,13 @@ import {
   CodeBracketIcon,
   PlayIcon,
   PaperAirplaneIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline'
 import { MessageRenderer } from '../../components/MessageRenderer'
 import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
+import CodePreview from './AutoProgrammer/components/CodePreview'
+import { isWebProject, detectProjectType } from '../../utils/projectDetector'
 
 // Types
 interface ChatMessage {
@@ -60,6 +63,7 @@ function AutoProgrammerContent() {
   const [codeChanges, setCodeChanges] = useState<CodeChange[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'structure' | 'preview' | 'changes'>('structure')
+  const [showPreview, setShowPreview] = useState(false)
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -568,8 +572,70 @@ The file structure isn't available for this analysis, but I can still help you w
     }
   }
 
-  const parseCodeChanges = (content: string) => {
-    return []
+  const parseCodeChanges = (content: string): CodeChange[] => {
+    const changes: CodeChange[] = []
+    
+    // Regex to find FILE: ... ACTION: ... CODE: ... blocks
+    const fileRegex = /FILE:\s*(.+?)\nACTION:\s*(create|modify|delete)\nCODE:\s*```[\w]*\n([\s\S]+?)```/g
+    
+    let match
+    while ((match = fileRegex.exec(content)) !== null) {
+      changes.push({
+        id: `change-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        file: match[1].trim(),
+        type: match[2] as 'create' | 'modify' | 'delete',
+        content: match[3].trim(),
+        approved: false
+      })
+    }
+    
+    return changes
+  }
+
+  const handleApplyChanges = (changes: CodeChange[]) => {
+    // Apply changes to file tree
+    const updatedTree = applyChangesToTree(fileTree, changes)
+    setFileTree(updatedTree)
+    
+    // Mark changes as approved
+    setCodeChanges(prev => prev.map(c => ({ ...c, approved: true })))
+    
+    toast.success(`Applied ${changes.length} change(s) successfully!`)
+    setShowPreview(false)
+  }
+
+  const applyChangesToTree = (tree: FileNode[], changes: CodeChange[]): FileNode[] => {
+    // Create a map of file paths to changes
+    const changeMap = new Map<string, CodeChange>()
+    changes.forEach(change => changeMap.set(change.file, change))
+    
+    // Recursively update the tree
+    const updateNode = (node: FileNode): FileNode => {
+      if (node.type === 'file' && changeMap.has(node.path)) {
+        const change = changeMap.get(node.path)!
+        if (change.type === 'modify' || change.type === 'create') {
+          return { ...node, content: change.content }
+        }
+      }
+      
+      if (node.children) {
+        return {
+          ...node,
+          children: node.children.map(updateNode).filter(child => {
+            // Remove deleted files
+            if (child.type === 'file' && changeMap.has(child.path)) {
+              const change = changeMap.get(child.path)!
+              return change.type !== 'delete'
+            }
+            return true
+          })
+        }
+      }
+      
+      return node
+    }
+    
+    return tree.map(updateNode)
   }
 
   const approveChange = (changeId: string) => {
@@ -889,8 +955,19 @@ The file structure isn't available for this analysis, but I can still help you w
             </form>
             
             {selectedProject && (
-              <div className="mt-2 text-xs text-gray-500 text-center">
-                Connected to <span className="font-medium text-blue-600">{getProjectName(selectedProject)}</span>
+              <div className="mt-2 flex items-center justify-between">
+                <div className="text-xs text-gray-500">
+                  Connected to <span className="font-medium text-blue-600">{getProjectName(selectedProject)}</span>
+                </div>
+                {isWebProject(selectedProject) && codeChanges.length > 0 && (
+                  <button
+                    onClick={() => setShowPreview(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-green-600 to-green-700 rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm"
+                  >
+                    <EyeIcon className="h-4 w-4" />
+                    Website Preview
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -1087,6 +1164,21 @@ The file structure isn't available for this analysis, but I can still help you w
           </div>
         )}
       </div>
+
+      {/* Website Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg w-full h-full max-w-7xl max-h-[95vh] overflow-hidden shadow-2xl">
+            <CodePreview
+              currentFiles={fileTree}
+              proposedChanges={codeChanges}
+              projectType={detectProjectType(selectedProject)}
+              onApplyChanges={handleApplyChanges}
+              onClose={() => setShowPreview(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
