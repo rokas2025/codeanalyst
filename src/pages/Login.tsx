@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Navigate, useSearchParams, Link } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
+import { supabase } from '../lib/supabase'
 import toast from 'react-hot-toast'
 
 export function Login() {
@@ -63,6 +64,39 @@ export function Login() {
       console.error('Google login error:', error)
       toast.error(error.message || 'Google login failed. Please try again.')
       setIsLoading(false)
+    }
+  }
+
+  const handleForgotPassword = async () => {
+    if (!supabase) {
+      toast.error('Password reset is not available. Please contact support.')
+      return
+    }
+
+    const resetEmail = prompt('Enter your email address to reset your password:')
+    if (!resetEmail) return
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(resetEmail)) {
+      toast.error('Please enter a valid email address')
+      return
+    }
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`
+      })
+      
+      if (error) throw error
+      
+      toast.success('Password reset email sent! Check your inbox.', {
+        duration: 5000,
+        icon: '📧'
+      })
+    } catch (error: any) {
+      console.error('Password reset error:', error)
+      toast.error('Failed to send reset email. Please try again.')
     }
   }
 
@@ -160,6 +194,15 @@ export function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <div className="text-right mt-2">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-primary-600 hover:text-primary-500 focus:outline-none"
+                >
+                  Forgot password?
+                </button>
+              </div>
             </div>
 
             <div>

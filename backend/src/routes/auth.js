@@ -530,15 +530,20 @@ router.post('/sync-supabase', async (req, res) => {
     }
     
     let user = await DatabaseService.getUserById(supabaseUserId)
+    let isNewUser = false
     
     if (!user) {
+      // Create new user from Google OAuth
       user = await DatabaseService.createUser({
         id: supabaseUserId,
         email: email,
         name: name || email.split('@')[0],
         plan: 'free',
-        auth_provider: 'supabase'
+        auth_provider: 'supabase',
+        is_active: false, // New users need approval
+        pending_approval: true
       })
+      isNewUser = true
       logger.info(`✅ New Supabase user synced: ${email}`)
     } else {
       await DatabaseService.updateUser(user.id, {
@@ -546,10 +551,54 @@ router.post('/sync-supabase', async (req, res) => {
       })
     }
     
+    // Check if user is pending approval
+    if (user.pending_approval) {
+      return res.status(403).json({
+        success: false,
+        error: 'Your account is pending approval',
+        message: 'Please wait for an administrator to approve your account.'
+      })
+    }
+    
+    // Check if user is deactivated
+    if (!user.is_active) {
+      return res.status(403).json({
+        success: false,
+        error: 'Your account has been deactivated',
+        message: 'Please contact support for assistance.'
+      })
+    }
+    
+    // Get user role from user_roles table
+    let userRole = 'user' // default
+    try {
+      const roleResult = await db.query(
+        'SELECT role FROM user_roles WHERE user_id = $1::UUID LIMIT 1',
+        [user.id]
+      )
+      
+      if (roleResult.rows.length > 0) {
+        userRole = roleResult.rows[0].role
+      } else if (isNewUser) {
+        // Assign admin role to new Google OAuth users
+        await db.query(
+          'INSERT INTO user_roles (user_id, role) VALUES ($1::UUID, $2) ON CONFLICT (user_id, role) DO NOTHING',
+          [user.id, 'admin']
+        )
+        userRole = 'admin'
+        logger.info(`✅ Admin role assigned to new Google user: ${email}`)
+      }
+    } catch (roleError) {
+      logger.error('Failed to get/assign user role:', roleError)
+      // Continue with default 'user' role
+    }
+    
+    // Generate JWT with role
     const token = jwt.sign({
       userId: user.id,
       email: user.email,
-      name: user.name
+      name: user.name,
+      role: userRole
     }, process.env.JWT_SECRET, { expiresIn: '30d' })
     
     res.json({ 
@@ -560,7 +609,8 @@ router.post('/sync-supabase', async (req, res) => {
         email: user.email, 
         name: user.name, 
         plan: user.plan,
-        avatarUrl: user.avatar_url
+        avatarUrl: user.avatar_url,
+        role: userRole
       } 
     })
     

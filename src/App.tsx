@@ -5,6 +5,7 @@ import { Layout } from './components/Layout'
 import { Dashboard } from './pages/Dashboard'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
+import { ResetPassword } from './pages/ResetPassword'
 import { GitHubCallback } from './pages/GitHubCallback'
 import { AuthCallback } from './pages/AuthCallback'
 import { CodeAnalyst } from './pages/modules/CodeAnalyst'
@@ -28,6 +29,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/auth/github/callback" element={<GitHubCallback />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
