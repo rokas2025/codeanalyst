@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useContentCreatorStore } from '../../../stores/contentCreatorStore'
 import type { ContentSection } from '../../../types/contentCreator'
+import EnhancedPreview from '../ContentCreator/components/EnhancedPreview'
 
 interface ContentPreviewProps {
   onComplete?: () => void
@@ -32,7 +33,11 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
     setPreviewMode,
     generationError,
     lastGenerationMetadata,
-    clearErrors
+    clearErrors,
+    previewTheme,
+    previewViewport,
+    setPreviewTheme,
+    setPreviewViewport
   } = useContentCreatorStore()
 
   const [editingSection, setEditingSection] = useState<string | null>(null)
@@ -458,77 +463,21 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
                   </div>
 
                   {viewMode === 'preview' ? (
-                    // Website Preview Mode - Beautiful, clean design
-                    <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
-                      {/* Mock Browser Header */}
-                      <div className="bg-gray-50 border-b border-gray-200 px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <div className="flex gap-1.5">
-                            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                            <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                          </div>
-                          <div className="flex-1 mx-4">
-                            <div className="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-600 text-center">
-                              {inputs.companyName || 'your-website'}.com
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Website Content */}
-                      <div className="p-8 max-w-4xl mx-auto">
-                        <article className="prose prose-lg max-w-none">
-                          {localContent.map((section, index) => {
-                            if (section.type === 'heading') {
-                              return (
-                                <h1 key={section.id} className="text-3xl font-bold text-gray-900 mb-6 leading-tight">
-                                  {section.content}
-                                </h1>
-                              )
-                            } else if (section.type === 'subheading') {
-                              return (
-                                <h2 key={section.id} className="text-2xl font-semibold text-gray-800 mt-8 mb-4 leading-tight">
-                                  {section.content}
-                                </h2>
-                              )
-                            } else if (section.type === 'list') {
-                              return (
-                                <ul key={section.id} className="list-disc list-inside space-y-2 mb-6 text-gray-700">
-                                  {section.content.split('\n').filter(item => item.trim()).map((item, itemIndex) => (
-                                    <li key={itemIndex} className="leading-relaxed">
-                                      {item.replace(/^[•\-\*]\s*/, '')}
-                                    </li>
-                                  ))}
-                                </ul>
-                              )
-                            } else if (section.type === 'cta') {
-                              return (
-                                <div key={section.id} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-6 text-center my-8 shadow-lg">
-                                  <p className="text-lg font-semibold mb-4">{section.content}</p>
-                                  <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors shadow-md">
-                                    Get Started
-                                  </button>
-                                </div>
-                              )
-                            } else if (section.type === 'quote') {
-                              return (
-                                <blockquote key={section.id} className="border-l-4 border-blue-500 pl-6 py-4 bg-blue-50 rounded-r-lg my-6">
-                                  <p className="text-lg italic text-gray-700 leading-relaxed">
-                                    "{section.content}"
-                                  </p>
-                                </blockquote>
-                              )
-                            } else {
-                              return (
-                                <p key={section.id} className="text-gray-700 leading-relaxed mb-4 text-lg">
-                                  {section.content}
-                                </p>
-                              )
-                            }
-                          })}
-                        </article>
-                      </div>
+                    // Enhanced Website Preview Mode - Interactive, responsive, themed
+                    <div className="h-[calc(100vh-20rem)]">
+                      <EnhancedPreview
+                        content={localContent}
+                        inputs={inputs}
+                        theme={previewTheme}
+                        viewport={previewViewport}
+                        onThemeChange={setPreviewTheme}
+                        onViewportChange={setPreviewViewport}
+                        onEdit={(sectionId, newContent) => {
+                          setLocalContent(prev => 
+                            prev.map(s => s.id === sectionId ? { ...s, content: newContent } : s)
+                          )
+                        }}
+                      />
                     </div>
                   ) : viewMode === 'edit' && previewMode === 'formatted' ? (
                     <div className="space-y-6">

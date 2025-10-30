@@ -7,8 +7,14 @@ import type {
 } from '../types/contentCreator'
 import { DEFAULT_GENERATION_SETTINGS } from '../types/contentCreator'
 import { contentCreatorService } from '../services/contentCreatorService'
+import { Theme, defaultTheme } from '../utils/previewThemes'
+import { Viewport } from '../utils/htmlGenerator'
 
 interface ContentCreatorStore extends ContentCreatorState {
+  // Preview state
+  previewTheme: Theme
+  previewViewport: Viewport
+  
   // Actions
   loadTemplates: () => Promise<void>
   selectTemplate: (template: ContentTemplate) => void
@@ -25,6 +31,10 @@ interface ContentCreatorStore extends ContentCreatorState {
   removeFromFavorites: (templateId: string) => void
   loadContentHistory: () => Promise<void>
   updateDefaultSettings: (settings: Partial<GenerationSettings>) => void
+  
+  // Preview actions
+  setPreviewTheme: (theme: Theme) => void
+  setPreviewViewport: (viewport: Viewport) => void
   
   // Error handling
   clearErrors: () => void
@@ -47,6 +57,10 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
   currentStep: 'template',
   showAdvancedSettings: false,
   previewMode: 'formatted',
+  
+  // Preview state
+  previewTheme: defaultTheme,
+  previewViewport: 'desktop' as Viewport,
   
   // Error handling
   generationError: null,
@@ -247,6 +261,16 @@ export const useContentCreatorStore = create<ContentCreatorStore>((set, get) => 
 
   setPreviewMode: (mode: ContentCreatorState['previewMode']) => {
     set({ previewMode: mode })
+  },
+
+  setPreviewTheme: (theme: Theme) => {
+    set({ previewTheme: theme })
+    localStorage.setItem('contentCreator_previewTheme', theme.id)
+  },
+
+  setPreviewViewport: (viewport: Viewport) => {
+    set({ previewViewport: viewport })
+    localStorage.setItem('contentCreator_previewViewport', viewport)
   },
 
   addToFavorites: (templateId: string) => {

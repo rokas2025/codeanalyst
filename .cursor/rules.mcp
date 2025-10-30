@@ -1,0 +1,479 @@
+# .cursor/rules.mcp
+# Cursor AI Rules for CodeAnalyst Project
+# Professional rules for Windows (PowerShell safe)
+# ------------------------------------------------------------------
+
+meta:
+  project_name: "CodeAnalyst - AI-Powered Website Analysis Platform"
+  owner: "Eomcorner OU"
+  os: "windows"
+  defaults:
+    editor: "Cursor Ultra"
+    node: "22.x"
+    package_manager: "npm"
+    db: "Supabase PostgreSQL (direct pg library, no ORM)"
+    deploy_frontend: "Vercel"
+    deploy_backend: "Railway"
+    frontend: "React 18 + Vite + TypeScript + TailwindCSS"
+    backend: "Node.js 22 + Express (ES Modules) + pg"
+    integrations:
+      - "Supabase Auth (email, Google, GitHub OAuth)"
+      - "WordPress REST API"
+      - "OpenAI GPT-4"
+      - "Anthropic Claude"
+      - "Google Gemini"
+      - "Puppeteer-extra + Stealth Plugin"
+      - "Bull + Redis (job queues)"
+
+# =========================
+# 1) Scope & Session rules
+# =========================
+scope:
+  session_management:
+    # Auto-handover when chats bloat or context drifts.
+    max_messages_before_handover: 250
+    drift_signals:
+      - "repeated clarification requests"
+      - "conflicting file state or stale diffs"
+      - "token/context limit reached errors"
+    on_handover:
+      action: "start_new_chat"
+      new_chat_title_prefix: "[CONTINUED]"
+      carry_forward:
+        - "Edited files list"
+        - "Active git branch and pending changes"
+        - "Objectives summary"
+        - "Open TODOs / blockers"
+      produce_summary:
+        last_n_messages: 20
+        template: |
+          # CONTEXT SUMMARY (carry to new chat)
+          ## Objectives
+          - <bullet list of current goals>
+
+          ## Current Work
+          - Files touched:
+            - <file>: <what changed>
+          - Branch: <branch>
+          - Pending migrations / scripts: <list>
+
+          ## TODOs / Next Steps
+          - <bullet list>
+
+          ## Decisions / Constraints
+          - <key decisions, versions, libraries>
+
+      confirmation_message: |
+        Context grew large, so I started a fresh thread with a compact summary and carried over goals, files, and TODOs.
+
+# ========================================
+# 2) Windows-safe terminal & OS awareness
+# ========================================
+platform:
+  os_assumptions:
+    - "Always assume Windows 11 terminal (PowerShell Core or Windows PowerShell)."
+  command_preferences:
+    # Prefer Windows-friendly commands; show Bash equivalents only as comments.
+    preferred:
+      dir: ["ls"]
+      copy: ["cp"]
+      move: ["mv"]
+      del: ["rm", "rimraf"]
+      type: ["cat"]
+      findstr: ["grep"]
+      powershell_CopyItem: ["cp -r"]
+      powershell_GetChildItem: ["ls -la"]
+    avoid:
+      - "chmod"
+      - "chown"
+      - "sudo"
+      - "awk"
+      - "sed"
+      - "bash-only process substitution ( <( ) )"
+      - "&&  (use separate commands or ; in PowerShell)"
+    path_rules:
+      - "Use backslashes in CLI examples (escape as \\\\ in JSON)."
+      - "Wrap paths with spaces in double quotes."
+    node_scripts:
+      - "Prefer cross-platform scripts in package.json (use Node JS files over Bash)."
+    shell_snippets:
+      show_both_platforms: false
+      format: |
+        # PowerShell only (Windows environment)
+
+# ================================
+# 3) Coding quality & style rules
+# ================================
+coding:
+  general:
+    - "Production-ready, DRY, readable code only."
+    - "Keep answers concise; prioritize correctness/clarity."
+    - "New env vars => update .env.example + README."
+    - "Name functions consistently; avoid breaking API surfaces."
+    - "Use TypeScript for frontend, JavaScript ES Modules for backend."
+    - "Always use async/await with try/catch error handling."
+    - "Log errors properly, never expose stack traces in production."
+  
+  frontend:
+    stack: "React 18 + Vite + TypeScript + TailwindCSS + React Router"
+    rules:
+      - "Functional components + hooks only (no class components)."
+      - "Use TypeScript for all new files (.tsx, .ts)."
+      - "Tailwind for styling; avoid inline styles."
+      - "React Router 6 for navigation."
+      - "React Query for server state."
+      - "Zustand for client state."
+      - "React Hot Toast for notifications."
+      - "Heroicons for icons."
+      - "Validate forms with react-hook-form."
+      - "Use Context API for global state (ProjectContext, AuthContext)."
+      - "Lazy load routes and heavy components."
+      - "Handle loading/error states in all data fetching."
+      - "Use environment variables with VITE_ prefix."
+  
+  backend:
+    stack: "Node.js 22 + Express + pg (PostgreSQL) + ES Modules"
+    rules:
+      - "Use ES Modules syntax (import/export, not require)."
+      - "Use async/await + try/catch; never unhandled promises."
+      - "Place routes under /api/*."
+      - "Separate route, controller, and service layers."
+      - "Use pg.Pool with connection pooling for Supabase."
+      - "Parameterize SQL queries to prevent injection."
+      - "Use DatabaseService.js for all database operations."
+      - "Log errors via Winston logger; never console.log in production."
+      - "Queue long-running tasks with Bull + Redis."
+      - "Use Puppeteer-extra with Stealth plugin for web scraping."
+      - "Implement rate limiting on public endpoints."
+      - "Use helmet for security headers."
+      - "Enable CORS only for allowed origins."
+      - "Return proper HTTP status codes (200, 201, 400, 401, 403, 404, 500)."
+      - "Use middleware for authentication (authMiddleware)."
+      - "Use role middleware for authorization (isSuperAdmin, isAdmin, etc)."
+
+# ================================
+# 4) Database & migrations
+# ================================
+database:
+  type: "PostgreSQL (Supabase)"
+  orm: "None - direct pg library"
+  connection: "pg.Pool with connection pooling"
+  rules:
+    - "Use parameterized queries ($1, $2, etc) to prevent SQL injection."
+    - "All queries go through DatabaseService.js."
+    - "Use transactions for multi-step operations."
+    - "Create indexes for frequently queried columns."
+    - "Use UUID for primary keys (gen_random_uuid())."
+    - "Use JSONB for flexible data structures."
+    - "Use timestamps (created_at, updated_at) on all tables."
+    - "Implement soft deletes where appropriate (is_active flag)."
+  migrations:
+    - "Store SQL migrations in backend/src/database/migrations/"
+    - "Run migrations manually via Supabase SQL Editor or migration scripts."
+    - "Never auto-migrate in production."
+    - "Test migrations on staging/dev first."
+    - "Document breaking changes in migration comments."
+
+# ==================================
+# 5) USER MANAGEMENT & RBAC
+# ==================================
+user_management:
+  roles:
+    superadmin:
+      - "Full system access"
+      - "Manage all users (approve, deactivate, reactivate)"
+      - "View all projects across all admins"
+      - "Only superadmin can create new superadmins"
+      - "Assigned to: rokas@zubas.lt (email) and rokas2025 (GitHub)"
+    admin:
+      - "Create and manage own projects"
+      - "Invite users to projects"
+      - "Set module permissions per user"
+      - "Cannot see other admins' projects"
+      - "New registrations default to admin role (pending approval)"
+    user:
+      - "Access only assigned projects"
+      - "Use only permitted modules"
+      - "Cannot create projects"
+      - "Cannot invite other users"
+  
+  authentication:
+    providers:
+      - "GitHub OAuth (primary for superadmin)"
+      - "Email/password via Supabase Auth"
+      - "Google OAuth via Supabase Auth"
+    flow:
+      - "New registrations set pending_approval = true"
+      - "Superadmin must approve before user can login"
+      - "Check is_active flag on every login"
+      - "Check pending_approval flag on every login"
+      - "GitHub user rokas2025 auto-assigned superadmin on first login"
+    security:
+      - "**NEVER hardcode passwords or credentials**"
+      - "Use bcrypt/crypt for password hashing"
+      - "JWT tokens for session management (30-day expiration)"
+      - "Store tokens in localStorage (frontend)"
+      - "Include Authorization: Bearer <token> in all API requests"
+  
+  authorization:
+    middleware:
+      - "authMiddleware: Verify JWT token"
+      - "isSuperAdmin: Check if user is superadmin"
+      - "isAdmin: Check if user is admin or superadmin"
+      - "hasProjectAccess: Check if user can access project"
+      - "hasModuleAccess: Check if user can use specific module"
+      - "isActiveUser: Check if account is active and approved"
+    implementation:
+      - "Apply middleware to protected routes"
+      - "Return 401 for unauthenticated requests"
+      - "Return 403 for unauthorized requests"
+      - "Log unauthorized access attempts"
+  
+  data_isolation:
+    - "Analysis history filtered by user_id"
+    - "WordPress connections tied to projects"
+    - "Each user sees only their own data"
+    - "Admins see only their own projects and users"
+    - "Superadmins see all data"
+    - "Use RLS (Row Level Security) where applicable"
+
+# ================================
+# 6) Security best practices
+# ================================
+security:
+  critical_rules:
+    - "**NEVER hardcode passwords, API keys, or credentials in code**"
+    - "**NEVER commit .env files to git**"
+    - "**ALWAYS use environment variables for secrets**"
+    - "**ALWAYS parameterize SQL queries**"
+    - "**ALWAYS validate and sanitize user inputs**"
+    - "**ALWAYS check user permissions before operations**"
+  
+  authentication:
+    - "Use Supabase Auth for email/Google authentication"
+    - "Use custom JWT for GitHub OAuth"
+    - "Verify JWT on every protected route"
+    - "Check is_active and pending_approval on login"
+    - "Implement token refresh mechanism"
+  
+  authorization:
+    - "Implement role-based access control (RBAC)"
+    - "Use middleware for permission checks"
+    - "Never trust client-side role checks"
+    - "Always verify permissions on backend"
+  
+  data_protection:
+    - "Use HTTPS only in production"
+    - "Sanitize all user-facing output"
+    - "Implement rate limiting on public endpoints"
+    - "Use helmet for security headers"
+    - "Enable CORS only for allowed origins"
+    - "Hash passwords with bcrypt (cost factor 10+)"
+    - "Never log sensitive data (passwords, tokens)"
+  
+  api_security:
+    - "Validate all request parameters"
+    - "Use express-validator for input validation"
+    - "Return generic error messages to clients"
+    - "Log detailed errors server-side only"
+    - "Implement request size limits"
+    - "Use compression for responses"
+
+# ================================
+# 7) Testing & quality assurance
+# ================================
+testing:
+  frontend:
+    framework: "Vitest + @testing-library/react"
+    commands:
+      - "npm run test          # Run tests"
+      - "npm run test:ui       # UI mode"
+      - "npm run test:coverage # Coverage report"
+      - "npm run test:watch    # Watch mode"
+    rules:
+      - "Write tests for critical user flows"
+      - "Test components in isolation"
+      - "Mock external dependencies"
+      - "Aim for 80%+ coverage on critical paths"
+  
+  backend:
+    framework: "Jest + Supertest"
+    commands:
+      - "cd backend && npm run test"
+      - "cd backend && npm run test:watch"
+    rules:
+      - "Test all API endpoints"
+      - "Test authentication/authorization flows"
+      - "Test database operations"
+      - "Mock external APIs (OpenAI, Claude, etc)"
+      - "Test error handling"
+  
+  linting:
+    frontend:
+      - "npm run lint          # Check"
+      - "npm run lint:fix      # Auto-fix"
+    backend:
+      - "cd backend && npm run lint"
+    rules:
+      - "Fix all linting errors before committing"
+      - "Use TypeScript strict mode for frontend"
+      - "Follow ESLint recommendations"
+
+# ================================
+# 8) Git & deployment
+# ================================
+git:
+  workflow:
+    - "Main branch: production-ready code only"
+    - "Create feature branches for new work"
+    - "Commit frequently with clear messages"
+    - "Never commit .env files or secrets"
+    - "Never force push to main"
+    - "Never skip hooks (--no-verify)"
+  
+  commit_messages:
+    format: "<type>: <description>"
+    types:
+      - "feat: New feature"
+      - "fix: Bug fix"
+      - "docs: Documentation"
+      - "style: Formatting"
+      - "refactor: Code restructuring"
+      - "test: Tests"
+      - "chore: Maintenance"
+    examples:
+      - "feat: Add user management system"
+      - "fix: Resolve WordPress plugin activation error"
+      - "docs: Update API documentation"
+
+deployment:
+  frontend:
+    platform: "Vercel"
+    trigger: "Push to main branch"
+    build_command: "npm run build"
+    env_vars:
+      - "VITE_SUPABASE_URL"
+      - "VITE_SUPABASE_ANON_KEY"
+      - "VITE_API_URL"
+      - "VITE_GITHUB_CLIENT_ID"
+      - "VITE_FRONTEND_URL"
+  
+  backend:
+    platform: "Railway"
+    trigger: "Push to main branch"
+    start_command: "npm start"
+    env_vars:
+      - "DATABASE_URL"
+      - "SUPABASE_URL"
+      - "SUPABASE_SERVICE_ROLE_KEY"
+      - "JWT_SECRET"
+      - "GITHUB_CLIENT_ID"
+      - "GITHUB_CLIENT_SECRET"
+      - "OPENAI_API_KEY"
+      - "GOOGLE_AI_API_KEY"
+      - "FRONTEND_URL"
+      - "CORS_ORIGIN"
+  
+  database:
+    platform: "Supabase"
+    management: "Manual via SQL Editor"
+    backups: "Automatic (Supabase)"
+
+# ================================
+# 9) Project-specific patterns
+# ================================
+patterns:
+  wordpress_integration:
+    - "WordPress plugin provides REST API endpoints"
+    - "Plugin must be installed on target WordPress site"
+    - "Use API key for authentication"
+    - "Fetch theme files, pages, and site info via REST API"
+    - "Store WordPress connections in database with project_id"
+  
+  ai_integrations:
+    - "Support multiple AI providers (OpenAI, Claude, Gemini)"
+    - "Use streaming for real-time responses"
+    - "Implement fallback mechanisms"
+    - "Cache AI responses where appropriate"
+    - "Handle rate limits gracefully"
+  
+  web_scraping:
+    - "Use Puppeteer-extra with Stealth plugin"
+    - "Implement retry logic with exponential backoff"
+    - "Handle timeouts gracefully"
+    - "Rotate user agents"
+    - "Respect robots.txt"
+    - "Implement fallback to Axios for blocked sites"
+  
+  project_architecture:
+    - "Projects belong to admins"
+    - "Users are invited to projects"
+    - "Module permissions are per user per project"
+    - "WordPress connections are tied to projects"
+    - "Analysis history is tied to projects and users"
+    - "When project is selected, disable manual URL entry"
+    - "When 'None' is selected, enable manual URL entry"
+
+# ================================
+# 10) Common tasks & commands
+# ================================
+tasks:
+  setup:
+    - "npm install                    # Install frontend deps"
+    - "cd backend && npm install      # Install backend deps"
+    - "Copy .env.example to .env      # Configure environment"
+  
+  development:
+    - "npm run dev                    # Start frontend (port 3000)"
+    - "cd backend && npm run dev      # Start backend (port 3001)"
+    - "Both must run simultaneously for full functionality"
+  
+  database:
+    - "Run migrations in Supabase SQL Editor"
+    - "Use DatabaseService.js for all queries"
+    - "Never run raw SQL from frontend"
+  
+  deployment:
+    - "git push origin main           # Auto-deploys to Vercel + Railway"
+    - "Check Vercel dashboard for frontend logs"
+    - "Check Railway dashboard for backend logs"
+  
+  troubleshooting:
+    - "Check browser console for frontend errors"
+    - "Check Railway logs for backend errors"
+    - "Verify environment variables are set correctly"
+    - "Test API endpoints with Postman/Thunder Client"
+    - "Check database connections in Supabase"
+
+# ================================
+# 11) File structure awareness
+# ================================
+structure:
+  frontend:
+    - "src/pages/          # Page components"
+    - "src/components/     # Reusable components"
+    - "src/contexts/       # React contexts"
+    - "src/services/       # API services"
+    - "src/utils/          # Utility functions"
+    - "public/             # Static assets"
+  
+  backend:
+    - "src/routes/         # API routes"
+    - "src/services/       # Business logic"
+    - "src/middleware/     # Express middleware"
+    - "src/database/       # Database connection & migrations"
+    - "src/workers/        # Background job workers"
+    - "src/utils/          # Utility functions"
+  
+  config:
+    - ".env               # Environment variables (not committed)"
+    - ".env.example       # Template for .env"
+    - "package.json       # Frontend dependencies"
+    - "backend/package.json # Backend dependencies"
+    - "vite.config.ts     # Vite configuration"
+    - "vercel.json        # Vercel deployment config"
+    - "tailwind.config.js # Tailwind configuration"
+
+# ================================
+# END OF RULES
+# ================================

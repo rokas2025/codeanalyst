@@ -242,7 +242,7 @@ export class ContentGenerationService {
    */
   async generateWithOpenAI(template, prompt, generationSettings, options = {}) {
     try {
-      const modelUsed = options.model || generationSettings.model || 'gpt-4-turbo'
+      const modelUsed = options.model || generationSettings.model || 'gpt-4o'
       const temperature = Math.min(Math.max(generationSettings.temperature || 0.7, 0.0), 1.0)
       const maxTokens = this.calculateMaxTokens(
         generationSettings.maxTokens || template.estimated_words || 1000
@@ -676,6 +676,7 @@ Generate comprehensive, high-quality content that exceeds expectations.`
     // Pricing as of 2024 (approximate, per 1K tokens)
     const pricing = {
       openai: {
+        'gpt-4o': { input: 0.0025, output: 0.01 },
         'gpt-4-turbo': { input: 0.01, output: 0.03 },
         'gpt-4': { input: 0.03, output: 0.06 },
         'gpt-3.5-turbo': { input: 0.001, output: 0.002 }

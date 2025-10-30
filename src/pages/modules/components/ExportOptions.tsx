@@ -9,22 +9,33 @@ import {
   CheckIcon,
   ShareIcon,
   BookmarkIcon,
-  CloudArrowDownIcon
+  CloudArrowDownIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline'
 import { useContentCreatorStore } from '../../../stores/contentCreatorStore'
+import { generateStyledHTML } from '../../../utils/htmlGenerator'
 
 interface ExportOptionsProps {
   onComplete?: () => void
 }
 
 export function ExportOptions({ onComplete }: ExportOptionsProps) {
-  const { generatedContent, selectedTemplate, saveContent } = useContentCreatorStore()
+  const { generatedContent, selectedTemplate, saveContent, previewTheme, previewViewport } = useContentCreatorStore()
   const [selectedFormats, setSelectedFormats] = useState<string[]>(['html'])
   const [savedToHistory, setSavedToHistory] = useState(false)
   const [exportingFormats, setExportingFormats] = useState<string[]>([])
   const [copiedFormats, setCopiedFormats] = useState<string[]>([])
 
   const exportFormats = [
+    {
+      id: 'html-styled',
+      name: 'HTML with Styling',
+      description: 'Complete HTML with embedded CSS and theme styling',
+      icon: SparklesIcon,
+      extension: '.html',
+      mimeType: 'text/html',
+      featured: true
+    },
     {
       id: 'html',
       name: 'HTML',
@@ -65,6 +76,13 @@ export function ExportOptions({ onComplete }: ExportOptionsProps) {
     const sections = generatedContent.content
 
     switch (format) {
+      case 'html-styled':
+        // Generate complete styled HTML with theme
+        return generateStyledHTML(sections, previewTheme, previewViewport, {
+          includeResponsive: true,
+          includeAnimations: true
+        })
+      
       case 'html':
         return sections.map(section => {
           switch (section.type) {
@@ -254,14 +272,20 @@ export function ExportOptions({ onComplete }: ExportOptionsProps) {
                     <div
                       key={format.id}
                       className={`
-                        border rounded-lg p-4 transition-all cursor-pointer
+                        border rounded-lg p-4 transition-all cursor-pointer relative
                         ${isSelected 
                           ? 'border-blue-500 bg-blue-50' 
                           : 'border-gray-200 hover:border-gray-300'
                         }
+                        ${format.featured ? 'ring-2 ring-purple-500 ring-offset-2' : ''}
                       `}
                       onClick={() => handleFormatToggle(format.id)}
                     >
+                      {format.featured && (
+                        <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          NEW
+                        </div>
+                      )}
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-3">
                           <div className={`
