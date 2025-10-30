@@ -99,6 +99,67 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
     // You could add a toast notification here
   }
 
+  // Format section content with markdown parsing for display
+  const formatSectionForDisplay = (section: ContentSection): string => {
+    const parseMarkdown = (text: string): string => {
+      let formatted = text
+      // Bold text: **text** or __text__
+      formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      formatted = formatted.replace(/__(.+?)__/g, '<strong>$1</strong>')
+      // Italic text: *text* or _text_ (but not if part of **)
+      formatted = formatted.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>')
+      formatted = formatted.replace(/(?<!_)_([^_]+?)_(?!_)/g, '<em>$1</em>')
+      // Links: [text](url)
+      formatted = formatted.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">$1</a>')
+      // Inline code: `code`
+      formatted = formatted.replace(/`(.+?)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">$1</code>')
+      return formatted
+    }
+
+    if (section.type === 'heading') {
+      // Remove markdown heading symbols and parse inline markdown
+      let text = section.content
+      let level = 2
+      if (text.startsWith('#### ')) {
+        level = 4
+        text = text.substring(5)
+      } else if (text.startsWith('### ')) {
+        level = 3
+        text = text.substring(4)
+      } else if (text.startsWith('## ')) {
+        level = 2
+        text = text.substring(3)
+      } else if (text.startsWith('# ')) {
+        level = 1
+        text = text.substring(2)
+      }
+      const formatted = parseMarkdown(text.trim())
+      return `<h${level} class="text-xl font-bold text-gray-900 mb-0">${formatted}</h${level}>`
+    } else if (section.type === 'list') {
+      const items = section.content.split('\n').filter(item => item.trim())
+      const listItems = items.map(item => {
+        const cleaned = item.replace(/^[\d\-\*\+]+\.?\s*/, '').trim()
+        const formatted = parseMarkdown(cleaned)
+        return `<li>${formatted}</li>`
+      }).join('')
+      return `<ul class="list-disc list-inside space-y-1 text-gray-800">${listItems}</ul>`
+    } else if (section.type === 'cta') {
+      const formatted = parseMarkdown(section.content)
+      return `<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center"><p class="text-blue-800 font-medium">${formatted}</p></div>`
+    } else if (section.type === 'quote') {
+      const formatted = parseMarkdown(section.content)
+      return `<blockquote class="border-l-4 border-gray-300 pl-4 italic text-gray-700">${formatted}</blockquote>`
+    } else {
+      // Paragraph - split by double newlines and parse each
+      const paragraphs = section.content.split('\n\n').filter(p => p.trim())
+      const formatted = paragraphs.map(p => {
+        const parsed = parseMarkdown(p.trim())
+        return `<p class="text-gray-800 leading-relaxed mb-2">${parsed}</p>`
+      }).join('')
+      return formatted
+    }
+  }
+
   const getFormattedContent = () => {
     if (previewMode === 'html') {
       return localContent.map(section => {
@@ -546,27 +607,10 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
                         <div 
                           className="prose prose-sm max-w-none cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors"
                           onClick={() => startEditing(section)}
-                        >
-                          {section.type === 'heading' ? (
-                            <h2 className="text-xl font-bold text-gray-900 mb-0">{section.content}</h2>
-                          ) : section.type === 'list' ? (
-                            <ul className="list-disc list-inside space-y-1 text-gray-800">
-                              {section.content.split('\n').filter(item => item.trim()).map((item, index) => (
-                                <li key={index}>{item.replace(/^[•\-\*]\s*/, '')}</li>
-                              ))}
-                            </ul>
-                          ) : section.type === 'cta' ? (
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                              <p className="text-blue-800 font-medium">{section.content}</p>
-                            </div>
-                          ) : section.type === 'quote' ? (
-                            <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-700">
-                              {section.content}
-                            </blockquote>
-                          ) : (
-                            <p className="text-gray-800 leading-relaxed">{section.content}</p>
-                          )}
-                        </div>
+                          dangerouslySetInnerHTML={{
+                            __html: formatSectionForDisplay(section)
+                          }}
+                        />
                       )}
                     </div>
                   ))}
