@@ -643,33 +643,77 @@ export class DatabaseService {
    */
   static async createUser(userData) {
     try {
-      const query = `
-        INSERT INTO users (
-          id, github_id, github_username, github_access_token, 
-          email, name, avatar_url, plan, created_at, updated_at
-        ) 
-        VALUES (
-          gen_random_uuid(), $1::BIGINT, $2::VARCHAR(255), $3::TEXT,
-          $4::VARCHAR(255), $5::VARCHAR(255), $6::TEXT, $7::VARCHAR(50),
-          CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-        )
-        RETURNING *
-      `
-      const values = [
-        userData.github_id,
-        userData.github_username,
-        userData.github_access_token,
-        userData.email,
-        userData.name,
-        userData.avatar_url,
-        userData.plan || 'free'
-      ]
+      // Handle both GitHub and Supabase users
+      const isGithubUser = !!userData.github_id
+      
+      let query, values
+      
+      if (isGithubUser) {
+        // GitHub user
+        query = `
+          INSERT INTO users (
+            id, github_id, github_username, github_access_token, 
+            email, name, avatar_url, plan, auth_provider,
+            is_active, pending_approval, created_at, updated_at
+          ) 
+          VALUES (
+            COALESCE($1::UUID, gen_random_uuid()), $2::BIGINT, $3::VARCHAR(255), $4::TEXT,
+            $5::VARCHAR(255), $6::VARCHAR(255), $7::TEXT, $8::VARCHAR(50), 'github',
+            COALESCE($9::BOOLEAN, false), COALESCE($10::BOOLEAN, true),
+            CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+          )
+          RETURNING *
+        `
+        values = [
+          userData.id || null,
+          userData.github_id,
+          userData.github_username,
+          userData.github_access_token,
+          userData.email,
+          userData.name,
+          userData.avatar_url,
+          userData.plan || 'free',
+          userData.is_active,
+          userData.pending_approval
+        ]
+      } else {
+        // Supabase user (email/Google)
+        query = `
+          INSERT INTO users (
+            id, email, name, avatar_url, plan, auth_provider,
+            is_active, pending_approval, created_at, updated_at
+          ) 
+          VALUES (
+            COALESCE($1::UUID, gen_random_uuid()), $2::VARCHAR(255), $3::VARCHAR(255), 
+            $4::TEXT, $5::VARCHAR(50), COALESCE($6::VARCHAR(50), 'supabase'),
+            COALESCE($7::BOOLEAN, false), COALESCE($8::BOOLEAN, true),
+            CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+          )
+          RETURNING *
+        `
+        values = [
+          userData.id || null,
+          userData.email,
+          userData.name,
+          userData.avatar_url,
+          userData.plan || 'free',
+          userData.auth_provider,
+          userData.is_active,
+          userData.pending_approval
+        ]
+      }
 
       const result = await db.query(query, values)
-      logger.logDatabase('insert', 'users', 0, { githubUsername: userData.github_username })
+      logger.logDatabase('insert', 'users', 0, { 
+        email: userData.email, 
+        githubUsername: userData.github_username 
+      })
       return result.rows[0]
     } catch (error) {
-      logger.logError('Database createUser', error, { githubUsername: userData.github_username })
+      logger.logError('Database createUser', error, { 
+        email: userData.email, 
+        githubUsername: userData.github_username 
+      })
       throw error
     }
   }

@@ -311,9 +311,11 @@ Implementation is complete when:
 **Backend:** https://codeanalyst-production.up.railway.app  
 **Repository:** Check git remote for GitHub URL
 
-**Superadmin Credentials:**
-- Email: `rokas@zubas.lt` / Password: `Beenex2025!`
-- GitHub: Username `rokas2025` (auto-assigned on first login)
+**Superadmin Accounts:**
+- Email: `rokas@zubas.lt` (login via GitHub OAuth - no password)
+- GitHub: Username `rokas2025` (auto-assigned superadmin on first login)
+
+**Note:** No passwords are hardcoded. All authentication is done via GitHub OAuth or Supabase Auth.
 
 ---
 

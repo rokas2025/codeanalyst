@@ -15,18 +15,17 @@ async function completeMigration() {
     await client.connect();
     console.log('✅ Connected to database\n');
 
-    // 1. Activate rokas@zubas.lt and set password
-    console.log('1️⃣  Activating rokas@zubas.lt (GitHub user)...');
+    // 1. Activate rokas@zubas.lt (no password - will use GitHub OAuth)
+    console.log('1️⃣  Activating rokas@zubas.lt...');
     
     await client.query(`
       UPDATE users 
       SET is_active = true,
           pending_approval = false,
-          approved_at = NOW(),
-          password_hash = crypt('Beenex2025!', gen_salt('bf'))
+          approved_at = NOW()
       WHERE email = 'rokas@zubas.lt';
     `);
-    console.log('✅ User activated with password\n');
+    console.log('✅ User activated (use GitHub login)\n');
 
     // 2. Assign superadmin role to rokas@zubas.lt
     console.log('2️⃣  Assigning superadmin role to rokas@zubas.lt...');
@@ -293,8 +292,9 @@ async function completeMigration() {
 
     console.log('\n🎉 Migration completed successfully!');
     console.log('\n✅ Superadmin accounts ready:');
-    console.log('   1. Email: rokas@zubas.lt / Password: Beenex2025!');
-    console.log('   2. GitHub: rokas2025 (auto-superadmin on login)\n');
+    console.log('   1. Email: rokas@zubas.lt (login via GitHub OAuth)');
+    console.log('   2. GitHub: rokas2025 (auto-superadmin on login)');
+    console.log('\n⚠️  Note: No passwords are stored. Use GitHub OAuth for authentication.\n');
 
   } catch (error) {
     console.error('❌ Error:', error);

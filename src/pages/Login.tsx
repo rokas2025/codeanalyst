@@ -171,10 +171,6 @@ export function Login() {
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
             </div>
-            
-            <div className="text-center text-sm text-gray-600">
-              Demo credentials: any email/password combination will work
-            </div>
           </form>
         </div>
       </div>

@@ -105,34 +105,17 @@ ADD COLUMN IF NOT EXISTS project_id UUID REFERENCES projects(id) ON DELETE SET N
 
 CREATE INDEX IF NOT EXISTS idx_analysis_history_project_id ON analysis_history(project_id);
 
--- 9. Create first superadmin (rokas@zubas.lt)
--- Note: Password is hashed with bcrypt
+-- 9. Assign superadmin role to existing user
+-- Note: User must already exist in the database (via GitHub login or email registration)
+-- No hardcoded credentials - superadmin is assigned by email or GitHub username
 DO $$
 DECLARE
   v_user_id UUID;
 BEGIN
-  -- Check if user already exists
+  -- Find user by email (rokas@zubas.lt)
   SELECT id INTO v_user_id FROM users WHERE email = 'rokas@zubas.lt';
   
-  IF v_user_id IS NULL THEN
-    -- Create superadmin user
-    INSERT INTO users (email, password, name, is_active, pending_approval, approved_at)
-    VALUES (
-      'rokas@zubas.lt',
-      crypt('Beenex2025!', gen_salt('bf')),
-      'Rokas Zubas',
-      true,
-      false,
-      NOW()
-    )
-    RETURNING id INTO v_user_id;
-    
-    -- Assign superadmin role
-    INSERT INTO user_roles (user_id, role)
-    VALUES (v_user_id, 'superadmin');
-    
-    RAISE NOTICE 'Superadmin created: rokas@zubas.lt';
-  ELSE
+  IF v_user_id IS NOT NULL THEN
     -- Update existing user to superadmin
     UPDATE users 
     SET is_active = true, 
@@ -140,12 +123,31 @@ BEGIN
         approved_at = NOW()
     WHERE id = v_user_id;
     
-    -- Ensure superadmin role exists
+    -- Assign superadmin role
     INSERT INTO user_roles (user_id, role)
     VALUES (v_user_id, 'superadmin')
     ON CONFLICT (user_id, role) DO NOTHING;
     
-    RAISE NOTICE 'Existing user updated to superadmin: rokas@zubas.lt';
+    RAISE NOTICE 'Superadmin role assigned to: rokas@zubas.lt';
+  ELSE
+    RAISE NOTICE 'User rokas@zubas.lt not found - will be assigned superadmin on first login';
+  END IF;
+  
+  -- Also assign superadmin to GitHub user rokas2025 if exists
+  SELECT id INTO v_user_id FROM users WHERE github_username = 'rokas2025';
+  
+  IF v_user_id IS NOT NULL THEN
+    UPDATE users 
+    SET is_active = true, 
+        pending_approval = false,
+        approved_at = NOW()
+    WHERE id = v_user_id;
+    
+    INSERT INTO user_roles (user_id, role)
+    VALUES (v_user_id, 'superadmin')
+    ON CONFLICT (user_id, role) DO NOTHING;
+    
+    RAISE NOTICE 'Superadmin role assigned to GitHub user: rokas2025';
   END IF;
 END $$;
 
