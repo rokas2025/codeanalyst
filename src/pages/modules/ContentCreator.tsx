@@ -14,8 +14,9 @@ import { InputForm } from './components/InputForm'
 import { SettingsPanel } from './components/SettingsPanel'
 import { ContentPreview } from './components/ContentPreview'
 import { ExportOptions } from './components/ExportOptions'
+import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 
-export function ContentCreator() {
+function ContentCreatorContent() {
   const {
     currentStep,
     selectedTemplate,
@@ -211,5 +212,13 @@ export function ContentCreator() {
           </div>
         )}
     </div>
+  )
+}
+
+export function ContentCreator() {
+  return (
+    <ModuleAccessGuard module="content_creator">
+      <ContentCreatorContent />
+    </ModuleAccessGuard>
   )
 }

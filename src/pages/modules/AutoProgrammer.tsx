@@ -14,6 +14,7 @@ import {
   ArrowLeftIcon
 } from '@heroicons/react/24/outline'
 import { MessageRenderer } from '../../components/MessageRenderer'
+import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 
 // Types
 interface ChatMessage {
@@ -49,7 +50,7 @@ interface CodeFunction {
   signature: string
 }
 
-export function AutoProgrammer() {
+function AutoProgrammerContent() {
   const navigate = useNavigate()
   const [analyses, setAnalyses] = useState<any[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)
@@ -1087,5 +1088,13 @@ The file structure isn't available for this analysis, but I can still help you w
         )}
       </div>
     </div>
+  )
+}
+
+export function AutoProgrammer() {
+  return (
+    <ModuleAccessGuard module="auto_programmer">
+      <AutoProgrammerContent />
+    </ModuleAccessGuard>
   )
 } 

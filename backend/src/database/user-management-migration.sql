@@ -93,19 +93,33 @@ CREATE TABLE IF NOT EXISTS user_activation_log (
 
 CREATE INDEX IF NOT EXISTS idx_activation_log_user_id ON user_activation_log(user_id);
 
--- 7. Add project_id to wordpress_connections
+-- 7. Add admin_id to existing projects table (if table already exists without this column)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'projects') THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM information_schema.columns 
+      WHERE table_name = 'projects' AND column_name = 'admin_id'
+    ) THEN
+      ALTER TABLE projects ADD COLUMN admin_id UUID REFERENCES users(id) ON DELETE CASCADE;
+      CREATE INDEX IF NOT EXISTS idx_projects_admin_id ON projects(admin_id);
+    END IF;
+  END IF;
+END $$;
+
+-- 8. Add project_id to wordpress_connections
 ALTER TABLE wordpress_connections 
 ADD COLUMN IF NOT EXISTS project_id UUID REFERENCES projects(id) ON DELETE SET NULL;
 
 CREATE INDEX IF NOT EXISTS idx_wp_connections_project_id ON wordpress_connections(project_id);
 
--- 8. Add project_id to analysis_history
+-- 9. Add project_id to analysis_history
 ALTER TABLE analysis_history 
 ADD COLUMN IF NOT EXISTS project_id UUID REFERENCES projects(id) ON DELETE SET NULL;
 
 CREATE INDEX IF NOT EXISTS idx_analysis_history_project_id ON analysis_history(project_id);
 
--- 9. Assign superadmin role to existing user
+-- 10. Assign superadmin role to existing user
 -- Note: User must already exist in the database (via GitHub login or email registration)
 -- No hardcoded credentials - superadmin is assigned by email or GitHub username
 DO $$
@@ -161,31 +175,36 @@ ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE project_users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE module_permissions ENABLE ROW LEVEL SECURITY;
 
--- 12. Create RLS Policies
+-- 13. Create RLS Policies
+-- Note: DROP POLICY IF EXISTS is used first to avoid conflicts
 
 -- Superadmin can see everything
-CREATE POLICY IF NOT EXISTS superadmin_all_user_roles ON user_roles FOR ALL
+DROP POLICY IF EXISTS superadmin_all_user_roles ON user_roles;
+CREATE POLICY superadmin_all_user_roles ON user_roles FOR ALL
   USING (EXISTS (
     SELECT 1 FROM user_roles 
     WHERE user_id = auth.uid() AND role = 'superadmin'
   ));
 
 -- Admins can see their own projects
-CREATE POLICY IF NOT EXISTS admin_own_projects ON projects FOR ALL
+DROP POLICY IF EXISTS admin_own_projects ON projects;
+CREATE POLICY admin_own_projects ON projects FOR ALL
   USING (
     admin_id = auth.uid() OR 
     EXISTS (SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role = 'superadmin')
   );
 
 -- Users can see projects they're invited to
-CREATE POLICY IF NOT EXISTS user_assigned_projects ON projects FOR SELECT
+DROP POLICY IF EXISTS user_assigned_projects ON projects;
+CREATE POLICY user_assigned_projects ON projects FOR SELECT
   USING (EXISTS (
     SELECT 1 FROM project_users 
     WHERE project_id = projects.id AND user_id = auth.uid() AND is_active = true
   ));
 
 -- Project users visibility
-CREATE POLICY IF NOT EXISTS project_users_visibility ON project_users FOR ALL
+DROP POLICY IF EXISTS project_users_visibility ON project_users;
+CREATE POLICY project_users_visibility ON project_users FOR ALL
   USING (
     user_id = auth.uid() OR
     EXISTS (SELECT 1 FROM projects WHERE id = project_users.project_id AND admin_id = auth.uid()) OR
@@ -193,14 +212,15 @@ CREATE POLICY IF NOT EXISTS project_users_visibility ON project_users FOR ALL
   );
 
 -- Module permissions visibility
-CREATE POLICY IF NOT EXISTS module_permissions_visibility ON module_permissions FOR ALL
+DROP POLICY IF EXISTS module_permissions_visibility ON module_permissions;
+CREATE POLICY module_permissions_visibility ON module_permissions FOR ALL
   USING (
     user_id = auth.uid() OR
     EXISTS (SELECT 1 FROM projects WHERE id = module_permissions.project_id AND admin_id = auth.uid()) OR
     EXISTS (SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role = 'superadmin')
   );
 
--- 13. Create helper functions
+-- 14. Create helper functions
 
 -- Function to check if user is superadmin
 CREATE OR REPLACE FUNCTION is_superadmin(check_user_id UUID)

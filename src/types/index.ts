@@ -8,6 +8,9 @@ export interface User {
   githubId?: number
   githubUsername?: string
   plan: 'free' | 'pro' | 'enterprise'
+  role?: 'superadmin' | 'admin' | 'user'
+  is_active?: boolean
+  pending_approval?: boolean
   createdAt: string
   updatedAt: string
 }

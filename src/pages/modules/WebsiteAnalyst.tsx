@@ -6,6 +6,8 @@ import WebsiteAnalysisReport from '../../components/WebsiteAnalysisReport'
 import { AdoreInoReport } from '../../components/AdoreInoReport'
 import { AIProviderStatus } from '../../components/AIProviderStatus'
 import { WordPressSiteSelector } from '../../components/WordPressSiteSelector'
+import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
+import { useProjectContext } from '../../contexts/ProjectContext'
 import { WordPressConnection } from '../../services/wordpressService'
 import { urlFetcher } from '../../services/urlFetcher'
 import { backendService } from '../../services/backendService'
@@ -15,8 +17,9 @@ import { AdoreInoAnalysis, AdoreInoResults } from '../../types'
 import { scanURL, convertURLScanToFileStructure } from '../../utils/urlScanner'
 import { realUrlConverter } from '../../utils/realUrlToFileConverter'
 
-export function WebsiteAnalyst() {
+function WebsiteAnalystContent() {
   const location = useLocation()
+  const { selectedProject, isProjectMode } = useProjectContext()
   const [urlInput, setUrlInput] = useState<string>('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisStep, setAnalysisStep] = useState<string>('')
@@ -43,6 +46,13 @@ export function WebsiteAnalyst() {
     
     checkBackend()
   }, [])
+
+  // Update URL input when project changes
+  useEffect(() => {
+    if (isProjectMode && selectedProject) {
+      setUrlInput(selectedProject.url)
+    }
+  }, [selectedProject, isProjectMode])
 
   // Handle prefilled URL from navigation (e.g., from Connected Sites)
   useEffect(() => {
@@ -392,7 +402,9 @@ export function WebsiteAnalyst() {
               placeholder="https://example.com"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
-              disabled={isAnalyzing}
+              disabled={isAnalyzing || isProjectMode}
+              readOnly={isProjectMode}
+              title={isProjectMode ? 'URL is set from selected project' : ''}
             />
             <button
               onClick={handleAnalyze}
@@ -516,5 +528,13 @@ export function WebsiteAnalyst() {
         </div>
       )}
     </div>
+  )
+}
+
+export function WebsiteAnalyst() {
+  return (
+    <ModuleAccessGuard module="website_analyst">
+      <WebsiteAnalystContent />
+    </ModuleAccessGuard>
   )
 }

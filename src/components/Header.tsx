@@ -1,15 +1,18 @@
 import React from 'react'
 import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAuthStore } from '../stores/authStore'
+import { ProjectSelector } from './ProjectSelector'
 
 export function Header() {
   const { user, logout } = useAuthStore()
+  const userRole = (user as any)?.role || 'user'
+  const isAdmin = userRole === 'admin' || userRole === 'superadmin'
 
   return (
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow border-b border-gray-200">
       <div className="flex-1 px-4 flex justify-between sm:px-6 lg:px-8">
         <div className="flex-1 flex items-center">
-          {/* Breadcrumb or page title could go here */}
+          {isAdmin && <ProjectSelector />}
         </div>
         <div className="ml-4 flex items-center md:ml-6 space-x-4">
           {/* Notifications */}

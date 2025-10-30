@@ -11,12 +11,13 @@ import { AdoreInoReport } from '../../components/AdoreInoReport'
 import { AIProviderStatus } from '../../components/AIProviderStatus'
 import { CodeAnalysisReport } from '../../components/CodeAnalysisReport'
 import { WordPressSiteSelector } from '../../components/WordPressSiteSelector'
+import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 import { WordPressConnection, wordpressService } from '../../services/wordpressService'
 import { githubService, GitHubRepository } from '../../services/githubService'
 import { useAuthStore } from '../../stores/authStore'
 import { analysisService, AnalysisResult } from '../../services/analysisService'
 
-export function CodeAnalyst() {
+function CodeAnalystContent() {
   const navigate = useNavigate()
   const location = useLocation()
   const [selectedProject, setSelectedProject] = useState('')
@@ -812,5 +813,13 @@ export function CodeAnalyst() {
         </div>
       )}
     </div>
+  )
+}
+
+export function CodeAnalyst() {
+  return (
+    <ModuleAccessGuard module="code_analyst">
+      <CodeAnalystContent />
+    </ModuleAccessGuard>
   )
 } 

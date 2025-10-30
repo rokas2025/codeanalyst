@@ -66,7 +66,9 @@ const uiLabels = {
   }
 }
 
-export function ContentAnalyst() {
+import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
+
+function ContentAnalystContent() {
   const location = useLocation()
   const [content, setContent] = useState('')
   const [url, setUrl] = useState('')
@@ -581,5 +583,13 @@ export function ContentAnalyst() {
         </div>
       )}
     </div>
+  )
+}
+
+export function ContentAnalyst() {
+  return (
+    <ModuleAccessGuard module="content_analyst">
+      <ContentAnalystContent />
+    </ModuleAccessGuard>
   )
 } 

@@ -10,27 +10,44 @@ import {
   PlusCircleIcon,
   ClockIcon,
   ChartBarIcon,
-  GlobeAltIcon
+  GlobeAltIcon,
+  UsersIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline'
-
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'Analysis History', href: '/projects', icon: ClockIcon },
-  {
-    name: 'AI Modules',
-    children: [
-      { name: 'Code Analyst', href: '/modules/code-analyst', icon: CodeBracketIcon },
-      { name: 'Website Analyst', href: '/modules/website-analyst', icon: ChartBarIcon },
-      { name: 'Content Analyst', href: '/modules/content-analyst', icon: DocumentTextIcon },
-      { name: 'Auto Programmer', href: '/modules/auto-programmer', icon: CommandLineIcon },
-      { name: 'Content Creator', href: '/modules/content-creator', icon: PlusCircleIcon },
-    ],
-  },
-  { name: 'Connected Sites', href: '/connected-sites', icon: GlobeAltIcon },
-  { name: 'Settings', href: '/settings', icon: CogIcon },
-]
+import { useAuthStore } from '../stores/authStore'
 
 export function Sidebar() {
+  const { user } = useAuthStore()
+  
+  // Determine user role from user object
+  const userRole = (user as any)?.role || 'user'
+  const isSuperAdmin = userRole === 'superadmin'
+  const isAdmin = userRole === 'admin' || isSuperAdmin
+  
+  const navigation = [
+    { name: 'Dashboard', href: '/', icon: HomeIcon, roles: ['superadmin', 'admin', 'user'] },
+    { name: 'Analysis History', href: '/projects', icon: ClockIcon, roles: ['superadmin', 'admin', 'user'] },
+    {
+      name: 'AI Modules',
+      roles: ['superadmin', 'admin', 'user'],
+      children: [
+        { name: 'Code Analyst', href: '/modules/code-analyst', icon: CodeBracketIcon },
+        { name: 'Website Analyst', href: '/modules/website-analyst', icon: ChartBarIcon },
+        { name: 'Content Analyst', href: '/modules/content-analyst', icon: DocumentTextIcon },
+        { name: 'Auto Programmer', href: '/modules/auto-programmer', icon: CommandLineIcon },
+        { name: 'Content Creator', href: '/modules/content-creator', icon: PlusCircleIcon },
+      ],
+    },
+    { name: 'My Projects', href: '/project-management', icon: FolderIcon, roles: ['superadmin', 'admin'] },
+    { name: 'User Management', href: '/user-management', icon: UsersIcon, roles: ['superadmin'] },
+    { name: 'Connected Sites', href: '/connected-sites', icon: GlobeAltIcon, roles: ['superadmin', 'admin', 'user'] },
+    { name: 'Settings', href: '/settings', icon: CogIcon, roles: ['superadmin', 'admin', 'user'] },
+  ]
+  
+  // Filter navigation based on user role
+  const filteredNavigation = navigation.filter(item => 
+    item.roles?.includes(userRole)
+  )
   return (
     <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-30">
       <div className="flex-1 flex flex-col min-h-0 bg-white border-r border-gray-200 shadow-sm">
@@ -47,7 +64,7 @@ export function Sidebar() {
             </div>
           </div>
           <nav className="mt-8 flex-1 px-2 space-y-1">
-            {navigation.map((item) => (
+            {filteredNavigation.map((item) => (
               <div key={item.name}>
                 {item.children ? (
                   <div>

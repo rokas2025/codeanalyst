@@ -17,11 +17,14 @@ import { Settings } from './pages/Settings'
 import { Projects } from './pages/Projects'
 import { AnalysisView } from './pages/AnalysisView'
 import { ConnectedSites } from './pages/ConnectedSites'
+import { UserManagement } from './pages/UserManagement'
+import { ProjectManagement } from './pages/ProjectManagement'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { ProjectProvider } from './contexts/ProjectContext'
 
 function App() {
   return (
-    <>
+    <ProjectProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -30,6 +33,8 @@ function App() {
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="project-management" element={<ProjectManagement />} />
+          <Route path="user-management" element={<UserManagement />} />
           <Route path="modules">
             <Route path="code-analyst" element={<CodeAnalyst />} />
             <Route path="website-analyst" element={<WebsiteAnalyst />} />
@@ -45,7 +50,7 @@ function App() {
         </Route>
       </Routes>
       <Toaster />
-    </>
+    </ProjectProvider>
   )
 }
 

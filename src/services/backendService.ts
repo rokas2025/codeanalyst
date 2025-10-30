@@ -291,6 +291,116 @@ class BackendService {
   }
 
   /**
+   * Superadmin: Get all users
+   */
+  async getAllUsers(): Promise<{ users: any[] }> {
+    const response = await api.get('/superadmin/users')
+    return response.data
+  }
+
+  /**
+   * Superadmin: Approve user
+   */
+  async approveUser(userId: string): Promise<void> {
+    await api.post(`/superadmin/users/${userId}/approve`)
+  }
+
+  /**
+   * Superadmin: Deactivate user
+   */
+  async deactivateUser(userId: string): Promise<void> {
+    await api.post(`/superadmin/users/${userId}/deactivate`)
+  }
+
+  /**
+   * Superadmin: Reactivate user
+   */
+  async reactivateUser(userId: string): Promise<void> {
+    await api.post(`/superadmin/users/${userId}/reactivate`)
+  }
+
+  /**
+   * Superadmin: Create superadmin
+   */
+  async createSuperadmin(userId: string): Promise<void> {
+    await api.post('/superadmin/create-superadmin', { userId })
+  }
+
+  /**
+   * Admin: Get admin's projects
+   */
+  async getAdminProjects(): Promise<{ projects: any[] }> {
+    const response = await api.get('/projects')
+    return response.data
+  }
+
+  /**
+   * Admin: Create project
+   */
+  async createProject(data: { name: string; url: string; description?: string }): Promise<void> {
+    await api.post('/projects', data)
+  }
+
+  /**
+   * Admin: Update project
+   */
+  async updateProject(projectId: string, data: { name: string; url: string; description?: string }): Promise<void> {
+    await api.put(`/projects/${projectId}`, data)
+  }
+
+  /**
+   * Admin: Delete project
+   */
+  async deleteProject(projectId: string): Promise<void> {
+    await api.delete(`/projects/${projectId}`)
+  }
+
+  /**
+   * Admin: Get project users
+   */
+  async getProjectUsers(projectId: string): Promise<{ users: any[] }> {
+    const response = await api.get(`/projects/${projectId}/users`)
+    return response.data
+  }
+
+  /**
+   * Admin: Invite user to project
+   */
+  async inviteUserToProject(projectId: string, data: { email: string; modules: any }): Promise<void> {
+    await api.post(`/projects/${projectId}/invite`, data)
+  }
+
+  /**
+   * Admin: Remove user from project
+   */
+  async removeUserFromProject(projectId: string, userId: string): Promise<void> {
+    await api.delete(`/projects/${projectId}/users/${userId}`)
+  }
+
+  /**
+   * Admin: Update module permissions
+   */
+  async updateModulePermissions(projectId: string, userId: string, modules: any): Promise<void> {
+    await api.put(`/projects/${projectId}/users/${userId}/permissions`, { modules })
+  }
+
+  /**
+   * User: Get user's projects
+   */
+  async getUserProjects(): Promise<{ projects: any[] }> {
+    const response = await api.get('/projects/my-projects')
+    return response.data
+  }
+
+  /**
+   * User: Check module permission
+   */
+  async checkModulePermission(projectId: string, module: string): Promise<{ hasAccess: boolean }> {
+    const response = await api.get(`/projects/${projectId}/permissions/${module}`)
+    return response.data
+  }
+
+  /**
    * Converts backend URL analysis result to a format compatible with frontend components.
    */
   convertToAdoreInoFormat(urlResult: URLAnalysisResult): any {
