@@ -34,6 +34,9 @@ export const useProject = () => {
   return context;
 };
 
+// Alias for consistency
+export const useProjectContext = useProject;
+
 interface ProjectProviderProps {
   children: ReactNode;
 }
