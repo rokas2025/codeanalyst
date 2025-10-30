@@ -109,14 +109,14 @@ async function handleGitHubCallback(code, state, res) {
       
       // Assign superadmin role to rokas2025
       if (githubUser.login === 'rokas2025') {
-        await DatabaseService.db.query(`
+        await db.query(`
           INSERT INTO user_roles (user_id, role)
           VALUES ($1::UUID, 'superadmin')
           ON CONFLICT (user_id, role) DO NOTHING
         `, [user.id])
         
         // Also activate and approve the user
-        await DatabaseService.db.query(`
+        await db.query(`
           UPDATE users
           SET is_active = true,
               pending_approval = false,
