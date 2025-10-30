@@ -434,20 +434,53 @@ export function renderSection(section: ContentSection, theme: Theme): string {
 }
 
 /**
+ * Parse markdown formatting (bold, italic, links, etc.)
+ */
+function parseMarkdown(text: string): string {
+  let formatted = text
+  
+  // Bold text: **text** or __text__
+  formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  formatted = formatted.replace(/__(.+?)__/g, '<strong>$1</strong>')
+  
+  // Italic text: *text* or _text_
+  formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>')
+  formatted = formatted.replace(/_(.+?)_/g, '<em>$1</em>')
+  
+  // Links: [text](url)
+  formatted = formatted.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+  
+  // Inline code: `code`
+  formatted = formatted.replace(/`(.+?)`/g, '<code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-family: monospace;">$1</code>')
+  
+  return formatted
+}
+
+/**
  * Format heading content
  */
 function formatHeading(content: string): string {
   // Detect heading level from content or default to h2
-  if (content.startsWith('# ')) {
-    return `<h1>${escapeHTML(content.substring(2))}</h1>`
-  } else if (content.startsWith('## ')) {
-    return `<h2>${escapeHTML(content.substring(3))}</h2>`
+  let level = 2
+  let text = content
+  
+  if (content.startsWith('#### ')) {
+    level = 4
+    text = content.substring(5)
   } else if (content.startsWith('### ')) {
-    return `<h3>${escapeHTML(content.substring(4))}</h3>`
-  } else if (content.startsWith('#### ')) {
-    return `<h4>${escapeHTML(content.substring(5))}</h4>`
+    level = 3
+    text = content.substring(4)
+  } else if (content.startsWith('## ')) {
+    level = 2
+    text = content.substring(3)
+  } else if (content.startsWith('# ')) {
+    level = 1
+    text = content.substring(2)
   }
-  return `<h2>${escapeHTML(content)}</h2>`
+  
+  // Parse markdown in heading text
+  const formattedText = parseMarkdown(text.trim())
+  return `<h${level}>${formattedText}</h${level}>`
 }
 
 /**
@@ -456,7 +489,11 @@ function formatHeading(content: string): string {
 function formatParagraph(content: string): string {
   // Split into paragraphs and format
   const paragraphs = content.split('\n\n').filter(p => p.trim())
-  return paragraphs.map(p => `<p>${escapeHTML(p.trim())}</p>`).join('\n')
+  return paragraphs.map(p => {
+    // Parse markdown formatting
+    const formatted = parseMarkdown(p.trim())
+    return `<p>${formatted}</p>`
+  }).join('\n')
 }
 
 /**
@@ -473,7 +510,9 @@ function formatList(content: string): string {
     .map(line => {
       // Remove markdown list markers
       const cleaned = line.replace(/^[\d\-\*\+]+\.?\s*/, '').trim()
-      return cleaned ? `<li>${escapeHTML(cleaned)}</li>` : ''
+      // Parse markdown in list items
+      const formatted = parseMarkdown(cleaned)
+      return formatted ? `<li>${formatted}</li>` : ''
     })
     .filter(item => item)
     .join('\n')
@@ -494,18 +533,20 @@ function formatCTA(content: string): string {
   
   for (const line of lines) {
     if (line.startsWith('#')) {
-      heading = line.replace(/^#+\s*/, '')
+      const headingText = line.replace(/^#+\s*/, '')
+      heading = parseMarkdown(headingText)
     } else if (line.toLowerCase().includes('button:') || line.toLowerCase().includes('cta:')) {
       buttonText = line.replace(/^(button|cta):\s*/i, '').trim()
     } else if (line.trim()) {
-      text += `<p>${escapeHTML(line)}</p>\n`
+      const formatted = parseMarkdown(line)
+      text += `<p>${formatted}</p>\n`
     }
   }
   
   return `
-    ${heading ? `<h2>${escapeHTML(heading)}</h2>` : ''}
+    ${heading ? `<h2>${heading}</h2>` : ''}
     ${text}
-    <button class="cta-button">${escapeHTML(buttonText)}</button>
+    <button class="cta-button">${buttonText}</button>
   `
 }
 
@@ -526,9 +567,11 @@ function formatQuote(content: string): string {
     }
   }
   
+  const formattedQuote = parseMarkdown(quote.trim())
+  
   return `
-    <p>${escapeHTML(quote.trim())}</p>
-    ${author ? `<div class="quote-author">— ${escapeHTML(author)}</div>` : ''}
+    <p>${formattedQuote}</p>
+    ${author ? `<div class="quote-author">— ${author}</div>` : ''}
   `
 }
 

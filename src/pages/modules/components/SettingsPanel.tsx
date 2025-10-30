@@ -249,6 +249,128 @@ export function SettingsPanel({ onComplete }: SettingsPanelProps) {
                   <option value="marketing">Marketing Professionals</option>
                 </select>
               </div>
+
+              {/* Brand Colors Section */}
+              <div className="pt-4 border-t border-gray-200">
+                <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                  <span className="text-lg">🎨</span>
+                  Brand Colors (Preview Styling)
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Customize the colors used in the website preview to match your brand.
+                </p>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Primary Color */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Primary Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.brandPrimaryColor || '#3B82F6'}
+                        onChange={(e) => handleSettingChange('brandPrimaryColor', e.target.value)}
+                        className="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.brandPrimaryColor || '#3B82F6'}
+                        onChange={(e) => handleSettingChange('brandPrimaryColor', e.target.value)}
+                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        placeholder="#3B82F6"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Secondary Color */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Secondary Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.brandSecondaryColor || '#8B5CF6'}
+                        onChange={(e) => handleSettingChange('brandSecondaryColor', e.target.value)}
+                        className="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.brandSecondaryColor || '#8B5CF6'}
+                        onChange={(e) => handleSettingChange('brandSecondaryColor', e.target.value)}
+                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        placeholder="#8B5CF6"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Background Color */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Background Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.brandBackgroundColor || '#FFFFFF'}
+                        onChange={(e) => handleSettingChange('brandBackgroundColor', e.target.value)}
+                        className="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.brandBackgroundColor || '#FFFFFF'}
+                        onChange={(e) => handleSettingChange('brandBackgroundColor', e.target.value)}
+                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        placeholder="#FFFFFF"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Text Color */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Text Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.brandTextColor || '#1F2937'}
+                        onChange={(e) => handleSettingChange('brandTextColor', e.target.value)}
+                        className="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.brandTextColor || '#1F2937'}
+                        onChange={(e) => handleSettingChange('brandTextColor', e.target.value)}
+                        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        placeholder="#1F2937"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Color Preview */}
+                <div className="mt-4 p-4 rounded-lg border border-gray-200" style={{
+                  backgroundColor: settings.brandBackgroundColor || '#FFFFFF'
+                }}>
+                  <h4 className="font-semibold mb-2" style={{
+                    color: settings.brandPrimaryColor || '#3B82F6'
+                  }}>
+                    Preview Heading
+                  </h4>
+                  <p className="text-sm mb-2" style={{
+                    color: settings.brandTextColor || '#1F2937'
+                  }}>
+                    This is how your content will look with these brand colors in the website preview.
+                  </p>
+                  <button className="px-4 py-2 rounded text-sm font-medium text-white" style={{
+                    background: `linear-gradient(135deg, ${settings.brandPrimaryColor || '#3B82F6'}, ${settings.brandSecondaryColor || '#8B5CF6'})`
+                  }}>
+                    CTA Button Preview
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 

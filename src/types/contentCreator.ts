@@ -8,6 +8,10 @@ export interface GenerationSettings {
   style: 'concise' | 'detailed' | 'conversational' | 'formal' | 'narrative' | 'list-based'
   audience: 'general' | 'technical' | 'executive' | 'consumer' | 'academic' | 'marketing'
   ctaStrength: 'subtle' | 'moderate' | 'strong' | 'aggressive'
+  brandPrimaryColor?: string // Optional brand primary color (hex)
+  brandSecondaryColor?: string // Optional brand secondary color (hex)
+  brandBackgroundColor?: string // Optional brand background color (hex)
+  brandTextColor?: string // Optional brand text color (hex)
 }
 
 export interface ContentTemplate {
@@ -145,7 +149,11 @@ export const DEFAULT_GENERATION_SETTINGS: GenerationSettings = {
   tone: 'professional',
   style: 'detailed',
   audience: 'general',
-  ctaStrength: 'moderate'
+  ctaStrength: 'moderate',
+  brandPrimaryColor: '#3B82F6',
+  brandSecondaryColor: '#8B5CF6',
+  brandBackgroundColor: '#FFFFFF',
+  brandTextColor: '#1F2937'
 }
 
 // Temperature presets

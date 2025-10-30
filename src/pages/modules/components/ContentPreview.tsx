@@ -470,6 +470,7 @@ export function ContentPreview({ onComplete }: ContentPreviewProps) {
                         inputs={inputs}
                         theme={previewTheme}
                         viewport={previewViewport}
+                        settings={settings}
                         onThemeChange={setPreviewTheme}
                         onViewportChange={setPreviewViewport}
                         onEdit={(sectionId, newContent) => {

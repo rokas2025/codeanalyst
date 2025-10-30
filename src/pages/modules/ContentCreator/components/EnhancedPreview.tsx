@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ZoomIn, ZoomOut, Maximize2, Download } from 'lucide-react'
-import { ContentSection } from '../../../../types/contentCreator'
+import { ContentSection, GenerationSettings } from '../../../../types/contentCreator'
 import { Theme } from '../../../../utils/previewThemes'
 import { Viewport, generateStyledHTML, getViewportDimensions } from '../../../../utils/htmlGenerator'
 import ViewportSelector from '../../../../components/ViewportSelector'
@@ -11,6 +11,7 @@ interface EnhancedPreviewProps {
   inputs: Record<string, any>
   theme: Theme
   viewport: Viewport
+  settings?: GenerationSettings
   onThemeChange: (theme: Theme) => void
   onViewportChange: (viewport: Viewport) => void
   onEdit?: (sectionId: string, newContent: string) => void
@@ -23,6 +24,7 @@ export default function EnhancedPreview({
   inputs,
   theme,
   viewport,
+  settings,
   onThemeChange,
   onViewportChange,
   onEdit
@@ -32,8 +34,17 @@ export default function EnhancedPreview({
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Apply brand colors to theme if provided in settings
+  const brandedTheme: Theme = settings ? {
+    ...theme,
+    primary: settings.brandPrimaryColor || theme.primary,
+    secondary: settings.brandSecondaryColor || theme.secondary,
+    background: settings.brandBackgroundColor || theme.background,
+    text: settings.brandTextColor || theme.text
+  } : theme
+
   // Generate HTML with current theme and viewport
-  const htmlContent = generateStyledHTML(content, theme, viewport, {
+  const htmlContent = generateStyledHTML(content, brandedTheme, viewport, {
     includeResponsive: true,
     includeAnimations: true
   })
