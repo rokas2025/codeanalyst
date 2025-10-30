@@ -1376,6 +1376,37 @@ export class DatabaseService {
     }
   }
 
+  /**
+   * Assign superadmin role to a user
+   * @param {string} userId - User ID to promote
+   * @returns {object} Updated user with role
+   */
+  static async assignSuperadminRole(userId) {
+    try {
+      // Add superadmin role
+      await db.query(`
+        INSERT INTO user_roles (user_id, role)
+        VALUES ($1::UUID, 'superadmin')
+        ON CONFLICT (user_id, role) DO NOTHING
+      `, [userId])
+      
+      // Get updated user with role
+      const query = `
+        SELECT u.*, ur.role
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        WHERE u.id = $1::UUID
+      `
+      const result = await db.query(query, [userId])
+      
+      logger.logDatabase('insert', 'user_roles', 1, { userId, role: 'superadmin' })
+      return result.rows[0]
+    } catch (error) {
+      logger.logError('Database assignSuperadminRole', error, { userId })
+      throw error
+    }
+  }
+
   // ============================================
   // PROJECT MANAGEMENT METHODS
   // ============================================

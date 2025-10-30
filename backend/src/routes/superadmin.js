@@ -177,6 +177,49 @@ router.get('/users/:userId/projects', async (req, res) => {
 });
 
 /**
+ * POST /api/superadmin/users/:userId/make-superadmin
+ * Promote a user to superadmin role
+ */
+router.post('/users/:userId/make-superadmin', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const superadminId = req.user.id;
+    
+    logger.info('👑 Promoting user to superadmin', { userId, promotedBy: superadminId });
+    
+    // Check if user exists
+    const user = await DatabaseService.getUserById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+    
+    // Activate user if not active
+    if (!user.is_active || user.pending_approval) {
+      await DatabaseService.reactivateUser(userId, superadminId);
+      await DatabaseService.approveUser(userId, superadminId);
+    }
+    
+    // Add superadmin role
+    const result = await DatabaseService.assignSuperadminRole(userId);
+    
+    res.json({
+      success: true,
+      message: 'User promoted to superadmin successfully',
+      user: result
+    });
+  } catch (error) {
+    logger.error('Failed to promote user to superadmin:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to promote user to superadmin'
+    });
+  }
+});
+
+/**
  * GET /api/superadmin/stats
  * Get system statistics
  */

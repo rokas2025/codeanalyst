@@ -323,7 +323,7 @@ class BackendService {
    * Superadmin: Create superadmin
    */
   async createSuperadmin(userId: string): Promise<void> {
-    await api.post('/superadmin/create-superadmin', { userId })
+    await api.post(`/superadmin/users/${userId}/make-superadmin`)
   }
 
   /**
