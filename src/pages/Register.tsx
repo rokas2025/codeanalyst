@@ -19,8 +19,22 @@ export function Register() {
     setIsLoading(true)
     
     try {
-      await register(email, password, name)
-      toast.success('Registration successful!')
+      const result = await register(email, password, name)
+      
+      if (result && result.pending) {
+        // Account created but pending admin approval
+        toast.success(result.message || 'Registration successful! Your account is pending admin approval.', {
+          duration: 6000,
+          icon: '⏳'
+        })
+        // Redirect to login page after a short delay
+        setTimeout(() => {
+          window.location.href = '/login'
+        }, 3000)
+      } else {
+        // Account created and auto-approved (logged in)
+        toast.success('Registration successful!')
+      }
     } catch (error: any) {
       toast.error(error.message || 'Registration failed')
     } finally {

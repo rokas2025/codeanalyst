@@ -38,7 +38,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const data = await response.json()
       
       if (!data.success) {
-        throw new Error(data.error || 'Login failed')
+        // Throw the specific error message from backend (includes pending approval, deactivated, etc)
+        throw new Error(data.error || data.message || 'Login failed')
       }
       
       localStorage.setItem('auth_token', data.token)
@@ -132,10 +133,22 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         throw new Error(data.error || 'Registration failed')
       }
       
+      // Handle pending approval case - no token returned
+      if (data.pending_approval) {
+        set({ loading: false })
+        return {
+          success: true,
+          pending: true,
+          message: data.message || 'Registration successful! Your account is pending admin approval.'
+        }
+      }
+      
+      // Normal registration (if auto-approved)
       localStorage.setItem('auth_token', data.token)
       localStorage.setItem('user', JSON.stringify(data.user))
       
       set({ user: data.user, isAuthenticated: true, loading: false })
+      return { success: true, pending: false }
     } catch (error) {
       set({ loading: false })
       throw error

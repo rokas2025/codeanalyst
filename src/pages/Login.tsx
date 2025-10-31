@@ -32,8 +32,23 @@ export function Login() {
     try {
       await login(email, password)
       toast.success('Login successful!')
-    } catch (error) {
-      toast.error('Login failed. Please try again.')
+    } catch (error: any) {
+      // Display specific error message from backend
+      const errorMessage = error.message || 'Login failed. Please try again.'
+      
+      if (errorMessage.includes('pending approval')) {
+        toast.error('Your account is pending admin approval. Please wait for activation.', {
+          duration: 6000,
+          icon: '⏳'
+        })
+      } else if (errorMessage.includes('deactivated')) {
+        toast.error('Your account has been deactivated. Please contact support.', {
+          duration: 6000,
+          icon: '🚫'
+        })
+      } else {
+        toast.error(errorMessage)
+      }
     } finally {
       setIsLoading(false)
     }
