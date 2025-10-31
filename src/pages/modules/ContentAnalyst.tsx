@@ -100,7 +100,8 @@ function ContentAnalystContent() {
     const contentToAnalyze = providedContent || content
     const inputContent = (inputType === 'text' || inputType === 'wordpress') ? contentToAnalyze : url
     
-    if (!inputContent.trim()) {
+    // Ensure inputContent is a string and not empty
+    if (!inputContent || typeof inputContent !== 'string' || !inputContent.trim()) {
       toast.error(`Please provide ${(inputType === 'text' || inputType === 'wordpress') ? 'content' : 'URL'} to analyze`)
       return
     }
