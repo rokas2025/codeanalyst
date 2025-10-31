@@ -329,8 +329,8 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 30)
       
       // Step 2: Analyze Code Structure
-      const { default: CodeAnalyzer } = await import('../services/CodeAnalyzer.js')
-      const codeAnalysis = await CodeAnalyzer.analyzeCodebase(extractedData.extractPath, analysisOptions)
+      const codeAnalyzer = new CodeAnalyzer()
+      const codeAnalysis = await codeAnalyzer.analyzeCodebase(extractedData.extractPath, analysisOptions)
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
       
       // Step 3: Store code analysis data
