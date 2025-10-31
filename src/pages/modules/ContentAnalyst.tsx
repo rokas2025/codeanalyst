@@ -70,10 +70,10 @@ import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 
 function ContentAnalystContent() {
   const location = useLocation()
-  const [content, setContent] = useState('')
-  const [url, setUrl] = useState('')
+  const [content, setContent] = useState<string>('')
+  const [url, setUrl] = useState<string>('')
   const [inputType, setInputType] = useState<'text' | 'url' | 'wordpress'>('text')
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
   
   // Handle WordPress content from navigation
@@ -350,8 +350,8 @@ function ContentAnalystContent() {
               )}
 
               <button
-                onClick={analyzeContent}
-                disabled={isAnalyzing || (!content.trim() && !url.trim())}
+                onClick={() => analyzeContent()}
+                disabled={isAnalyzing || (typeof content === 'string' && !content.trim() && typeof url === 'string' && !url.trim())}
                 className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-lg"
               >
                 {isAnalyzing ? (
