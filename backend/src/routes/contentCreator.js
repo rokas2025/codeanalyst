@@ -288,11 +288,11 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
     .withMessage('Invalid tone option'),
   body('generation_settings.style')
     .optional()
-    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging', 'conversational', 'formal', 'narrative', 'list-based'])
+    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging', 'conversational', 'formal', 'narrative', 'list-based', 'compelling'])
     .withMessage('Invalid style option'),
   body('generation_settings.audience')
     .optional()
-    .isIn(['general', 'technical', 'business', 'consumer', 'executive', 'academic', 'marketing'])
+    .isIn(['general', 'technical', 'business', 'consumer', 'executive', 'academic', 'marketing', 'prospect', 'investor'])
     .withMessage('Invalid audience option')
 ], async (req, res) => {
   try {
