@@ -6,9 +6,17 @@ import { logger } from '../utils/logger.js'
 
 export class ZipService {
   constructor() {
-    this.tempDir = process.env.TEMP_DIR || '/tmp'
+    // Railway-compatible temp directory
+    // Use /app/tmp for Railway, /tmp for local/other environments
+    this.tempDir = process.env.TEMP_DIR || (process.env.RAILWAY_ENVIRONMENT ? '/app/tmp' : '/tmp')
     this.maxZipSize = parseInt(process.env.MAX_ZIP_SIZE) || 100 * 1024 * 1024 // 100MB
     this.maxFiles = parseInt(process.env.MAX_ZIP_FILES) || 5000
+    
+    logger.info('ZipService initialized', {
+      tempDir: this.tempDir,
+      maxZipSize: `${this.maxZipSize / 1024 / 1024}MB`,
+      maxFiles: this.maxFiles
+    })
   }
 
   /**
@@ -41,6 +49,13 @@ export class ZipService {
    */
   async extractZipFile(filePath, analysisId, originalName) {
     try {
+      logger.info(`📦 Starting ZIP extraction`, {
+        filePath,
+        analysisId,
+        originalName,
+        tempDir: this.tempDir
+      })
+      
       await this.validateZipFile(filePath, originalName)
       
       const zipBuffer = await fs.readFile(filePath)
@@ -53,6 +68,13 @@ export class ZipService {
       
       const zipContents = await zip.loadAsync(zipBuffer)
       const extractPath = path.join(this.tempDir, `codeanalyst-zip-${analysisId}`)
+      
+      logger.info(`📁 Creating extraction directory: ${extractPath}`)
+      
+      // Ensure temp directory exists first
+      await fs.mkdir(this.tempDir, { recursive: true }).catch(err => {
+        logger.warn(`Temp dir already exists or can't create: ${err.message}`)
+      })
       
       // Create extraction directory
       await fs.mkdir(extractPath, { recursive: true })
