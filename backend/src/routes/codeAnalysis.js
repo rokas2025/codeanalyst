@@ -325,10 +325,28 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
 
       // Step 1: Extract ZIP file
       const zipService = new ZipService()
+      logger.info('📦 Extracting ZIP file', {
+        filePath: req.file.path,
+        analysisId,
+        originalName: req.file.originalname
+      })
       const extractedData = await zipService.extractZipFile(req.file.path, analysisId, req.file.originalname)
+      logger.info('✅ ZIP extracted successfully', {
+        extractPath: extractedData?.extractPath,
+        fileCount: extractedData?.extractedFiles?.length
+      })
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 30)
       
       // Step 2: Analyze Code Structure
+      if (!extractedData || !extractedData.extractPath) {
+        throw new Error('ZIP extraction failed: No extract path returned')
+      }
+      
+      logger.info('🔍 Analyzing codebase', {
+        extractPath: extractedData.extractPath,
+        fileCount: extractedData.extractedFiles?.length
+      })
+      
       const codeAnalyzer = new CodeAnalyzer()
       const codeAnalysis = await codeAnalyzer.analyzeCodebase(extractedData.extractPath, analysisOptions)
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
