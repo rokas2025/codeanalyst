@@ -72,9 +72,9 @@ function WebsiteAnalystContent() {
     setUrlInput(site.site_url)
     toast.success(`Selected ${site.site_name || site.site_url}. Starting analysis...`)
     
-    // Auto-start analysis
+    // Auto-start analysis - pass URL directly!
     setTimeout(() => {
-      handleAnalyze()
+      handleAnalyze(site.site_url)
     }, 500)
   }
 
@@ -87,13 +87,15 @@ function WebsiteAnalystContent() {
     }
   }
 
-  const handleAnalyze = async () => {
-    if (!urlInput.trim()) {
+  const handleAnalyze = async (providedUrl?: string) => {
+    const urlToAnalyze = providedUrl || urlInput
+    
+    if (!urlToAnalyze.trim()) {
       toast.error('Please enter a website URL to analyze')
       return
     }
 
-    if (!isValidUrl(urlInput)) {
+    if (!isValidUrl(urlToAnalyze)) {
       toast.error('Please enter a valid URL (e.g., https://example.com)')
       return
     }
@@ -114,7 +116,7 @@ function WebsiteAnalystContent() {
       let filesToAnalyze: { path: string; content: string; size: number }[] = []
       
       // Handle URL scanning with the exact same logic as CodeAnalyst
-      if (urlInput) {
+      if (urlToAnalyze) {
         if (useBackend && backendStatus === 'available') {
           // Use backend for real analysis
           setAnalysisType('url')
@@ -122,7 +124,7 @@ function WebsiteAnalystContent() {
           
           try {
             const response = await backendService.analyzeURL({
-              url: urlInput,
+              url: urlToAnalyze,
               options: {
                 aiProfile: 'mixed', // For URL analysis, use mixed profile
                 deepAnalysis: true,
@@ -159,7 +161,7 @@ function WebsiteAnalystContent() {
               newAnalysis.completedAt = new Date().toISOString()
               setAnalysis({ ...newAnalysis })
               
-              toast.success(`✅ Backend analysis completed! Real data from ${urlInput}`, {
+              toast.success(`✅ Backend analysis completed! Real data from ${urlToAnalyze}`, {
                 duration: 5000,
                 position: 'top-right',
               })
@@ -219,7 +221,7 @@ function WebsiteAnalystContent() {
           
           try {
             // Use real URL fetcher instead of simulation
-            const realScanResult = await urlFetcher.fetchURL(urlInput, {
+            const realScanResult = await urlFetcher.fetchURL(urlToAnalyze, {
               includeResources: true,
               timeout: 30000,
               proxyService: 'allorigins'
@@ -231,7 +233,7 @@ function WebsiteAnalystContent() {
             // Convert real data to file structure
             filesToAnalyze = realUrlConverter.convertToFileStructure(realScanResult)
             
-            toast.success(`Successfully analyzed ${urlInput}! 🌐 Found ${filesToAnalyze.length} analyzable files`, {
+            toast.success(`Successfully analyzed ${urlToAnalyze}! 🌐 Found ${filesToAnalyze.length} analyzable files`, {
               duration: 4000,
               position: 'top-right',
             })
@@ -257,7 +259,7 @@ function WebsiteAnalystContent() {
             console.log('🔄 Falling back to simulation method...')
             setAnalysisStep('Using fallback analysis method...')
             
-            const fallbackResult = await scanURL(urlInput, {
+            const fallbackResult = await scanURL(urlToAnalyze, {
               includeResources: true,
               checkPerformance: true,
               analyzeSEO: true,
@@ -266,7 +268,7 @@ function WebsiteAnalystContent() {
             
             filesToAnalyze = convertURLScanToFileStructure(fallbackResult)
             
-            toast(`⚠️ Using fallback analysis for ${urlInput}`, {
+            toast(`⚠️ Using fallback analysis for ${urlToAnalyze}`, {
               duration: 3000,
               position: 'top-right',
             })

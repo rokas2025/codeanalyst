@@ -42,10 +42,21 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         throw new Error(data.error || data.message || 'Login failed')
       }
       
+      // Store token and user with role
       localStorage.setItem('auth_token', data.token)
-      localStorage.setItem('user', JSON.stringify(data.user))
+      localStorage.setItem('user', JSON.stringify({
+        ...data.user,
+        role: data.user.role || 'user'  // Ensure role is stored
+      }))
       
-      set({ user: data.user, isAuthenticated: true, loading: false })
+      set({ 
+        user: {
+          ...data.user,
+          role: data.user.role || 'user'
+        }, 
+        isAuthenticated: true, 
+        loading: false 
+      })
     } catch (error) {
       set({ loading: false })
       throw error

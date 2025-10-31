@@ -440,11 +440,26 @@ router.post('/login-supabase', async (req, res) => {
       last_login: new Date().toISOString()
     })
     
-    // Generate our custom JWT
+    // Get user role from user_roles table
+    let userRole = 'user' // default
+    try {
+      const roleResult = await db.query(
+        'SELECT role FROM user_roles WHERE user_id = $1::UUID LIMIT 1',
+        [user.id]
+      )
+      if (roleResult.rows.length > 0) {
+        userRole = roleResult.rows[0].role
+      }
+    } catch (roleError) {
+      logger.error('Failed to get user role:', roleError)
+    }
+    
+    // Generate our custom JWT with role
     const token = jwt.sign({
       userId: user.id,
       email: user.email,
-      name: user.name
+      name: user.name,
+      role: userRole  // CRITICAL: Include role
     }, process.env.JWT_SECRET, { expiresIn: '30d' })
     
     res.json({ 
@@ -455,7 +470,8 @@ router.post('/login-supabase', async (req, res) => {
         email: user.email, 
         name: user.name, 
         plan: user.plan,
-        avatarUrl: user.avatar_url
+        avatarUrl: user.avatar_url,
+        role: userRole  // CRITICAL: Include in response
       } 
     })
     

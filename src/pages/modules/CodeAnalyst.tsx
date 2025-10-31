@@ -48,9 +48,9 @@ function CodeAnalystContent() {
       setUploadedFiles(files)
       toast.success(`Loaded ${files.length} theme files. Starting analysis...`)
       
-      // Auto-start analysis
+      // Auto-start analysis - pass files directly!
       setTimeout(() => {
-        handleAnalyze()
+        handleAnalyze(files)
       }, 500)
     }
   }, [location.state])
@@ -181,12 +181,16 @@ function CodeAnalystContent() {
     multiple: true
   })
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = async (providedFiles?: { path: string; content: string; size: number }[]) => {
     if (userProfile === 'github' && !selectedRepository) {
       alert('Please select a GitHub repository first')
       return
     }
-    if (userProfile === 'zip' && uploadedFiles.length === 0) {
+    
+    // Use provided files or fall back to state
+    const filesToUse = providedFiles || uploadedFiles
+    
+    if (userProfile === 'zip' && filesToUse.length === 0) {
       alert('Please upload files first')
       return
     }
@@ -390,7 +394,7 @@ function CodeAnalystContent() {
       await new Promise(resolve => setTimeout(resolve, 1500))
       
       // Use uploaded files or create demo files if project selected
-      let filesToAnalyze = uploadedFiles
+      let filesToAnalyze = providedFiles || uploadedFiles
       
       if (uploadedFiles.length === 0 && selectedProject) {
         // Create realistic demo files based on selected project
@@ -538,9 +542,9 @@ function CodeAnalystContent() {
                   setUploadedFiles(response.files)
                   toast.success(`Loaded ${response.files.length} theme files. Starting analysis...`)
                   
-                  // Auto-start analysis
+                  // Auto-start analysis - pass files directly!
                   setTimeout(() => {
-                    handleAnalyze()
+                    handleAnalyze(response.files)
                   }, 500)
                 } else {
                   toast.error(response.error || 'Failed to fetch theme files')

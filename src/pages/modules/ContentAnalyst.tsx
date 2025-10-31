@@ -96,8 +96,9 @@ function ContentAnalystContent() {
     return uiLabels[lang as keyof typeof uiLabels] || uiLabels.en
   }
 
-  const analyzeContent = async () => {
-    const inputContent = (inputType === 'text' || inputType === 'wordpress') ? content : url
+  const analyzeContent = async (providedContent?: string) => {
+    const contentToAnalyze = providedContent || content
+    const inputContent = (inputType === 'text' || inputType === 'wordpress') ? contentToAnalyze : url
     
     if (!inputContent.trim()) {
       toast.error(`Please provide ${(inputType === 'text' || inputType === 'wordpress') ? 'content' : 'URL'} to analyze`)
@@ -249,14 +250,14 @@ function ContentAnalystContent() {
                 const response = await wordpressService.getPageContent(site.id, 'homepage')
                 toast.dismiss()
                 
-                if (response.success && response.content) {
-                  setContent(response.content)
-                  toast.success(`Loaded content from ${response.title}. Starting analysis...`)
-                  
-                  // Auto-start analysis
-                  setTimeout(() => {
-                    analyzeContent()
-                  }, 500)
+              if (response.success && response.content) {
+                setContent(response.content)
+                toast.success(`Loaded content from ${response.title}. Starting analysis...`)
+                
+                // Auto-start analysis - pass content directly!
+                setTimeout(() => {
+                  analyzeContent(response.content)
+                }, 500)
                 } else {
                   toast.error(response.error || 'Failed to fetch page content')
                 }

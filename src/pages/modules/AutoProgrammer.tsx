@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { 
@@ -12,8 +12,12 @@ import {
   PlayIcon,
   PaperAirplaneIcon,
   ArrowLeftIcon,
-  EyeIcon
+  EyeIcon,
+  DocumentArrowUpIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline'
+import { useDropzone } from 'react-dropzone'
+import JSZip from 'jszip'
 import { MessageRenderer } from '../../components/MessageRenderer'
 import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 import CodePreview from './AutoProgrammer/components/CodePreview'
@@ -65,6 +69,10 @@ function AutoProgrammerContent() {
   const [activeTab, setActiveTab] = useState<'structure' | 'preview' | 'changes'>('structure')
   const [showPreview, setShowPreview] = useState(false)
   const [apiEndpoints, setApiEndpoints] = useState<Array<{method: string, path: string, description?: string}>>([])
+  
+  // ZIP upload state
+  const [inputMethod, setInputMethod] = useState<'github' | 'zip'>('github')
+  const [uploadedFiles, setUploadedFiles] = useState<FileNode[]>([])
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -941,6 +949,67 @@ The file structure isn't available for this analysis, but I can still help you w
     
     return endpoints
   }
+  
+  // Helper function to check if file should be included
+  const shouldIncludeFile = (path: string): boolean => {
+    const excludePatterns = ['node_modules/', '.git/', 'dist/', 'build/', '.DS_Store', '__MACOSX']
+    return !excludePatterns.some(pattern => path.includes(pattern))
+  }
+  
+  // ZIP upload handler
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const files: FileNode[] = []
+    
+    try {
+      for (const file of acceptedFiles) {
+        if (file.name.endsWith('.zip')) {
+          const zip = new JSZip()
+          const zipContent = await zip.loadAsync(file)
+          
+          for (const [path, zipEntry] of Object.entries(zipContent.files)) {
+            if (!zipEntry.dir && shouldIncludeFile(path)) {
+              const content = await zipEntry.async('string')
+              files.push({
+                name: path.split('/').pop() || path,
+                path: path,
+                type: 'file',
+                content: content
+              })
+            }
+          }
+        }
+      }
+      
+      setUploadedFiles(files)
+      setFileTree(files)
+      setSelectedProject({
+        id: 'uploaded-zip',
+        name: 'Uploaded ZIP Project',
+        type: 'zip'
+      })
+      toast.success(`Uploaded ${files.length} files successfully`)
+    } catch (error) {
+      console.error('ZIP upload error:', error)
+      toast.error('Failed to process ZIP file')
+    }
+  }, [])
+  
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
+    onDrop,
+    accept: { 'application/zip': ['.zip'] }
+  })
+  
+  // Auto-select uploaded project when files are uploaded
+  useEffect(() => {
+    if (inputMethod === 'zip' && uploadedFiles.length > 0) {
+      setFileTree(uploadedFiles)
+      setSelectedProject({
+        id: 'uploaded-zip',
+        name: 'Uploaded ZIP Project',
+        type: 'zip'
+      })
+    }
+  }, [inputMethod, uploadedFiles])
 
   return (
     <div className="h-screen max-h-screen bg-gray-50 flex overflow-hidden">
@@ -1016,18 +1085,96 @@ The file structure isn't available for this analysis, but I can still help you w
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-6 pb-2 pt-3" style={{ minHeight: 0, maxHeight: 'calc(100vh - 120px)' }}>
             {!selectedProject ? (
-              <div className="text-center py-8">
-                <div className="text-gray-400 mb-3">
-                  <CodeBracketIcon className="h-12 w-12 mx-auto" />
+              <div className="p-6 space-y-6">
+                <div className="text-center">
+                  <div className="text-gray-400 mb-3">
+                    <CodeBracketIcon className="h-12 w-12 mx-auto" />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Welcome to AutoProgrammer</h3>
+                  <p className="text-gray-500 mb-6">Choose how you want to start coding with AI</p>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Welcome to AutoProgrammer</h3>
-                <p className="text-gray-500 mb-4">Select a project to start coding with AI</p>
-                <button
-                  onClick={() => setSidebarOpen(true)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Choose Project
-                </button>
+                
+                {/* Input Method Selection */}
+                <div className="card p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Choose Input Method</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      className={`p-4 border rounded-lg transition-colors text-left ${
+                        inputMethod === 'github' 
+                          ? 'border-blue-500 bg-blue-50 text-blue-900' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      onClick={() => setInputMethod('github')}
+                    >
+                      <div className="font-medium">GitHub Project</div>
+                      <div className="text-sm text-gray-600 mt-1">Select from analyzed projects</div>
+                    </button>
+                    <button
+                      className={`p-4 border rounded-lg transition-colors text-left ${
+                        inputMethod === 'zip' 
+                          ? 'border-blue-500 bg-blue-50 text-blue-900' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      onClick={() => setInputMethod('zip')}
+                    >
+                      <div className="font-medium">ZIP Upload</div>
+                      <div className="text-sm text-gray-600 mt-1">Upload project files directly</div>
+                    </button>
+                  </div>
+                </div>
+                
+                {/* GitHub Project Selection */}
+                {inputMethod === 'github' && (
+                  <div className="card p-6">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Select GitHub Project</h3>
+                    <p className="text-gray-500 mb-4">Choose a project from your analyzed repositories</p>
+                    <button
+                      onClick={() => setSidebarOpen(true)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                    >
+                      Choose Project
+                    </button>
+                  </div>
+                )}
+                
+                {/* ZIP Upload */}
+                {inputMethod === 'zip' && (
+                  <div className="card p-6">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Upload Project Files</h3>
+                    <div
+                      {...getRootProps()}
+                      className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                        isDragActive 
+                          ? 'border-blue-400 bg-blue-50' 
+                          : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      <input {...getInputProps()} />
+                      <DocumentArrowUpIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      {isDragActive ? (
+                        <p className="text-blue-600 font-medium">Drop ZIP file here...</p>
+                      ) : (
+                        <>
+                          <p className="text-gray-600 mb-2">
+                            Drag & drop a ZIP file, or click to browse
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Supports project archives up to 50MB
+                          </p>
+                        </>
+                      )}
+                    </div>
+                    
+                    {uploadedFiles.length > 0 && (
+                      <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3">
+                        <div className="flex items-center text-sm text-green-700">
+                          <CheckCircleIcon className="h-5 w-5 mr-2" />
+                          <span className="font-medium">{uploadedFiles.length} files uploaded successfully</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-4 pb-2">
