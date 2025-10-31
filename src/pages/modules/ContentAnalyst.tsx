@@ -83,9 +83,9 @@ function ContentAnalystContent() {
       setContent(location.state.wordpressContent)
       toast.success(`Loaded content from ${location.state.wordpressTitle || 'WordPress'}. Starting analysis...`)
       
-      // Auto-start analysis
+      // Auto-start analysis - pass content directly!
       setTimeout(() => {
-        analyzeContent()
+        analyzeContent(location.state.wordpressContent)
       }, 500)
     }
   }, [location.state])

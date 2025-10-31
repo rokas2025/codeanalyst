@@ -14,7 +14,9 @@ import {
   ArrowLeftIcon,
   EyeIcon,
   DocumentArrowUpIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  XMarkIcon,
+  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline'
 import { useDropzone } from 'react-dropzone'
 import JSZip from 'jszip'
@@ -66,9 +68,13 @@ function AutoProgrammerContent() {
   const [selectedFile, setSelectedFile] = useState<FileNode | null>(null)
   const [codeChanges, setCodeChanges] = useState<CodeChange[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState<'structure' | 'preview' | 'changes'>('structure')
+  const [activeTab, setActiveTab] = useState<'files' | 'preview' | 'changes'>('files')
   const [showPreview, setShowPreview] = useState(false)
   const [apiEndpoints, setApiEndpoints] = useState<Array<{method: string, path: string, description?: string}>>([])
+  
+  // Website preview modal state
+  const [showWebsitePreview, setShowWebsitePreview] = useState(false)
+  const [previewHTML, setPreviewHTML] = useState('')
   
   // ZIP upload state
   const [inputMethod, setInputMethod] = useState<'github' | 'zip'>('github')
@@ -1010,6 +1016,98 @@ The file structure isn't available for this analysis, but I can still help you w
       })
     }
   }, [inputMethod, uploadedFiles])
+  
+  // Helper functions for changes management
+  const getCurrentFileContent = (filePath: string): string => {
+    const flatFiles = flattenFiles(fileTree)
+    const file = flatFiles.find(f => f.path === filePath)
+    return file?.content || '// New file'
+  }
+  
+  const applySingleChange = (changeId: string) => {
+    const change = codeChanges.find(c => c.id === changeId)
+    if (!change) return
+    
+    const updatedTree = applyChangeToTree(fileTree, change)
+    setFileTree(updatedTree)
+    setCodeChanges(prev => prev.filter(c => c.id !== changeId))
+    
+    toast.success(`Applied changes to ${change.file}`)
+  }
+  
+  const applyAllChanges = () => {
+    let updatedTree = fileTree
+    codeChanges.forEach(change => {
+      updatedTree = applyChangeToTree(updatedTree, change)
+    })
+    
+    setFileTree(updatedTree)
+    setCodeChanges([])
+    
+    toast.success(`Applied ${codeChanges.length} changes`)
+  }
+  
+  const rejectChange = (changeId: string) => {
+    setCodeChanges(prev => prev.filter(c => c.id !== changeId))
+    toast.success('Change rejected')
+  }
+  
+  const applyChangeToTree = (tree: FileNode[], change: CodeChange): FileNode[] => {
+    return tree.map(node => {
+      if (node.type === 'file' && node.path === change.file) {
+        return { ...node, content: change.content }
+      }
+      if (node.type === 'folder' && node.children) {
+        return { ...node, children: applyChangeToTree(node.children, change) }
+      }
+      return node
+    })
+  }
+  
+  const generatePreviewWithChanges = (tree: FileNode[], changes: CodeChange[]): string => {
+    let previewTree = JSON.parse(JSON.stringify(tree))
+    changes.forEach(change => {
+      previewTree = applyChangeToTree(previewTree, change)
+    })
+    return generatePreviewHTML(previewTree, detectProjectType(previewTree))
+  }
+  
+  const downloadProjectAsZip = async () => {
+    try {
+      const zip = new JSZip()
+      
+      const addFilesToZip = (nodes: FileNode[], folder: JSZip | null = null) => {
+        nodes.forEach(node => {
+          if (node.type === 'file' && node.content) {
+            const target = folder || zip
+            target.file(node.path, node.content)
+          } else if (node.type === 'folder' && node.children) {
+            const newFolder = folder ? folder.folder(node.name) : zip.folder(node.name)
+            if (newFolder) {
+              addFilesToZip(node.children, newFolder)
+            }
+          }
+        })
+      }
+      
+      addFilesToZip(fileTree)
+      
+      const blob = await zip.generateAsync({ type: 'blob' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${getProjectName(selectedProject)}-updated.zip`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      
+      toast.success('Project downloaded successfully!')
+    } catch (error) {
+      console.error('Download failed:', error)
+      toast.error('Failed to download project')
+    }
+  }
 
   return (
     <div className="h-screen max-h-screen bg-gray-50 flex overflow-hidden">
@@ -1072,13 +1170,24 @@ The file structure isn't available for this analysis, but I can still help you w
                   )}
                 </div>
               </div>
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                <ArrowLeftIcon className="h-4 w-4" />
-                <span>Dashboard</span>
-              </button>
+              <div className="flex items-center space-x-2">
+                {selectedProject && (
+                  <button
+                    onClick={downloadProjectAsZip}
+                    className="flex items-center space-x-2 px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  >
+                    <ArrowDownTrayIcon className="h-4 w-4" />
+                    <span>Download ZIP</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => navigate('/')}
+                  className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  <ArrowLeftIcon className="h-4 w-4" />
+                  <span>Dashboard</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1297,8 +1406,8 @@ The file structure isn't available for this analysis, but I can still help you w
             <div className="border-b border-gray-200">
               <nav className="flex">
                 {[
-                  { id: 'structure', name: 'Files', icon: FolderIcon },
-                  { id: 'preview', name: 'Website Preview', icon: EyeIcon },
+                  { id: 'files', name: 'Files', icon: FolderIcon },
+                  { id: 'preview', name: 'Preview', icon: EyeIcon },
                   { id: 'changes', name: 'Changes', icon: CodeBracketIcon }
                 ].map((tab) => (
                   <button
@@ -1313,7 +1422,7 @@ The file structure isn't available for this analysis, but I can still help you w
                     <tab.icon className="h-4 w-4 mr-2" />
                     {tab.name}
                     {tab.id === 'changes' && codeChanges.length > 0 && (
-                      <span className="ml-2 bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">
+                      <span className="ml-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">
                         {codeChanges.length}
                       </span>
                     )}
@@ -1324,7 +1433,7 @@ The file structure isn't available for this analysis, but I can still help you w
 
             {/* Tab Content */}
             <div className="flex-1 overflow-hidden">
-              {activeTab === 'structure' && (
+              {activeTab === 'files' && (
                 <div className="h-full overflow-y-auto">
                   {fileTree.length > 0 ? (
                     <div className="p-2">
@@ -1342,102 +1451,155 @@ The file structure isn't available for this analysis, but I can still help you w
               )}
 
               {activeTab === 'preview' && (
-                <div className="h-full overflow-hidden">
-                  {isWebProject(selectedProject) ? (
-                    <div className="h-full flex flex-col">
-                      <div className="p-3 border-b border-gray-200 bg-gray-50">
-                        <h4 className="text-sm font-semibold text-gray-800">Current Project State</h4>
-                        <p className="text-xs text-gray-500 mt-1">Preview before making changes</p>
-                      </div>
-                      <div className="flex-1 overflow-auto bg-gray-100 p-4">
-                        <div className="bg-white rounded-lg shadow-lg overflow-hidden mx-auto" style={{ maxWidth: '100%' }}>
-                          <iframe
-                            ref={projectPreviewRef}
-                            className="w-full h-full border-0"
-                            style={{ minHeight: '600px' }}
-                            sandbox="allow-same-origin allow-scripts"
-                            title="Project Preview"
-                          />
+                <div className="h-full overflow-y-auto">
+                  <div className="p-4 space-y-4">
+                    {/* Website Preview Button */}
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-medium text-gray-900">Live Website Preview</h3>
+                          <p className="text-sm text-gray-600 mt-1">
+                            View your project rendered in a browser
+                          </p>
                         </div>
+                        <button
+                          onClick={() => {
+                            const html = generatePreviewHTML(fileTree, detectProjectType(fileTree))
+                            setPreviewHTML(html)
+                            setShowWebsitePreview(true)
+                          }}
+                          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          <EyeIcon className="h-5 w-5" />
+                          <span>Preview Website</span>
+                        </button>
                       </div>
                     </div>
-                  ) : (
-                    <div className="h-full overflow-y-auto p-4">
-                      <div className="mb-4">
-                        <h4 className="text-sm font-semibold text-gray-800 mb-2">API Endpoints</h4>
-                        <p className="text-xs text-gray-500">Detected endpoints in this project</p>
+                    
+                    {/* File Content Preview */}
+                    {selectedFile ? (
+                      <div className="bg-gray-900 rounded-lg p-4 overflow-auto max-h-[600px]">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-400">{selectedFile.path}</span>
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(selectedFile.content || '')
+                              toast.success('Copied to clipboard!')
+                            }}
+                            className="text-xs text-blue-400 hover:text-blue-300"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                        <pre className="text-sm text-gray-100">
+                          <code>{selectedFile.content || 'No content available'}</code>
+                        </pre>
                       </div>
-                      {apiEndpoints.length > 0 ? (
-                        <div className="space-y-2">
-                          {apiEndpoints.map((endpoint, index) => (
-                            <div key={index} className="bg-white border border-gray-200 rounded-lg p-3">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`text-xs font-mono px-2 py-0.5 rounded ${
-                                  endpoint.method === 'GET' ? 'bg-green-100 text-green-700' :
-                                  endpoint.method === 'POST' ? 'bg-blue-100 text-blue-700' :
-                                  endpoint.method === 'PUT' ? 'bg-yellow-100 text-yellow-700' :
-                                  'bg-red-100 text-red-700'
-                                }`}>
-                                  {endpoint.method}
-                                </span>
-                                <span className="text-sm font-mono text-gray-700">{endpoint.path}</span>
-                              </div>
-                              {endpoint.description && (
-                                <p className="text-xs text-gray-500 mt-1">{endpoint.description}</p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-8 text-gray-500">
-                          <CodeBracketIcon className="h-12 w-12 mx-auto mb-2 text-gray-300" />
-                          <p className="text-sm">No API endpoints detected</p>
-                          <p className="text-xs mt-1">Analyzing project structure...</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    ) : (
+                      <div className="text-center py-12 text-gray-500">
+                        <DocumentIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+                        <p>Select a file from the tree to preview its content</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
               {activeTab === 'changes' && (
                 <div className="h-full overflow-y-auto p-4">
-                  {codeChanges.length > 0 ? (
-                    <div className="space-y-3">
-                      {codeChanges.map((change) => (
-                        <div key={change.id} className="border rounded-lg p-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium">{change.file}</span>
-                            <button
-                              onClick={() => approveChange(change.id)}
-                              className={`text-xs px-2 py-1 rounded ${
-                                change.approved
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                              }`}
-                            >
-                              {change.approved ? 'Approved' : 'Approve'}
-                            </button>
-                          </div>
-                          <pre className="text-xs bg-gray-50 p-2 rounded overflow-x-auto">
-                            {change.content.slice(0, 200)}...
-                          </pre>
-                        </div>
-                      ))}
-                      <button
-                        onClick={commitChanges}
-                        className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
-                      >
-                        <PlayIcon className="h-4 w-4 inline mr-2" />
-                        Commit to GitHub
-                      </button>
-                    </div>
-                  ) : (
+                  {codeChanges.length === 0 ? (
                     <div className="flex items-center justify-center h-full text-gray-500">
                       <div className="text-center">
                         <CodeBracketIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p className="text-sm">No pending changes</p>
+                        <p className="text-xs mt-1">Chat with AI to suggest improvements</p>
                       </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {/* Actions Header */}
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium text-gray-900">
+                              {codeChanges.length} Pending Change{codeChanges.length !== 1 ? 's' : ''}
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Review and approve changes before applying
+                            </p>
+                          </div>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => {
+                                const html = generatePreviewWithChanges(fileTree, codeChanges)
+                                setPreviewHTML(html)
+                                setShowWebsitePreview(true)
+                              }}
+                              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                            >
+                              Preview Changes
+                            </button>
+                            <button
+                              onClick={applyAllChanges}
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                            >
+                              Apply All
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* List of Changes with Side-by-Side */}
+                      {codeChanges.map((change) => (
+                        <div key={change.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                          {/* Change Header */}
+                          <div className="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <span className={`px-2 py-1 text-xs font-medium rounded ${
+                                change.type === 'create' ? 'bg-green-100 text-green-700' :
+                                change.type === 'modify' ? 'bg-blue-100 text-blue-700' :
+                                'bg-red-100 text-red-700'
+                              }`}>
+                                {change.type.toUpperCase()}
+                              </span>
+                              <span className="text-sm font-medium text-gray-900">{change.file}</span>
+                            </div>
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => applySingleChange(change.id)}
+                                className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                              >
+                                Apply
+                              </button>
+                              <button
+                                onClick={() => rejectChange(change.id)}
+                                className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          </div>
+                          
+                          {/* Side-by-Side Comparison */}
+                          <div className="grid grid-cols-2 divide-x divide-gray-200">
+                            {/* Current */}
+                            <div className="p-4 bg-red-50">
+                              <h4 className="text-xs font-medium text-gray-700 mb-2">CURRENT</h4>
+                              <pre className="text-xs bg-white p-3 rounded border border-red-200 overflow-auto max-h-64">
+                                <code>{getCurrentFileContent(change.file)}</code>
+                              </pre>
+                            </div>
+                            
+                            {/* Proposed */}
+                            <div className="p-4 bg-green-50">
+                              <h4 className="text-xs font-medium text-gray-700 mb-2">PROPOSED</h4>
+                              <pre className="text-xs bg-white p-3 rounded border border-green-200 overflow-auto max-h-64">
+                                <code>{change.content}</code>
+                              </pre>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -1447,7 +1609,7 @@ The file structure isn't available for this analysis, but I can still help you w
         )}
       </div>
 
-      {/* Website Preview Modal */}
+      {/* Code Preview Modal (existing) */}
       {showPreview && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg w-full h-full max-w-7xl max-h-[95vh] overflow-hidden shadow-2xl">
@@ -1458,6 +1620,44 @@ The file structure isn't available for this analysis, but I can still help you w
               onApplyChanges={handleApplyChanges}
               onClose={() => setShowPreview(false)}
             />
+          </div>
+        </div>
+      )}
+      
+      {/* Website Preview Modal (new) */}
+      {showWebsitePreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Website Preview</h2>
+              <button
+                onClick={() => setShowWebsitePreview(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <XMarkIcon className="h-6 w-6 text-gray-500" />
+              </button>
+            </div>
+            
+            {/* Modal Body - Iframe */}
+            <div className="flex-1 p-4 overflow-hidden">
+              <iframe
+                srcDoc={previewHTML}
+                className="w-full h-full border border-gray-200 rounded-lg bg-white"
+                sandbox="allow-scripts allow-same-origin"
+                title="Website Preview"
+              />
+            </div>
+            
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-gray-200 flex justify-end space-x-3">
+              <button
+                onClick={() => setShowWebsitePreview(false)}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
