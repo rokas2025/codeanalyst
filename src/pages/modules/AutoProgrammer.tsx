@@ -49,6 +49,7 @@ interface FileNode {
   content?: string
   functions?: CodeFunction[]
   size?: number
+  isImage?: boolean  // Flag for image files with data URL content
 }
 
 interface CodeFunction {
@@ -962,6 +963,16 @@ The file structure isn't available for this analysis, but I can still help you w
     return !excludePatterns.some(pattern => path.includes(pattern))
   }
   
+  // Helper function to convert blob to data URL
+  const blobToDataURL = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result as string)
+      reader.onerror = reject
+      reader.readAsDataURL(blob)
+    })
+  }
+
   // ZIP upload handler
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const files: FileNode[] = []
@@ -974,17 +985,45 @@ The file structure isn't available for this analysis, but I can still help you w
           
           for (const [path, zipEntry] of Object.entries(zipContent.files)) {
             if (!zipEntry.dir && shouldIncludeFile(path)) {
-              const content = await zipEntry.async('string')
-              files.push({
-                name: path.split('/').pop() || path,
-                path: path,
-                type: 'file',
-                content: content
-              })
+              // Check if it's an image file
+              const isImage = /\.(png|jpg|jpeg|gif|svg|webp|ico|bmp)$/i.test(path)
+              
+              if (isImage) {
+                try {
+                  // Extract as blob and convert to data URL
+                  const blob = await zipEntry.async('blob')
+                  const dataUrl = await blobToDataURL(blob)
+                  files.push({
+                    name: path.split('/').pop() || path,
+                    path: path,
+                    type: 'file',
+                    content: dataUrl,
+                    isImage: true
+                  })
+                } catch (imgError) {
+                  console.warn(`Failed to extract image: ${path}`, imgError)
+                }
+              } else {
+                // Extract as text for code files
+                try {
+                  const content = await zipEntry.async('string')
+                  files.push({
+                    name: path.split('/').pop() || path,
+                    path: path,
+                    type: 'file',
+                    content: content
+                  })
+                } catch (textError) {
+                  console.warn(`Failed to extract file: ${path}`, textError)
+                }
+              }
             }
           }
         }
       }
+      
+      const imageCount = files.filter(f => f.isImage).length
+      const codeCount = files.length - imageCount
       
       setUploadedFiles(files)
       setFileTree(files)
@@ -993,7 +1032,7 @@ The file structure isn't available for this analysis, but I can still help you w
         name: 'Uploaded ZIP Project',
         type: 'zip'
       })
-      toast.success(`Uploaded ${files.length} files successfully`)
+      toast.success(`Uploaded ${codeCount} code files and ${imageCount} images successfully`)
     } catch (error) {
       console.error('ZIP upload error:', error)
       toast.error('Failed to process ZIP file')

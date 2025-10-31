@@ -488,74 +488,141 @@ Generate comprehensive, high-quality content that exceeds expectations.`
    */
   parseGeneratedContent(rawContent, outputStructure) {
     try {
-      const sections = []
+      logger.info('📝 Parsing generated content', {
+        contentLength: rawContent.length,
+        structureCount: outputStructure?.length || 0
+      })
       
+      // If no structure, return as single section
       if (!outputStructure || outputStructure.length === 0) {
-        // Simple parsing if no structure defined
-        sections.push({
-          id: 'content',
-          name: 'Main Content',
-          type: 'paragraph',
-          content: rawContent.trim(),
-          editable: true,
-          order: 1
-        })
-        
-        return { sections }
+        return {
+          sections: [{
+            id: 'content',
+            name: 'Generated Content',
+            type: 'paragraph',
+            content: rawContent.trim(),
+            editable: true,
+            order: 1
+          }]
+        }
       }
       
-      // Smart parsing based on output structure
-      const lines = rawContent.split('\n').filter(line => line.trim())
-      let currentSectionIndex = 0
-      let currentContent = []
+      // Try to split by markdown headers first (most reliable)
+      const headerRegex = /^#{1,3}\s+(.+)$/gm
+      const headerMatches = [...rawContent.matchAll(headerRegex)]
       
-      for (const line of lines) {
-        const trimmedLine = line.trim()
+      logger.info('🔍 Found markdown headers:', headerMatches.length)
+      
+      if (headerMatches.length >= outputStructure.length - 1) {
+        // We have enough headers to split properly
+        const sections = []
+        let lastIndex = 0
         
-        // Check if this line starts a new section
-        const isHeading = trimmedLine.match(/^#{1,3}\s+/) || 
-                         trimmedLine.match(/^[A-Z][^.!?]*:?\s*$/) ||
-                         (trimmedLine.length < 100 && !trimmedLine.includes('.'))
-        
-        if (isHeading && currentSectionIndex < outputStructure.length - 1) {
-          // Save current section
-          if (currentContent.length > 0) {
-            const structure = outputStructure[currentSectionIndex]
+        for (let i = 0; i < outputStructure.length; i++) {
+          const structure = outputStructure[i]
+          const nextMatch = headerMatches[i]
+          
+          let content = ''
+          if (nextMatch) {
+            const startIndex = nextMatch.index
+            const endIndex = headerMatches[i + 1]?.index || rawContent.length
+            content = rawContent.substring(startIndex, endIndex).trim()
+          } else if (i === 0) {
+            // First section, take everything before first header or all content
+            const endIndex = headerMatches[0]?.index || rawContent.length
+            content = rawContent.substring(0, endIndex).trim()
+          } else {
+            // Last section, take remaining content
+            content = rawContent.substring(lastIndex).trim()
+          }
+          
+          if (content) {
             sections.push({
-              id: structure.id || `section_${currentSectionIndex}`,
+              id: structure.id || `section_${i}`,
               name: structure.name,
               type: structure.type || 'paragraph',
-              content: currentContent.join('\n').trim(),
+              content: content,
               editable: structure.editable !== false,
-              order: structure.order || currentSectionIndex + 1
+              order: structure.order || i + 1
             })
-            currentContent = []
-            currentSectionIndex++
+          }
+          
+          if (nextMatch) {
+            lastIndex = nextMatch.index + nextMatch[0].length
           }
         }
         
-        currentContent.push(line)
+        if (sections.length > 0) {
+          logger.info('✅ Parsed with markdown headers:', sections.length)
+          return { sections }
+        }
       }
       
-      // Add final section
-      if (currentContent.length > 0) {
-        const structure = outputStructure[Math.min(currentSectionIndex, outputStructure.length - 1)]
-        sections.push({
-          id: structure.id || `section_${currentSectionIndex}`,
-          name: structure.name,
-          type: structure.type || 'paragraph',
-          content: currentContent.join('\n').trim(),
-          editable: structure.editable !== false,
-          order: structure.order || currentSectionIndex + 1
-        })
+      // Fallback 1: Split by double newlines (paragraph breaks)
+      const paragraphs = rawContent.split(/\n\n+/).filter(p => p.trim())
+      
+      logger.info('📄 Splitting by paragraphs:', paragraphs.length)
+      
+      if (paragraphs.length >= outputStructure.length) {
+        // Map paragraphs to structure
+        const sections = outputStructure.map((struct, idx) => ({
+          id: struct.id || `section_${idx}`,
+          name: struct.name,
+          type: struct.type || 'paragraph',
+          content: paragraphs[idx] || '',
+          editable: struct.editable !== false,
+          order: struct.order || idx + 1
+        })).filter(s => s.content.trim())
+        
+        if (sections.length > 0) {
+          logger.info('✅ Parsed by paragraphs:', sections.length)
+          return { sections }
+        }
       }
       
-      return { sections }
+      // Fallback 2: Distribute content evenly across sections
+      const words = rawContent.split(/\s+/)
+      const wordsPerSection = Math.ceil(words.length / outputStructure.length)
+      
+      logger.info('📊 Distributing words evenly:', { totalWords: words.length, wordsPerSection })
+      
+      const sections = outputStructure.map((struct, idx) => {
+        const start = idx * wordsPerSection
+        const end = Math.min((idx + 1) * wordsPerSection, words.length)
+        const content = words.slice(start, end).join(' ')
+        
+        return {
+          id: struct.id || `section_${idx}`,
+          name: struct.name,
+          type: struct.type || 'paragraph',
+          content: content.trim(),
+          editable: struct.editable !== false,
+          order: struct.order || idx + 1
+        }
+      }).filter(s => s.content)
+      
+      if (sections.length > 0) {
+        logger.info('✅ Distributed content across sections:', sections.length)
+        return { sections }
+      }
+      
+      // Ultimate fallback: Put all content in first section
+      logger.warn('⚠️ Using ultimate fallback - single section with all content')
+      return {
+        sections: [{
+          id: outputStructure[0]?.id || 'content',
+          name: outputStructure[0]?.name || 'Content',
+          type: outputStructure[0]?.type || 'paragraph',
+          content: rawContent.trim(),
+          editable: true,
+          order: 1
+        }]
+      }
       
     } catch (error) {
       logger.error('❌ Error parsing generated content:', error)
       
-      // Fallback: return raw content as single section
+      // Absolute fallback: return raw content as single section
       return {
         sections: [{
           id: 'content',

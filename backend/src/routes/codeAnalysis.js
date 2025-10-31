@@ -289,10 +289,11 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
 
     // Basic ZIP validation
     try {
-      await ZipService.validateZipFile(req.file.path)
+      await ZipService.validateZipFile(req.file.path, req.file.originalname)
     } catch (error) {
       // Clean up uploaded file
       await fs.unlink(req.file.path).catch(() => {})
+      logger.error('ZIP validation failed:', error)
       return res.status(400).json({
         success: false,
         error: 'Invalid ZIP file',
@@ -323,7 +324,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
 
       // Step 1: Extract ZIP file
       const { default: ZipService } = await import('../services/ZipService.js')
-      const extractedData = await ZipService.extractZipFile(req.file.path)
+      const extractedData = await ZipService.extractZipFile(req.file.path, analysisId, req.file.originalname)
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 30)
       
       // Step 2: Analyze Code Structure

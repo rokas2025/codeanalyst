@@ -333,14 +333,58 @@ function generatePreviewHTML(files: FileNode[], projectType: ProjectType): strin
   
   // Get all JS files
   const jsFiles = findFilesByExtension(files, ['.js', '.jsx', '.ts', '.tsx'])
+  
+  // Get all image files
+  const flatFiles = flattenFiles(files)
+  const imageFiles = flatFiles.filter(f => f.isImage)
 
   // Build complete HTML with inlined styles and scripts
   let html = htmlFile.content || ''
+  
+  // Ensure proper HTML structure if missing
+  if (!html.includes('<!DOCTYPE') && !html.includes('<html')) {
+    html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview</title>
+</head>
+<body>
+  ${html}
+</body>
+</html>`
+  }
   
   // Inject CSS
   const cssContent = cssFiles.map(f => f.content || '').join('\n')
   if (cssContent) {
     html = html.replace('</head>', `<style>${cssContent}</style></head>`)
+  }
+  
+  // Inject image files as data URLs
+  // Replace image src paths with data URLs
+  for (const img of imageFiles) {
+    if (img.content && img.isImage) {
+      // Get just the filename
+      const imgName = img.name
+      // Get the full path (normalized)
+      const imgPath = img.path.replace(/\\/g, '/')
+      
+      // Replace various possible image reference formats
+      // 1. Exact filename match: src="image.png"
+      html = html.replace(new RegExp(`src=["']([^"']*?/)?(${imgName})["']`, 'gi'), `src="${img.content}"`)
+      
+      // 2. Full path match: src="images/logo.png"
+      html = html.replace(new RegExp(`src=["'](${imgPath})["']`, 'gi'), `src="${img.content}"`)
+      
+      // 3. Relative path variations: ./images/logo.png or ../images/logo.png
+      const pathParts = imgPath.split('/')
+      for (let i = 0; i < pathParts.length; i++) {
+        const partialPath = pathParts.slice(i).join('/')
+        html = html.replace(new RegExp(`src=["'](\\.{0,2}/)*${partialPath}["']`, 'gi'), `src="${img.content}"`)
+      }
+    }
   }
 
   // For React/JSX files, add a note
@@ -351,6 +395,16 @@ function generatePreviewHTML(files: FileNode[], projectType: ProjectType): strin
       </div>
     `
     html = html.replace('<body>', `<body>${note}`)
+  }
+  
+  // Add a note if images were injected
+  if (imageFiles.length > 0) {
+    const imageNote = `
+      <div style="position: fixed; bottom: 10px; right: 10px; background: #10B981; color: white; padding: 6px 10px; border-radius: 6px; font-size: 11px; z-index: 9999;">
+        ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''} loaded
+      </div>
+    `
+    html = html.replace('</body>', `${imageNote}</body>`)
   }
 
   return html

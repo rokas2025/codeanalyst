@@ -460,35 +460,55 @@ function parseMarkdown(text: string): string {
  * Format heading content
  */
 function formatHeading(content: string): string {
-  // Detect heading level from content or default to h2
-  let level = 2
-  let text = content
+  const lines = content.split('\n').filter(l => l.trim())
   
-  if (content.startsWith('#### ')) {
+  // Detect heading level from first line or default to h2
+  let level = 2
+  let text = lines[0] || content
+  
+  if (text.startsWith('#### ')) {
     level = 4
-    text = content.substring(5)
-  } else if (content.startsWith('### ')) {
+    text = text.substring(5)
+  } else if (text.startsWith('### ')) {
     level = 3
-    text = content.substring(4)
-  } else if (content.startsWith('## ')) {
+    text = text.substring(4)
+  } else if (text.startsWith('## ')) {
     level = 2
-    text = content.substring(3)
-  } else if (content.startsWith('# ')) {
+    text = text.substring(3)
+  } else if (text.startsWith('# ')) {
     level = 1
-    text = content.substring(2)
+    text = text.substring(2)
   }
   
   // Parse markdown in heading text
   const formattedText = parseMarkdown(text.trim())
-  return `<h${level}>${formattedText}</h${level}>`
+  const heading = `<h${level}>${formattedText}</h${level}>`
+  
+  // If there are additional lines, format them as paragraphs
+  if (lines.length > 1) {
+    const restLines = lines.slice(1)
+    const paragraphs = restLines.map(line => {
+      const formatted = parseMarkdown(line.trim())
+      return `<p>${formatted}</p>`
+    }).join('\n')
+    return `${heading}\n${paragraphs}`
+  }
+  
+  return heading
 }
 
 /**
  * Format paragraph content
  */
 function formatParagraph(content: string): string {
-  // Split into paragraphs and format
-  const paragraphs = content.split('\n\n').filter(p => p.trim())
+  // First try splitting by double newlines (proper paragraphs)
+  let paragraphs = content.split('\n\n').filter(p => p.trim())
+  
+  // If no double newlines, split by single newlines
+  if (paragraphs.length === 1 && content.includes('\n')) {
+    paragraphs = content.split('\n').filter(p => p.trim())
+  }
+  
   return paragraphs.map(p => {
     // Parse markdown formatting
     const formatted = parseMarkdown(p.trim())
@@ -528,7 +548,7 @@ function formatCTA(content: string): string {
   const lines = content.split('\n').filter(line => line.trim())
   
   let heading = ''
-  let text = ''
+  let textParts: string[] = []
   let buttonText = 'Learn More'
   
   for (const line of lines) {
@@ -539,13 +559,13 @@ function formatCTA(content: string): string {
       buttonText = line.replace(/^(button|cta):\s*/i, '').trim()
     } else if (line.trim()) {
       const formatted = parseMarkdown(line)
-      text += `<p>${formatted}</p>\n`
+      textParts.push(`<p>${formatted}</p>`)
     }
   }
   
   return `
     ${heading ? `<h2>${heading}</h2>` : ''}
-    ${text}
+    ${textParts.join('\n')}
     <button class="cta-button">${buttonText}</button>
   `
 }
@@ -556,18 +576,19 @@ function formatCTA(content: string): string {
 function formatQuote(content: string): string {
   const lines = content.split('\n').filter(line => line.trim())
   
-  let quote = ''
+  let quoteParts: string[] = []
   let author = ''
   
   for (const line of lines) {
     if (line.startsWith('—') || line.startsWith('-') || line.toLowerCase().includes('author:')) {
       author = line.replace(/^[—\-]\s*|^author:\s*/i, '').trim()
     } else if (line.trim()) {
-      quote += line + ' '
+      quoteParts.push(line)
     }
   }
   
-  const formattedQuote = parseMarkdown(quote.trim())
+  const quoteText = quoteParts.join(' ')
+  const formattedQuote = parseMarkdown(quoteText.trim())
   
   return `
     <p>${formattedQuote}</p>

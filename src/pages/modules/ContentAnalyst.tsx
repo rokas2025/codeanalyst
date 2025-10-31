@@ -111,6 +111,13 @@ function ContentAnalystContent() {
       const token = localStorage.getItem('auth_token')
       const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
       
+      console.log('🔍 Content Analyst - Starting analysis:', {
+        inputType,
+        hasContent: !!contentToAnalyze,
+        contentLength: contentToAnalyze?.length,
+        hasUrl: !!url
+      })
+      
       const response = await fetch(`${baseUrl}/content-analysis/analyze`, {
         method: 'POST',
         headers: {
@@ -118,19 +125,29 @@ function ContentAnalystContent() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          content: inputType === 'text' ? content : undefined,
+          content: (inputType === 'text' || inputType === 'wordpress') ? contentToAnalyze : undefined,
           url: inputType === 'url' ? url : undefined,
           type: inputType === 'url' ? 'url' : 'text'
         })
       })
 
+      console.log('📡 Content Analyst - Response status:', response.status)
+
       if (!response.ok) {
-        throw new Error(`Analysis failed: ${response.statusText}`)
+        const errorText = await response.text()
+        console.error('❌ Content Analyst - API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        })
+        throw new Error(`Analysis failed: ${response.statusText} - ${errorText}`)
       }
 
       const data = await response.json()
+      console.log('✅ Content Analyst - Response data:', data)
       
       if (!data.success) {
+        console.error('❌ Content Analyst - Backend error:', data.error)
         throw new Error(data.error || 'Analysis failed')
       }
 
@@ -164,8 +181,9 @@ function ContentAnalystContent() {
       toast.success('Content analysis completed!')
       
     } catch (error) {
-      console.error('Analysis failed:', error)
-      toast.error('Content analysis failed')
+      console.error('❌ Content Analyst - Analysis failed:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Content analysis failed'
+      toast.error(errorMessage)
     } finally {
       setIsAnalyzing(false)
     }
