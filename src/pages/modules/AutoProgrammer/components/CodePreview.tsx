@@ -362,6 +362,13 @@ function generatePreviewHTML(files: FileNode[], projectType: ProjectType): strin
     html = html.replace('</head>', `<style>${cssContent}</style></head>`)
   }
   
+  // Log HTML before image replacement
+  console.log('📄 HTML before image replacement:', {
+    htmlLength: html.length,
+    htmlPreview: html.substring(0, 500),
+    imageCount: imageFiles.length
+  })
+  
   // Inject image files as data URLs
   // Replace image src paths with data URLs
   for (const img of imageFiles) {
@@ -379,7 +386,8 @@ function generatePreviewHTML(files: FileNode[], projectType: ProjectType): strin
       console.log(`🖼️ Replacing image: ${imgName}`, {
         path: imgPath,
         hasContent: !!img.content,
-        contentLength: img.content?.length
+        contentLength: img.content?.length,
+        contentPreview: img.content?.substring(0, 50)
       })
       
       // Replace various possible image reference formats
@@ -410,6 +418,11 @@ function generatePreviewHTML(files: FileNode[], projectType: ProjectType): strin
   }
   
   console.log(`✅ Processed ${imageFiles.length} images for preview`)
+  console.log('📄 HTML after image replacement:', {
+    htmlLength: html.length,
+    containsDataUrl: html.includes('data:image'),
+    dataUrlCount: (html.match(/data:image/g) || []).length
+  })
 
   // For React/JSX files, add a note
   if (projectType === 'web' && jsFiles.some(f => f.path.includes('.jsx') || f.path.includes('.tsx'))) {
