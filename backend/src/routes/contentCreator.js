@@ -288,7 +288,7 @@ router.post('/generate', contentGenerationRateLimit, authMiddleware, [
     .withMessage('Invalid tone option'),
   body('generation_settings.style')
     .optional()
-    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging', 'conversational', 'formal', 'narrative', 'list-based', 'compelling'])
+    .isIn(['detailed', 'concise', 'creative', 'technical', 'engaging', 'conversational', 'formal', 'narrative', 'list-based', 'compelling', 'authoritative'])
     .withMessage('Invalid style option'),
   body('generation_settings.audience')
     .optional()
