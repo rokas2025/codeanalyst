@@ -7,13 +7,20 @@ import { logger } from '../utils/logger.js'
 export class ZipService {
   constructor() {
     // Railway-compatible temp directory
-    // Use /app/tmp for Railway, /tmp for local/other environments
-    this.tempDir = process.env.TEMP_DIR || (process.env.RAILWAY_ENVIRONMENT ? '/app/tmp' : '/tmp')
+    // Use current working directory's temp folder for Railway (writable)
+    // Railway containers have write access to /app directory
+    const defaultTempDir = process.env.RAILWAY_ENVIRONMENT 
+      ? path.join(process.cwd(), 'temp') 
+      : '/tmp'
+    
+    this.tempDir = process.env.TEMP_DIR || defaultTempDir
     this.maxZipSize = parseInt(process.env.MAX_ZIP_SIZE) || 100 * 1024 * 1024 // 100MB
     this.maxFiles = parseInt(process.env.MAX_ZIP_FILES) || 5000
     
     logger.info('ZipService initialized', {
       tempDir: this.tempDir,
+      cwd: process.cwd(),
+      isRailway: !!process.env.RAILWAY_ENVIRONMENT,
       maxZipSize: `${this.maxZipSize / 1024 / 1024}MB`,
       maxFiles: this.maxFiles
     })
