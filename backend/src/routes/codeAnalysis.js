@@ -22,14 +22,23 @@ const router = express.Router()
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
-    const uploadDir = path.join(process.cwd(), 'uploads', 'zip-files')
-    await fs.mkdir(uploadDir, { recursive: true })
-    cb(null, uploadDir)
+    try {
+      const uploadDir = path.join(process.cwd(), 'uploads', 'zip-files')
+      logger.info('📁 Creating upload directory', { uploadDir, cwd: process.cwd() })
+      await fs.mkdir(uploadDir, { recursive: true })
+      logger.info('✅ Upload directory ready', { uploadDir })
+      cb(null, uploadDir)
+    } catch (error) {
+      logger.error('❌ Failed to create upload directory', { error: error.message })
+      cb(error)
+    }
   },
   filename: (req, file, cb) => {
     const uniqueId = uuidv4()
     const ext = path.extname(file.originalname)
-    cb(null, `${uniqueId}${ext}`)
+    const filename = `${uniqueId}${ext}`
+    logger.info('📝 Generating filename', { originalname: file.originalname, filename })
+    cb(null, filename)
   }
 })
 
@@ -243,13 +252,27 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
     .withMessage('aiProfile must be technical, business, or mixed')
 ], async (req, res) => {
   try {
+    logger.info('🚀 ZIP upload endpoint hit', {
+      hasFile: !!req.file,
+      userId: req.user?.id,
+      contentType: req.headers['content-type']
+    })
+    
     // Check if file was uploaded
     if (!req.file) {
+      logger.error('❌ No file in request')
       return res.status(400).json({
         success: false,
         error: 'No ZIP file uploaded'
       })
     }
+    
+    logger.info('✅ File received', {
+      filename: req.file.originalname,
+      size: req.file.size,
+      path: req.file.path,
+      mimetype: req.file.mimetype
+    })
 
     // Validation
     const errors = validationResult(req)
@@ -420,7 +443,14 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       })
 
     } catch (analysisError) {
-      logger.error(`ZIP analysis failed: ${analysisError.message}`, analysisError)
+      logger.error(`❌ ZIP analysis failed: ${analysisId}`, {
+        error: analysisError.message,
+        stack: analysisError.stack,
+        name: analysisError.name,
+        code: analysisError.code,
+        userId,
+        filename: req.file?.originalname
+      })
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
       
       // Clean up uploaded file
@@ -430,7 +460,11 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         success: false,
         analysisId,
         error: 'Analysis failed',
-        message: analysisError.message
+        message: analysisError.message,
+        errorDetails: {
+          name: analysisError.name,
+          code: analysisError.code
+        }
       })
     }
 
@@ -440,11 +474,22 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       await fs.unlink(req.file.path).catch(() => {})
     }
     
-    logger.error('ZIP analysis request failed:', error)
+    logger.error('❌ ZIP analysis request failed:', {
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+      code: error.code,
+      hasFile: !!req.file,
+      filePath: req.file?.path
+    })
     res.status(500).json({
       success: false,
       error: 'Failed to queue ZIP analysis',
-      message: error.message
+      message: error.message,
+      errorDetails: {
+        name: error.name,
+        code: error.code
+      }
     })
   }
 })
