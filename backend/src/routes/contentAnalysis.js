@@ -434,7 +434,20 @@ router.post('/analyze', authMiddleware, async (req, res) => {
       contentTypeDescription = 'HTML content (cleaned and extracted)'
     }
 
+    // Detect content language FIRST
+    const { LanguageDetector } = await import('../services/LanguageDetector.js')
+    const languageDetector = new LanguageDetector()
+    const languageDetection = languageDetector.detectLanguage(content || '', textToAnalyze)
+    const detectedLanguage = languageDetection.language
+    
+    // Language-specific instructions
+    const languageNote = detectedLanguage === 'lt' 
+      ? 'SVARBU: Visas pagerintas turinys PRIVALO būti lietuvių kalba. Nepakeisk kalbos į anglų kalbą!' 
+      : 'IMPORTANT: All improved content MUST be in English.'
+    
     const prompt = `You are a professional content editor and SEO specialist. Analyze the following ${contentTypeDescription} and provide improvements.
+
+${languageNote}
 
 ${contentSource === 'url' ? `WEBPAGE CONTENT FROM: ${url}` : 
   contentSource === 'html' ? 'CLEANED TEXT FROM HTML:' : 
@@ -478,16 +491,10 @@ Focus on:
 4. Extracting relevant keywords from the actual content
 `
 
-    // Detect content language
-    const { LanguageDetector } = await import('../services/LanguageDetector.js')
-    const languageDetector = new LanguageDetector()
-    const languageDetection = languageDetector.detectLanguage(content || '', textToAnalyze)
-    const detectedLanguage = languageDetection.language
-    
-    // Language-specific system messages
+    // Language-specific system messages (detectedLanguage already defined above)
     const languageInstructions = {
-      lt: 'Atsakyk lietuvių kalba. Naudok taisyklingą lietuvių kalbos gramatiką ir idiomas.',
-      en: 'Respond in English. Use proper English grammar and idioms.'
+      lt: 'Atsakyk lietuvių kalba. Naudok taisyklingą lietuvių kalbos gramatiką ir idiomas. Visas pagerintas turinys turi būti lietuvių kalba!',
+      en: 'Respond in English. Use proper English grammar and idioms. All improved content must be in English!'
     }
     const languageInstruction = languageInstructions[detectedLanguage] || languageInstructions.en
 
