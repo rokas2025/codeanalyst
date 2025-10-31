@@ -100,8 +100,19 @@ function ContentAnalystContent() {
     const contentToAnalyze = providedContent || content
     const inputContent = (inputType === 'text' || inputType === 'wordpress') ? contentToAnalyze : url
     
+    console.log('🔍 Content Analyst - Validation:', {
+      providedContent: !!providedContent,
+      contentState: content,
+      contentLength: content?.length,
+      inputType,
+      inputContent,
+      inputContentType: typeof inputContent,
+      inputContentLength: inputContent?.length
+    })
+    
     // Ensure inputContent is a string and not empty
     if (!inputContent || typeof inputContent !== 'string' || !inputContent.trim()) {
+      console.error('❌ Validation failed:', { inputContent, type: typeof inputContent })
       toast.error(`Please provide ${(inputType === 'text' || inputType === 'wordpress') ? 'content' : 'URL'} to analyze`)
       return
     }
