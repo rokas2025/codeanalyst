@@ -371,21 +371,45 @@ function generatePreviewHTML(files: FileNode[], projectType: ProjectType): strin
       // Get the full path (normalized)
       const imgPath = img.path.replace(/\\/g, '/')
       
+      // Escape special regex characters in filename
+      const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const escapedName = escapeRegex(imgName)
+      const escapedPath = escapeRegex(imgPath)
+      
+      console.log(`🖼️ Replacing image: ${imgName}`, {
+        path: imgPath,
+        hasContent: !!img.content,
+        contentLength: img.content?.length
+      })
+      
       // Replace various possible image reference formats
-      // 1. Exact filename match: src="image.png"
-      html = html.replace(new RegExp(`src=["']([^"']*?/)?(${imgName})["']`, 'gi'), `src="${img.content}"`)
+      // 1. Exact filename match: src="sample1.jpg" or src="./sample1.jpg"
+      html = html.replace(
+        new RegExp(`src=["'](\\.?/)?${escapedName}["']`, 'gi'), 
+        `src="${img.content}"`
+      )
       
-      // 2. Full path match: src="images/logo.png"
-      html = html.replace(new RegExp(`src=["'](${imgPath})["']`, 'gi'), `src="${img.content}"`)
+      // 2. Full path match: src="images/sample1.jpg"
+      html = html.replace(
+        new RegExp(`src=["']${escapedPath}["']`, 'gi'), 
+        `src="${img.content}"`
+      )
       
-      // 3. Relative path variations: ./images/logo.png or ../images/logo.png
-      const pathParts = imgPath.split('/')
-      for (let i = 0; i < pathParts.length; i++) {
-        const partialPath = pathParts.slice(i).join('/')
-        html = html.replace(new RegExp(`src=["'](\\.{0,2}/)*${partialPath}["']`, 'gi'), `src="${img.content}"`)
-      }
+      // 3. Relative path variations: ./sample1.jpg or ../sample1.jpg
+      html = html.replace(
+        new RegExp(`src=["']\\.{1,2}/${escapedName}["']`, 'gi'), 
+        `src="${img.content}"`
+      )
+      
+      // 4. Path with any prefix: src="anything/sample1.jpg"
+      html = html.replace(
+        new RegExp(`src=["'][^"']*/${escapedName}["']`, 'gi'), 
+        `src="${img.content}"`
+      )
     }
   }
+  
+  console.log(`✅ Processed ${imageFiles.length} images for preview`)
 
   // For React/JSX files, add a note
   if (projectType === 'web' && jsFiles.some(f => f.path.includes('.jsx') || f.path.includes('.tsx'))) {

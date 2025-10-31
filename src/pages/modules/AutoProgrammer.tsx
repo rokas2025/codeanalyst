@@ -1025,6 +1025,18 @@ The file structure isn't available for this analysis, but I can still help you w
       const imageCount = files.filter(f => f.isImage).length
       const codeCount = files.length - imageCount
       
+      console.log('📦 ZIP Extraction Complete:', {
+        totalFiles: files.length,
+        codeFiles: codeCount,
+        imageFiles: imageCount,
+        images: files.filter(f => f.isImage).map(f => ({
+          name: f.name,
+          path: f.path,
+          hasContent: !!f.content,
+          contentPreview: f.content?.substring(0, 50)
+        }))
+      })
+      
       setUploadedFiles(files)
       setFileTree(files)
       setSelectedProject({
