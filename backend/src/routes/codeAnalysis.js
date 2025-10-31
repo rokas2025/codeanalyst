@@ -7,6 +7,7 @@ import path from 'path'
 import fs from 'fs/promises'
 import { GitHubService } from '../services/GitHubService.js'
 import { ZipService } from '../services/ZipService.js'
+import { SupabaseZipService } from '../services/SupabaseZipService.js'
 import { CodeAnalyzer } from '../services/CodeAnalyzer.js'
 import { AIAnalysisService } from '../services/AIAnalysisService.js'
 import { AICodeAnalysisService } from '../services/AICodeAnalysisService.js'
@@ -310,10 +311,13 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       options: analysisOptions
     })
 
+    // Read file buffer for Supabase upload
+    const fileBuffer = await fs.readFile(req.file.path)
+    
     // Basic ZIP validation
+    const supabaseZipService = new SupabaseZipService()
     try {
-      const zipService = new ZipService()
-      await zipService.validateZipFile(req.file.path, req.file.originalname)
+      await supabaseZipService.validateZipFile(fileBuffer, req.file.originalname)
     } catch (error) {
       // Clean up uploaded file
       await fs.unlink(req.file.path).catch(() => {})
@@ -324,6 +328,24 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         message: error.message
       })
     }
+
+    // Upload to Supabase Storage
+    let supabaseUpload
+    try {
+      supabaseUpload = await supabaseZipService.uploadZip(fileBuffer, analysisId, req.file.originalname)
+      logger.info('✅ ZIP uploaded to Supabase', { path: supabaseUpload.path })
+    } catch (error) {
+      await fs.unlink(req.file.path).catch(() => {})
+      logger.error('Failed to upload ZIP to Supabase:', error)
+      return res.status(500).json({
+        success: false,
+        error: 'Upload failed',
+        message: error.message
+      })
+    }
+
+    // Clean up local uploaded file (no longer needed)
+    await fs.unlink(req.file.path).catch(() => {})
 
     // Create initial analysis record
     const analysis = await DatabaseService.createCodeAnalysis({
@@ -336,7 +358,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       metadata: {
         filename: req.file.originalname,
         fileSize: req.file.size,
-        uploadPath: req.file.path
+        supabasePath: supabaseUpload.path
       }
     })
 
@@ -346,32 +368,36 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 10)
 
-      // Step 1: Extract ZIP file
-      const zipService = new ZipService()
-      logger.info('📦 Extracting ZIP file', {
-        filePath: req.file.path,
+      // Step 1: Extract ZIP file from Supabase (in-memory)
+      logger.info('📦 Extracting ZIP from Supabase', {
+        supabasePath: supabaseUpload.path,
         analysisId,
         originalName: req.file.originalname
       })
-      const extractedData = await zipService.extractZipFile(req.file.path, analysisId, req.file.originalname)
-      logger.info('✅ ZIP extracted successfully', {
-        extractPath: extractedData?.extractPath,
-        fileCount: extractedData?.extractedFiles?.length
+      
+      const extractedData = await supabaseZipService.extractZipFromSupabase(
+        supabaseUpload.path,
+        analysisId,
+        req.file.originalname
+      )
+      
+      logger.info('✅ ZIP extracted successfully (in-memory)', {
+        fileCount: extractedData?.extractedFiles?.length,
+        inMemory: extractedData?.inMemory
       })
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 30)
       
-      // Step 2: Analyze Code Structure
-      if (!extractedData || !extractedData.extractPath) {
-        throw new Error('ZIP extraction failed: No extract path returned')
+      // Step 2: Analyze Code Structure (using in-memory files)
+      if (!extractedData || !extractedData.extractedFiles) {
+        throw new Error('ZIP extraction failed: No files extracted')
       }
       
-      logger.info('🔍 Analyzing codebase', {
-        extractPath: extractedData.extractPath,
-        fileCount: extractedData.extractedFiles?.length
+      logger.info('🔍 Analyzing codebase (in-memory)', {
+        fileCount: extractedData.extractedFiles.length
       })
       
       const codeAnalyzer = new CodeAnalyzer()
-      const codeAnalysis = await codeAnalyzer.analyzeCodebase(extractedData.extractPath, analysisOptions)
+      const codeAnalysis = await codeAnalyzer.analyzeCodebase(extractedData.extractedFiles, null)
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
       
       // Step 3: Store code analysis data
@@ -425,8 +451,8 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'completed', 100)
       await DatabaseService.updateCodeAnalysisData(analysisId, finalResult)
 
-      // Clean up uploaded file
-      await fs.unlink(req.file.path).catch(() => {})
+      // Clean up Supabase file
+      await supabaseZipService.cleanupZip(supabaseUpload.path).catch(() => {})
       
       res.json({
         success: true,
@@ -453,8 +479,10 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       })
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
       
-      // Clean up uploaded file
-      await fs.unlink(req.file.path).catch(() => {})
+      // Clean up Supabase file
+      if (supabaseUpload) {
+        await supabaseZipService.cleanupZip(supabaseUpload.path).catch(() => {})
+      }
       
       res.status(500).json({
         success: false,
