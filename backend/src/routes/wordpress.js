@@ -733,63 +733,6 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
 })
 
 /**
- * GET /api/wordpress/pages/:connectionId
- * Fetch list of all pages from connected WordPress site
- */
-router.get('/pages/:connectionId', authMiddleware, async (req, res) => {
-  try {
-    const { connectionId } = req.params
-    const userId = req.user.id
-
-    logger.info('📄 Fetching pages for connection', { connectionId, userId })
-
-    // Verify connection belongs to user
-    const connections = await DatabaseService.getWordPressConnections(userId)
-    const connection = connections.find(c => c.id === connectionId)
-
-    if (!connection) {
-      return res.status(404).json({
-        success: false,
-        error: 'Connection not found'
-      })
-    }
-
-    // Check if site is connected
-    if (!connection.is_connected) {
-      return res.status(400).json({
-        success: false,
-        error: 'WordPress site is not connected',
-        message: 'Please reconnect your WordPress site first'
-      })
-    }
-
-    // Fetch pages using WordPressService
-    const wordpressService = new WordPressService()
-    const pages = await wordpressService.fetchPages(connection)
-
-    logger.info(`✅ Successfully fetched ${pages.length} pages`)
-
-    res.json({
-      success: true,
-      pages,
-      total: pages.length,
-      connection: {
-        site_url: connection.site_url,
-        site_name: connection.site_name
-      }
-    })
-
-  } catch (error) {
-    logger.error('Failed to fetch pages:', error)
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch pages',
-      message: error.message
-    })
-  }
-})
-
-/**
  * GET /api/wordpress/page-content/:connectionId/:pageId
  * Fetch content of a specific page from connected WordPress site
  */

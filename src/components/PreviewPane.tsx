@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { 
   ComputerDesktopIcon, 
   DevicePhoneMobileIcon, 
@@ -35,48 +35,8 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Fetch preview URL on mount or when target changes
-  useEffect(() => {
-    fetchPreviewUrl()
-    return () => {
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current)
-      }
-    }
-  }, [connectionId, target, builder])
-
-  // Countdown timer
-  useEffect(() => {
-    if (ttl > 0 && !isExpired) {
-      setTimeRemaining(ttl)
-      setIsExpired(false)
-
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current)
-      }
-
-      countdownIntervalRef.current = setInterval(() => {
-        setTimeRemaining((prev) => {
-          if (prev <= 1) {
-            setIsExpired(true)
-            if (countdownIntervalRef.current) {
-              clearInterval(countdownIntervalRef.current)
-            }
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
-    }
-
-    return () => {
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current)
-      }
-    }
-  }, [ttl, isExpired])
-
-  const fetchPreviewUrl = async () => {
+  const fetchPreviewUrl = useCallback(async () => {
+    console.log('fetchPreviewUrl called', { connectionId, target, builder, mode })
     setLoading(true)
     setError(null)
     setIsExpired(false)
@@ -110,7 +70,49 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
     } finally {
       setLoading(false)
     }
-  }
+  }, [connectionId, target, builder, mode])
+
+  // Fetch preview URL on mount or when target changes
+  useEffect(() => {
+    console.log('PreviewPane useEffect triggered', { connectionId, target, builder, mode })
+    fetchPreviewUrl()
+    return () => {
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current)
+      }
+    }
+  }, [fetchPreviewUrl])
+
+  // Countdown timer
+  useEffect(() => {
+    if (ttl > 0 && !isExpired) {
+      setTimeRemaining(ttl)
+      setIsExpired(false)
+
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current)
+      }
+
+      countdownIntervalRef.current = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            setIsExpired(true)
+            if (countdownIntervalRef.current) {
+              clearInterval(countdownIntervalRef.current)
+            }
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+
+    return () => {
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current)
+      }
+    }
+  }, [ttl, isExpired])
 
   const handleRefresh = () => {
     fetchPreviewUrl()

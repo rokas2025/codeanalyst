@@ -1293,6 +1293,11 @@ The file structure isn't available for this analysis, but I can still help you w
                         {selectedWordPressPage && (
                           <button
                             onClick={() => {
+                              console.log('Load & Preview clicked', {
+                                connectionId: selectedWordPressSite?.id,
+                                target: selectedWordPressPage.id,
+                                showWordPressPreview: showWordPressPreview
+                              })
                               setShowWordPressPreview(true)
                               setActiveTab('preview')
                             }}
