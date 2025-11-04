@@ -2,11 +2,10 @@
 # This file configures the production Railway service
 
 [build]
-workingDirectory = "backend"
+builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npm start"
-workingDirectory = "backend"
+startCommand = "cd backend && npm install && npm start"
 
 # Production environment variables
 [env]
