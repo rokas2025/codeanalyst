@@ -1302,9 +1302,6 @@ The file structure isn't available for this analysis, but I can still help you w
                     )}
                   </div>
                 )}
-                
-                {/* ZIP Upload */}
-                {inputMethod === 'zip' && (
               </div>
             ) : (
               <div className="space-y-4 pb-2">
