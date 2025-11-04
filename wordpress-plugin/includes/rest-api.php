@@ -56,6 +56,13 @@ class CodeAnalyst_REST_API {
             'callback' => array($this, 'get_page_content'),
             'permission_callback' => array($this, 'check_permission')
         ));
+        
+        // Mint preview URL (POST)
+        register_rest_route('codeanalyst/v1', '/preview/mint', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'mint_preview_url'),
+            'permission_callback' => array($this, 'check_permission')
+        ));
     }
     
     /**
@@ -280,12 +287,12 @@ class CodeAnalyst_REST_API {
     }
     
     /**
-     * Get list of all pages
+     * Get list of all pages (including drafts and pending)
      */
     public function get_pages($request) {
         $args = array(
             'post_type' => 'page',
-            'post_status' => 'publish',
+            'post_status' => array('publish', 'draft', 'pending'),
             'posts_per_page' => -1,
             'orderby' => 'title',
             'order' => 'ASC'
@@ -357,6 +364,73 @@ class CodeAnalyst_REST_API {
             'url' => get_permalink($page->ID),
             'excerpt' => $page->post_excerpt,
             'modified' => $page->post_modified
+        ));
+    }
+    
+    /**
+     * Mint preview URL with JWT token
+     */
+    public function mint_preview_url($request) {
+        $json_params = $request->get_json_params();
+        $target = isset($json_params['target']) ? $json_params['target'] : null;
+        $builder = isset($json_params['builder']) ? $json_params['builder'] : 'auto';
+        $audience = isset($json_params['audience']) ? $json_params['audience'] : '';
+        
+        if (empty($target)) {
+            return new WP_Error('missing_target', 'Target is required', array('status' => 400));
+        }
+        
+        // Rate limiting: max 10 requests per minute per IP
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $rate_limit_key = 'codeanalyst_mint_' . md5($ip);
+        $rate_limit_count = get_transient($rate_limit_key);
+        
+        if ($rate_limit_count === false) {
+            set_transient($rate_limit_key, 1, 60); // 1 minute expiration
+        } else {
+            if ($rate_limit_count >= 10) {
+                return new WP_Error('rate_limit', 'Too many requests. Please try again later.', array('status' => 429));
+            }
+            set_transient($rate_limit_key, $rate_limit_count + 1, 60);
+        }
+        
+        // Get JWT secret (use AUTH_SALT if available, otherwise plugin secret)
+        $secret = defined('AUTH_SALT') ? AUTH_SALT : get_option('codeanalyst_jwt_secret');
+        
+        // Generate secret if not exists
+        if (empty($secret)) {
+            $secret = wp_generate_password(64, true, true);
+            update_option('codeanalyst_jwt_secret', $secret);
+        }
+        
+        // Prepare JWT claims
+        $now = time();
+        $exp = $now + 300; // 5 minutes TTL
+        $site_url = get_site_url();
+        
+        $claims = array(
+            'target' => $target,
+            'builder' => $builder,
+            'aud' => $audience,
+            'exp' => $exp,
+            'iat' => $now,
+            'iss' => $site_url,
+            'jti' => wp_generate_password(32, false)
+        );
+        
+        // Generate JWT
+        $header = base64_encode(json_encode(array('alg' => 'HS256', 'typ' => 'JWT')));
+        $payload = base64_encode(json_encode($claims));
+        $signature = hash_hmac('sha256', $header . '.' . $payload, $secret, true);
+        $jwt = $header . '.' . $payload . '.' . base64_encode($signature);
+        
+        // Build preview URL
+        $preview_url = home_url('/?codeanalyst_preview=' . rawurlencode($jwt));
+        
+        return rest_ensure_response(array(
+            'success' => true,
+            'preview_url' => $preview_url,
+            'ttl' => 300
         ));
     }
 }

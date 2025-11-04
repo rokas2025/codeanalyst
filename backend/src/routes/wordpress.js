@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { DatabaseService } from '../services/DatabaseService.js'
 import { WordPressService } from '../services/WordPressService.js'
+import { WordPressPreviewService } from '../services/WordPressPreviewService.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { db } from '../database/connection.js'
 import logger from '../utils/logger.js'
@@ -565,16 +566,17 @@ router.get('/files/:connectionId', authMiddleware, async (req, res) => {
 /**
  * GET /api/wordpress/pages/:connectionId
  * Get all WordPress pages for a connection (Gutenberg, Elementor, Classic)
+ * Fetches directly from WordPress REST API
  */
 router.get('/pages/:connectionId', authMiddleware, async (req, res) => {
   try {
     const { connectionId } = req.params
-    const { editorType } = req.query // Optional filter
     const userId = req.user.id
 
+    logger.info('📄 Fetching WordPress pages', { connectionId, userId })
+
     // Verify connection belongs to user
-    const connections = await DatabaseService.getWordPressConnections(userId)
-    const connection = connections.find(c => c.id === connectionId)
+    const connection = await DatabaseService.getWordPressConnectionById(connectionId, userId)
 
     if (!connection) {
       return res.status(404).json({
@@ -583,37 +585,25 @@ router.get('/pages/:connectionId', authMiddleware, async (req, res) => {
       })
     }
 
-    // Get pages from database with optional filter
-    let query = `
-      SELECT id, post_id, post_title, post_type, editor_type, 
-             content, elementor_data, blocks, block_count, 
-             page_url, last_modified, created_at
-      FROM wordpress_pages
-      WHERE connection_id = $1
-    `
-    const params = [connectionId]
-
-    if (editorType && ['gutenberg', 'elementor', 'classic'].includes(editorType)) {
-      query += ` AND editor_type = $2`
-      params.push(editorType)
+    // Check if site is connected
+    if (!connection.is_connected) {
+      return res.status(400).json({
+        success: false,
+        error: 'WordPress site is not connected',
+        message: 'Please reconnect your WordPress site first'
+      })
     }
 
-    query += ` ORDER BY post_id`
+    // Fetch pages from WordPress REST API
+    const wordpressService = new WordPressService()
+    const pagesData = await wordpressService.fetchPages(connection)
 
-    const result = await db.query(query, params)
-
-    // Group by editor type for summary
-    const summary = {
-      gutenberg: result.rows.filter(p => p.editor_type === 'gutenberg').length,
-      elementor: result.rows.filter(p => p.editor_type === 'elementor').length,
-      classic: result.rows.filter(p => p.editor_type === 'classic').length,
-      total: result.rows.length
-    }
+    logger.info(`✅ Successfully fetched ${pagesData.pages?.length || 0} pages`)
 
     res.json({
       success: true,
-      pages: result.rows,
-      summary
+      pages: pagesData.pages || [],
+      total: pagesData.total || 0
     })
 
   } catch (error) {
@@ -846,6 +836,141 @@ router.get('/page-content/:connectionId/:pageId', authMiddleware, async (req, re
     res.status(500).json({
       success: false,
       error: 'Failed to fetch page content',
+      message: error.message
+    })
+  }
+})
+
+/**
+ * POST /api/wordpress/preview
+ * Mint a preview URL for WordPress page/post
+ */
+router.post('/preview', authMiddleware, async (req, res) => {
+  try {
+    const { connectionId, target, builder = 'auto' } = req.body
+    const userId = req.user.id
+
+    if (!connectionId || !target) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields',
+        message: 'connectionId and target are required'
+      })
+    }
+
+    logger.info('🔍 Minting preview URL', { connectionId, target, builder, userId })
+
+    // Verify connection belongs to user
+    const connection = await DatabaseService.getWordPressConnectionById(connectionId, userId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      })
+    }
+
+    // Check if site is connected
+    if (!connection.is_connected) {
+      return res.status(400).json({
+        success: false,
+        error: 'WordPress site is not connected',
+        message: 'Please reconnect your WordPress site first'
+      })
+    }
+
+    // Mint preview URL from WordPress plugin
+    const { previewUrl, ttl } = await WordPressPreviewService.mintPreviewUrl({
+      siteUrl: connection.site_url,
+      pluginApiKey: connection.api_key,
+      target,
+      builder
+    })
+
+    logger.info('✅ Preview URL minted successfully', { connectionId, ttl })
+
+    res.json({
+      success: true,
+      preview_url: previewUrl,
+      ttl
+    })
+
+  } catch (error) {
+    logger.error('Failed to mint preview URL:', error)
+    
+    // Determine error type
+    if (error.message.includes('timeout')) {
+      return res.status(504).json({
+        success: false,
+        error: 'Request timeout',
+        message: 'WordPress site did not respond in time'
+      })
+    }
+
+    if (error.message.includes('HTTP')) {
+      return res.status(502).json({
+        success: false,
+        error: 'Upstream error',
+        message: error.message
+      })
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Failed to mint preview URL',
+      message: error.message
+    })
+  }
+})
+
+/**
+ * POST /api/wordpress/snapshot
+ * Generate snapshot of WordPress page/post (stub - TODO: implement with Puppeteer)
+ */
+router.post('/snapshot', authMiddleware, async (req, res) => {
+  try {
+    const { connectionId, target } = req.body
+    const userId = req.user.id
+
+    if (!connectionId || !target) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields',
+        message: 'connectionId and target are required'
+      })
+    }
+
+    logger.info('📸 Snapshot requested (stub)', { connectionId, target, userId })
+
+    // Verify connection belongs to user
+    const connection = await DatabaseService.getWordPressConnectionById(connectionId, userId)
+
+    if (!connection) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found'
+      })
+    }
+
+    // TODO: Implement Puppeteer-based snapshot generation
+    // 1. Mint preview URL (same as live preview)
+    // 2. Use Puppeteer to open preview URL
+    // 3. Wait for network idle
+    // 4. Take full-page screenshot
+    // 5. Store screenshot by revision key
+    // 6. Return snapshot URL
+
+    res.json({
+      success: true,
+      snapshotUrl: null,
+      message: 'Snapshot mode coming soon'
+    })
+
+  } catch (error) {
+    logger.error('Failed to generate snapshot:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate snapshot',
       message: error.message
     })
   }

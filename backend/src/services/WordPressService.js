@@ -655,8 +655,11 @@ export class WordPressService {
       )
       
       if (response.data && response.data.success) {
-        logger.info(`✅ Fetched ${response.data.total} pages`)
-        return response.data.pages
+        logger.info(`✅ Fetched ${response.data.pages?.length || 0} pages`)
+        return {
+          pages: response.data.pages || [],
+          total: response.data.total || response.data.pages?.length || 0
+        }
       } else {
         throw new Error('Invalid response from WordPress REST API')
       }

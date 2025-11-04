@@ -18,12 +18,13 @@ import {
   XMarkIcon,
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline'
-import { useDropzone } from 'react-dropzone'
-import JSZip from 'jszip'
 import { MessageRenderer } from '../../components/MessageRenderer'
 import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 import CodePreview from './AutoProgrammer/components/CodePreview'
 import { isWebProject, detectProjectType } from '../../utils/projectDetector'
+import { WordPressSiteSelector } from '../../components/WordPressSiteSelector'
+import { PreviewPane } from '../../components/PreviewPane'
+import { wordpressService, WordPressConnection } from '../../services/wordpressService'
 
 // Types
 interface ChatMessage {
@@ -77,9 +78,12 @@ function AutoProgrammerContent() {
   const [showWebsitePreview, setShowWebsitePreview] = useState(false)
   const [previewHTML, setPreviewHTML] = useState('')
   
-  // ZIP upload state
-  const [inputMethod, setInputMethod] = useState<'github' | 'zip'>('github')
-  const [uploadedFiles, setUploadedFiles] = useState<FileNode[]>([])
+  // WordPress state
+  const [inputMethod, setInputMethod] = useState<'github' | 'wordpress'>('github')
+  const [selectedWordPressSite, setSelectedWordPressSite] = useState<WordPressConnection | null>(null)
+  const [wordPressPages, setWordPressPages] = useState<Array<{id: number, title: string, url: string}>>([])
+  const [selectedWordPressPage, setSelectedWordPressPage] = useState<{id: number, title: string} | null>(null)
+  const [showWordPressPreview, setShowWordPressPreview] = useState(false)
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -973,100 +977,62 @@ The file structure isn't available for this analysis, but I can still help you w
     })
   }
 
-  // ZIP upload handler
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const files: FileNode[] = []
+  // WordPress site selection handler
+  const handleWordPressSiteSelect = async (site: WordPressConnection) => {
+    setSelectedWordPressSite(site)
+    setWordPressPages([])
+    setSelectedWordPressPage(null)
     
     try {
-      for (const file of acceptedFiles) {
-        if (file.name.endsWith('.zip')) {
-          const zip = new JSZip()
-          const zipContent = await zip.loadAsync(file)
-          
-          for (const [path, zipEntry] of Object.entries(zipContent.files)) {
-            if (!zipEntry.dir && shouldIncludeFile(path)) {
-              // Check if it's an image file
-              const isImage = /\.(png|jpg|jpeg|gif|svg|webp|ico|bmp)$/i.test(path)
-              
-              if (isImage) {
-                try {
-                  // Extract as blob and convert to data URL
-                  const blob = await zipEntry.async('blob')
-                  const dataUrl = await blobToDataURL(blob)
-                  files.push({
-                    name: path.split('/').pop() || path,
-                    path: path,
-                    type: 'file',
-                    content: dataUrl,
-                    isImage: true
-                  })
-                } catch (imgError) {
-                  console.warn(`Failed to extract image: ${path}`, imgError)
-                }
-              } else {
-                // Extract as text for code files
-                try {
-                  const content = await zipEntry.async('string')
-                  files.push({
-                    name: path.split('/').pop() || path,
-                    path: path,
-                    type: 'file',
-                    content: content
-                  })
-                } catch (textError) {
-                  console.warn(`Failed to extract file: ${path}`, textError)
-                }
-              }
-            }
+      toast.loading('Loading pages...')
+      const response = await wordpressService.getPages(site.id)
+      toast.dismiss()
+      
+      if (response.success && response.pages) {
+        setWordPressPages(response.pages)
+        toast.success(`Loaded ${response.pages.length} pages`)
+      } else {
+        toast.error(response.error || 'Failed to load pages')
+      }
+    } catch (error) {
+      toast.dismiss()
+      toast.error('Failed to load WordPress pages')
+    }
+  }
+
+  // WordPress page selection handler
+  const handleWordPressPageSelect = (pageId: number) => {
+    const page = wordPressPages.find(p => p.id === pageId)
+    if (page) {
+      setSelectedWordPressPage({ id: page.id, title: page.title })
+    }
+  }
+
+  // Load WordPress theme files when site is selected
+  useEffect(() => {
+    if (selectedWordPressSite && inputMethod === 'wordpress') {
+      const loadThemeFiles = async () => {
+        try {
+          const response = await wordpressService.getThemeFiles(selectedWordPressSite.id)
+          if (response.success && response.files) {
+            // Convert WordPress files to FileNode structure
+            const themeFiles: FileNode[] = response.files.map((file: any) => ({
+              name: file.name || file.path.split('/').pop(),
+              path: file.path,
+              type: 'file',
+              content: file.content ? atob(file.content) : '', // Decode base64 content
+              size: file.size
+            }))
+            setFileTree(themeFiles)
           }
+        } catch (error) {
+          console.error('Failed to load theme files:', error)
         }
       }
-      
-      const imageCount = files.filter(f => f.isImage).length
-      const codeCount = files.length - imageCount
-      
-      console.log('📦 ZIP Extraction Complete:', {
-        totalFiles: files.length,
-        codeFiles: codeCount,
-        imageFiles: imageCount,
-        images: files.filter(f => f.isImage).map(f => ({
-          name: f.name,
-          path: f.path,
-          hasContent: !!f.content,
-          contentPreview: f.content?.substring(0, 50)
-        }))
-      })
-      
-      setUploadedFiles(files)
-      setFileTree(files)
-      setSelectedProject({
-        id: 'uploaded-zip',
-        name: 'Uploaded ZIP Project',
-        type: 'zip'
-      })
-      toast.success(`Uploaded ${codeCount} code files and ${imageCount} images successfully`)
-    } catch (error) {
-      console.error('ZIP upload error:', error)
-      toast.error('Failed to process ZIP file')
+      loadThemeFiles()
     }
-  }, [])
-  
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
-    onDrop,
-    accept: { 'application/zip': ['.zip'] }
-  })
-  
-  // Auto-select uploaded project when files are uploaded
-  useEffect(() => {
-    if (inputMethod === 'zip' && uploadedFiles.length > 0) {
-      setFileTree(uploadedFiles)
-      setSelectedProject({
-        id: 'uploaded-zip',
-        name: 'Uploaded ZIP Project',
-        type: 'zip'
-      })
-    }
-  }, [inputMethod, uploadedFiles])
+  }, [selectedWordPressSite, inputMethod])
+
   
   // Helper functions for changes management
   const getCurrentFileContent = (filePath: string): string => {
@@ -1271,14 +1237,14 @@ The file structure isn't available for this analysis, but I can still help you w
                     </button>
                     <button
                       className={`p-4 border rounded-lg transition-colors text-left ${
-                        inputMethod === 'zip' 
+                        inputMethod === 'wordpress' 
                           ? 'border-blue-500 bg-blue-50 text-blue-900' 
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
-                      onClick={() => setInputMethod('zip')}
+                      onClick={() => setInputMethod('wordpress')}
                     >
-                      <div className="font-medium">ZIP Upload</div>
-                      <div className="text-sm text-gray-600 mt-1">Upload project files directly</div>
+                      <div className="font-medium">WordPress Site</div>
+                      <div className="text-sm text-gray-600 mt-1">Connect via plugin</div>
                     </button>
                   </div>
                 </div>
@@ -1297,44 +1263,48 @@ The file structure isn't available for this analysis, but I can still help you w
                   </div>
                 )}
                 
-                {/* ZIP Upload */}
-                {inputMethod === 'zip' && (
-                  <div className="card p-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Upload Project Files</h3>
-                    <div
-                      {...getRootProps()}
-                      className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-                        isDragActive 
-                          ? 'border-blue-400 bg-blue-50' 
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      <input {...getInputProps()} />
-                      <DocumentArrowUpIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      {isDragActive ? (
-                        <p className="text-blue-600 font-medium">Drop ZIP file here...</p>
-                      ) : (
-                        <>
-                          <p className="text-gray-600 mb-2">
-                            Drag & drop a ZIP file, or click to browse
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Supports project archives up to 50MB
-                          </p>
-                        </>
-                      )}
-                    </div>
+                {/* WordPress Site Selection */}
+                {inputMethod === 'wordpress' && (
+                  <div className="card p-6 space-y-4">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Select WordPress Site</h3>
+                    <WordPressSiteSelector 
+                      onSiteSelect={handleWordPressSiteSelect}
+                      label="Choose a WordPress site to work with"
+                    />
                     
-                    {uploadedFiles.length > 0 && (
-                      <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3">
-                        <div className="flex items-center text-sm text-green-700">
-                          <CheckCircleIcon className="h-5 w-5 mr-2" />
-                          <span className="font-medium">{uploadedFiles.length} files uploaded successfully</span>
-                        </div>
+                    {selectedWordPressSite && wordPressPages.length > 0 && (
+                      <div className="space-y-3">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Select Page to Preview
+                        </label>
+                        <select
+                          value={selectedWordPressPage?.id || ''}
+                          onChange={(e) => handleWordPressPageSelect(Number(e.target.value))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">Select a page...</option>
+                          {wordPressPages.map((page) => (
+                            <option key={page.id} value={page.id}>
+                              {page.title} {page.status !== 'publish' ? `(${page.status})` : ''}
+                            </option>
+                          ))}
+                        </select>
+                        
+                        {selectedWordPressPage && (
+                          <button
+                            onClick={() => setShowWordPressPreview(true)}
+                            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          >
+                            Load & Preview
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
                 )}
+                
+                {/* ZIP Upload */}
+                {inputMethod === 'zip' && (
               </div>
             ) : (
               <div className="space-y-4 pb-2">
@@ -1502,57 +1472,77 @@ The file structure isn't available for this analysis, but I can still help you w
               )}
 
               {activeTab === 'preview' && (
-                <div className="h-full overflow-y-auto">
-                  <div className="p-4 space-y-4">
-                    {/* Website Preview Button */}
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium text-gray-900">Live Website Preview</h3>
-                          <p className="text-sm text-gray-600 mt-1">
-                            View your project rendered in a browser
-                          </p>
+                <div className="h-full overflow-hidden">
+                  {inputMethod === 'wordpress' && selectedWordPressSite && selectedWordPressPage && showWordPressPreview ? (
+                    <PreviewPane
+                      connectionId={selectedWordPressSite.id}
+                      target={selectedWordPressPage.id}
+                      builder="auto"
+                      onClose={() => setShowWordPressPreview(false)}
+                    />
+                  ) : inputMethod === 'wordpress' && selectedWordPressSite && selectedWordPressPage ? (
+                    <div className="h-full flex items-center justify-center">
+                      <button
+                        onClick={() => setShowWordPressPreview(true)}
+                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Open Preview
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="h-full overflow-y-auto">
+                      <div className="p-4 space-y-4">
+                        {/* Website Preview Button */}
+                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h3 className="font-medium text-gray-900">Live Website Preview</h3>
+                              <p className="text-sm text-gray-600 mt-1">
+                                View your project rendered in a browser
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => {
+                                const html = generatePreviewHTML(fileTree, detectProjectType(fileTree))
+                                setPreviewHTML(html)
+                                setShowWebsitePreview(true)
+                              }}
+                              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                              <EyeIcon className="h-5 w-5" />
+                              <span>Preview Website</span>
+                            </button>
+                          </div>
                         </div>
-                        <button
-                          onClick={() => {
-                            const html = generatePreviewHTML(fileTree, detectProjectType(fileTree))
-                            setPreviewHTML(html)
-                            setShowWebsitePreview(true)
-                          }}
-                          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          <EyeIcon className="h-5 w-5" />
-                          <span>Preview Website</span>
-                        </button>
+                        
+                        {/* File Content Preview */}
+                        {selectedFile ? (
+                          <div className="bg-gray-900 rounded-lg p-4 overflow-auto max-h-[600px]">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm text-gray-400">{selectedFile.path}</span>
+                              <button 
+                                onClick={() => {
+                                  navigator.clipboard.writeText(selectedFile.content || '')
+                                  toast.success('Copied to clipboard!')
+                                }}
+                                className="text-xs text-blue-400 hover:text-blue-300"
+                              >
+                                Copy
+                              </button>
+                            </div>
+                            <pre className="text-sm text-gray-100">
+                              <code>{selectedFile.content || 'No content available'}</code>
+                            </pre>
+                          </div>
+                        ) : (
+                          <div className="text-center py-12 text-gray-500">
+                            <DocumentIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+                            <p>Select a file from the tree to preview its content</p>
+                          </div>
+                        )}
                       </div>
                     </div>
-                    
-                    {/* File Content Preview */}
-                    {selectedFile ? (
-                      <div className="bg-gray-900 rounded-lg p-4 overflow-auto max-h-[600px]">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-gray-400">{selectedFile.path}</span>
-                          <button 
-                            onClick={() => {
-                              navigator.clipboard.writeText(selectedFile.content || '')
-                              toast.success('Copied to clipboard!')
-                            }}
-                            className="text-xs text-blue-400 hover:text-blue-300"
-                          >
-                            Copy
-                          </button>
-                        </div>
-                        <pre className="text-sm text-gray-100">
-                          <code>{selectedFile.content || 'No content available'}</code>
-                        </pre>
-                      </div>
-                    ) : (
-                      <div className="text-center py-12 text-gray-500">
-                        <DocumentIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
-                        <p>Select a file from the tree to preview its content</p>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
               )}
 

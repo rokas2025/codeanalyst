@@ -354,6 +354,57 @@ class WordPressService {
             }
         }
     }
+
+    /**
+     * Mint preview URL for WordPress page/post
+     */
+    async mintPreview(connectionId: string, target: string | number, builder?: 'auto' | 'gutenberg' | 'elementor' | 'divi' | 'wpbakery'): Promise<{ success: boolean; preview_url?: string; ttl?: number; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/preview`, {
+                method: 'POST',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify({
+                    connectionId,
+                    target,
+                    builder: builder || 'auto'
+                })
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to mint preview URL:', error)
+            return {
+                success: false,
+                error: 'Failed to mint preview URL'
+            }
+        }
+    }
+
+    /**
+     * Mint snapshot URL for WordPress page/post (stub - coming soon)
+     */
+    async mintSnapshot(connectionId: string, target: string | number): Promise<{ success: boolean; snapshotUrl?: string | null; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/snapshot`, {
+                method: 'POST',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify({
+                    connectionId,
+                    target
+                })
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to mint snapshot URL:', error)
+            return {
+                success: false,
+                error: 'Failed to mint snapshot URL'
+            }
+        }
+    }
 }
 
 export const wordpressService = new WordPressService()

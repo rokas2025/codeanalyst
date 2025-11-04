@@ -1196,6 +1196,28 @@ export class DatabaseService {
     }
   }
 
+  /**
+   * Get WordPress connection by ID (for authenticated user)
+   * @param {string} connectionId - Connection ID
+   * @param {string} userId - User ID (for authorization)
+   * @returns {object|null} Connection data or null
+   */
+  static async getWordPressConnectionById(connectionId, userId) {
+    try {
+      const query = `
+        SELECT * FROM wordpress_connections
+        WHERE id = $1::UUID AND user_id = $2::UUID
+      `
+
+      const result = await db.query(query, [connectionId, userId])
+      logger.logDatabase('select', 'wordpress_connections', result.rows.length, { connectionId, userId })
+      return result.rows.length > 0 ? result.rows[0] : null
+    } catch (error) {
+      logger.logError('Database getWordPressConnectionById', error, { connectionId, userId })
+      throw error
+    }
+  }
+
   // ============================================
   // USER MANAGEMENT METHODS
   // ============================================

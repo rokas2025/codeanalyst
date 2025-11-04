@@ -26,7 +26,8 @@ $required_files = array(
     'admin/settings-page.php',
     'includes/api-client.php',
     'includes/file-reader.php',
-    'includes/rest-api.php'
+    'includes/rest-api.php',
+    'includes/preview-handler.php'
 );
 
 foreach ($required_files as $file) {
@@ -117,6 +118,15 @@ class CodeAnalyst_Connector {
         add_option('codeanalyst_connected', false);
         add_option('codeanalyst_last_sync', '');
         add_option('codeanalyst_connection_id', '');
+        
+        // Create preview bot user if doesn't exist
+        $this->create_preview_bot_user();
+        
+        // Generate JWT secret if not exists
+        if (empty(get_option('codeanalyst_jwt_secret'))) {
+            $secret = wp_generate_password(64, true, true);
+            update_option('codeanalyst_jwt_secret', $secret);
+        }
     }
     
     /**
@@ -266,6 +276,25 @@ class CodeAnalyst_Connector {
         
         if ($result['success']) {
             update_option('codeanalyst_last_sync', current_time('mysql'));
+        }
+    }
+    
+    /**
+     * Create preview bot user for preview functionality
+     */
+    private function create_preview_bot_user() {
+        $username = 'codeanalyst-preview-bot';
+        
+        if (!username_exists($username)) {
+            $password = wp_generate_password(64, true, true);
+            $user_id = wp_create_user($username, $password, 'preview@codeanalyst.local');
+            
+            if (!is_wp_error($user_id)) {
+                $user = get_user_by('id', $user_id);
+                if ($user) {
+                    $user->set_role('subscriber');
+                }
+            }
         }
     }
 }
