@@ -1429,7 +1429,7 @@ The file structure isn't available for this analysis, but I can still help you w
         </div>
 
         {/* Right Panel - File Structure & Preview */}
-        {selectedProject && (
+        {(selectedProject || (inputMethod === 'wordpress' && selectedWordPressSite && selectedWordPressPage)) && (
           <div className="w-80 bg-white border-l border-gray-200 flex flex-col">
             {/* Tabs */}
             <div className="border-b border-gray-200">
