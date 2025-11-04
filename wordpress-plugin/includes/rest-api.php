@@ -301,15 +301,31 @@ class CodeAnalyst_REST_API {
         $pages = get_posts($args);
         $page_list = array();
         
+        // Get home page and posts page IDs
+        $home_page_id = get_option('page_on_front');
+        $posts_page_id = get_option('page_for_posts');
+        
         foreach ($pages as $page) {
+            $is_home = ($page->ID == $home_page_id);
+            $is_posts_page = ($page->ID == $posts_page_id);
+            
             $page_list[] = array(
                 'id' => $page->ID,
                 'title' => $page->post_title,
                 'url' => get_permalink($page->ID),
                 'status' => $page->post_status,
-                'modified' => $page->post_modified
+                'modified' => $page->post_modified,
+                'is_home' => $is_home,
+                'is_posts_page' => $is_posts_page
             );
         }
+        
+        // Sort: home page first, then alphabetically by title
+        usort($page_list, function($a, $b) {
+            if ($a['is_home']) return -1;
+            if ($b['is_home']) return 1;
+            return strcmp($a['title'], $b['title']);
+        });
         
         return rest_ensure_response(array(
             'success' => true,

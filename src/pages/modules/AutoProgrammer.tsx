@@ -81,7 +81,7 @@ function AutoProgrammerContent() {
   // WordPress state
   const [inputMethod, setInputMethod] = useState<'github' | 'wordpress'>('github')
   const [selectedWordPressSite, setSelectedWordPressSite] = useState<WordPressConnection | null>(null)
-  const [wordPressPages, setWordPressPages] = useState<Array<{id: number, title: string, url: string}>>([])
+  const [wordPressPages, setWordPressPages] = useState<Array<{id: number, title: string, url: string, status?: string, is_home?: boolean, is_posts_page?: boolean}>>([])
   const [selectedWordPressPage, setSelectedWordPressPage] = useState<{id: number, title: string} | null>(null)
   const [showWordPressPreview, setShowWordPressPreview] = useState(false)
 
@@ -1285,14 +1285,17 @@ The file structure isn't available for this analysis, but I can still help you w
                           <option value="">Select a page...</option>
                           {wordPressPages.map((page) => (
                             <option key={page.id} value={page.id}>
-                              {page.title} {page.status !== 'publish' ? `(${page.status})` : ''}
+                              {page.is_home ? '🏠 ' : ''}{page.title} {page.status !== 'publish' ? `(${page.status})` : ''}
                             </option>
                           ))}
                         </select>
                         
                         {selectedWordPressPage && (
                           <button
-                            onClick={() => setShowWordPressPreview(true)}
+                            onClick={() => {
+                              setShowWordPressPreview(true)
+                              setActiveTab('preview')
+                            }}
                             className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                           >
                             Load & Preview
