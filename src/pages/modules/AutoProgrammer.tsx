@@ -1296,10 +1296,13 @@ The file structure isn't available for this analysis, but I can still help you w
                               console.log('Load & Preview clicked', {
                                 connectionId: selectedWordPressSite?.id,
                                 target: selectedWordPressPage.id,
-                                showWordPressPreview: showWordPressPreview
+                                showWordPressPreview: showWordPressPreview,
+                                activeTab: activeTab,
+                                inputMethod: inputMethod
                               })
                               setShowWordPressPreview(true)
                               setActiveTab('preview')
+                              console.log('State updated - should switch to preview tab')
                             }}
                             className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                           >
@@ -1478,6 +1481,16 @@ The file structure isn't available for this analysis, but I can still help you w
 
               {activeTab === 'preview' && (
                 <div className="h-full overflow-hidden">
+                  {(() => {
+                    console.log('Preview tab render check:', {
+                      inputMethod,
+                      hasSelectedSite: !!selectedWordPressSite,
+                      hasSelectedPage: !!selectedWordPressPage,
+                      showWordPressPreview,
+                      activeTab
+                    })
+                    return null
+                  })()}
                   {inputMethod === 'wordpress' && selectedWordPressSite && selectedWordPressPage && showWordPressPreview ? (
                     <PreviewPane
                       connectionId={selectedWordPressSite.id}
