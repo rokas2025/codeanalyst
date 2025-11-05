@@ -1,5 +1,5 @@
 # Proper WordPress Plugin ZIP Creator
-# Creates ZIP with correct folder structure (not filename backslashes)
+# Creates ZIP with correct folder structure
 
 $ErrorActionPreference = "Stop"
 
@@ -8,6 +8,13 @@ Write-Host "Creating WordPress plugin ZIP with proper folder structure..." -Fore
 # Paths
 $sourceDir = "wordpress-plugin"
 $outputZip = "backend/codeanalyst-connector.zip"
+$tempDir = "temp-plugin-build"
+$pluginFolderName = "codeanalyst-connector"
+
+# Clean up any previous temp directory
+if (Test-Path $tempDir) {
+    Remove-Item $tempDir -Recurse -Force
+}
 
 # Remove old ZIP
 if (Test-Path $outputZip) {
@@ -15,39 +22,29 @@ if (Test-Path $outputZip) {
     Write-Host "Removed old ZIP" -ForegroundColor Yellow
 }
 
-# Load .NET compression
-Add-Type -Assembly System.IO.Compression.FileSystem
+# Create temp directory with plugin folder name
+$tempPluginPath = Join-Path $tempDir $pluginFolderName
+New-Item -ItemType Directory -Path $tempPluginPath -Force | Out-Null
 
-# Create ZIP
-$zip = [System.IO.Compression.ZipFile]::Open($outputZip, [System.IO.Compression.ZipArchiveMode]::Create)
+# Copy all plugin files to temp directory
+Write-Host "Copying plugin files..." -ForegroundColor Cyan
+Copy-Item -Path "$sourceDir\*" -Destination $tempPluginPath -Recurse -Force
 
-# Function to add files recursively
-function Add-FilesToZip {
-    param($Path, $ZipArchive, $BasePath)
-    
-    Get-ChildItem -Path $Path -Recurse -File | ForEach-Object {
-        $relativePath = $_.FullName.Substring($BasePath.Length + 1)
-        # Replace backslashes with forward slashes for ZIP
-        $zipPath = $relativePath.Replace('\', '/')
-        
-        Write-Host "  Adding: $zipPath" -ForegroundColor Gray
-        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($ZipArchive, $_.FullName, $zipPath) | Out-Null
-    }
-}
+# Create ZIP from temp directory (this will include the parent folder)
+Write-Host "Creating ZIP archive..." -ForegroundColor Cyan
+Compress-Archive -Path "$tempDir\*" -DestinationPath $outputZip -Force
 
-# Add all files
-$fullSourcePath = (Resolve-Path $sourceDir).Path
-Add-FilesToZip -Path $fullSourcePath -ZipArchive $zip -BasePath $fullSourcePath
-
-# Close ZIP
-$zip.Dispose()
+# Clean up temp directory
+Remove-Item $tempDir -Recurse -Force
 
 Write-Host "`n✅ ZIP created successfully!" -ForegroundColor Green
 Write-Host "Location: $outputZip" -ForegroundColor Cyan
 
-# Verify structure
+# Verify structure using .NET
 Write-Host "`nVerifying ZIP structure..." -ForegroundColor Yellow
-$verifyZip = [System.IO.Compression.ZipFile]::OpenRead((Resolve-Path $outputZip).Path)
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$outputZipAbsolute = Join-Path (Get-Location) $outputZip
+$verifyZip = [System.IO.Compression.ZipFile]::OpenRead($outputZipAbsolute)
 $entries = $verifyZip.Entries | Select-Object -First 10 -ExpandProperty FullName
 $verifyZip.Dispose()
 
@@ -55,4 +52,3 @@ Write-Host "First 10 entries:" -ForegroundColor Cyan
 $entries | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
 
 Write-Host "`n✅ Done! Ready to deploy." -ForegroundColor Green
-
