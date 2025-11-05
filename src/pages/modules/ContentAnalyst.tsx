@@ -75,6 +75,10 @@ function ContentAnalystContent() {
   const [inputType, setInputType] = useState<'text' | 'url' | 'wordpress'>('text')
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
+  const [wordpressSite, setWordpressSite] = useState<any>(null)
+  const [wordpressPages, setWordpressPages] = useState<any[]>([])
+  const [selectedPageId, setSelectedPageId] = useState<string>('')
+  const [loadingPages, setLoadingPages] = useState(false)
   
   // Handle WordPress content from navigation
   useEffect(() => {
@@ -271,33 +275,106 @@ function ContentAnalystContent() {
 
       {/* WordPress Page Selector */}
       {inputType === 'wordpress' && (
-        <div className="card p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Select WordPress Site</h3>
-          <WordPressSiteSelector 
-            onSiteSelect={async (site) => {
-              try {
-                toast.loading('Fetching homepage content...')
-                const response = await wordpressService.getPageContent(site.id, 'homepage')
-                toast.dismiss()
+        <div className="card p-6 space-y-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Select WordPress Site & Page</h3>
+          
+          {/* Site Selector */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">WordPress Site</label>
+            <WordPressSiteSelector 
+              onSiteSelect={async (site) => {
+                setWordpressSite(site)
+                setLoadingPages(true)
+                setWordpressPages([])
+                setSelectedPageId('')
                 
-              if (response.success && response.content) {
-                setContent(response.content)
-                toast.success(`Loaded content from ${response.title}. Starting analysis...`)
-                
-                // Auto-start analysis - pass content directly!
-                setTimeout(() => {
-                  analyzeContent(response.content)
-                }, 500)
-                } else {
-                  toast.error(response.error || 'Failed to fetch page content')
+                try {
+                  const pagesResponse = await wordpressService.getPages(site.id)
+                  
+                  if (pagesResponse.success && pagesResponse.pages) {
+                    // Sort pages: homepage first, then alphabetically
+                    const sortedPages = [...pagesResponse.pages].sort((a, b) => {
+                      if (a.is_home) return -1
+                      if (b.is_home) return 1
+                      return a.title.localeCompare(b.title)
+                    })
+                    
+                    setWordpressPages(sortedPages)
+                    
+                    // Auto-select homepage
+                    const homepage = sortedPages.find(p => p.is_home) || sortedPages[0]
+                    if (homepage) {
+                      setSelectedPageId(homepage.id.toString())
+                      
+                      // Fetch and analyze homepage content
+                      toast.loading('Loading homepage content...')
+                      const contentResponse = await wordpressService.getPageContent(site.id, homepage.id.toString())
+                      toast.dismiss()
+                      
+                      if (contentResponse.success && contentResponse.content) {
+                        setContent(contentResponse.content)
+                        toast.success(`Loaded ${contentResponse.title}. Starting analysis...`)
+                        setTimeout(() => analyzeContent(contentResponse.content), 500)
+                      } else {
+                        toast.error(contentResponse.error || 'Failed to fetch page content')
+                      }
+                    }
+                  } else {
+                    toast.error('Failed to load pages')
+                  }
+                } catch (error) {
+                  toast.error('Failed to load pages')
+                } finally {
+                  setLoadingPages(false)
                 }
-              } catch (error) {
-                toast.dismiss()
-                toast.error('Failed to fetch page content')
-              }
-            }}
-            label="Choose a WordPress site to analyze its homepage"
-          />
+              }}
+              label="Choose a WordPress site"
+            />
+          </div>
+          
+          {/* Page Selector */}
+          {wordpressSite && wordpressPages.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Page to Analyze</label>
+              <select
+                value={selectedPageId}
+                onChange={async (e) => {
+                  const pageId = e.target.value
+                  setSelectedPageId(pageId)
+                  
+                  toast.loading('Loading page content...')
+                  const contentResponse = await wordpressService.getPageContent(wordpressSite.id, pageId)
+                  toast.dismiss()
+                  
+                  if (contentResponse.success && contentResponse.content) {
+                    setContent(contentResponse.content)
+                    toast.success(`Loaded ${contentResponse.title}. Starting analysis...`)
+                    setTimeout(() => analyzeContent(contentResponse.content), 500)
+                  } else {
+                    toast.error(contentResponse.error || 'Failed to fetch page content')
+                  }
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                disabled={loadingPages}
+              >
+                {wordpressPages.map(page => (
+                  <option key={page.id} value={page.id}>
+                    {page.is_home ? '🏠 ' : ''}{page.title}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-sm text-gray-500">
+                {wordpressPages.length} page{wordpressPages.length !== 1 ? 's' : ''} available
+              </p>
+            </div>
+          )}
+          
+          {loadingPages && (
+            <div className="text-center py-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+              <p className="mt-2 text-sm text-gray-600">Loading pages...</p>
+            </div>
+          )}
         </div>
       )}
 
