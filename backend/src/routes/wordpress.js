@@ -73,7 +73,7 @@ router.get('/plugin/download', authMiddleware, async (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
     res.setHeader('Pragma', 'no-cache')
     res.setHeader('Expires', '0')
-    res.setHeader('X-Plugin-Version', '1.0.0')
+    res.setHeader('X-Plugin-Version', '1.1.0')
     res.setHeader('X-Build-Time', new Date().toISOString())
     
     // Send file for download
