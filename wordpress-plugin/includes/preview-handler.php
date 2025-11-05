@@ -100,24 +100,33 @@ class CodeAnalyst_Preview_Handler {
             error_log('JWT Debug: Token expired. Exp=' . $payload['exp'] . ', Now=' . time());
             return false;
         }
+        error_log('JWT Debug: Expiration check passed');
         
         // Verify signature
         $secret = defined('AUTH_SALT') ? AUTH_SALT : get_option('codeanalyst_jwt_secret');
+        error_log('JWT Debug: Secret source = ' . (defined('AUTH_SALT') ? 'AUTH_SALT' : 'DB option'));
+        error_log('JWT Debug: Secret length = ' . strlen($secret));
         
         if (empty($secret)) {
             error_log('JWT Debug: Empty secret');
             return false;
         }
+        error_log('JWT Debug: About to verify signature');
         
         $expected_signature = hash_hmac('sha256', $header_b64 . '.' . $payload_b64, $secret, true);
         $provided_signature = $this->base64url_decode($signature_b64);
         
+        error_log('JWT Debug: Signature computed');
+        error_log('JWT Debug: Expected signature length = ' . strlen($expected_signature));
+        error_log('JWT Debug: Provided signature length = ' . strlen($provided_signature));
+        error_log('JWT Debug: Expected (hex) = ' . bin2hex($expected_signature));
+        error_log('JWT Debug: Provided (hex) = ' . bin2hex($provided_signature));
+        
         if (!hash_equals($expected_signature, $provided_signature)) {
             error_log('JWT Debug: Signature mismatch!');
-            error_log('JWT Debug: Expected signature length = ' . strlen($expected_signature));
-            error_log('JWT Debug: Provided signature length = ' . strlen($provided_signature));
             return false;
         }
+        error_log('JWT Debug: Signature verified!');
         
         // Verify audience if APP_PUBLIC_URL is set
         $app_url = get_option('codeanalyst_backend_url');
