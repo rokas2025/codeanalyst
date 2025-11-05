@@ -183,13 +183,13 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
         : 'h-full'
     }`}>
       {/* Toolbar */}
-      <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 sticky top-0 z-10 flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {/* Mode Toggle */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setMode('live')}
-              className={`px-3 py-1.5 text-sm font-medium rounded ${
+              className={`px-2 py-1.5 text-xs font-medium rounded ${
                 mode === 'live'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -199,7 +199,7 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
             </button>
             <button
               onClick={() => setMode('snapshot')}
-              className={`px-3 py-1.5 text-sm font-medium rounded ${
+              className={`px-2 py-1.5 text-xs font-medium rounded ${
                 mode === 'snapshot'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -210,103 +210,103 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
           </div>
 
           {/* Device Selector */}
-          <div className="flex items-center gap-1 border border-gray-300 rounded">
+          <div className="flex items-center gap-0.5 border border-gray-300 rounded">
             <button
               onClick={() => setDevice('desktop')}
-              className={`p-2 ${
+              className={`p-1.5 ${
                 device === 'desktop'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
               title="Desktop"
             >
-              <ComputerDesktopIcon className="w-5 h-5" />
+              <ComputerDesktopIcon className="w-4 h-4" />
             </button>
             <button
               onClick={() => setDevice('tablet')}
-              className={`p-2 ${
+              className={`p-1.5 ${
                 device === 'tablet'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
               title="Tablet"
             >
-              <DeviceTabletIcon className="w-5 h-5" />
+              <DeviceTabletIcon className="w-4 h-4" />
             </button>
             <button
               onClick={() => setDevice('mobile')}
-              className={`p-2 ${
+              className={`p-1.5 ${
                 device === 'mobile'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
               title="Mobile"
             >
-              <DevicePhoneMobileIcon className="w-5 h-5" />
+              <DevicePhoneMobileIcon className="w-4 h-4" />
             </button>
           </div>
 
           {/* Zoom Controls */}
-          <div className="flex items-center gap-1 border border-gray-300 rounded">
+          <div className="flex items-center gap-0.5 border border-gray-300 rounded">
             <button
               onClick={handleZoomOut}
               disabled={zoom <= 0.5}
-              className="p-2 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-1.5 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               title="Zoom Out"
             >
-              <MagnifyingGlassMinusIcon className="w-5 h-5" />
+              <MagnifyingGlassMinusIcon className="w-4 h-4" />
             </button>
-            <span className="px-2 text-sm text-gray-700 min-w-[3rem] text-center">
+            <span className="px-2 text-xs text-gray-700 min-w-[2.5rem] text-center">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={handleZoomIn}
               disabled={zoom >= 2}
-              className="p-2 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-1.5 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               title="Zoom In"
             >
-              <MagnifyingGlassPlusIcon className="w-5 h-5" />
+              <MagnifyingGlassPlusIcon className="w-4 h-4" />
             </button>
           </div>
 
           {/* Reload Button */}
           <button
             onClick={handleRefresh}
-            className="p-2 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+            className="p-1.5 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
             title="Reload"
           >
-            <ArrowPathIcon className="w-5 h-5" />
+            <ArrowPathIcon className="w-4 h-4" />
           </button>
-        </div>
-
-        <div className="flex items-center gap-4">
-          {/* Status Pill */}
-          <span className={`px-3 py-1.5 text-xs font-medium rounded-full ${getStatusColor()}`}>
-            {getStatusText()}
-          </span>
 
           {/* Fullscreen/Expand Button */}
           <button
             onClick={handleToggleFullscreen}
-            className="p-2 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+            className="p-1.5 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           >
             {isFullscreen ? (
-              <ArrowsPointingInIcon className="w-5 h-5" />
+              <ArrowsPointingInIcon className="w-4 h-4" />
             ) : (
-              <ArrowsPointingOutIcon className="w-5 h-5" />
+              <ArrowsPointingOutIcon className="w-4 h-4" />
             )}
           </button>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Status Pill */}
+          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor()}`}>
+            {getStatusText()}
+          </span>
 
           {/* Open in New Window Button - Only for Live mode */}
           {mode === 'live' && (
             <button
               onClick={handleOpenInNewWindow}
               disabled={!previewUrl}
-              className="px-3 py-1.5 text-sm font-medium bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-2 py-1 text-xs font-medium bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               title="Open in New Window"
             >
-              Open in New Window
+              New Window
             </button>
           )}
 
@@ -314,10 +314,10 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
           {onClose && !isFullscreen && (
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600"
+              className="p-1.5 text-gray-400 hover:text-gray-600"
               title="Close"
             >
-              <XMarkIcon className="w-5 h-5" />
+              <XMarkIcon className="w-4 h-4" />
             </button>
           )}
         </div>
