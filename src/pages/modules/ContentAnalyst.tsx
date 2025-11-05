@@ -104,7 +104,7 @@ function ContentAnalystContent() {
     const contentToAnalyze = providedContent || content
     const inputContent = (inputType === 'text' || inputType === 'wordpress') ? contentToAnalyze : url
     
-    console.log('🔍 Content Analyst - Validation:', {
+    console.log('🔍 Content Analyst - Starting validation:', {
       providedContent: !!providedContent,
       contentState: content,
       contentLength: content?.length,
