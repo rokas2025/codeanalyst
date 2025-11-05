@@ -64,8 +64,10 @@ class CodeAnalyst_Preview_Handler {
      */
     private function verify_jwt($jwt) {
         $parts = explode('.', $jwt);
+        error_log('JWT Debug: Parts count = ' . count($parts));
         
         if (count($parts) !== 3) {
+            error_log('JWT Debug: Invalid parts count');
             return false;
         }
         
@@ -75,6 +77,7 @@ class CodeAnalyst_Preview_Handler {
         $header = json_decode($this->base64url_decode($header_b64), true);
         
         if (!$header || !isset($header['alg']) || $header['alg'] !== 'HS256') {
+            error_log('JWT Debug: Header validation failed');
             return false;
         }
         
@@ -82,11 +85,13 @@ class CodeAnalyst_Preview_Handler {
         $payload = json_decode($this->base64url_decode($payload_b64), true);
         
         if (!$payload) {
+            error_log('JWT Debug: Payload decode failed');
             return false;
         }
         
         // Verify expiration
         if (isset($payload['exp']) && $payload['exp'] < time()) {
+            error_log('JWT Debug: Token expired. Exp=' . $payload['exp'] . ', Now=' . time());
             return false;
         }
         
@@ -94,6 +99,7 @@ class CodeAnalyst_Preview_Handler {
         $secret = defined('AUTH_SALT') ? AUTH_SALT : get_option('codeanalyst_jwt_secret');
         
         if (empty($secret)) {
+            error_log('JWT Debug: Empty secret');
             return false;
         }
         
@@ -101,6 +107,9 @@ class CodeAnalyst_Preview_Handler {
         $provided_signature = $this->base64url_decode($signature_b64);
         
         if (!hash_equals($expected_signature, $provided_signature)) {
+            error_log('JWT Debug: Signature mismatch!');
+            error_log('JWT Debug: Expected signature length = ' . strlen($expected_signature));
+            error_log('JWT Debug: Provided signature length = ' . strlen($provided_signature));
             return false;
         }
         
