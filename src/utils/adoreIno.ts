@@ -177,11 +177,11 @@ export class AdoreInoAnalyzer {
   private calculateStructureScore(): number {
     if (!this.hasGoodStructure()) return 0
     // Award more points for better structure
-    const hasComponents = this.files.some(f => f.path.includes('components/'))
-    const hasServices = this.files.some(f => f.path.includes('services/') || f.path.includes('api/'))
-    const hasUtils = this.files.some(f => f.path.includes('utils/') || f.path.includes('helpers/'))
-    const hasConfig = this.files.some(f => f.path.includes('config/') || f.path.match(/\.(config|rc)\./))
-    const hasPublicPrivate = this.files.some(f => f.path.includes('public/') || f.path.includes('private/'))
+    const hasComponents = this.files.some(f => f?.path && f.path.includes('components/'))
+    const hasServices = this.files.some(f => f?.path && (f.path.includes('services/') || f.path.includes('api/')))
+    const hasUtils = this.files.some(f => f?.path && (f.path.includes('utils/') || f.path.includes('helpers/')))
+    const hasConfig = this.files.some(f => f?.path && (f.path.includes('config/') || f.path.match(/\.(config|rc)\./)))
+    const hasPublicPrivate = this.files.some(f => f?.path && (f.path.includes('public/') || f.path.includes('private/')))
     
     let score = 10 // Base for having structure
     if (hasComponents) score += 3
@@ -216,10 +216,10 @@ export class AdoreInoAnalyzer {
 
   private calculateDocumentationScore(): number {
     if (!this.hasDocumentation()) return 0
-    const hasReadme = this.files.some(f => f.path.toLowerCase().includes('readme'))
-    const hasApiDocs = this.files.some(f => f.path.includes('docs/') || (f.path.includes('.md') && !f.path.toLowerCase().includes('readme')))
-    const hasComments = this.files.some(f => f.content && (f.content.includes('/**') || f.content.includes('///')))
-    const hasChangelog = this.files.some(f => f.path.toLowerCase().includes('changelog'))
+    const hasReadme = this.files.some(f => f?.path && f.path.toLowerCase().includes('readme'))
+    const hasApiDocs = this.files.some(f => f?.path && (f.path.includes('docs/') || (f.path.includes('.md') && !f.path.toLowerCase().includes('readme'))))
+    const hasComments = this.files.some(f => f?.content && (f.content.includes('/**') || f.content.includes('///')))
+    const hasChangelog = this.files.some(f => f?.path && f.path.toLowerCase().includes('changelog'))
     
     let score = 0
     if (hasReadme) score += 4
@@ -561,8 +561,10 @@ export class AdoreInoAnalyzer {
 
   private hasDocumentation(): boolean {
     return this.files.some(f => 
-      f.path.toLowerCase().includes('readme') ||
-      f.path.toLowerCase().includes('docs')
+      f?.path && (
+        f.path.toLowerCase().includes('readme') ||
+        f.path.toLowerCase().includes('docs')
+      )
     )
   }
 
@@ -593,6 +595,8 @@ export class AdoreInoAnalyzer {
     let hasIssues = false
     
     this.files.forEach(file => {
+      if (!file?.content) return
+      
       const content = file.content.toLowerCase()
       
       // Check for actual security anti-patterns
@@ -686,13 +690,13 @@ export class AdoreInoAnalyzer {
   private identifyTechnologies(): string[] {
     const technologies: string[] = []
     
-    if (this.files.some(f => f.content.includes('react'))) technologies.push('React')
-    if (this.files.some(f => f.content.includes('vue'))) technologies.push('Vue.js')
-    if (this.files.some(f => f.content.includes('angular'))) technologies.push('Angular')
-    if (this.files.some(f => f.content.includes('typescript'))) technologies.push('TypeScript')
-    if (this.files.some(f => f.content.includes('tailwind'))) technologies.push('Tailwind CSS')
-    if (this.files.some(f => f.path.includes('.php'))) technologies.push('PHP')
-    if (this.files.some(f => f.path.includes('.py'))) technologies.push('Python')
+    if (this.files.some(f => f?.content && f.content.includes('react'))) technologies.push('React')
+    if (this.files.some(f => f?.content && f.content.includes('vue'))) technologies.push('Vue.js')
+    if (this.files.some(f => f?.content && f.content.includes('angular'))) technologies.push('Angular')
+    if (this.files.some(f => f?.content && f.content.includes('typescript'))) technologies.push('TypeScript')
+    if (this.files.some(f => f?.content && f.content.includes('tailwind'))) technologies.push('Tailwind CSS')
+    if (this.files.some(f => f?.path && f.path.includes('.php'))) technologies.push('PHP')
+    if (this.files.some(f => f?.path && f.path.includes('.py'))) technologies.push('Python')
     
     return technologies.length > 0 ? technologies : [this.projectType]
   }
@@ -1237,6 +1241,7 @@ export class AdoreInoAnalyzer {
 
     // Check for hardcoded secrets
     const hasHardcodedSecrets = this.processedFiles.some(file => {
+      if (!file?.content) return false
       const content = file.content.toLowerCase()
       return content.includes('password') && content.includes('=') ||
              content.includes('api_key') && content.includes('=') ||
@@ -1465,11 +1470,13 @@ export class AdoreInoAnalyzer {
 
     const frameworks = this.codebaseStructure.frameworks.map(f => f.name)
     const hasAPI = this.processedFiles.some(f => 
-      f.path.includes('api') || f.content.includes('express') || f.content.includes('fastify')
+      (f?.path && f.path.includes('api')) || (f?.content && (f.content.includes('express') || f.content.includes('fastify')))
     )
     const hasDatabase = this.processedFiles.some(f =>
-      f.content.includes('database') || f.content.includes('sequelize') || 
-      f.content.includes('mongoose') || f.content.includes('prisma')
+      f?.content && (
+        f.content.includes('database') || f.content.includes('sequelize') || 
+        f.content.includes('mongoose') || f.content.includes('prisma')
+      )
     )
 
     // Advanced type detection
@@ -2212,6 +2219,7 @@ export class AdoreInoAnalyzer {
   private getSecurityRiskFiles(): string[] {
     return this.processedFiles
       .filter(file => {
+        if (!file?.content) return false
         const content = file.content.toLowerCase()
         return content.includes('password') && content.includes('=') ||
                content.includes('api_key') && content.includes('=') ||

@@ -201,13 +201,14 @@ export class SafeCodeRunner {
     }
 
     // Check for test patterns in files (more comprehensive)
-    const hasVitest = files.some(f => f.content.includes('vitest'))
+    const hasVitest = files.some(f => f?.content && f.content.includes('vitest'))
     if (hasVitest) return 'Vitest'
 
-    const hasJest = files.some(f => f.content.includes('jest'))
+    const hasJest = files.some(f => f?.content && f.content.includes('jest'))
     if (hasJest) return 'Jest'
 
     const hasJestPatterns = files.some(f => 
+      f?.content && 
       (f.content.includes('describe(') || f.content.includes('describe ')) && 
       (f.content.includes('it(') || f.content.includes('test(')) && 
       f.content.includes('expect(')
@@ -215,6 +216,7 @@ export class SafeCodeRunner {
     if (hasJestPatterns) return 'Jest/Vitest'
 
     const hasMochaPatterns = files.some(f =>
+      f?.content && 
       f.content.includes('describe(') && f.content.includes('it(') && f.content.includes('should')
     )
     if (hasMochaPatterns) return 'Mocha'
@@ -233,13 +235,15 @@ export class SafeCodeRunner {
    */
   private getTestFiles(files: { path: string; content: string; size: number }[]): { path: string; content: string; size: number }[] {
     return files.filter(f => 
-      f.path.includes('test') || 
-      f.path.includes('spec') || 
-      f.path.includes('__tests__') ||
-      f.path.includes('.test.') ||
-      f.path.includes('.spec.') ||
-      f.path.includes('cypress') ||
-      f.path.includes('e2e')
+      f?.path && (
+        f.path.includes('test') || 
+        f.path.includes('spec') || 
+        f.path.includes('__tests__') ||
+        f.path.includes('.test.') ||
+        f.path.includes('.spec.') ||
+        f.path.includes('cypress') ||
+        f.path.includes('e2e')
+      )
     )
   }
 
@@ -294,6 +298,11 @@ export class SafeCodeRunner {
     const errors: string[] = []
 
     files.forEach(file => {
+      if (!file?.path || !file?.content) {
+        valid++ // Skip invalid file objects
+        return
+      }
+      
       if (file.path.endsWith('.json')) {
         try {
           JSON.parse(file.content)
@@ -333,14 +342,18 @@ export class SafeCodeRunner {
    */
   private simulateLinting(files: { path: string; content: string; size: number }[]) {
     const jsFiles = files.filter(f => 
-      f.path.endsWith('.js') || f.path.endsWith('.jsx') || 
-      f.path.endsWith('.ts') || f.path.endsWith('.tsx')
+      f?.path && (
+        f.path.endsWith('.js') || f.path.endsWith('.jsx') || 
+        f.path.endsWith('.ts') || f.path.endsWith('.tsx')
+      )
     )
 
     let issues = 0
     const errors: string[] = []
 
     jsFiles.forEach(file => {
+      if (!file?.content || !file?.path) return
+      
       // Check for common linting issues
       if (file.content.includes('var ')) {
         issues++
@@ -363,7 +376,7 @@ export class SafeCodeRunner {
    * Simulate TypeScript type checking
    */
   private simulateTypeChecking(files: { path: string; content: string; size: number }[]) {
-    const tsFiles = files.filter(f => f.path.endsWith('.ts') || f.path.endsWith('.tsx'))
+    const tsFiles = files.filter(f => f?.path && (f.path.endsWith('.ts') || f.path.endsWith('.tsx')))
     const hasTypeScript = tsFiles.length > 0
 
     if (!hasTypeScript) {
@@ -374,6 +387,8 @@ export class SafeCodeRunner {
     const issues: string[] = []
 
     tsFiles.forEach(file => {
+      if (!file?.content || !file?.path) return
+      
       // Check for common TypeScript issues
       if (file.content.includes(': any')) {
         errors++
@@ -396,6 +411,8 @@ export class SafeCodeRunner {
     const issues: string[] = []
 
     files.forEach(file => {
+      if (!file?.content || !file?.path) return
+      
       const content = file.content.toLowerCase()
       
       // Check for hardcoded secrets
@@ -424,12 +441,12 @@ export class SafeCodeRunner {
    * Detect build system from files
    */
   private detectBuildSystem(files: { path: string; content: string; size: number }[]): string | null {
-    if (files.some(f => f.path.includes('webpack.config'))) return 'Webpack'
-    if (files.some(f => f.path.includes('vite.config'))) return 'Vite'
-    if (files.some(f => f.path.includes('rollup.config'))) return 'Rollup'
-    if (files.some(f => f.path.includes('package.json'))) return 'npm/yarn'
-    if (files.some(f => f.path.includes('composer.json'))) return 'Composer'
-    if (files.some(f => f.path.includes('Dockerfile'))) return 'Docker'
+    if (files.some(f => f?.path && f.path.includes('webpack.config'))) return 'Webpack'
+    if (files.some(f => f?.path && f.path.includes('vite.config'))) return 'Vite'
+    if (files.some(f => f?.path && f.path.includes('rollup.config'))) return 'Rollup'
+    if (files.some(f => f?.path && f.path.includes('package.json'))) return 'npm/yarn'
+    if (files.some(f => f?.path && f.path.includes('composer.json'))) return 'Composer'
+    if (files.some(f => f?.path && f.path.includes('Dockerfile'))) return 'Docker'
     
     return null
   }
@@ -567,13 +584,17 @@ export class SafeCodeRunner {
    */
   private simulateLintingFast(files: { path: string; content: string; size: number }[]) {
     const jsFiles = files.filter(f => 
-      f.path.endsWith('.js') || f.path.endsWith('.jsx') || 
-      f.path.endsWith('.ts') || f.path.endsWith('.tsx')
+      f?.path && (
+        f.path.endsWith('.js') || f.path.endsWith('.jsx') || 
+        f.path.endsWith('.ts') || f.path.endsWith('.tsx')
+      )
     ).slice(0, 5) // Limit to first 5 files
 
     const errors: string[] = []
 
     jsFiles.forEach(file => {
+      if (!file?.content || !file?.path) return
+      
       // Only check for common issues, limit results
       if (file.content.includes(' == ') && errors.length < 3) {
         errors.push(`${file.path}: Use '===' instead of '=='`)
@@ -596,6 +617,8 @@ export class SafeCodeRunner {
     const issues: string[] = []
 
     files.slice(0, 10).forEach(file => { // Limit to first 10 files
+      if (!file?.content || !file?.path) return
+      
       const content = file.content.toLowerCase()
       
       // Only check most critical issues
