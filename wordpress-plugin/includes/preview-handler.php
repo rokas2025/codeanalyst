@@ -38,15 +38,9 @@ class CodeAnalyst_Preview_Handler {
         // Verify JWT
         $claims = $this->verify_jwt($jwt);
         
-        error_log('JWT Debug: verify_jwt returned: ' . ($claims ? 'SUCCESS' : 'FAILED'));
-        
         if (!$claims) {
-            error_log('JWT Debug: Claims is false, showing error page');
             wp_die('Invalid or expired preview token', 'Preview Error', array('response' => 403));
         }
-        
-        error_log('JWT Debug: Claims verified, continuing with preview setup');
-        error_log('JWT Debug: Target = ' . (isset($claims['target']) ? $claims['target'] : 'NOT SET'));
         
         // Set preview bot user context
         $this->set_preview_user();
@@ -59,9 +53,7 @@ class CodeAnalyst_Preview_Handler {
         $target = $claims['target'];
         $builder = isset($claims['builder']) ? $claims['builder'] : 'auto';
         
-        error_log('JWT Debug: About to resolve target: ' . $target);
         $this->resolve_target($target, $builder);
-        error_log('JWT Debug: Target resolved successfully');
         
         // Let WordPress continue with normal template loading
         // We'll inject base tag in wp_head hook
@@ -72,76 +64,48 @@ class CodeAnalyst_Preview_Handler {
      */
     private function verify_jwt($jwt) {
         $parts = explode('.', $jwt);
-        error_log('JWT Debug: Parts count = ' . count($parts));
         
         if (count($parts) !== 3) {
-            error_log('JWT Debug: Invalid parts count');
             return false;
         }
         
         list($header_b64, $payload_b64, $signature_b64) = $parts;
         
-        error_log('JWT Debug: About to decode header');
         // Decode header (base64url)
         $header = json_decode($this->base64url_decode($header_b64), true);
-        error_log('JWT Debug: Header decoded, checking validation');
         
         if (!$header || !isset($header['alg']) || $header['alg'] !== 'HS256') {
-            error_log('JWT Debug: Header validation failed. Header=' . print_r($header, true));
             return false;
         }
-        error_log('JWT Debug: Header OK');
         
-        error_log('JWT Debug: About to decode payload');
         // Decode payload (base64url)
         $payload = json_decode($this->base64url_decode($payload_b64), true);
-        error_log('JWT Debug: Payload decoded');
         
         if (!$payload) {
-            error_log('JWT Debug: Payload decode failed');
             return false;
         }
-        error_log('JWT Debug: Payload OK');
         
         // Verify expiration
         if (isset($payload['exp']) && $payload['exp'] < time()) {
-            error_log('JWT Debug: Token expired. Exp=' . $payload['exp'] . ', Now=' . time());
             return false;
         }
-        error_log('JWT Debug: Expiration check passed');
         
         // Verify signature
         $secret = defined('AUTH_SALT') ? AUTH_SALT : get_option('codeanalyst_jwt_secret');
-        error_log('JWT Debug: Secret source = ' . (defined('AUTH_SALT') ? 'AUTH_SALT' : 'DB option'));
-        error_log('JWT Debug: Secret length = ' . strlen($secret));
         
         if (empty($secret)) {
-            error_log('JWT Debug: Empty secret');
             return false;
         }
-        error_log('JWT Debug: About to verify signature');
         
         $expected_signature = hash_hmac('sha256', $header_b64 . '.' . $payload_b64, $secret, true);
         $provided_signature = $this->base64url_decode($signature_b64);
         
-        error_log('JWT Debug: Signature computed');
-        error_log('JWT Debug: Expected signature length = ' . strlen($expected_signature));
-        error_log('JWT Debug: Provided signature length = ' . strlen($provided_signature));
-        error_log('JWT Debug: Expected (hex) = ' . bin2hex($expected_signature));
-        error_log('JWT Debug: Provided (hex) = ' . bin2hex($provided_signature));
-        
         if (!hash_equals($expected_signature, $provided_signature)) {
-            error_log('JWT Debug: Signature mismatch!');
             return false;
         }
-        error_log('JWT Debug: Signature verified!');
         
         // Verify audience if APP_PUBLIC_URL is set
         $app_url = get_option('codeanalyst_backend_url');
-        error_log('JWT Debug: Checking audience...');
-        error_log('JWT Debug: Backend URL from DB = ' . ($app_url ? $app_url : 'EMPTY'));
-        error_log('JWT Debug: Payload aud = ' . (isset($payload['aud']) ? $payload['aud'] : 'NOT SET'));
-        error_log('JWT Debug: Site URL = ' . get_site_url());
         
         if (!empty($app_url) && isset($payload['aud']) && !empty($payload['aud'])) {
             // Normalize URLs for comparison (remove trailing slashes and /api suffix)
@@ -151,10 +115,6 @@ class CodeAnalyst_Preview_Handler {
             // Remove /api suffix if present for comparison
             $normalized_app_url_base = preg_replace('#/api$#', '', $normalized_app_url);
             
-            error_log('JWT Debug: Normalized app URL = ' . $normalized_app_url);
-            error_log('JWT Debug: Normalized app URL (no /api) = ' . $normalized_app_url_base);
-            error_log('JWT Debug: Normalized aud = ' . $normalized_aud);
-            
             // Check if audience matches backend URL (with or without /api) or site URL
             $aud_matches = (
                 $normalized_aud === $normalized_app_url ||
@@ -163,12 +123,10 @@ class CodeAnalyst_Preview_Handler {
             );
             
             if (!$aud_matches) {
-                error_log('JWT Debug: Audience mismatch! Rejecting token.');
                 return false;
             }
         }
         
-        error_log('JWT Debug: Audience check passed, returning payload');
         return $payload;
     }
     
