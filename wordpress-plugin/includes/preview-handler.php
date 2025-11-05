@@ -38,9 +38,15 @@ class CodeAnalyst_Preview_Handler {
         // Verify JWT
         $claims = $this->verify_jwt($jwt);
         
+        error_log('JWT Debug: verify_jwt returned: ' . ($claims ? 'SUCCESS' : 'FAILED'));
+        
         if (!$claims) {
+            error_log('JWT Debug: Claims is false, showing error page');
             wp_die('Invalid or expired preview token', 'Preview Error', array('response' => 403));
         }
+        
+        error_log('JWT Debug: Claims verified, continuing with preview setup');
+        error_log('JWT Debug: Target = ' . (isset($claims['target']) ? $claims['target'] : 'NOT SET'));
         
         // Set preview bot user context
         $this->set_preview_user();
@@ -53,7 +59,9 @@ class CodeAnalyst_Preview_Handler {
         $target = $claims['target'];
         $builder = isset($claims['builder']) ? $claims['builder'] : 'auto';
         
+        error_log('JWT Debug: About to resolve target: ' . $target);
         $this->resolve_target($target, $builder);
+        error_log('JWT Debug: Target resolved successfully');
         
         // Let WordPress continue with normal template loading
         // We'll inject base tag in wp_head hook
@@ -130,13 +138,21 @@ class CodeAnalyst_Preview_Handler {
         
         // Verify audience if APP_PUBLIC_URL is set
         $app_url = get_option('codeanalyst_backend_url');
+        error_log('JWT Debug: Checking audience...');
+        error_log('JWT Debug: Backend URL from DB = ' . ($app_url ? $app_url : 'EMPTY'));
+        error_log('JWT Debug: Payload aud = ' . (isset($payload['aud']) ? $payload['aud'] : 'NOT SET'));
+        error_log('JWT Debug: Site URL = ' . get_site_url());
+        
         if (!empty($app_url) && isset($payload['aud']) && $payload['aud'] !== $app_url) {
+            error_log('JWT Debug: Audience does not match backend URL, checking site URL...');
             // Allow if audience matches site URL or is empty for backward compatibility
             if ($payload['aud'] !== get_site_url() && !empty($payload['aud'])) {
+                error_log('JWT Debug: Audience mismatch! Rejecting token.');
                 return false;
             }
         }
         
+        error_log('JWT Debug: Audience check passed, returning payload');
         return $payload;
     }
     
