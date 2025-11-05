@@ -435,11 +435,11 @@ class CodeAnalyst_REST_API {
             'jti' => wp_generate_password(32, false)
         );
         
-        // Generate JWT
-        $header = base64_encode(json_encode(array('alg' => 'HS256', 'typ' => 'JWT')));
-        $payload = base64_encode(json_encode($claims));
+        // Generate JWT with base64url encoding
+        $header = $this->base64url_encode(json_encode(array('alg' => 'HS256', 'typ' => 'JWT')));
+        $payload = $this->base64url_encode(json_encode($claims));
         $signature = hash_hmac('sha256', $header . '.' . $payload, $secret, true);
-        $jwt = $header . '.' . $payload . '.' . base64_encode($signature);
+        $jwt = $header . '.' . $payload . '.' . $this->base64url_encode($signature);
         
         // Build preview URL
         $preview_url = home_url('/?codeanalyst_preview=' . rawurlencode($jwt));
@@ -449,6 +449,20 @@ class CodeAnalyst_REST_API {
             'preview_url' => $preview_url,
             'ttl' => 300
         ));
+    }
+    
+    /**
+     * Base64url encode (JWT standard)
+     */
+    private function base64url_encode($data) {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+    
+    /**
+     * Base64url decode (JWT standard)
+     */
+    private function base64url_decode($data) {
+        return base64_decode(strtr($data, '-_', '+/'));
     }
 }
 

@@ -69,15 +69,15 @@ class CodeAnalyst_Preview_Handler {
         
         list($header_b64, $payload_b64, $signature_b64) = $parts;
         
-        // Decode header
-        $header = json_decode(base64_decode($header_b64), true);
+        // Decode header (base64url)
+        $header = json_decode($this->base64url_decode($header_b64), true);
         
         if (!$header || !isset($header['alg']) || $header['alg'] !== 'HS256') {
             return false;
         }
         
-        // Decode payload
-        $payload = json_decode(base64_decode($payload_b64), true);
+        // Decode payload (base64url)
+        $payload = json_decode($this->base64url_decode($payload_b64), true);
         
         if (!$payload) {
             return false;
@@ -96,7 +96,7 @@ class CodeAnalyst_Preview_Handler {
         }
         
         $expected_signature = hash_hmac('sha256', $header_b64 . '.' . $payload_b64, $secret, true);
-        $provided_signature = base64_decode($signature_b64);
+        $provided_signature = $this->base64url_decode($signature_b64);
         
         if (!hash_equals($expected_signature, $provided_signature)) {
             return false;
@@ -255,6 +255,13 @@ class CodeAnalyst_Preview_Handler {
         }
         
         header("Content-Security-Policy: frame-ancestors " . $allowed_origins);
+    }
+    
+    /**
+     * Base64url decode (JWT standard)
+     */
+    private function base64url_decode($data) {
+        return base64_decode(strtr($data, '-_', '+/'));
     }
 }
 
