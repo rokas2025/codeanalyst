@@ -365,7 +365,10 @@ export class AdoreInoAnalyzer {
 
   private calculateCodeMetrics(): CodeMetrics {
     const totalFiles = this.files.length
-    const totalLines = this.files.reduce((sum, file) => sum + file.content.split('\n').length, 0)
+    const totalLines = this.files.reduce((sum, file) => {
+      const content = file?.content || ''
+      return sum + content.split('\n').length
+    }, 0)
     
     return {
       totalFiles,
@@ -830,7 +833,13 @@ export class AdoreInoAnalyzer {
     // Fast duplicate detection with size limits
     const maxFilesToCheck = 50 // Limit files to prevent performance issues
     const filesToCheck = this.files.slice(0, maxFilesToCheck)
-    const contents = filesToCheck.map(f => f.content)
+    // Filter out undefined/null content and ensure all are strings
+    const contents = filesToCheck
+      .map(f => f?.content)
+      .filter((content): content is string => typeof content === 'string' && content.length > 0)
+    
+    if (contents.length === 0) return 0
+    
     let duplicates = 0
     
     // Use a faster hashing approach for large projects
@@ -846,10 +855,14 @@ export class AdoreInoAnalyzer {
       }
     }
     
-    return Math.round((duplicates / filesToCheck.length) * 100)
+    return Math.round((duplicates / contents.length) * 100)
   }
 
   private calculateSimilarityFast(str1: string, str2: string): number {
+    // Guard against undefined/null input
+    if (!str1 || typeof str1 !== 'string') str1 = ''
+    if (!str2 || typeof str2 !== 'string') str2 = ''
+    
     // Fast similarity check using length and character-based comparison
     if (str1.length === 0 && str2.length === 0) return 1
     if (str1.length === 0 || str2.length === 0) return 0
@@ -877,6 +890,9 @@ export class AdoreInoAnalyzer {
     let duplicates = 0
     
     for (const content of contents) {
+      // Skip undefined/null content
+      if (!content || typeof content !== 'string') continue
+      
       // Create a simple hash of the content
       const hash = this.simpleHash(content)
       const existing = hashMap.get(hash) || 0
@@ -886,10 +902,18 @@ export class AdoreInoAnalyzer {
       hashMap.set(hash, existing + 1)
     }
     
-    return Math.round((duplicates / contents.length) * 100)
+    const validContents = contents.filter(c => c && typeof c === 'string')
+    if (validContents.length === 0) return 0
+    
+    return Math.round((duplicates / validContents.length) * 100)
   }
 
   private simpleHash(str: string): string {
+    // Guard against undefined/null input
+    if (!str || typeof str !== 'string') {
+      return 'empty_0'
+    }
+    
     // Simple hash function for content similarity
     const normalized = str.replace(/\s+/g, '').toLowerCase()
     const length = normalized.length
