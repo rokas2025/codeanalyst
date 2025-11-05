@@ -30,6 +30,37 @@ function getOpenAIClient() {
 }
 
 /**
+ * Estimate token count (rough approximation: 1 token ≈ 4 characters)
+ */
+function estimateTokens(text) {
+  return Math.ceil(text.length / 4)
+}
+
+/**
+ * Truncate content to fit within token limits
+ * Keeps the beginning and end of content for context
+ */
+function truncateContent(text, maxTokens = 6000) {
+  const estimatedTokens = estimateTokens(text)
+  
+  if (estimatedTokens <= maxTokens) {
+    return text
+  }
+  
+  // Convert tokens to characters (rough approximation)
+  const maxChars = maxTokens * 4
+  
+  // Keep 80% from the beginning, 20% from the end for context
+  const beginChars = Math.floor(maxChars * 0.8)
+  const endChars = Math.floor(maxChars * 0.2)
+  
+  const beginning = text.substring(0, beginChars)
+  const ending = text.substring(text.length - endChars)
+  
+  return `${beginning}\n\n[... Content truncated for analysis - ${estimatedTokens} tokens reduced to ~${maxTokens} tokens ...]\n\n${ending}`
+}
+
+/**
  * Fetch and extract content from URL
  */
 async function fetchUrlContent(url) {
@@ -440,6 +471,16 @@ router.post('/analyze', authMiddleware, async (req, res) => {
     const languageDetection = languageDetector.detectLanguage(content || '', textToAnalyze)
     const detectedLanguage = languageDetection.language
     
+    // Truncate content to fit within token limits (6000 tokens for input, leaving room for response)
+    const originalLength = textToAnalyze.length
+    const originalTokens = estimateTokens(textToAnalyze)
+    textToAnalyze = truncateContent(textToAnalyze, 6000)
+    const truncatedTokens = estimateTokens(textToAnalyze)
+    
+    if (originalTokens > truncatedTokens) {
+      console.log(`Content truncated: ${originalLength} chars (${originalTokens} tokens) → ${textToAnalyze.length} chars (${truncatedTokens} tokens)`)
+    }
+    
     // Language-specific instructions
     const languageNote = detectedLanguage === 'lt' 
       ? 'SVARBU: Visas pagerintas turinys PRIVALO būti lietuvių kalba. Nepakeisk kalbos į anglų kalbą!' 
@@ -499,7 +540,7 @@ Focus on:
     const languageInstruction = languageInstructions[detectedLanguage] || languageInstructions.en
 
     const response = await openaiClient.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo', // Using GPT-3.5-turbo for faster, cheaper analysis with higher rate limits
       messages: [
         {
           role: 'system',
@@ -511,7 +552,7 @@ Focus on:
         }
       ],
       temperature: 0.7,
-      max_tokens: 2000
+      max_tokens: 3000 // Increased for better content improvement responses
     })
 
     let analysisData
@@ -599,8 +640,7 @@ Focus on:
     })
     res.status(500).json({
       success: false,
-      error: 'Content analysis failed',
-      details: error.message
+      error: 'Content analysis failed. Please try again or contact support if the issue persists.'
     })
   }
 })
