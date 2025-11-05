@@ -280,6 +280,8 @@ export class SafeCodeRunner {
   private countTests(testFiles: { path: string; content: string; size: number }[]): number {
     let count = 0
     testFiles.forEach(file => {
+      if (!file?.content) return
+      
       // Count 'it(', 'test(', 'should(' patterns
       const itMatches = (file.content.match(/\bit\s*\(/g) || []).length
       const testMatches = (file.content.match(/\btest\s*\(/g) || []).length
@@ -560,6 +562,8 @@ export class SafeCodeRunner {
     const errors: string[] = []
 
     files.forEach(file => {
+      if (!file?.path || !file?.content) return
+      
       if (file.path.endsWith('.json')) {
         try {
           JSON.parse(file.content)

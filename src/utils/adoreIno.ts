@@ -475,6 +475,8 @@ export class AdoreInoAnalyzer {
     const mainFiles = this.files.slice(0, 5) // Top 5 files for explanation
     
     for (const file of mainFiles) {
+      if (!file?.content || !file?.path) continue
+      
       explanations.push({
         context: `File: ${file.path}`,
         explanation: this.generateFileExplanation(file),
@@ -1002,6 +1004,8 @@ export class AdoreInoAnalyzer {
   }
 
   private generateFileExplanation(file: { path: string; content: string; size: number }): string {
+    if (!file?.content || !file?.path) return 'File information unavailable'
+    
     const fileType = this.getFileType(file.path)
     const lineCount = file.content.split('\n').length
     
@@ -1009,6 +1013,8 @@ export class AdoreInoAnalyzer {
   }
 
   private getFileType(path: string): string {
+    if (!path || typeof path !== 'string') return 'source code'
+    
     const ext = path.split('.').pop()?.toLowerCase()
     
     switch (ext) {
