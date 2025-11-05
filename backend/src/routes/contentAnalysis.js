@@ -591,9 +591,16 @@ Focus on:
 
   } catch (error) {
     console.error('Content analysis error:', error)
+    console.error('Error stack:', error.stack)
+    console.error('Error details:', {
+      message: error.message,
+      name: error.name,
+      stack: error.stack
+    })
     res.status(500).json({
       success: false,
-      error: 'Content analysis failed'
+      error: 'Content analysis failed',
+      details: error.message
     })
   }
 })
