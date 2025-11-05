@@ -6,7 +6,9 @@ import {
   ArrowPathIcon,
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
-  XMarkIcon
+  XMarkIcon,
+  ArrowsPointingOutIcon,
+  ArrowsPointingInIcon
 } from '@heroicons/react/24/outline'
 import { wordpressService } from '../services/wordpressService'
 import toast from 'react-hot-toast'
@@ -32,6 +34,7 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isExpired, setIsExpired] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -126,6 +129,16 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
     setZoom((prev) => Math.max(prev - 0.1, 0.5))
   }
 
+  const handleToggleFullscreen = () => {
+    setIsFullscreen((prev) => !prev)
+  }
+
+  const handleOpenInNewWindow = () => {
+    if (previewUrl) {
+      window.open(previewUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -164,7 +177,11 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-50">
+    <div className={`flex flex-col bg-gray-50 ${
+      isFullscreen 
+        ? 'fixed inset-0 z-50 h-screen w-screen' 
+        : 'h-full'
+    }`}>
       {/* Toolbar */}
       <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="flex items-center gap-4">
@@ -268,8 +285,31 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
             {getStatusText()}
           </span>
 
+          {/* Fullscreen/Expand Button */}
+          <button
+            onClick={handleToggleFullscreen}
+            className="p-2 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+            title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+          >
+            {isFullscreen ? (
+              <ArrowsPointingInIcon className="w-5 h-5" />
+            ) : (
+              <ArrowsPointingOutIcon className="w-5 h-5" />
+            )}
+          </button>
+
+          {/* Open in New Window Button */}
+          <button
+            onClick={handleOpenInNewWindow}
+            disabled={!previewUrl}
+            className="px-3 py-1.5 text-sm font-medium bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Open in New Window"
+          >
+            Open in New Window
+          </button>
+
           {/* Close Button */}
-          {onClose && (
+          {onClose && !isFullscreen && (
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600"
