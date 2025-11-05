@@ -27,9 +27,7 @@ class CodeAnalyst_Preview_Handler {
             return;
         }
         
-        // Get JWT without corruption - only allow valid JWT characters
-        $jwt = isset($_GET['codeanalyst_preview']) ? $_GET['codeanalyst_preview'] : '';
-        $jwt = preg_replace('/[^A-Za-z0-9\.\-_]/', '', $jwt);
+        $jwt = sanitize_text_field($_GET['codeanalyst_preview']);
         
         if (empty($jwt)) {
             wp_die('Invalid preview token', 'Preview Error', array('response' => 400));
@@ -64,40 +62,29 @@ class CodeAnalyst_Preview_Handler {
      */
     private function verify_jwt($jwt) {
         $parts = explode('.', $jwt);
-        error_log('JWT Debug: Parts count = ' . count($parts));
         
         if (count($parts) !== 3) {
-            error_log('JWT Debug: Invalid parts count');
             return false;
         }
         
         list($header_b64, $payload_b64, $signature_b64) = $parts;
         
-        error_log('JWT Debug: About to decode header');
         // Decode header (base64url)
         $header = json_decode($this->base64url_decode($header_b64), true);
-        error_log('JWT Debug: Header decoded, checking validation');
         
         if (!$header || !isset($header['alg']) || $header['alg'] !== 'HS256') {
-            error_log('JWT Debug: Header validation failed. Header=' . print_r($header, true));
             return false;
         }
-        error_log('JWT Debug: Header OK');
         
-        error_log('JWT Debug: About to decode payload');
         // Decode payload (base64url)
         $payload = json_decode($this->base64url_decode($payload_b64), true);
-        error_log('JWT Debug: Payload decoded');
         
         if (!$payload) {
-            error_log('JWT Debug: Payload decode failed');
             return false;
         }
-        error_log('JWT Debug: Payload OK');
         
         // Verify expiration
         if (isset($payload['exp']) && $payload['exp'] < time()) {
-            error_log('JWT Debug: Token expired. Exp=' . $payload['exp'] . ', Now=' . time());
             return false;
         }
         
@@ -105,7 +92,6 @@ class CodeAnalyst_Preview_Handler {
         $secret = defined('AUTH_SALT') ? AUTH_SALT : get_option('codeanalyst_jwt_secret');
         
         if (empty($secret)) {
-            error_log('JWT Debug: Empty secret');
             return false;
         }
         
@@ -113,9 +99,6 @@ class CodeAnalyst_Preview_Handler {
         $provided_signature = $this->base64url_decode($signature_b64);
         
         if (!hash_equals($expected_signature, $provided_signature)) {
-            error_log('JWT Debug: Signature mismatch!');
-            error_log('JWT Debug: Expected signature length = ' . strlen($expected_signature));
-            error_log('JWT Debug: Provided signature length = ' . strlen($provided_signature));
             return false;
         }
         
