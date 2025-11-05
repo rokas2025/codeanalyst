@@ -143,10 +143,26 @@ class CodeAnalyst_Preview_Handler {
         error_log('JWT Debug: Payload aud = ' . (isset($payload['aud']) ? $payload['aud'] : 'NOT SET'));
         error_log('JWT Debug: Site URL = ' . get_site_url());
         
-        if (!empty($app_url) && isset($payload['aud']) && $payload['aud'] !== $app_url) {
-            error_log('JWT Debug: Audience does not match backend URL, checking site URL...');
-            // Allow if audience matches site URL or is empty for backward compatibility
-            if ($payload['aud'] !== get_site_url() && !empty($payload['aud'])) {
+        if (!empty($app_url) && isset($payload['aud']) && !empty($payload['aud'])) {
+            // Normalize URLs for comparison (remove trailing slashes and /api suffix)
+            $normalized_app_url = rtrim($app_url, '/');
+            $normalized_aud = rtrim($payload['aud'], '/');
+            
+            // Remove /api suffix if present for comparison
+            $normalized_app_url_base = preg_replace('#/api$#', '', $normalized_app_url);
+            
+            error_log('JWT Debug: Normalized app URL = ' . $normalized_app_url);
+            error_log('JWT Debug: Normalized app URL (no /api) = ' . $normalized_app_url_base);
+            error_log('JWT Debug: Normalized aud = ' . $normalized_aud);
+            
+            // Check if audience matches backend URL (with or without /api) or site URL
+            $aud_matches = (
+                $normalized_aud === $normalized_app_url ||
+                $normalized_aud === $normalized_app_url_base ||
+                $normalized_aud === rtrim(get_site_url(), '/')
+            );
+            
+            if (!$aud_matches) {
                 error_log('JWT Debug: Audience mismatch! Rejecting token.');
                 return false;
             }
