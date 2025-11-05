@@ -312,6 +312,15 @@ export function ConnectedSites() {
                                     <span className="text-gray-600">Plugins:</span>
                                     <span className="font-medium">{connection.active_plugins?.length || 0}</span>
                                 </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-gray-600">Plugin:</span>
+                                    <span className={`font-medium ${connection.plugin_version === '1.1.0' ? 'text-green-600' : 'text-orange-600'}`}>
+                                        {connection.plugin_version ? `v${connection.plugin_version}` : 'Not detected'}
+                                        {connection.plugin_version && connection.plugin_version !== '1.1.0' && (
+                                            <span className="ml-1 text-xs text-orange-600">(Update available)</span>
+                                        )}
+                                    </span>
+                                </div>
                             </div>
 
                             {/* Page Builders */}

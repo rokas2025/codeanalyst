@@ -315,20 +315,35 @@ router.get('/connections', authMiddleware, async (req, res) => {
     const connections = await DatabaseService.getWordPressConnections(userId)
 
     // Format the response to hide sensitive data
-    const formattedConnections = connections.map(conn => ({
-      id: conn.id,
-      site_url: conn.site_url,
-      site_name: conn.site_name,
-      wordpress_version: conn.wordpress_version,
-      active_theme: conn.active_theme,
-      active_plugins: conn.active_plugins,
-      site_health: conn.site_health,
-      php_version: conn.php_version,
-      is_connected: conn.is_connected,
-      last_sync: conn.last_sync,
-      created_at: conn.created_at,
-      api_key: conn.api_key.substring(0, 8) + '...' // Masked API key
-    }))
+    const formattedConnections = connections.map(conn => {
+      // Extract plugin version from site_info if available
+      let pluginVersion = null
+      if (conn.site_info) {
+        try {
+          const siteInfo = typeof conn.site_info === 'string' ? JSON.parse(conn.site_info) : conn.site_info
+          pluginVersion = siteInfo.plugin_version || null
+        } catch (e) {
+          logger.warn('Failed to parse site_info for plugin version', { connectionId: conn.id })
+        }
+      }
+
+      return {
+        id: conn.id,
+        site_url: conn.site_url,
+        site_name: conn.site_name,
+        wordpress_version: conn.wordpress_version,
+        active_theme: conn.active_theme,
+        active_plugins: conn.active_plugins,
+        site_health: conn.site_health,
+        php_version: conn.php_version,
+        is_connected: conn.is_connected,
+        last_sync: conn.last_sync,
+        created_at: conn.created_at,
+        api_key: conn.api_key.substring(0, 8) + '...', // Masked API key
+        plugin_version: pluginVersion,
+        site_info: conn.site_info
+      }
+    })
 
     res.json({
       success: true,

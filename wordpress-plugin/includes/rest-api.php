@@ -275,6 +275,7 @@ class CodeAnalyst_REST_API {
                 'php_version' => PHP_VERSION,
                 'mysql_version' => $mysql_version,
                 'active_plugins' => $plugin_data,
+                'plugin_version' => defined('CODEANALYST_VERSION') ? CODEANALYST_VERSION : '1.0.0',
                 'site_url' => get_site_url(),
                 'home_url' => get_home_url(),
                 'admin_email' => get_option('admin_email'),

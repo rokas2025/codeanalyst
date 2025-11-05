@@ -18,6 +18,7 @@ export interface WordPressConnection {
     last_sync: string
     created_at: string
     api_key: string // Masked
+    plugin_version?: string // CodeAnalyst plugin version
     site_info?: {
         theme: string
         theme_version: string
