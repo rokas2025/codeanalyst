@@ -298,15 +298,17 @@ export function PreviewPane({ connectionId, target, builder = 'auto', onClose }:
             )}
           </button>
 
-          {/* Open in New Window Button */}
-          <button
-            onClick={handleOpenInNewWindow}
-            disabled={!previewUrl}
-            className="px-3 py-1.5 text-sm font-medium bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Open in New Window"
-          >
-            Open in New Window
-          </button>
+          {/* Open in New Window Button - Only for Live mode */}
+          {mode === 'live' && (
+            <button
+              onClick={handleOpenInNewWindow}
+              disabled={!previewUrl}
+              className="px-3 py-1.5 text-sm font-medium bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Open in New Window"
+            >
+              Open in New Window
+            </button>
+          )}
 
           {/* Close Button */}
           {onClose && !isFullscreen && (
