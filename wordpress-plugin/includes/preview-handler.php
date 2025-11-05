@@ -27,7 +27,9 @@ class CodeAnalyst_Preview_Handler {
             return;
         }
         
-        $jwt = sanitize_text_field($_GET['codeanalyst_preview']);
+        // Get JWT without corruption - only allow valid JWT characters
+        $jwt = isset($_GET['codeanalyst_preview']) ? $_GET['codeanalyst_preview'] : '';
+        $jwt = preg_replace('/[^A-Za-z0-9\.\-_]/', '', $jwt);
         
         if (empty($jwt)) {
             wp_die('Invalid preview token', 'Preview Error', array('response' => 400));
