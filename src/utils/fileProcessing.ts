@@ -97,12 +97,19 @@ export class AdvancedFileProcessor {
     const processed: ProcessedFile[] = []
     
     for (const file of this.files) {
+      // Guard against invalid file objects
+      if (!file || !file.path) {
+        console.warn('Skipping invalid file object:', file)
+        continue
+      }
+      
       const processedFile: ProcessedFile = {
         ...file,
+        content: file.content || '', // Ensure content is always a string
         type: this.classifyFileType(file.path),
-        language: this.detectProgrammingLanguage(file.path, file.content),
-        complexity: this.calculateFileComplexity(file.content, file.path),
-        dependencies: this.extractDependencies(file.content, file.path)
+        language: this.detectProgrammingLanguage(file.path, file.content || ''),
+        complexity: this.calculateFileComplexity(file.content || '', file.path),
+        dependencies: this.extractDependencies(file.content || '', file.path)
       }
       
       processed.push(processedFile)
@@ -191,6 +198,11 @@ export class AdvancedFileProcessor {
    * Calculate file complexity score
    */
   private calculateFileComplexity(content: string, path: string): number {
+    // Guard against undefined/null content
+    if (!content || typeof content !== 'string') {
+      return 1 // Return minimal complexity for invalid content
+    }
+    
     let complexity = 0
     const lines = content.split('\n')
     
@@ -240,6 +252,11 @@ export class AdvancedFileProcessor {
    */
   private extractDependencies(content: string, path: string): string[] {
     const dependencies: string[] = []
+    
+    // Guard against undefined/null content
+    if (!content || typeof content !== 'string') {
+      return dependencies
+    }
     
     // JavaScript/TypeScript imports
     const importMatches = content.match(/import\s+.*?from\s+['"]([^'"]+)['"]/g)
