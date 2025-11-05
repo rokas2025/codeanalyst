@@ -29,21 +29,29 @@ export class AdoreInoAnalyzer {
   } = {}
 
   constructor(files: { path: string; content: string; size: number }[]) {
-    this.files = files || []
+    // Ensure files is always an array
+    this.files = Array.isArray(files) ? files : []
     this.fileProcessor = new AdvancedFileProcessor(this.files)
     this.codeRunner = new SafeCodeRunner()
     this.detectProjectType()
   }
 
   private detectProjectType(): void {
-    const hasPackageJson = this.files.some(f => f.path.includes('package.json'))
-    const hasComposerJson = this.files.some(f => f.path.includes('composer.json'))
-    const hasWordPress = this.files.some(f => f.content.includes('wp-config') || f.path.includes('wp-') || f.content.includes('WordPress'))
-    const hasLaravel = this.files.some(f => f.content.includes('Illuminate\\') || f.path.includes('artisan') || f.content.includes('Laravel'))
-    const hasReact = this.files.some(f => f.content.includes('react') || f.content.includes('jsx') || f.path.includes('.jsx') || f.path.includes('.tsx'))
-    const hasVue = this.files.some(f => f.content.includes('vue') || f.path.includes('.vue'))
-    const hasAngular = this.files.some(f => f.content.includes('@angular') || f.content.includes('Angular'))
-    const hasNext = this.files.some(f => f.content.includes('next') || f.path.includes('next.config'))
+    // Guard against non-array or empty files
+    if (!Array.isArray(this.files) || this.files.length === 0) {
+      this.projectType = 'Custom'
+      console.log(`🎯 Detected project type: ${this.projectType} (no files provided)`)
+      return
+    }
+    
+    const hasPackageJson = this.files.some(f => f && f.path && f.path.includes('package.json'))
+    const hasComposerJson = this.files.some(f => f && f.path && f.path.includes('composer.json'))
+    const hasWordPress = this.files.some(f => f && ((f.content && f.content.includes('wp-config')) || (f.path && f.path.includes('wp-')) || (f.content && f.content.includes('WordPress'))))
+    const hasLaravel = this.files.some(f => f && ((f.content && f.content.includes('Illuminate\\')) || (f.path && f.path.includes('artisan')) || (f.content && f.content.includes('Laravel'))))
+    const hasReact = this.files.some(f => f && ((f.content && f.content.includes('react')) || (f.content && f.content.includes('jsx')) || (f.path && f.path.includes('.jsx')) || (f.path && f.path.includes('.tsx'))))
+    const hasVue = this.files.some(f => f && ((f.content && f.content.includes('vue')) || (f.path && f.path.includes('.vue'))))
+    const hasAngular = this.files.some(f => f && ((f.content && f.content.includes('@angular')) || (f.content && f.content.includes('Angular'))))
+    const hasNext = this.files.some(f => f && ((f.content && f.content.includes('next')) || (f.path && f.path.includes('next.config'))))
     
     if (hasWordPress) this.projectType = 'WordPress'
     else if (hasLaravel) this.projectType = 'Laravel' 
