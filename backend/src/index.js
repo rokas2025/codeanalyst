@@ -245,21 +245,26 @@ process.on('SIGINT', () => {
 // Start server
 async function startServer() {
   try {
-    // Initialize database
+    // Initialize database (optional - Railway free tier may block external DB connections)
     logger.info('📦 Initializing database...')
-    await initDatabase()
-    logger.info('✅ Database initialized successfully')
-
-    // Run database migrations
-    await runMigrations()
-
-    // Auto-seed content templates
-    logger.info('🌱 Running auto-seeding for content templates...')
     try {
-      await autoSeed()
-      logger.info('✅ Auto-seeding completed successfully')
-    } catch (error) {
-      logger.warn('⚠️ Auto-seeding failed (non-critical):', error.message)
+      await initDatabase()
+      logger.info('✅ Database initialized successfully')
+
+      // Run database migrations
+      await runMigrations()
+
+      // Auto-seed content templates
+      logger.info('🌱 Running auto-seeding for content templates...')
+      try {
+        await autoSeed()
+        logger.info('✅ Auto-seeding completed successfully')
+      } catch (error) {
+        logger.warn('⚠️ Auto-seeding failed (non-critical):', error.message)
+      }
+    } catch (dbError) {
+      logger.warn('⚠️ Database connection failed - starting without database:', dbError.message)
+      logger.warn('💡 Server will run with limited functionality (no user persistence)')
     }
 
     // Queue service disabled for Railway deployment
