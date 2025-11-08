@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeAnalyst: Multi-Agent AI Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+
+        .header .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            padding: 20px 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-subtitle {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin: 30px 0 15px 0;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .module-icon {
+            font-size: 2.5em;
+        }
+
+        .module-title {
+            font-size: 1.8em;
+            color: #333;
+        }
+
+        .module-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .bot-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .bot-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            page-break-inside: avoid;
+        }
+
+        .bot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .bot-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .bot-function {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .bot-agents {
+            font-size: 0.85em;
+            color: #999;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .diagram-container {
+            margin: 40px 0;
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+
+        .diagram-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .mermaid {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-box {
+            background: #e0e7ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tech-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .tech-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tech-item li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tech-item li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .action-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .action-buttons {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .summary-table {
+            margin: 30px 0;
+        }
+
+        .summary-table td:first-child {
+            font-weight: bold;
+            color: #667eea;
+            width: 30%;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .bot-list {
+                grid-template-columns: 1fr;
+            }
+            .action-buttons {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 CODEANALYST</h1>
+            <div class="subtitle">Multi-Agent AI Architecture</div>
+            <div class="subtitle" style="font-size: 1.2em; margin-top: 10px;">Enterprise-Grade AI Bot & Agent Ecosystem</div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="number">5</div>
+                    <div class="label">AI Modules</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">45+</div>
+                    <div class="label">Specialized Bots</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">250+</div>
+                    <div class="label">AI Agents</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">4</div>
+                    <div class="label">AI Providers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Executive Summary -->
+            <div class="section">
+                <h2 class="section-title">📋 Executive Summary</h2>
+                <p style="font-size: 1.2em; line-height: 1.8; margin-bottom: 20px;">
+                    CodeAnalyst platformoje įdiegta pažangi <strong>multi-agent AI architektūra</strong>, kur kiekvienas modulis veikia kaip savarankiškas AI orkestravimo centras. Sistema paremta <strong>3-lygių hierarchija</strong>:
+                </p>
+                <div class="info-box">
+                    <h3>Hierarchinė Struktūra</h3>
+                    <ol style="padding-left: 20px; font-size: 1.1em;">
+                        <li><strong>MODULIAI</strong> (5 vnt.) - Aukščiausio lygio AI orkestravimo centrai</li>
+                        <li><strong>BOTAI</strong> (45+ vnt.) - Specializuoti AI agentai konkretiems procesams</li>
+                        <li><strong>AGENTAI</strong> (250+ vnt.) - Mikro-užduočių vykdytojai</li>
+                    </ol>
+                </div>
+
+                <table class="summary-table">
+                    <tr>
+                        <td>Bendras AI vienetų skaičius</td>
+                        <td>250+ aktyvių AI komponentų</td>
+                    </tr>
+                    <tr>
+                        <td>AI Provider diversifikacija</td>
+                        <td>OpenAI GPT-4/3.5, Anthropic Claude, Google Gemini</td>
+                    </tr>
+                    <tr>
+                        <td>Architektūros tipas</td>
+                        <td>Hierarchinė, mikroservisų pagrįsta</td>
+                    </tr>
+                    <tr>
+                        <td>Skalėjimo galimybės</td>
+                        <td>Horizontalus ir vertikalus skalėjimas</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Overall Architecture Diagram -->
+            <div class="section">
+                <h2 class="section-title">🏗️ Bendroji Architektūra</h2>
+                <div class="diagram-container">
+                    <div class="diagram-title">Overall System Architecture</div>
+                    <div class="mermaid">
+graph TB
+    subgraph "CodeAnalyst Platform"
+        subgraph "Module Layer"
+            M1[Code Analyst<br/>9 Bots, 90+ Agents]
+            M2[Content Analyst<br/>8 Bots, 81 Agents]
+            M3[Website Analyst<br/>10 Bots, 111 Agents]
+            M4[Content Creator<br/>9 Bots, 74 Agents]
+            M5[Auto Programmer<br/>9 Bots, 82 Agents]
+        end
+        
+        subgraph "AI Orchestration Layer"
+            AO[AI Orchestrator]
+            AIAnalysis[AI Analysis Service]
+            AICode[AI Code Service]
+            ContentGen[Content Generation]
+        end
+        
+        subgraph "AI Provider Layer"
+            GPT4[OpenAI GPT-4]
+            GPT35[OpenAI GPT-3.5]
+            Claude[Anthropic Claude]
+            Gemini[Google Gemini]
+        end
+        
+        subgraph "Data Layer"
+            DB[(PostgreSQL)]
+            Queue[Message Queue]
+            Cache[Redis Cache]
+        end
+    end
+    
+    M1 --> AO
+    M2 --> AO
+    M3 --> AO
+    M4 --> AO
+    M5 --> AO
+    
+    AO --> AIAnalysis
+    AO --> AICode
+    AO --> ContentGen
+    
+    AIAnalysis --> GPT4
+    AIAnalysis --> Claude
+    AICode --> GPT4
+    AICode --> GPT35
+    ContentGen --> GPT4
+    ContentGen --> Gemini
+    
+    AO --> DB
+    AO --> Queue
+    AO --> Cache
+    
+    style M1 fill:#4F46E5
+    style M2 fill:#7C3AED
+    style M3 fill:#2563EB
+    style M4 fill:#DB2777
+    style M5 fill:#059669
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>Architektūros Principai</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>Hierarchinė struktūra:</strong> Module → Bot → Agent hierarchija užtikrina aiškų atsakomybių paskirstymą</li>
+                        <li><strong>AI Provider diversifikacija:</strong> Kelių AI providerių naudojimas užtikrina atsparumą ir optimalų našumą</li>
+                        <li><strong>Mikroservisų architektūra:</strong> Kiekvienas botas ir agentas veikia kaip nepriklausomas mikroservisas</li>
+                        <li><strong>Event-driven komunikacija:</strong> Message queue ir pub/sub pattern užtikrina efektyvią komunikaciją</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Module 1: Code Analyst -->
+            <div class="section">
+                <h2 class="section-title">📊 MODULE 1: CODE ANALYST</h2>
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">💻</div>
+                        <div class="module-title">Code Analyst</div>
+                    </div>
+                    <div class="module-description">
+                        <strong>Paskirtis:</strong> Kodo kokybės, saugumo ir architektūros analizė
+                    </div>
+                    <div class="info-box">
+                        <strong>9 Botai | 90+ Agentai</strong>
+                    </div>
+                    
+                    <div class="bot-list">
+                        <div class="bot-card">
+                            <div class="bot-title">🏗️ Structure Analyzer Bot</div>
+                            <div class="bot-function">Analizuoja projekto struktūrą, failų organizaciją</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> File Tree Scanner, Dependency Mapper, Circular Dep Detector, Dead Code Identifier, Entry Point Locator, Export/Import Validator, Monorepo Analyzer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">✨ Quality Assessment Bot</div>
+                            <div class="bot-function">Vertina kodo kokybę, stilių, best practices</div>
+                            <div class="bot-agents"><strong>12 Agentai:</strong> Syntax Validator, Linting Enforcer, Code Style Checker, Naming Convention Validator, Function Complexity Analyzer, Code Duplication Detector, Magic Number Identifier, Comment Quality Assessor, TODO Tracker, Code Smell Detector, Anti-Pattern Identifier, Best Practices Validator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔒 Security Scanner Bot</div>
+                            <div class="bot-function">Ieško saugumo spragų, pažeidžiamumų</div>
+                            <div class="bot-agents"><strong>15 Agentai:</strong> Hardcoded Secrets Detector, SQL Injection Scanner, XSS Finder, CSRF Validator, Authentication Analyzer, Authorization Detector, Insecure Dependencies Scanner, Cryptography Analyzer, File Upload Scanner, Path Traversal Detector, Command Injection Scanner, Sensitive Data Analyzer, HTTPS Checker, CORS Validator, Rate Limiting Checker</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">⚡ Performance Optimization Bot</div>
+                            <div class="bot-function">Analizuoja kodo efektyvumą, bottlenecks</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> Algorithm Complexity Analyzer, Memory Leak Detector, Database Query Optimizer, N+1 Query Detector, Caching Identifier, Bundle Size Analyzer, Lazy Loading Validator, Image Optimization Checker, API Call Optimizer, Resource Loading Analyzer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🧪 Test Coverage Bot</div>
+                            <div class="bot-function">Vertina testų aprėptį, kokybę</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> Unit Test Calculator, Integration Test Validator, E2E Test Analyzer, Test Quality Assessor, Mock/Stub Validator, Test Flakiness Detector, Assertion Analyzer, Test Maintainability Scorer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📚 Documentation Quality Bot</div>
+                            <div class="bot-function">Analizuoja dokumentacijos kokybę</div>
+                            <div class="bot-agents"><strong>7 Agentai:</strong> JSDoc/TSDoc Validator, README Checker, API Documentation Analyzer, Inline Comment Assessor, Changelog Validator, Architecture Diagram Checker, Getting Started Validator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔧 Tech Stack Detector Bot</div>
+                            <div class="bot-function">Identifikuoja naudojamas technologijas</div>
+                            <div class="bot-agents"><strong>9 Agentai:</strong> Frontend Framework Detector, Backend Framework Detector, Database Identifier, Build Tool Analyzer, Package Manager Detector, CSS Framework Identifier, State Management Detector, Testing Framework Finder, Deployment Platform Detector</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🤖 AI Enhancement Bot</div>
+                            <div class="bot-function">Generuoja AI pagrįstus pasiūlymus</div>
+                            <div class="bot-agents"><strong>6 Agentai:</strong> Refactoring Suggester, Code Modernization Advisor, Performance Improvement Suggester, Security Hardening Advisor, Accessibility Enhancer, Code Simplification Agent</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🎯 Project Classifier Bot</div>
+                            <div class="bot-function">Klasifikuoja projekto tipą</div>
+                            <div class="bot-agents"><strong>5 Agentai:</strong> Web App Classifier, Mobile App Detector, API Service Identifier, Library/Package Classifier, Monorepo Detector</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Analyst Diagram -->
+                <div class="diagram-container">
+                    <div class="diagram-title">Code Analyst Module Architecture</div>
+                    <div class="mermaid">
+graph TB
+    subgraph "CODE ANALYST MODULE"
+        CA[Code Analyst Orchestrator]
+        
+        subgraph "Analysis Bots"
+            B1[Structure Analyzer Bot<br/>8 Agents]
+            B2[Quality Assessment Bot<br/>12 Agents]
+            B3[Security Scanner Bot<br/>15 Agents]
+            B4[Performance Bot<br/>10 Agents]
+            B5[Test Coverage Bot<br/>8 Agents]
+            B6[Documentation Bot<br/>7 Agents]
+            B7[Tech Stack Bot<br/>9 Agents]
+            B8[AI Enhancement Bot<br/>6 Agents]
+            B9[Project Classifier Bot<br/>5 Agents]
+        end
+        
+        CA --> B1
+        CA --> B2
+        CA --> B3
+        CA --> B4
+        CA --> B5
+        CA --> B6
+        CA --> B7
+        CA --> B8
+        CA --> B9
+        
+        B1 --> A1[File Tree Scanner]
+        B1 --> A2[Dependency Mapper]
+        B1 --> A3[Circular Dep Detector]
+        
+        B2 --> A4[Syntax Validator]
+        B2 --> A5[Linting Enforcer]
+        B2 --> A6[Code Smell Detector]
+        
+        B3 --> A7[Secret Detector]
+        B3 --> A8[SQL Injection Scanner]
+        B3 --> A9[XSS Finder]
+        
+        B4 --> A10[Algorithm Analyzer]
+        B4 --> A11[Memory Leak Detector]
+        B4 --> A12[Query Optimizer]
+    end
+    
+    style CA fill:#4F46E5,color:#fff
+    style B1 fill:#818CF8
+    style B2 fill:#818CF8
+    style B3 fill:#818CF8
+    style B4 fill:#818CF8
+    style B5 fill:#818CF8
+    style B6 fill:#818CF8
+    style B7 fill:#818CF8
+    style B8 fill:#818CF8
+    style B9 fill:#818CF8
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 2: Content Analyst -->
+            <div class="section">
+                <h2 class="section-title">📊 MODULE 2: CONTENT ANALYST</h2>
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">📝</div>
+                        <div class="module-title">Content Analyst</div>
+                    </div>
+                    <div class="module-description">
+                        <strong>Paskirtis:</strong> Turinio kokybės, SEO, readability, gramatikos analizė
+                    </div>
+                    <div class="info-box">
+                        <strong>8 Botai | 81 Agentas</strong>
+                    </div>
+                    
+                    <div class="bot-list">
+                        <div class="bot-card">
+                            <div class="bot-title">✨ Content Quality Bot</div>
+                            <div class="bot-function">Vertina turinio kokybę, originalumą</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> Originality Checker, Plagiarism Detector, Content Depth Analyzer, Topic Relevance Scorer, Information Density Analyzer, Fact Accuracy Validator, Source Citation Checker, Content Freshness Analyzer, Multimedia Assessor, CTA Evaluator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔍 SEO Optimization Bot</div>
+                            <div class="bot-function">Analizuoja SEO optimizaciją</div>
+                            <div class="bot-agents"><strong>15 Agentai:</strong> Keyword Density Analyzer, Meta Title Optimizer, Meta Description Checker, Header Hierarchy Validator, Image Alt Text Analyzer, Internal Linking Checker, External Link Validator, URL Structure Analyzer, Schema Markup Detector, Canonical Tag Validator, Open Graph Checker, Twitter Card Validator, Mobile Optimization Checker, Page Speed Impact Analyzer, Content Length Optimizer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📖 Readability Bot</div>
+                            <div class="bot-function">Vertina teksto skaitomumą</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> Flesch Reading Ease Calculator, Gunning Fog Index Analyzer, SMOG Index Calculator, Coleman-Liau Index Agent, Sentence Length Analyzer, Paragraph Structure Checker, Passive Voice Detector, Complex Word Identifier</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">✍️ Grammar & Spelling Bot</div>
+                            <div class="bot-function">Tikrina gramatiką, rašybą</div>
+                            <div class="bot-agents"><strong>12 Agentai:</strong> Spelling Error Detector, Grammar Rule Validator, Punctuation Checker, Capitalization Validator, Subject-Verb Agreement Checker, Tense Consistency Analyzer, Pronoun Reference Validator, Modifier Placement Checker, Sentence Fragment Detector, Run-on Sentence Identifier, Redundancy Detector, Wordiness Analyzer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🌍 Language Detection Bot</div>
+                            <div class="bot-function">Identifikuoja turinio kalbą</div>
+                            <div class="bot-agents"><strong>5 Agentai:</strong> Primary Language Detector, Multi-Language Analyzer, Dialect Identifier, Language Mixing Detector, Translation Quality Assessor</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">😊 Sentiment Analysis Bot</div>
+                            <div class="bot-function">Analizuoja turinio toną, emocijas</div>
+                            <div class="bot-agents"><strong>7 Agentai:</strong> Overall Sentiment Classifier, Emotion Detection Agent, Tone Analyzer, Subjectivity Scorer, Polarity Analyzer, Sarcasm Detector, Urgency Level Assessor</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🏗️ Content Structure Bot</div>
+                            <div class="bot-function">Analizuoja turinio struktūrą</div>
+                            <div class="bot-agents"><strong>6 Agentai:</strong> Outline Generator, Section Balance Analyzer, Flow Coherence Checker, Transition Quality Assessor, Introduction/Conclusion Validator, Content Hierarchy Analyzer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🤖 AI Enhancement Bot</div>
+                            <div class="bot-function">Generuoja AI pagrįstus pasiūlymus</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> Content Expansion Suggester, Clarity Improvement Agent, Engagement Optimizer, Conversion Rate Optimizer, Accessibility Enhancer, Localization Advisor, Content Repurposing Suggester, A/B Testing Idea Generator</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Analyst Diagram -->
+                <div class="diagram-container">
+                    <div class="diagram-title">Content Analyst Module Architecture</div>
+                    <div class="mermaid">
+graph TB
+    subgraph "CONTENT ANALYST MODULE"
+        CN[Content Analyst Orchestrator]
+        
+        subgraph "Analysis Bots"
+            CB1[Quality Analyzer Bot<br/>10 Agents]
+            CB2[SEO Optimization Bot<br/>15 Agents]
+            CB3[Readability Bot<br/>8 Agents]
+            CB4[Grammar & Spelling Bot<br/>12 Agents]
+            CB5[Language Detection Bot<br/>5 Agents]
+            CB6[Sentiment Analysis Bot<br/>7 Agents]
+            CB7[Structure Bot<br/>6 Agents]
+            CB8[AI Enhancement Bot<br/>8 Agents]
+        end
+        
+        CN --> CB1
+        CN --> CB2
+        CN --> CB3
+        CN --> CB4
+        CN --> CB5
+        CN --> CB6
+        CN --> CB7
+        CN --> CB8
+        
+        CB1 --> CA1[Originality Checker]
+        CB1 --> CA2[Plagiarism Detector]
+        CB1 --> CA3[Content Depth Analyzer]
+        
+        CB2 --> CA4[Keyword Density]
+        CB2 --> CA5[Meta Title Optimizer]
+        CB2 --> CA6[Header Hierarchy]
+        
+        CB3 --> CA7[Flesch Calculator]
+        CB3 --> CA8[Fog Index Analyzer]
+        
+        CB4 --> CA9[Spelling Detector]
+        CB4 --> CA10[Grammar Validator]
+    end
+    
+    style CN fill:#7C3AED,color:#fff
+    style CB1 fill:#A78BFA
+    style CB2 fill:#A78BFA
+    style CB3 fill:#A78BFA
+    style CB4 fill:#A78BFA
+    style CB5 fill:#A78BFA
+    style CB6 fill:#A78BFA
+    style CB7 fill:#A78BFA
+    style CB8 fill:#A78BFA
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 3: Website Analyst -->
+            <div class="section">
+                <h2 class="section-title">📊 MODULE 3: WEBSITE ANALYST</h2>
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">🌐</div>
+                        <div class="module-title">Website Analyst</div>
+                    </div>
+                    <div class="module-description">
+                        <strong>Paskirtis:</strong> Website performance, SEO, security, accessibility analizė
+                    </div>
+                    <div class="info-box">
+                        <strong>10 Botų | 111 Agentų</strong>
+                    </div>
+                    
+                    <div class="bot-list">
+                        <div class="bot-card">
+                            <div class="bot-title">⚡ Performance Metrics Bot</div>
+                            <div class="bot-function">Matuoja website performance</div>
+                            <div class="bot-agents"><strong>12 Agentai:</strong> Lighthouse Runner, Core Web Vitals Analyzer, TTFB Measurer, FCP Tracker, LCP Analyzer, CLS Detector, FID Measurer, TTI Analyzer, TBT Calculator, Speed Index Measurer, Page Load Tracker, Resource Loading Analyzer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔍 SEO Technical Bot</div>
+                            <div class="bot-function">Atlieka techninį SEO auditą</div>
+                            <div class="bot-agents"><strong>18 Agentai:</strong> Robots.txt Validator, Sitemap Checker, Meta Tags Analyzer, Canonical URL Validator, Hreflang Checker, Structured Data Validator, Mobile-Friendliness Tester, Page Speed SEO Analyzer, HTTPS Checker, Redirect Chain Analyzer, 404 Error Detector, Broken Link Checker, Duplicate Content Detector, Thin Content Identifier, Keyword Cannibalization Checker, Internal Linking Analyzer, XML Sitemap Validator, Indexability Checker</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔒 Security Audit Bot</div>
+                            <div class="bot-function">Atlieka saugumo auditą</div>
+                            <div class="bot-agents"><strong>16 Agentai:</strong> SSL/TLS Checker, SSL Labs Analyzer, Security Headers Validator, CSP Checker, HSTS Validator, X-Frame-Options Checker, X-Content-Type-Options Validator, Referrer-Policy Analyzer, Cookie Security Checker, Mixed Content Detector, Vulnerable JS Scanner, SQL Injection Tester, XSS Scanner, CSRF Validator, Clickjacking Checker, Security.txt Validator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">♿ Accessibility Audit Bot</div>
+                            <div class="bot-function">Vertina WCAG compliance</div>
+                            <div class="bot-agents"><strong>14 Agentai:</strong> WCAG Level A Validator, WCAG Level AA Validator, WCAG Level AAA Validator, Keyboard Navigation Tester, Screen Reader Checker, Color Contrast Analyzer, Alt Text Validator, ARIA Labels Checker, Form Accessibility Validator, Focus Indicator Checker, Skip Navigation Validator, Heading Structure Analyzer, Language Attribute Validator, Media Accessibility Checker</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔧 Tech Stack Detector Bot</div>
+                            <div class="bot-function">Identifikuoja technologijas</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> CMS Detector, Frontend Framework Detector, JavaScript Library Identifier, CSS Framework Detector, Analytics Platform Identifier, CDN Provider Detector, Hosting Provider Identifier, E-commerce Platform Detector, Payment Gateway Identifier, Third-Party Service Detector</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📄 Content Extraction Bot</div>
+                            <div class="bot-function">Ekstraktuoja website turinį</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> HTML Content Parser, Main Content Extractor, Navigation Analyzer, Footer Extractor, Sidebar Parser, Dynamic Content Loader, Image Metadata Extractor, Link Harvester</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📱 Mobile Optimization Bot</div>
+                            <div class="bot-function">Analizuoja mobile optimizaciją</div>
+                            <div class="bot-agents"><strong>9 Agentai:</strong> Viewport Checker, Touch Target Validator, Mobile Font Analyzer, Responsive Design Tester, Mobile Speed Analyzer, Mobile-Specific Content Checker, App Banner Validator, Mobile Usability Tester, AMP Implementation Checker</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📦 Resource Analyzer Bot</div>
+                            <div class="bot-function">Analizuoja puslapio resursus</div>
+                            <div class="bot-agents"><strong>11 Agentai:</strong> Image Optimization Checker, CSS Minification Validator, JS Minification Checker, Unused CSS Detector, Unused JS Identifier, Resource Compression Checker, Browser Caching Validator, CDN Usage Analyzer, Lazy Loading Checker, Critical CSS Extractor, Resource Preloading Validator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🎨 UX Bot</div>
+                            <div class="bot-function">Analizuoja user experience</div>
+                            <div class="bot-agents"><strong>7 Agentai:</strong> Page Layout Analyzer, Visual Hierarchy Assessor, CTA Placement Analyzer, Form Usability Checker, Error Message Assessor, Loading State Checker, Interactivity Feedback Validator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🤖 AI Enhancement Bot</div>
+                            <div class="bot-function">Generuoja AI pasiūlymus</div>
+                            <div class="bot-agents"><strong>6 Agentai:</strong> Performance Optimization Suggester, SEO Improvement Advisor, Security Hardening Suggester, Accessibility Enhancement Advisor, UX Improvement Suggester, Conversion Rate Optimizer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website Analyst Diagram -->
+                <div class="diagram-container">
+                    <div class="diagram-title">Website Analyst Module Architecture</div>
+                    <div class="mermaid">
+graph TB
+    subgraph "WEBSITE ANALYST MODULE"
+        WA[Website Analyst Orchestrator]
+        
+        subgraph "Analysis Bots"
+            WB1[Performance Metrics Bot<br/>12 Agents]
+            WB2[SEO Technical Bot<br/>18 Agents]
+            WB3[Security Audit Bot<br/>16 Agents]
+            WB4[Accessibility Bot<br/>14 Agents]
+            WB5[Tech Stack Bot<br/>10 Agents]
+            WB6[Content Extraction Bot<br/>8 Agents]
+            WB7[Mobile Optimization Bot<br/>9 Agents]
+            WB8[Resource Analyzer Bot<br/>11 Agents]
+            WB9[UX Bot<br/>7 Agents]
+            WB10[AI Enhancement Bot<br/>6 Agents]
+        end
+        
+        WA --> WB1
+        WA --> WB2
+        WA --> WB3
+        WA --> WB4
+        WA --> WB5
+        WA --> WB6
+        WA --> WB7
+        WA --> WB8
+        WA --> WB9
+        WA --> WB10
+        
+        WB1 --> WA1[Lighthouse Runner]
+        WB1 --> WA2[Core Web Vitals]
+        WB1 --> WA3[TTFB Measurer]
+        
+        WB2 --> WA4[Robots.txt Validator]
+        WB2 --> WA5[Sitemap Checker]
+        WB2 --> WA6[Meta Tags Analyzer]
+        
+        WB3 --> WA7[SSL/TLS Checker]
+        WB3 --> WA8[Security Headers]
+        WB3 --> WA9[Vulnerability Scanner]
+    end
+    
+    style WA fill:#2563EB,color:#fff
+    style WB1 fill:#60A5FA
+    style WB2 fill:#60A5FA
+    style WB3 fill:#60A5FA
+    style WB4 fill:#60A5FA
+    style WB5 fill:#60A5FA
+    style WB6 fill:#60A5FA
+    style WB7 fill:#60A5FA
+    style WB8 fill:#60A5FA
+    style WB9 fill:#60A5FA
+    style WB10 fill:#60A5FA
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 4: Content Creator -->
+            <div class="section">
+                <h2 class="section-title">📊 MODULE 4: CONTENT CREATOR</h2>
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">✍️</div>
+                        <div class="module-title">Content Creator</div>
+                    </div>
+                    <div class="module-description">
+                        <strong>Paskirtis:</strong> AI-powered turinio kūrimas, generavimas, optimizavimas
+                    </div>
+                    <div class="info-box">
+                        <strong>9 Botai | 74 Agentai</strong>
+                    </div>
+                    
+                    <div class="bot-list">
+                        <div class="bot-card">
+                            <div class="bot-title">📋 Content Planning Bot</div>
+                            <div class="bot-function">Planuoja turinio strategiją</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> Topic Research Agent, Keyword Research Agent, Competitor Content Analyzer, Content Gap Identifier, Content Calendar Generator, Target Audience Profiler, Content Format Suggester, Content Length Optimizer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📰 Article Generation Bot</div>
+                            <div class="bot-function">Generuoja straipsnius, blog posts</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> Outline Generator, Introduction Writer, Body Content Generator, Conclusion Writer, Headline Creator, Subheading Generator, Paragraph Expander, Transition Sentence Creator, Call-to-Action Generator, Meta Description Writer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🛍️ Product Description Bot</div>
+                            <div class="bot-function">Generuoja produktų aprašymus</div>
+                            <div class="bot-agents"><strong>7 Agentai:</strong> Feature Highlighter, Benefit Articulator, Technical Specification Writer, Emotional Appeal Creator, Comparison Content Generator, Use Case Scenario Writer, Product Title Optimizer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📱 Social Media Bot</div>
+                            <div class="bot-function">Generuoja social media turinį</div>
+                            <div class="bot-agents"><strong>9 Agentai:</strong> Tweet Generator, LinkedIn Post Creator, Facebook Post Generator, Instagram Caption Writer, Hashtag Suggester, Social Media Hook Creator, Engagement Question Generator, Story Content Creator, Thread Generator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📧 Email Content Bot</div>
+                            <div class="bot-function">Generuoja email marketing turinį</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> Subject Line Generator, Preview Text Creator, Email Body Writer, Personalization Token Inserter, CTA Button Text Generator, Email Signature Creator, A/B Test Variant Generator, Follow-up Email Sequencer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🎯 Landing Page Bot</div>
+                            <div class="bot-function">Generuoja landing page tekstus</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> Hero Section Writer, Value Proposition Creator, Feature Section Generator, Testimonial Writer, FAQ Generator, Pricing Section Writer, Trust Badge Copy Creator, Urgency Message Generator, Guarantee Statement Writer, Footer Copy Generator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔍 SEO Optimizer Bot</div>
+                            <div class="bot-function">Optimizuoja turinį SEO</div>
+                            <div class="bot-agents"><strong>9 Agentai:</strong> Keyword Density Optimizer, LSI Keyword Inserter, Internal Link Suggester, External Link Recommender, Image Alt Text Generator, Schema Markup Generator, Meta Tag Optimizer, URL Slug Generator, Content Refresh Suggester</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🌍 Multilingual Bot</div>
+                            <div class="bot-function">Generuoja daugiakalbį turinį</div>
+                            <div class="bot-agents"><strong>6 Agentai:</strong> Translation Generator, Localization Adapter, Cultural Sensitivity Checker, Idiomatic Expression Adapter, Currency/Unit Converter, Hreflang Tag Generator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">♻️ Repurposing Bot</div>
+                            <div class="bot-function">Perpanaudoja turinį</div>
+                            <div class="bot-agents"><strong>7 Agentai:</strong> Blog-to-Social Converter, Article-to-Email Adapter, Long-form-to-Short-form Condenser, Bullet Point Expander, Video Script Generator, Infographic Content Creator, Podcast Show Notes Generator</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Creator Diagram -->
+                <div class="diagram-container">
+                    <div class="diagram-title">Content Creator Module Architecture</div>
+                    <div class="mermaid">
+graph TB
+    subgraph "CONTENT CREATOR MODULE"
+        CC[Content Creator Orchestrator]
+        
+        subgraph "Generation Bots"
+            CCB1[Planning Bot<br/>8 Agents]
+            CCB2[Article Generation Bot<br/>10 Agents]
+            CCB3[Product Description Bot<br/>7 Agents]
+            CCB4[Social Media Bot<br/>9 Agents]
+            CCB5[Email Content Bot<br/>8 Agents]
+            CCB6[Landing Page Bot<br/>10 Agents]
+            CCB7[SEO Optimizer Bot<br/>9 Agents]
+            CCB8[Multilingual Bot<br/>6 Agents]
+            CCB9[Repurposing Bot<br/>7 Agents]
+        end
+        
+        CC --> CCB1
+        CC --> CCB2
+        CC --> CCB3
+        CC --> CCB4
+        CC --> CCB5
+        CC --> CCB6
+        CC --> CCB7
+        CC --> CCB8
+        CC --> CCB9
+        
+        CCB1 --> CCA1[Topic Research]
+        CCB1 --> CCA2[Keyword Research]
+        CCB1 --> CCA3[Content Gap Finder]
+        
+        CCB2 --> CCA4[Outline Generator]
+        CCB2 --> CCA5[Introduction Writer]
+        CCB2 --> CCA6[Body Generator]
+        
+        CCB4 --> CCA7[Tweet Generator]
+        CCB4 --> CCA8[LinkedIn Creator]
+        CCB4 --> CCA9[Hashtag Suggester]
+    end
+    
+    style CC fill:#DB2777,color:#fff
+    style CCB1 fill:#F472B6
+    style CCB2 fill:#F472B6
+    style CCB3 fill:#F472B6
+    style CCB4 fill:#F472B6
+    style CCB5 fill:#F472B6
+    style CCB6 fill:#F472B6
+    style CCB7 fill:#F472B6
+    style CCB8 fill:#F472B6
+    style CCB9 fill:#F472B6
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 5: Auto Programmer -->
+            <div class="section">
+                <h2 class="section-title">📊 MODULE 5: AUTO PROGRAMMER</h2>
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">🤖</div>
+                        <div class="module-title">Auto Programmer</div>
+                    </div>
+                    <div class="module-description">
+                        <strong>Paskirtis:</strong> AI-powered kodo generavimas, refactoring, debugging
+                    </div>
+                    <div class="info-box">
+                        <strong>9 Botai | 82 Agentai</strong>
+                    </div>
+                    
+                    <div class="bot-list">
+                        <div class="bot-card">
+                            <div class="bot-title">⚙️ Code Generation Bot</div>
+                            <div class="bot-function">Generuoja kodą pagal specifikacijas</div>
+                            <div class="bot-agents"><strong>12 Agentai:</strong> Function Generator, Class Generator, Component Generator, API Endpoint Generator, Database Schema Generator, Test Case Generator, Configuration File Generator, Documentation Generator, Type Definition Generator, Interface Generator, Mock Data Generator, Boilerplate Code Generator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔄 Refactoring Bot</div>
+                            <div class="bot-function">Refaktorina esamą kodą</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> Code Simplifier, Function Extractor, Variable Renamer, Duplicate Code Eliminator, Design Pattern Applier, Code Modernizer, Performance Optimizer, Error Handling Improver, Type Safety Enhancer, Code Style Normalizer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🐛 Bug Detection Bot</div>
+                            <div class="bot-function">Aptinka ir taiso bugs</div>
+                            <div class="bot-agents"><strong>11 Agentai:</strong> Syntax Error Detector, Logic Error Identifier, Runtime Error Predictor, Memory Leak Detector, Race Condition Identifier, Null/Undefined Error Preventer, Type Mismatch Detector, Off-by-One Error Finder, Infinite Loop Detector, Exception Handler Generator, Bug Fix Suggester</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">👀 Code Review Bot</div>
+                            <div class="bot-function">Atlieka automatinį code review</div>
+                            <div class="bot-agents"><strong>9 Agentai:</strong> Code Quality Reviewer, Best Practices Validator, Security Vulnerability Scanner, Performance Issue Identifier, Code Style Checker, Documentation Completeness Reviewer, Test Coverage Assessor, Dependency Audit Agent, Code Review Comment Generator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🧪 Test Generation Bot</div>
+                            <div class="bot-function">Generuoja automatizuotus testus</div>
+                            <div class="bot-agents"><strong>10 Agentai:</strong> Unit Test Generator, Integration Test Creator, E2E Test Generator, Mock Generator, Test Data Factory Creator, Edge Case Identifier, Test Assertion Generator, Test Setup/Teardown Creator, Snapshot Test Generator, Performance Test Creator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">📚 Documentation Bot</div>
+                            <div class="bot-function">Generuoja kodo dokumentaciją</div>
+                            <div class="bot-agents"><strong>8 Agentai:</strong> JSDoc/TSDoc Generator, README Generator, API Documentation Generator, Inline Comment Generator, Architecture Diagram Generator, Changelog Generator, Getting Started Guide Generator, Code Example Generator</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🔀 Migration Bot</div>
+                            <div class="bot-function">Migracijos tarp technologijų</div>
+                            <div class="bot-agents"><strong>7 Agentai:</strong> Framework Migrator, Language Version Upgrader, Library Replacer, API Version Migrator, Database Migration Generator, Configuration Migrator, Deprecation Fixer</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">⚡ Optimization Bot</div>
+                            <div class="bot-function">Optimizuoja kodo efektyvumą</div>
+                            <div class="bot-agents"><strong>9 Agentai:</strong> Algorithm Optimizer, Database Query Optimizer, Bundle Size Reducer, Memory Usage Optimizer, Render Performance Enhancer, API Call Optimizer, Caching Strategy Implementer, Lazy Loading Implementer, Code Splitting Suggester</div>
+                        </div>
+                        
+                        <div class="bot-card">
+                            <div class="bot-title">🤖 AI Assistant Bot</div>
+                            <div class="bot-function">Bendras AI asistentas</div>
+                            <div class="bot-agents"><strong>6 Agentai:</strong> Code Explanation Generator, Code Completion Suggester, Error Message Explainer, Stack Overflow Searcher, Library/Framework Recommender, Architecture Decision Advisor</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auto Programmer Diagram -->
+                <div class="diagram-container">
+                    <div class="diagram-title">Auto Programmer Module Architecture</div>
+                    <div class="mermaid">
+graph TB
+    subgraph "AUTO PROGRAMMER MODULE"
+        AP[Auto Programmer Orchestrator]
+        
+        subgraph "Programming Bots"
+            APB1[Code Generation Bot<br/>12 Agents]
+            APB2[Refactoring Bot<br/>10 Agents]
+            APB3[Bug Detection Bot<br/>11 Agents]
+            APB4[Code Review Bot<br/>9 Agents]
+            APB5[Test Generation Bot<br/>10 Agents]
+            APB6[Documentation Bot<br/>8 Agents]
+            APB7[Migration Bot<br/>7 Agents]
+            APB8[Optimization Bot<br/>9 Agents]
+            APB9[AI Assistant Bot<br/>6 Agents]
+        end
+        
+        AP --> APB1
+        AP --> APB2
+        AP --> APB3
+        AP --> APB4
+        AP --> APB5
+        AP --> APB6
+        AP --> APB7
+        AP --> APB8
+        AP --> APB9
+        
+        APB1 --> APA1[Function Generator]
+        APB1 --> APA2[Class Generator]
+        APB1 --> APA3[Component Generator]
+        
+        APB2 --> APA4[Code Simplifier]
+        APB2 --> APA5[Function Extractor]
+        APB2 --> APA6[Pattern Applier]
+        
+        APB3 --> APA7[Syntax Error Detector]
+        APB3 --> APA8[Logic Error Finder]
+        APB3 --> APA9[Memory Leak Detector]
+    end
+    
+    style AP fill:#059669,color:#fff
+    style APB1 fill:#34D399
+    style APB2 fill:#34D399
+    style APB3 fill:#34D399
+    style APB4 fill:#34D399
+    style APB5 fill:#34D399
+    style APB6 fill:#34D399
+    style APB7 fill:#34D399
+    style APB8 fill:#34D399
+    style APB9 fill:#34D399
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Provider Integration -->
+            <div class="section">
+                <h2 class="section-title">🔗 AI Provider Integration</h2>
+                <div class="info-box">
+                    <h3>AI Provider Diversifikacija</h3>
+                    <p>Sistema naudoja kelis AI providerius užtikrinant optimalų našumą ir atsparumą:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li><strong>OpenAI GPT-4 Turbo:</strong> Strateginė analizė, sudėtingi sprendimai, verslo insights</li>
+                        <li><strong>OpenAI GPT-3.5 Turbo:</strong> Greita turinio analizė, masinis procesavimas</li>
+                        <li><strong>Anthropic Claude 3 Sonnet:</strong> Kodo kokybės vertinimas, techninė analizė</li>
+                        <li><strong>Google Gemini 2.5 Flash:</strong> Real-time analizė, performance optimizacija</li>
+                    </ul>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">AI Provider Architecture</div>
+                    <div class="mermaid">
+graph LR
+    subgraph "AI Orchestration"
+        AO[AI Orchestrator]
+        
+        subgraph "Provider Selection Logic"
+            PS[Provider Selector]
+            LB[Load Balancer]
+            FB[Fallback Handler]
+        end
+        
+        AO --> PS
+        PS --> LB
+        LB --> FB
+    end
+    
+    subgraph "AI Providers"
+        subgraph "OpenAI"
+            GPT4[GPT-4 Turbo<br/>Strategic Analysis]
+            GPT35[GPT-3.5 Turbo<br/>Fast Processing]
+        end
+        
+        subgraph "Anthropic"
+            Claude[Claude 3 Sonnet<br/>Code Quality]
+        end
+        
+        subgraph "Google"
+            Gemini[Gemini 2.5 Flash<br/>Real-time Analysis]
+        end
+    end
+    
+    FB --> GPT4
+    FB --> GPT35
+    FB --> Claude
+    FB --> Gemini
+    
+    GPT4 --> R1[Analysis Results]
+    GPT35 --> R1
+    Claude --> R1
+    Gemini --> R1
+    
+    R1 --> AO
+    
+    style AO fill:#4F46E5,color:#fff
+    style GPT4 fill:#10B981
+    style GPT35 fill:#10B981
+    style Claude fill:#F59E0B
+    style Gemini fill:#3B82F6
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="section">
+                <h2 class="section-title">🔄 Data Flow Architecture</h2>
+                <div class="diagram-container">
+                    <div class="diagram-title">Request Processing Flow</div>
+                    <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Module
+    participant Bot
+    participant Agent
+    participant AI
+    participant DB
+    
+    User->>Frontend: Initiate Analysis
+    Frontend->>Module: Send Request
+    Module->>DB: Create Analysis Record
+    
+    Module->>Bot: Delegate to Bots
+    Bot->>Agent: Distribute Tasks
+    
+    Agent->>AI: Request AI Processing
+    AI-->>Agent: Return AI Results
+    
+    Agent-->>Bot: Return Task Results
+    Bot-->>Module: Aggregate Bot Results
+    
+    Module->>DB: Update Analysis
+    Module-->>Frontend: Send Results
+    Frontend-->>User: Display Analysis
+    
+    Note over Agent,AI: Multiple parallel AI calls
+    Note over Bot,Agent: Concurrent agent execution
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Specifications -->
+            <div class="section">
+                <h2 class="section-title">📊 Technical Specifications</h2>
+                
+                <h3 class="section-subtitle">Technology Stack</h3>
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <h4>Frontend</h4>
+                        <ul>
+                            <li>React 18 + TypeScript</li>
+                            <li>Tailwind CSS</li>
+                            <li>Zustand (State Management)</li>
+                            <li>React Query (Data Fetching)</li>
+                            <li>Vite (Build Tool)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <h4>Backend</h4>
+                        <ul>
+                            <li>Node.js + Express</li>
+                            <li>PostgreSQL (Supabase)</li>
+                            <li>Redis (Queue Management)</li>
+                            <li>Puppeteer (Web Scraping)</li>
+                            <li>JWT Authentication</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <h4>AI/ML</h4>
+                        <ul>
+                            <li>OpenAI API (GPT-4, GPT-3.5)</li>
+                            <li>Anthropic API (Claude 3)</li>
+                            <li>Google AI API (Gemini)</li>
+                            <li>Custom NLP pipelines</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <h4>Infrastructure</h4>
+                        <ul>
+                            <li>Vercel (Frontend Hosting)</li>
+                            <li>Railway (Backend Hosting)</li>
+                            <li>Supabase (Database + Auth)</li>
+                            <li>GitHub Actions (CI/CD)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Performance Metrics</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metrika</th>
+                            <th>Reikšmė</th>
+                            <th>Aprašymas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Average Analysis Time</td>
+                            <td>15-45 seconds</td>
+                            <td>Vidutinis analizės laikas priklausomai nuo modulio</td>
+                        </tr>
+                        <tr>
+                            <td>Concurrent Users</td>
+                            <td>1000+</td>
+                            <td>Vienu metu aptarnaujamų vartotojų skaičius</td>
+                        </tr>
+                        <tr>
+                            <td>API Response Time</td>
+                            <td>&lt;200ms (p95)</td>
+                            <td>95% API užklausų atsakymo laikas</td>
+                        </tr>
+                        <tr>
+                            <td>Uptime</td>
+                            <td>99.9%</td>
+                            <td>Sistemos prieinamumo garantija</td>
+                        </tr>
+                        <tr>
+                            <td>AI Accuracy</td>
+                            <td>92%+</td>
+                            <td>AI analizės tikslumas (validuotas)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Scalability -->
+            <div class="section">
+                <h2 class="section-title">📈 Scalability & Extensibility</h2>
+                
+                <div class="info-box">
+                    <h3>Horizontal Scaling</h3>
+                    <p>Sistema suprojektuota horizontaliam skalėjimui:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li><strong>Bot Instances:</strong> Kiekvienas botas gali būti skalėjamas nepriklausomai</li>
+                        <li><strong>Agent Pool:</strong> Agentai veikia kaip worker pool, galintis dinamiškai augti</li>
+                        <li><strong>Load Balancing:</strong> Automatinis darbo paskirstymas tarp botų/agentų</li>
+                        <li><strong>Database Sharding:</strong> PostgreSQL sharding dideliems duomenų kiekiams</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>Vertical Expansion</h3>
+                    <p>Lengva pridėti naujus komponentus:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li><strong>Nauji Moduliai:</strong> Plug-and-play architektūra naujų modulių pridėjimui</li>
+                        <li><strong>Nauji Botai:</strong> Standartizuotas bot interface leidžia lengvai integruoti</li>
+                        <li><strong>Nauji Agentai:</strong> Mikroservisų principai užtikrina paprastą plėtrą</li>
+                        <li><strong>Custom AI Models:</strong> Galimybė integruoti custom AI modelius</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Business Value -->
+            <div class="section">
+                <h2 class="section-title">🎯 Business Value</h2>
+                
+                <div class="bot-list">
+                    <div class="bot-card">
+                        <div class="bot-title">📈 Produktyvumo Didinimas</div>
+                        <div class="bot-function">
+                            <ul style="padding-left: 20px;">
+                                <li>250+ AI komponentų automatizuoja rutinines užduotis</li>
+                                <li>Multi-layer analizė pateikia giluminius insights</li>
+                                <li>Real-time processing užtikrina greitą feedback loop</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bot-card">
+                        <div class="bot-title">✅ Kokybės Užtikrinimas</div>
+                        <div class="bot-function">
+                            <ul style="padding-left: 20px;">
+                                <li>Automatizuoti auditai garantuoja nuoseklią kokybę</li>
+                                <li>Best practices enforcement per AI botus</li>
+                                <li>Continuous monitoring per agentų sistemą</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bot-card">
+                        <div class="bot-title">🚀 Konkurencinis Pranašumas</div>
+                        <div class="bot-function">
+                            <ul style="padding-left: 20px;">
+                                <li>Unikalus multi-agent approach rinkoje</li>
+                                <li>Scalable architecture augimui</li>
+                                <li>Extensible platform naujiems features</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Future Roadmap -->
+            <div class="section">
+                <h2 class="section-title">🔮 Future Roadmap</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Timeline</th>
+                            <th>Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Phase 1: Enhanced AI</strong></td>
+                            <td>Q2 2025</td>
+                            <td>
+                                <ul style="padding-left: 20px;">
+                                    <li>Integruoti GPT-5 kai išleidžiamas</li>
+                                    <li>Pridėti custom AI model training</li>
+                                    <li>Implementuoti federated learning</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 2: Advanced Automation</strong></td>
+                            <td>Q3 2025</td>
+                            <td>
+                                <ul style="padding-left: 20px;">
+                                    <li>Pridėti auto-healing botus</li>
+                                    <li>Implementuoti predictive analytics agentus</li>
+                                    <li>Sukurti self-optimizing sistemą</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 3: Enterprise Features</strong></td>
+                            <td>Q4 2025</td>
+                            <td>
+                                <ul style="padding-left: 20px;">
+                                    <li>Multi-tenant architecture</li>
+                                    <li>White-label solutions</li>
+                                    <li>Enterprise SSO integration</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 4: AI Marketplace</strong></td>
+                            <td>Q1 2026</td>
+                            <td>
+                                <ul style="padding-left: 20px;">
+                                    <li>Custom bot marketplace</li>
+                                    <li>Community-contributed agents</li>
+                                    <li>Plugin ecosystem</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Security & Compliance -->
+            <div class="section">
+                <h2 class="section-title">🔐 Security & Compliance</h2>
+                
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <h4>Data Protection</h4>
+                        <ul>
+                            <li>Encryption at Rest: AES-256</li>
+                            <li>Encryption in Transit: TLS 1.3</li>
+                            <li>API Key Management: Secure vault</li>
+                            <li>User Data Isolation: Row-level security</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <h4>Compliance</h4>
+                        <ul>
+                            <li>GDPR Compliant</li>
+                            <li>SOC 2 Type II (in progress)</li>
+                            <li>ISO 27001 (planned)</li>
+                            <li>OWASP Top 10 (regular audits)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h2 style="margin-bottom: 20px;">CodeAnalyst Platform</h2>
+            <p style="font-size: 1.1em; margin-bottom: 10px;">Multi-Agent AI Architecture Documentation</p>
+            <p style="opacity: 0.8;">Version 1.0 | Last Updated: November 8, 2025</p>
+            <p style="margin-top: 20px;">
+                <strong>Website:</strong> https://app.beenex.dev<br>
+                <strong>Email:</strong> support@beenex.dev
+            </p>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="action-button" onclick="window.print()">
+            🖨️ Print / Save as PDF
+        </button>
+        <button class="action-button" onclick="copyToClipboard()">
+            📋 Copy Link
+        </button>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        // Copy link function
+        function copyToClipboard() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
