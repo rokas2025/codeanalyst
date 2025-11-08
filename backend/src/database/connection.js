@@ -22,10 +22,10 @@ class DatabaseConnection {
         config = {
           connectionString: process.env.DATABASE_URL,
           // Connection pool settings optimized for Supabase
-          max: 10, // Reduced max connections for Railway free tier
-          min: 2, // Keep minimum connections alive
-          idleTimeoutMillis: 60000, // Keep idle connections for 60 seconds
-          connectionTimeoutMillis: 10000, // Longer timeout for slow connections
+          max: 5, // Reduced max connections for Railway free tier
+          min: 1, // Keep minimum connections alive
+          idleTimeoutMillis: 30000, // Keep idle connections for 30 seconds
+          connectionTimeoutMillis: 30000, // 30 second timeout for initial connection
           
           // Add keepalive to prevent connection termination during long operations
           keepAlive: true,
@@ -35,8 +35,12 @@ class DatabaseConnection {
           statement_timeout: 300000, // 5 minutes max per query
           query_timeout: 300000, // 5 minutes max
           
-          // SSL configuration for Supabase
-          ssl: { rejectUnauthorized: false }
+          // SSL configuration for Supabase - required for pooler connections
+          ssl: { 
+            rejectUnauthorized: false,
+            // Add additional SSL options for better compatibility
+            checkServerIdentity: () => undefined
+          }
         }
       } else {
         // Fallback to individual environment variables for local development
