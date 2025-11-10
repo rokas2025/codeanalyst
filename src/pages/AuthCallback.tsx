@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../stores/authStore'
+import { getApiUrl } from '../lib/api'
 import toast from 'react-hot-toast'
 
 export function AuthCallback() {
@@ -25,7 +26,7 @@ export function AuthCallback() {
       
       if (session) {
         // Sync with backend to get our JWT
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/sync-supabase`, {
+        const response = await fetch(getApiUrl('/auth/sync-supabase'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
