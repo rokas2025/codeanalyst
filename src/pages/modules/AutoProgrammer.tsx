@@ -84,6 +84,7 @@ function AutoProgrammerContent() {
   const [wordPressPages, setWordPressPages] = useState<Array<{id: number, title: string, url: string, status?: string, is_home?: boolean, is_posts_page?: boolean}>>([])
   const [selectedWordPressPage, setSelectedWordPressPage] = useState<{id: number, title: string} | null>(null)
   const [showWordPressPreview, setShowWordPressPreview] = useState(false)
+  const [wordPressPageContent, setWordPressPageContent] = useState<{content: string, title: string, url: string, builder: string} | null>(null)
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -525,6 +526,50 @@ The file structure isn't available for this analysis, but I can still help you w
 
     try {
       const baseUrl = import.meta.env.VITE_API_URL || 'https://codeanalyst-production.up.railway.app/api'
+      
+      // Build project context - either GitHub project or WordPress page
+      let projectContext = null
+      
+      if (selectedProject) {
+        // GitHub project context
+        projectContext = {
+          name: getProjectName(selectedProject),
+          url: getProjectUrl(selectedProject),
+          fileStructure: fileTree,
+          selectedFile: selectedFile ? {
+            name: selectedFile.name,
+            path: selectedFile.path,
+            content: selectedFile.content,
+            functions: selectedFile.functions
+          } : null,
+          codeQuality: selectedProject.codeQualityScore,
+          languages: selectedProject.languages,
+          totalFiles: selectedProject.totalFiles
+        }
+      } else if (inputMethod === 'wordpress' && selectedWordPressSite && selectedWordPressPage && wordPressPageContent) {
+        // WordPress page context
+        projectContext = {
+          isWordPress: true,
+          name: `${selectedWordPressSite.site_name} - ${selectedWordPressPage.title}`,
+          url: wordPressPageContent.url,
+          site: {
+            url: selectedWordPressSite.site_url,
+            name: selectedWordPressSite.site_name,
+            theme: selectedWordPressSite.active_theme,
+            builder: selectedWordPressSite.site_info?.builders?.[0] || 'classic',
+            wordpress_version: selectedWordPressSite.wordpress_version,
+            php_version: selectedWordPressSite.php_version
+          },
+          page: {
+            id: selectedWordPressPage.id,
+            title: selectedWordPressPage.title,
+            content: wordPressPageContent.content,
+            builder: wordPressPageContent.builder,
+            url: wordPressPageContent.url
+          }
+        }
+      }
+      
       const response = await fetch(`${baseUrl}/chat`, {
         method: 'POST',
         headers: getAuthHeaders(),
@@ -533,20 +578,7 @@ The file structure isn't available for this analysis, but I can still help you w
             role: msg.role,
             content: msg.content
           })),
-          project: selectedProject ? {
-            name: getProjectName(selectedProject),
-            url: getProjectUrl(selectedProject),
-            fileStructure: fileTree,
-            selectedFile: selectedFile ? {
-              name: selectedFile.name,
-              path: selectedFile.path,
-              content: selectedFile.content,
-              functions: selectedFile.functions
-            } : null,
-            codeQuality: selectedProject.codeQualityScore,
-            languages: selectedProject.languages,
-            totalFiles: selectedProject.totalFiles
-          } : null
+          project: projectContext
         })
       })
 
@@ -1000,11 +1032,75 @@ The file structure isn't available for this analysis, but I can still help you w
     }
   }
 
+  // Helper function to detect builder type from content
+  const detectBuilderFromContent = (content: string): string => {
+    if (content.includes('data-elementor-type') || content.includes('elementor')) {
+      return 'Elementor'
+    }
+    if (content.includes('<!-- wp:')) {
+      return 'Gutenberg'
+    }
+    if (content.includes('et_pb_') || content.includes('divi')) {
+      return 'Divi'
+    }
+    return 'Classic'
+  }
+
   // WordPress page selection handler
-  const handleWordPressPageSelect = (pageId: number) => {
+  const handleWordPressPageSelect = async (pageId: number) => {
     const page = wordPressPages.find(p => p.id === pageId)
-    if (page) {
+    if (page && selectedWordPressSite) {
       setSelectedWordPressPage({ id: page.id, title: page.title })
+      
+      // Fetch page content
+      try {
+        toast.loading('Loading page content...')
+        const contentResponse = await wordpressService.getPageContent(selectedWordPressSite.id, pageId.toString())
+        toast.dismiss()
+        
+        if (contentResponse.success && contentResponse.content) {
+          const builder = detectBuilderFromContent(contentResponse.content)
+          setWordPressPageContent({
+            content: contentResponse.content,
+            title: contentResponse.title || page.title,
+            url: contentResponse.url || page.url,
+            builder
+          })
+          
+          // Send initial context message
+          const contextMessage: ChatMessage = {
+            role: 'assistant',
+            content: `Hey! I'm your AI coding assistant. I've loaded your WordPress page **${contentResponse.title || page.title}** and I'm ready to help you improve it.
+
+**📊 Page Analysis:**
+• **Site:** ${selectedWordPressSite.site_name}
+• **Page:** ${contentResponse.title || page.title}
+• **Builder:** ${builder}
+• **URL:** ${contentResponse.url || page.url}
+
+**🎯 What I can help you with:**
+
+I can help you design and add new sections to your WordPress page. For example:
+- Add hero sections with custom content
+- Create about us blocks with images and text
+- Design contact sections
+- Build feature showcases
+- Add testimonial sections
+
+Just describe what you want to add, and I'll generate the HTML/block code for you to preview. What would you like to work on?`,
+            timestamp: new Date()
+          }
+          
+          setMessages([contextMessage])
+          toast.success(`Loaded ${contentResponse.title || page.title}`)
+        } else {
+          toast.error(contentResponse.error || 'Failed to fetch page content')
+        }
+      } catch (error) {
+        toast.dismiss()
+        toast.error('Failed to load page content')
+        console.error('Error loading page content:', error)
+      }
     }
   }
 
@@ -1387,9 +1483,15 @@ The file structure isn't available for this analysis, but I can still help you w
                 <textarea
                   value={input}
                   onChange={handleInputChange}
-                  placeholder={selectedProject ? "Ask me anything about your code... (Shift+Enter for new line)" : "Select a project first..."}
+                  placeholder={
+                    selectedProject 
+                      ? "Ask me anything about your code... (Shift+Enter for new line)" 
+                      : selectedWordPressPage 
+                        ? `Ask me to add sections to ${selectedWordPressPage.title}... (Shift+Enter for new line)`
+                        : "Select a project or WordPress page first..."
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none bg-white shadow-sm"
-                  disabled={isLoading || !selectedProject}
+                  disabled={isLoading || (!selectedProject && !selectedWordPressPage)}
                   rows={1}
                   style={{ minHeight: '44px', maxHeight: '120px' }}
                   onKeyDown={(e) => {
@@ -1402,19 +1504,35 @@ The file structure isn't available for this analysis, but I can still help you w
               </div>
               <button
                 type="submit"
-                disabled={isLoading || !input.trim() || !selectedProject}
+                disabled={isLoading || !input.trim() || (!selectedProject && !selectedWordPressPage)}
                 className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95"
               >
                 <PaperAirplaneIcon className="h-4 w-4" />
               </button>
             </form>
             
-            {selectedProject && (
+            {(selectedProject || (selectedWordPressSite && selectedWordPressPage && wordPressPageContent)) && (
               <div className="mt-2 flex items-center justify-between">
                 <div className="text-xs text-gray-500">
-                  Connected to <span className="font-medium text-blue-600">{getProjectName(selectedProject)}</span>
+                  {selectedProject ? (
+                    <>
+                      Connected to <span className="font-medium text-blue-600">{getProjectName(selectedProject)}</span>
+                    </>
+                  ) : (
+                    <>
+                      Connected to <span className="font-medium text-blue-600">{selectedWordPressSite?.site_name}</span> - <span className="font-medium text-purple-600">{selectedWordPressPage?.title}</span>
+                      {wordPressPageContent && (
+                        <span className="ml-2 px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                          {wordPressPageContent.builder}
+                        </span>
+                      )}
+                      <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">
+                        Preview Only
+                      </span>
+                    </>
+                  )}
                 </div>
-                {isWebProject(selectedProject) && codeChanges.length > 0 && (
+                {selectedProject && isWebProject(selectedProject) && codeChanges.length > 0 && (
                   <button
                     onClick={() => setShowPreview(true)}
                     className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-green-600 to-green-700 rounded-md hover:from-green-700 hover:to-green-800 transition-all shadow-sm"
