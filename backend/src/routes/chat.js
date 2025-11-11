@@ -210,8 +210,8 @@ DO NOT just provide recommendations or suggestions without actual code. Always i
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || ''
       if (content) {
-        // Send text delta
-        res.write(`0:{"type":"text-delta","textDelta":"${content.replace(/"/g, '\\"')}"}\n`)
+        // Send text delta with properly escaped JSON
+        res.write(`0:${JSON.stringify({type:"text-delta",textDelta:content})}\n`)
       }
     }
 
