@@ -829,6 +829,13 @@ export class CodeAnalyzer {
   }
 
   /**
+   * Check if file is code file (alias for isAnalyzableFile)
+   */
+  isCodeFile(filePath) {
+    return this.isAnalyzableFile(filePath)
+  }
+
+  /**
    * Get files recursively from directory
    */
   async getFilesRecursively(dir) {
