@@ -190,7 +190,7 @@ function CodeAnalystContent() {
     // Use provided files or fall back to state
     const filesToUse = providedFiles || uploadedFiles
     
-    if (userProfile === 'zip' && filesToUse.length === 0) {
+    if ((userProfile === 'zip' || userProfile === 'wordpress') && filesToUse.length === 0) {
       alert('Please upload files first')
       return
     }
@@ -199,31 +199,32 @@ function CodeAnalystContent() {
     setAnalysisStep('Initializing code analysis...')
     
     try {
-      // For ZIP uploads, send to backend for analysis
-      if (userProfile === 'zip' && uploadedFiles.length > 0) {
+      // For ZIP uploads OR WordPress theme files, send to backend for analysis
+      if ((userProfile === 'zip' || userProfile === 'wordpress') && filesToUse.length > 0) {
         setAnalysisStep('Uploading files to backend for analysis...')
         
         try {
-          // Create FormData with the ORIGINAL ZIP file
+          // Create FormData with the ORIGINAL ZIP file or WordPress files
           const formData = new FormData()
           
-          if (originalZipFile) {
+          if (originalZipFile && userProfile === 'zip') {
             // Use the original ZIP file
             formData.append('zipFile', originalZipFile, originalZipFile.name)
           } else {
-            // Fallback: Create a new ZIP from extracted files (shouldn't happen normally)
+            // Create a new ZIP from files (WordPress theme files or fallback)
             const JSZip = (await import('jszip')).default
             const zip = new JSZip()
             
-            uploadedFiles.forEach(file => {
+            filesToUse.forEach(file => {
               zip.file(file.path, file.content)
             })
             
             const zipBlob = await zip.generateAsync({ type: 'blob' })
-            formData.append('zipFile', zipBlob, 'code-analysis.zip')
+            const fileName = userProfile === 'wordpress' ? 'wordpress-theme.zip' : 'code-analysis.zip'
+            formData.append('zipFile', zipBlob, fileName)
           }
           formData.append('options', JSON.stringify({
-            aiProfile: 'mixed',
+            aiProfile: userProfile === 'wordpress' ? 'business' : 'mixed',
             deepAnalysis: true,
             aiAnalysis: true
           }))
@@ -248,12 +249,13 @@ function CodeAnalystContent() {
           
           const result = await response.json()
           
-          toast.success(`✅ ZIP analysis started! ID: ${result.analysisId}`, {
+          const analysisType = userProfile === 'wordpress' ? 'WordPress theme' : 'ZIP'
+          toast.success(`✅ ${analysisType} analysis started! ID: ${result.analysisId}`, {
             duration: 5000,
             position: 'top-right',
           })
           
-          setAnalysisStep(`ZIP analysis in progress... (${result.estimatedTime || '5-10 minutes'})`)
+          setAnalysisStep(`${analysisType} analysis in progress... (${result.estimatedTime || '5-10 minutes'})`)
           
           // Start real polling for results
           const finalResult = await analysisService.pollAnalysisStatus(
@@ -280,7 +282,7 @@ function CodeAnalystContent() {
           setIsAnalyzing(false)
           
           if (finalResult.status === 'completed') {
-            toast.success(`🎉 ZIP analysis completed!`, {
+            toast.success(`🎉 ${analysisType} analysis completed!`, {
               duration: 5000
             })
           } else {
@@ -291,8 +293,8 @@ function CodeAnalystContent() {
           return
           
         } catch (error) {
-          console.error('ZIP analysis failed:', error)
-          toast.error(`Failed to analyze ZIP: ${error instanceof Error ? error.message : 'Unknown error'}`)
+          console.error(`${analysisType} analysis failed:`, error)
+          toast.error(`Failed to analyze ${analysisType}: ${error instanceof Error ? error.message : 'Unknown error'}`)
           setIsAnalyzing(false)
           return
         }
