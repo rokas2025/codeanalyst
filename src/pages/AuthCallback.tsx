@@ -18,23 +18,33 @@ export function AuthCallback() {
 
         let session = null
         let sessionError: Error | null = null
-        const urlContainsAuthParams = window.location.href.includes('code=') || window.location.hash.includes('access_token=')
 
-        if (urlContainsAuthParams) {
-          const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true })
+        // Check if we have an OAuth code in the URL (Google OAuth callback)
+        const urlParams = new URLSearchParams(window.location.search)
+        const code = urlParams.get('code')
+
+        if (code) {
+          // Exchange the code for a session (Supabase v2 method)
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code)
           if (error) {
+            console.error('Failed to exchange code for session:', error)
             sessionError = error
           } else {
             session = data.session
+            console.log('✅ Session obtained from OAuth code')
           }
         }
 
+        // If no code or exchange failed, try to get existing session
         if (!session) {
           const { data, error } = await supabase.auth.getSession()
           if (error) {
             sessionError = error
           } else {
             session = data.session
+            if (session) {
+              console.log('✅ Session obtained from storage')
+            }
           }
         }
 
