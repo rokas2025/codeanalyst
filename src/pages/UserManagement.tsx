@@ -98,10 +98,15 @@ export function UserManagement() {
     }
 
     try {
+      console.log('🗑️ Attempting to delete user:', { userId, email })
       await backendService.deleteUser(userId)
+      console.log('✅ User deleted successfully')
       toast.success('User deleted successfully')
       loadUsers()
     } catch (error: any) {
+      console.error('❌ Delete user error:', error)
+      console.error('Error response:', error.response)
+      console.error('Error data:', error.response?.data)
       const message = error.response?.data?.error || error.message || 'Failed to delete user'
       toast.error(message)
     }

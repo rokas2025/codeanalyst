@@ -163,7 +163,10 @@ router.delete('/users/:userId', async (req, res) => {
     const { userId } = req.params;
     const superadminId = req.user.id;
 
+    logger.info('🗑️ Delete user request received', { userId, superadminId });
+
     if (userId === superadminId) {
+      logger.warn('❌ User attempted to delete own account', { userId });
       return res.status(400).json({
         success: false,
         error: 'You cannot delete your own account'
@@ -171,36 +174,45 @@ router.delete('/users/:userId', async (req, res) => {
     }
 
     const targetUser = await DatabaseService.getUserById(userId);
+    logger.info('👤 Target user found', { userId, email: targetUser?.email, authProvider: targetUser?.auth_provider });
 
     if (!targetUser) {
+      logger.warn('❌ User not found', { userId });
       return res.status(404).json({
         success: false,
         error: 'User not found'
       });
     }
 
-    logger.info('🗑️ Permanently deleting user', { userId, superadminId });
+    logger.info('🗑️ Starting user deletion', { userId, email: targetUser.email, superadminId });
 
     const deletedUser = await DatabaseService.deleteUser(userId, superadminId);
 
     if (!deletedUser) {
+      logger.error('❌ Delete operation returned null', { userId });
       return res.status(404).json({
         success: false,
-        error: 'User not found'
+        error: 'User not found or deletion failed'
       });
     }
 
+    logger.info('✅ User deleted from database', { userId, email: deletedUser.email });
+
+    // Clean up Supabase auth if needed
     if (targetUser.auth_provider === 'supabase' && supabase) {
       try {
+        logger.info('🧹 Attempting to delete Supabase auth user', { userId });
         await supabase.auth.admin.deleteUser(userId);
-        logger.info('🧹 Supabase auth user removed', { userId });
+        logger.info('✅ Supabase auth user removed', { userId });
       } catch (supabaseError) {
-        logger.warn('Failed to delete Supabase auth user', {
+        logger.warn('⚠️ Failed to delete Supabase auth user (non-critical)', {
           userId,
           error: supabaseError.message
         });
       }
     }
+
+    logger.info('🎉 User deletion completed successfully', { userId, email: deletedUser.email });
 
     res.json({
       success: true,
@@ -208,10 +220,11 @@ router.delete('/users/:userId', async (req, res) => {
       user: deletedUser
     });
   } catch (error) {
-    logger.error('Failed to delete user:', error);
+    logger.error('❌ Failed to delete user - EXCEPTION:', error);
+    logger.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
-      error: 'Failed to delete user'
+      error: error.message || 'Failed to delete user'
     });
   }
 });
