@@ -452,14 +452,30 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         }
       }
 
-      const finalResult = {
-        ...codeAnalysis,
-        aiInsights,
-        completedAt: new Date().toISOString()
+      // Update AI insights if generated
+      if (aiInsights) {
+        await db.query(`
+          UPDATE code_analyses 
+          SET 
+            system_overview = $2,
+            technical_structure = $3,
+            maintenance_needs = $4,
+            ai_explanations = $5,
+            business_recommendations = $6,
+            risk_assessment = $7
+          WHERE id = $1
+        `, [
+          analysisId,
+          JSON.stringify(aiInsights.systemOverview || {}),
+          JSON.stringify(aiInsights.technicalStructure || {}),
+          JSON.stringify(aiInsights.maintenanceNeeds || {}),
+          JSON.stringify(aiInsights.aiExplanations || {}),
+          JSON.stringify(aiInsights.businessRecommendations || {}),
+          JSON.stringify(aiInsights.riskAssessment || {})
+        ])
       }
-
+      
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'completed', 100)
-      await DatabaseService.updateCodeAnalysisData(analysisId, finalResult)
 
       // Clean up Supabase file after 10 minutes
       setTimeout(async () => {
