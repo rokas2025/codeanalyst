@@ -412,7 +412,9 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       await DatabaseService.updateCodeAnalysisData(analysisId, {
         total_files: codeAnalysis.totalFiles || 0,
         total_lines: codeAnalysis.totalLines || 0,
-        languages: codeAnalysis.languages || [],
+        languages: typeof codeAnalysis.languages === 'object' && !Array.isArray(codeAnalysis.languages) 
+          ? Object.keys(codeAnalysis.languages) 
+          : (codeAnalysis.languages || []),
         frameworks: codeAnalysis.frameworks || [],
         code_quality_score: codeAnalysis.codeQualityScore || 0,
         technical_debt_percentage: codeAnalysis.technicalDebtPercentage || 0,
