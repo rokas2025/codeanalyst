@@ -487,7 +487,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         success: true,
         analysisId,
         status: 'completed',
-        data: finalResult,
+        data: codeAnalysis,
         message: 'ZIP file analysis completed successfully!',
         file: {
           originalName: req.file.originalname,
