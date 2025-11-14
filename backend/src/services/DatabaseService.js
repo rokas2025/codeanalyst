@@ -1419,6 +1419,27 @@ export class DatabaseService {
         logger.warn('Failed to log user deletion', { userId, error: logError.message })
       }
 
+      // CRITICAL: Set performed_by to NULL for any logs where this user was the performer
+      // This prevents FK constraint violation when deleting the user
+      await client.query(`
+        UPDATE user_activation_log
+        SET performed_by = NULL
+        WHERE performed_by = $1::UUID
+      `, [userId])
+
+      // Also nullify any references in users table
+      await client.query(`
+        UPDATE users
+        SET approved_by = NULL
+        WHERE approved_by = $1::UUID
+      `, [userId])
+
+      await client.query(`
+        UPDATE users
+        SET deactivated_by = NULL
+        WHERE deactivated_by = $1::UUID
+      `, [userId])
+
       // Delete user - CASCADE will handle related records
       const result = await client.query(`
         DELETE FROM users
