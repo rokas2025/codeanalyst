@@ -1517,48 +1517,574 @@ export class CodeAnalyzer {
     return risks
   }
 
-  // Placeholder methods for remaining analysis types
+  // Real code quality analysis
   async performCodeQualityAnalysis(files) {
+    const codeSmells = []
+    let totalComplexity = 0
+    let totalLines = 0
+    let totalFunctions = 0
+    let longFunctions = 0
+    let duplicatedLines = 0
+    
+    for (const file of files) {
+      if (!file.content || !this.isCodeFile(file.path)) continue
+      
+      const lines = file.content.split('\n')
+      totalLines += lines.length
+      
+      // Detect long functions (code smell)
+      const functionMatches = file.content.match(/function\s+\w+|=>\s*{|^\s*\w+\s*\([^)]*\)\s*{/gm) || []
+      totalFunctions += functionMatches.length
+      
+      // Find long functions (>50 lines)
+      const functionBlocks = file.content.split(/function\s+\w+|=>\s*{/)
+      functionBlocks.forEach((block, index) => {
+        if (index === 0) return
+        const blockLines = block.split('\n').length
+        if (blockLines > 50) {
+          longFunctions++
+          codeSmells.push({
+            type: 'long-function',
+            file: file.path,
+            severity: 'medium',
+            message: `Function has ${blockLines} lines (recommended: <50)`
+          })
+        }
+      })
+      
+      // Detect code duplication (simple check for repeated lines)
+      const lineMap = new Map()
+      lines.forEach(line => {
+        const trimmed = line.trim()
+        if (trimmed.length > 20) { // Only check substantial lines
+          lineMap.set(trimmed, (lineMap.get(trimmed) || 0) + 1)
+        }
+      })
+      lineMap.forEach((count, line) => {
+        if (count > 2) {
+          duplicatedLines += count
+        }
+      })
+      
+      // Calculate cyclomatic complexity
+      const complexityKeywords = ['if', 'else', 'while', 'for', 'case', 'catch', '&&', '||']
+      complexityKeywords.forEach(keyword => {
+        const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        try {
+          const matches = file.content.match(new RegExp(`\\b${escapedKeyword}\\b`, 'g'))
+          if (matches) totalComplexity += matches.length
+        } catch (e) {
+          // Skip invalid patterns
+        }
+      })
+      
+      // Detect other code smells
+      if (file.content.includes('eval(')) {
+        codeSmells.push({
+          type: 'dangerous-eval',
+          file: file.path,
+          severity: 'high',
+          message: 'Use of eval() is dangerous and should be avoided'
+        })
+      }
+      
+      if (lines.length > 500) {
+        codeSmells.push({
+          type: 'large-file',
+          file: file.path,
+          severity: 'low',
+          message: `File has ${lines.length} lines (recommended: <500)`
+        })
+      }
+      
+      // Check for nested callbacks (callback hell)
+      const nestedCallbacks = (file.content.match(/function\s*\([^)]*\)\s*{\s*[^}]*function\s*\(/g) || []).length
+      if (nestedCallbacks > 3) {
+        codeSmells.push({
+          type: 'callback-hell',
+          file: file.path,
+          severity: 'medium',
+          message: `${nestedCallbacks} nested callbacks detected`
+        })
+      }
+    }
+    
+    // Calculate real maintainability index
+    // Based on: https://docs.microsoft.com/en-us/visualstudio/code-quality/code-metrics-values
+    const avgComplexity = totalFunctions > 0 ? totalComplexity / totalFunctions : 1
+    const avgFileSize = files.length > 0 ? totalLines / files.length : 0
+    
+    // Maintainability Index = MAX(0, (171 - 5.2 * ln(avgComplexity) - 0.23 * avgFileSize - 16.2 * ln(totalLines)) * 100 / 171)
+    let maintainabilityIndex = 100
+    if (totalLines > 0) {
+      const complexityPenalty = avgComplexity > 1 ? 5.2 * Math.log(avgComplexity) : 0
+      const sizePenalty = 0.23 * avgFileSize
+      const volumePenalty = 16.2 * Math.log(totalLines)
+      maintainabilityIndex = Math.max(0, Math.min(100, 
+        ((171 - complexityPenalty - sizePenalty - volumePenalty) * 100) / 171
+      ))
+    }
+    
     return {
-      codeSmells: [],
-      duplicatedLines: 0,
-      maintainabilityIndex: 75,
-      issues: []
+      codeSmells,
+      duplicatedLines,
+      maintainabilityIndex: Math.round(maintainabilityIndex),
+      issues: codeSmells,
+      metrics: {
+        totalComplexity,
+        avgComplexity: Math.round(avgComplexity * 10) / 10,
+        longFunctions,
+        totalFunctions
+      }
     }
   }
 
   async detectArchitecturePatterns(files) {
+    const patterns = []
+    const antiPatterns = []
+    const recommendations = []
+    
+    // Detect MVC pattern
+    const hasMVC = files.some(f => 
+      f.path.toLowerCase().includes('/models/') || 
+      f.path.toLowerCase().includes('/views/') || 
+      f.path.toLowerCase().includes('/controllers/')
+    )
+    if (hasMVC) patterns.push('MVC (Model-View-Controller)')
+    
+    // Detect Component-based architecture
+    const hasComponents = files.some(f => 
+      f.path.toLowerCase().includes('/components/') ||
+      f.path.toLowerCase().includes('.component.')
+    )
+    if (hasComponents) patterns.push('Component-based architecture')
+    
+    // Detect Microservices
+    const hasServices = files.filter(f => 
+      f.path.toLowerCase().includes('/services/') ||
+      f.path.toLowerCase().includes('.service.')
+    ).length
+    if (hasServices > 3) patterns.push('Service-oriented architecture')
+    
+    // Detect Layered architecture
+    const hasLayers = ['api', 'business', 'data', 'presentation'].filter(layer =>
+      files.some(f => f.path.toLowerCase().includes(`/${layer}/`))
+    ).length
+    if (hasLayers >= 2) patterns.push('Layered architecture')
+    
+    // Detect REST API
+    const hasRoutes = files.some(f => 
+      f.path.toLowerCase().includes('/routes/') ||
+      f.path.toLowerCase().includes('/api/') ||
+      (f.content && f.content.match(/\.(get|post|put|delete|patch)\s*\(/i))
+    )
+    if (hasRoutes) patterns.push('REST API')
+    
+    // Detect Repository pattern
+    const hasRepositories = files.some(f => 
+      f.path.toLowerCase().includes('/repositories/') ||
+      f.path.toLowerCase().includes('.repository.')
+    )
+    if (hasRepositories) patterns.push('Repository pattern')
+    
+    // Detect Anti-patterns
+    
+    // God Object (files with too many lines)
+    const godObjects = files.filter(f => 
+      f.content && f.content.split('\n').length > 1000
+    )
+    if (godObjects.length > 0) {
+      antiPatterns.push({
+        type: 'God Object',
+        severity: 'high',
+        files: godObjects.map(f => f.path),
+        description: 'Files with excessive lines of code (>1000 lines)'
+      })
+      recommendations.push('Break down large files into smaller, focused modules')
+    }
+    
+    // Spaghetti Code (high coupling, no clear structure)
+    const hasNoStructure = !files.some(f => 
+      f.path.includes('/') && (
+        f.path.includes('/src/') || 
+        f.path.includes('/lib/') ||
+        f.path.includes('/app/')
+      )
+    )
+    if (hasNoStructure && files.length > 10) {
+      antiPatterns.push({
+        type: 'Spaghetti Code',
+        severity: 'medium',
+        description: 'Lack of clear directory structure'
+      })
+      recommendations.push('Organize code into logical directories (src/, lib/, components/, etc.)')
+    }
+    
+    // Circular dependencies (basic check)
+    const imports = new Map()
+    files.forEach(file => {
+      if (file.content) {
+        const importMatches = file.content.match(/import.*from\s+['"]([^'"]+)['"]/g) || []
+        imports.set(file.path, importMatches.map(m => m.match(/from\s+['"]([^'"]+)['"]/)?.[1]))
+      }
+    })
+    
+    // If no clear patterns detected
+    if (patterns.length === 0) {
+      patterns.push('Monolithic architecture')
+      recommendations.push('Consider adopting a clear architectural pattern (MVC, Component-based, etc.)')
+    }
+    
+    // General recommendations
+    if (!hasComponents && files.length > 20) {
+      recommendations.push('Consider breaking down code into reusable components')
+    }
+    
+    if (!hasServices && files.length > 15) {
+      recommendations.push('Consider extracting business logic into service classes')
+    }
+    
     return {
-      patterns: ['Component-based architecture'],
-      antiPatterns: [],
-      recommendations: []
+      patterns,
+      antiPatterns,
+      recommendations
     }
   }
 
   async analyzePerformanceRisks(files) {
+    const issues = []
+    const recommendations = []
+    let riskScore = 100
+    
+    for (const file of files) {
+      if (!file.content || !this.isCodeFile(file.path)) continue
+      
+      // Detect synchronous operations in async code
+      if (file.content.includes('fs.readFileSync') || file.content.includes('fs.writeFileSync')) {
+        issues.push({
+          type: 'blocking-io',
+          severity: 'high',
+          file: file.path,
+          message: 'Synchronous file operations block the event loop'
+        })
+        riskScore -= 10
+      }
+      
+      // Detect N+1 query patterns
+      const hasLoops = (file.content.match(/for\s*\(|while\s*\(|forEach\s*\(/g) || []).length
+      const hasQueries = (file.content.match(/\.query\(|\.find\(|\.findOne\(|SELECT\s+/gi) || []).length
+      if (hasLoops > 0 && hasQueries > hasLoops) {
+        issues.push({
+          type: 'n-plus-one-query',
+          severity: 'high',
+          file: file.path,
+          message: 'Potential N+1 query problem detected'
+        })
+        riskScore -= 15
+      }
+      
+      // Detect large loops without optimization
+      const largeLoopMatches = file.content.match(/for\s*\([^)]*\.length[^)]*\)\s*{[^}]{200,}/g) || []
+      if (largeLoopMatches.length > 0) {
+        issues.push({
+          type: 'unoptimized-loop',
+          severity: 'medium',
+          file: file.path,
+          message: 'Large loop detected - consider optimization'
+        })
+        riskScore -= 5
+      }
+      
+      // Detect memory leaks (event listeners not removed)
+      const addEventListener = (file.content.match(/addEventListener|on\(/g) || []).length
+      const removeEventListener = (file.content.match(/removeEventListener|off\(/g) || []).length
+      if (addEventListener > removeEventListener + 2) {
+        issues.push({
+          type: 'memory-leak-risk',
+          severity: 'medium',
+          file: file.path,
+          message: 'Event listeners added but not removed - potential memory leak'
+        })
+        riskScore -= 8
+      }
+      
+      // Detect inefficient DOM manipulation
+      if (file.content.includes('innerHTML') && file.content.match(/for|while/)) {
+        issues.push({
+          type: 'dom-thrashing',
+          severity: 'medium',
+          file: file.path,
+          message: 'innerHTML in loop causes DOM thrashing'
+        })
+        riskScore -= 7
+      }
+      
+      // Detect missing pagination/limits
+      if (file.content.match(/\.find\(\)|SELECT \* FROM/i) && !file.content.match(/limit|take|top/i)) {
+        issues.push({
+          type: 'missing-pagination',
+          severity: 'medium',
+          file: file.path,
+          message: 'Database query without limit - could return too much data'
+        })
+        riskScore -= 5
+      }
+      
+      // Detect nested loops (O(n²) complexity)
+      const nestedLoops = (file.content.match(/for\s*\([^}]*for\s*\(|while\s*\([^}]*while\s*\(/g) || []).length
+      if (nestedLoops > 0) {
+        issues.push({
+          type: 'nested-loops',
+          severity: 'medium',
+          file: file.path,
+          message: `${nestedLoops} nested loop(s) detected - O(n²) complexity`
+        })
+        riskScore -= nestedLoops * 5
+      }
+      
+      // Detect large bundle sizes (for frontend)
+      if (file.path.match(/\.(js|jsx|ts|tsx)$/) && file.content.length > 100000) {
+        issues.push({
+          type: 'large-file-size',
+          severity: 'low',
+          file: file.path,
+          message: `Large file (${Math.round(file.content.length / 1024)}KB) - consider code splitting`
+        })
+        riskScore -= 3
+      }
+    }
+    
+    // Generate recommendations
+    if (issues.some(i => i.type === 'blocking-io')) {
+      recommendations.push('Replace synchronous file operations with async alternatives')
+    }
+    if (issues.some(i => i.type === 'n-plus-one-query')) {
+      recommendations.push('Use eager loading or batch queries to avoid N+1 problems')
+    }
+    if (issues.some(i => i.type === 'nested-loops')) {
+      recommendations.push('Optimize nested loops using hash maps or better algorithms')
+    }
+    if (issues.some(i => i.type === 'memory-leak-risk')) {
+      recommendations.push('Always remove event listeners when components unmount')
+    }
+    if (issues.some(i => i.type === 'missing-pagination')) {
+      recommendations.push('Add pagination or limits to database queries')
+    }
+    
+    // Ensure score is between 0 and 100
+    riskScore = Math.max(0, Math.min(100, riskScore))
+    
     return {
-      issues: [],
-      score: 75,
-      recommendations: []
+      issues,
+      score: Math.round(riskScore),
+      recommendations
     }
   }
 
   async calculateTechnicalDebt(files) {
+    let debtScore = 0
+    const debtCategories = {
+      codeSmells: 0,
+      outdatedDependencies: 0,
+      lackOfTests: 0,
+      securityIssues: 0,
+      documentation: 0,
+      complexity: 0
+    }
+    
+    let totalLines = 0
+    let commentLines = 0
+    let testFiles = 0
+    let todoCount = 0
+    
+    for (const file of files) {
+      if (!file.content) continue
+      
+      const lines = file.content.split('\n')
+      totalLines += lines.length
+      
+      // Check if it's a test file
+      if (file.path.match(/\.(test|spec)\.(js|ts|jsx|tsx)$/) || file.path.includes('/test/') || file.path.includes('/__tests__/')) {
+        testFiles++
+      }
+      
+      // Count comments (documentation)
+      commentLines += (file.content.match(/\/\/|\/\*|\*\/|#|<!--|-->/g) || []).length
+      
+      // Count TODOs/FIXMEs (technical debt markers)
+      todoCount += (file.content.match(/TODO|FIXME|HACK|XXX/g) || []).length
+      
+      if (!this.isCodeFile(file.path)) continue
+      
+      // Code smells
+      if (lines.length > 500) {
+        debtCategories.codeSmells += 5 // Large file
+      }
+      
+      if (file.content.includes('eval(')) {
+        debtCategories.codeSmells += 10 // Dangerous eval
+      }
+      
+      // Detect code duplication
+      const duplicateLines = new Set()
+      const lineMap = new Map()
+      lines.forEach((line, index) => {
+        const trimmed = line.trim()
+        if (trimmed.length > 15) {
+          if (lineMap.has(trimmed)) {
+            duplicateLines.add(index)
+          }
+          lineMap.set(trimmed, index)
+        }
+      })
+      if (duplicateLines.size > 10) {
+        debtCategories.codeSmells += Math.min(15, duplicateLines.size)
+      }
+      
+      // Complexity debt
+      const complexityIndicators = (file.content.match(/if\s*\(|for\s*\(|while\s*\(|switch\s*\(/g) || []).length
+      if (complexityIndicators > 50) {
+        debtCategories.complexity += Math.min(20, complexityIndicators / 5)
+      }
+      
+      // Security issues
+      if (file.content.match(/password\s*=\s*['"][^'"]+['"]/i)) {
+        debtCategories.securityIssues += 15 // Hardcoded password
+      }
+      if (file.content.match(/api[_-]?key\s*=\s*['"][^'"]+['"]/i)) {
+        debtCategories.securityIssues += 15 // Hardcoded API key
+      }
+      if (file.content.includes('innerHTML')) {
+        debtCategories.securityIssues += 3 // XSS risk
+      }
+    }
+    
+    // Check for outdated dependencies
+    const packageJsonFile = files.find(f => f.path.endsWith('package.json'))
+    if (packageJsonFile && packageJsonFile.content) {
+      try {
+        const packageJson = JSON.parse(packageJsonFile.content)
+        const deps = { ...packageJson.dependencies, ...packageJson.devDependencies }
+        
+        // Check for old version patterns (^0.x, ~1.x, etc.)
+        Object.entries(deps || {}).forEach(([name, version]) => {
+          if (version.match(/^[~^]?0\./)) {
+            debtCategories.outdatedDependencies += 2 // Pre-1.0 dependency
+          }
+          if (!version.match(/^[\^~]/)) {
+            debtCategories.outdatedDependencies += 1 // Pinned version (harder to update)
+          }
+        })
+      } catch (e) {
+        // Invalid package.json
+      }
+    }
+    
+    // Lack of tests
+    const codeFiles = files.filter(f => this.isCodeFile(f.path) && !f.path.match(/\.(test|spec)\./)).length
+    const testCoverageRatio = codeFiles > 0 ? testFiles / codeFiles : 0
+    if (testCoverageRatio < 0.3) {
+      debtCategories.lackOfTests = Math.round((0.3 - testCoverageRatio) * 100)
+    }
+    
+    // Documentation debt
+    const commentRatio = totalLines > 0 ? commentLines / totalLines : 0
+    if (commentRatio < 0.1) {
+      debtCategories.documentation = Math.round((0.1 - commentRatio) * 200)
+    }
+    
+    // Add TODO/FIXME debt
+    debtCategories.codeSmells += todoCount * 2
+    
+    // Calculate total debt score (0-100 scale)
+    debtScore = Object.values(debtCategories).reduce((sum, val) => sum + val, 0)
+    debtScore = Math.min(100, Math.round(debtScore))
+    
     return {
-      technicalDebt: Math.min(50, files.length * 2),
-      debtCategories: {}
+      technicalDebt: debtScore,
+      debtCategories,
+      metrics: {
+        todoCount,
+        testCoverageRatio: Math.round(testCoverageRatio * 100),
+        commentRatio: Math.round(commentRatio * 100),
+        codeFiles,
+        testFiles
+      }
     }
   }
 
   async assessBusinessImpact(structure, dependencies, security, quality) {
+    const recommendations = []
+    let riskLevel = 'low'
+    let businessValue = 'medium'
+    
+    // Assess risk level based on security and quality
+    if (security.securityScore < 50) {
+      riskLevel = 'critical'
+      recommendations.push('URGENT: Address critical security vulnerabilities immediately')
+    } else if (security.securityScore < 70) {
+      riskLevel = 'high'
+      recommendations.push('Improve security posture - vulnerabilities detected')
+    } else if (security.securityScore < 85) {
+      riskLevel = 'medium'
+      recommendations.push('Review and address moderate security concerns')
+    }
+    
+    // Assess business value based on project type and quality
+    const highValueProjects = ['Web Application', 'API', 'Mobile App', 'E-commerce', 'SaaS']
+    if (highValueProjects.some(type => structure.projectType?.includes(type))) {
+      businessValue = 'high'
+    } else if (structure.projectType === 'Unknown' || structure.projectType === 'Script') {
+      businessValue = 'low'
+    }
+    
+    // Dependencies recommendations
+    if (dependencies.outdatedPackages && dependencies.outdatedPackages.length > 0) {
+      recommendations.push(`Update ${dependencies.outdatedPackages.length} outdated dependencies`)
+    }
+    if (dependencies.vulnerablePackages && dependencies.vulnerablePackages.length > 0) {
+      recommendations.push(`Fix ${dependencies.vulnerablePackages.length} vulnerable dependencies`)
+    }
+    
+    // Quality recommendations
+    if (quality.maintainabilityIndex < 50) {
+      recommendations.push('Refactor code to improve maintainability (current index: ' + quality.maintainabilityIndex + ')')
+    }
+    if (quality.codeSmells && quality.codeSmells.length > 10) {
+      recommendations.push(`Address ${quality.codeSmells.length} code smells`)
+    }
+    
+    // Structure recommendations
+    if (structure.totalLines > 50000) {
+      recommendations.push('Consider breaking down large codebase into microservices or modules')
+    }
+    if (!structure.testStructure || structure.testStructure.testFiles === 0) {
+      recommendations.push('Implement automated testing - no tests found')
+    } else if (structure.testStructure.estimatedCoverage < 50) {
+      recommendations.push(`Increase test coverage from ${structure.testStructure.estimatedCoverage}% to at least 70%`)
+    }
+    
+    // Documentation recommendations
+    if (!structure.hasReadme) {
+      recommendations.push('Add README.md with project documentation')
+    }
+    
+    // Performance recommendations
+    if (structure.totalFiles > 1000) {
+      recommendations.push('Optimize build process for large codebase')
+    }
+    
+    // If no specific recommendations, add general ones
+    if (recommendations.length === 0) {
+      recommendations.push('Maintain current code quality standards')
+      recommendations.push('Continue regular dependency updates')
+      recommendations.push('Monitor security advisories')
+    }
+    
     return {
-      riskLevel: security.securityScore < 70 ? 'high' : 'medium',
-      businessValue: structure.projectType === 'Unknown' ? 'medium' : 'high',
-      recommendations: [
-        'Modernize outdated dependencies',
-        'Improve security posture',
-        'Enhance code documentation'
-      ]
+      riskLevel,
+      businessValue,
+      recommendations
     }
   }
 

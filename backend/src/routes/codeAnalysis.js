@@ -451,8 +451,11 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'completed', 100)
       await DatabaseService.updateCodeAnalysisData(analysisId, finalResult)
 
-      // Clean up Supabase file
-      await supabaseZipService.cleanupZip(supabaseUpload.path).catch(() => {})
+      // Clean up Supabase file after 10 minutes
+      setTimeout(async () => {
+        await supabaseZipService.cleanupZip(supabaseUpload.path).catch(() => {})
+        logger.info(`🗑️ Cleaned up ZIP file after 10 minutes: ${supabaseUpload.path}`)
+      }, 10 * 60 * 1000) // 10 minutes
       
       res.json({
         success: true,
@@ -479,9 +482,12 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       })
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'failed', 0, analysisError.message)
       
-      // Clean up Supabase file
+      // Clean up Supabase file after 10 minutes (even on failure, for debugging)
       if (supabaseUpload) {
-        await supabaseZipService.cleanupZip(supabaseUpload.path).catch(() => {})
+        setTimeout(async () => {
+          await supabaseZipService.cleanupZip(supabaseUpload.path).catch(() => {})
+          logger.info(`🗑️ Cleaned up failed analysis ZIP after 10 minutes: ${supabaseUpload.path}`)
+        }, 10 * 60 * 1000) // 10 minutes
       }
       
       res.status(500).json({
