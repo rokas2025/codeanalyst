@@ -409,7 +409,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         code_quality_score: codeAnalysis.qualityScore,
         technical_debt_percentage: codeAnalysis.technicalDebt,
         test_coverage_percentage: typeof codeAnalysis.testCoverage === 'object' ? (codeAnalysis.testCoverage?.percentage || 0) : (codeAnalysis.testCoverage || 0),
-        complexity_score: codeAnalysis.complexity,
+        complexity_score: typeof codeAnalysis.complexity === 'object' ? (codeAnalysis.complexity?.averageComplexity || 0) : (codeAnalysis.complexity || 0),
         test_results: codeAnalysis.testResults,
         build_results: codeAnalysis.buildResults,
         static_analysis_results: codeAnalysis.staticAnalysis
