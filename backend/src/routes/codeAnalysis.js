@@ -397,22 +397,30 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       })
       
       const codeAnalyzer = new CodeAnalyzer()
-      const codeAnalysis = await codeAnalyzer.analyzeCodebase(extractedData.extractedFiles, null)
+      const rawAnalysis = await codeAnalyzer.analyzeCodebase(extractedData.extractedFiles, null)
+      
+      // Format the analysis result properly
+      const codeAnalysis = codeAnalyzer.formatAnalysisResult(rawAnalysis, {
+        totalFiles: extractedData.extractedFiles.length,
+        analyzedFiles: extractedData.extractedFiles.filter(f => codeAnalyzer.isAnalyzableFile(f.path)).length,
+        projectPath: null
+      })
+      
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
       
       // Step 3: Store code analysis data
       await DatabaseService.updateCodeAnalysisData(analysisId, {
-        total_files: codeAnalysis.totalFiles,
-        total_lines: codeAnalysis.totalLines,
-        languages: codeAnalysis.languages,
-        frameworks: codeAnalysis.frameworks,
-        code_quality_score: codeAnalysis.qualityScore,
-        technical_debt_percentage: codeAnalysis.technicalDebt,
-        test_coverage_percentage: typeof codeAnalysis.testCoverage === 'object' ? (codeAnalysis.testCoverage?.percentage || 0) : (codeAnalysis.testCoverage || 0),
-        complexity_score: typeof codeAnalysis.complexity === 'object' ? (codeAnalysis.complexity?.averageComplexity || 0) : (codeAnalysis.complexity || 0),
-        test_results: codeAnalysis.testResults,
-        build_results: codeAnalysis.buildResults,
-        static_analysis_results: codeAnalysis.staticAnalysis
+        total_files: codeAnalysis.totalFiles || 0,
+        total_lines: codeAnalysis.totalLines || 0,
+        languages: codeAnalysis.languages || [],
+        frameworks: codeAnalysis.frameworks || [],
+        code_quality_score: codeAnalysis.codeQualityScore || 0,
+        technical_debt_percentage: codeAnalysis.technicalDebtPercentage || 0,
+        test_coverage_percentage: codeAnalysis.testCoveragePercentage || 0,
+        complexity_score: codeAnalysis.complexityScore || 0,
+        test_results: codeAnalysis.testResults || {},
+        build_results: codeAnalysis.buildResults || {},
+        static_analysis_results: codeAnalysis.staticAnalysis || {}
       })
       
       // Step 4: AI Analysis
