@@ -263,9 +263,15 @@ export class CodeAnalyzer {
     ]
     
     complexityKeywords.forEach(keyword => {
-      const matches = content.match(new RegExp(`\\b${keyword}\\b`, 'g'))
-      if (matches) {
-        complexity += matches.length
+      // Escape special regex characters
+      const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      try {
+        const matches = content.match(new RegExp(`\\b${escapedKeyword}\\b`, 'g'))
+        if (matches) {
+          complexity += matches.length
+        }
+      } catch (e) {
+        // Skip invalid regex patterns
       }
     })
     
