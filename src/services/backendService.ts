@@ -316,7 +316,23 @@ class BackendService {
    * Superadmin: Reactivate user
    */
   async reactivateUser(userId: string): Promise<void> {
-    await api.post(`/superadmin/users/${userId}/reactivate`)
+    try {
+      await api.post(`/superadmin/users/${userId}/reactivate`)
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        // Fallback for environments that only expose the original /activate route
+        await api.post(`/superadmin/users/${userId}/activate`)
+        return
+      }
+      throw error
+    }
+  }
+
+  /**
+   * Superadmin: Delete user
+   */
+  async deleteUser(userId: string): Promise<void> {
+    await api.delete(`/superadmin/users/${userId}`)
   }
 
   /**

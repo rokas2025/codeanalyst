@@ -547,6 +547,20 @@ router.post('/sync-supabase', async (req, res) => {
     
     let user = await DatabaseService.getUserById(supabaseUserId)
     let isNewUser = false
+    let matchedExistingByEmail = false
+    
+    if (!user) {
+      user = await DatabaseService.getUserByEmail(email)
+      if (user) {
+        matchedExistingByEmail = true
+        logger.info('🔄 Supabase user matched existing account by email', {
+          email,
+          supabaseUserId,
+          existingUserId: user.id,
+          provider: user.auth_provider
+        })
+      }
+    }
     
     if (!user) {
       // Create new user from Google OAuth

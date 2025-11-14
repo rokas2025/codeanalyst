@@ -1399,6 +1399,40 @@ export class DatabaseService {
   }
 
   /**
+   * Permanently delete a user (and cascade related data)
+   * @param {string} userId - User ID to delete
+   * @param {string} deletedBy - Superadmin performing the deletion
+   */
+  static async deleteUser(userId, deletedBy) {
+    const client = await db.connect()
+    try {
+      await client.query('BEGIN')
+
+      await client.query(`
+        INSERT INTO user_activation_log (user_id, action, performed_by, reason)
+        VALUES ($1::UUID, 'deactivated', $2::UUID, $3)
+      `, [userId, deletedBy, 'User permanently deleted by superadmin'])
+
+      const result = await client.query(`
+        DELETE FROM users
+        WHERE id = $1::UUID
+        RETURNING id, email, name
+      `, [userId])
+
+      await client.query('COMMIT')
+
+      logger.logDatabase('delete', 'users', result.rows.length, { userId, action: 'deleted' })
+      return result.rows[0] || null
+    } catch (error) {
+      await client.query('ROLLBACK')
+      logger.logError('Database deleteUser', error, { userId, deletedBy })
+      throw error
+    } finally {
+      client.release()
+    }
+  }
+
+  /**
    * Assign superadmin role to a user
    * @param {string} userId - User ID to promote
    * @returns {object} Updated user with role

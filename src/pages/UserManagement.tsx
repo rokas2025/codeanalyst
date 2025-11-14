@@ -7,6 +7,7 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline'
 import { backendService } from '../services/backendService'
+import { useAuthStore } from '../stores/authStore'
 import toast from 'react-hot-toast'
 
 interface User {
@@ -25,6 +26,7 @@ export function UserManagement() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'pending' | 'active' | 'inactive'>('all')
+  const currentUserId = useAuthStore(state => state.user?.id)
 
   useEffect(() => {
     loadUsers()
@@ -87,6 +89,21 @@ export function UserManagement() {
       loadUsers()
     } catch (error: any) {
       toast.error(error.message || 'Failed to promote user')
+    }
+  }
+
+  const handleDeleteUser = async (userId: string, email: string) => {
+    if (!confirm(`This will permanently delete ${email} and all related projects. This action cannot be undone. Continue?`)) {
+      return
+    }
+
+    try {
+      await backendService.deleteUser(userId)
+      toast.success('User deleted successfully')
+      loadUsers()
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message || 'Failed to delete user'
+      toast.error(message)
     }
   }
 
@@ -229,42 +246,53 @@ export function UserManagement() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                  {user.pending_approval && (
-                    <button
-                      onClick={() => handleApproveUser(user.id)}
-                      className="text-green-600 hover:text-green-900"
-                    >
-                      Approve
-                    </button>
-                  )}
-                  
-                  {user.is_active && !user.pending_approval && (
-                    <button
-                      onClick={() => handleDeactivateUser(user.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Deactivate
-                    </button>
-                  )}
-                  
-                  {!user.is_active && !user.pending_approval && (
-                    <button
-                      onClick={() => handleReactivateUser(user.id)}
-                      className="text-green-600 hover:text-green-900"
-                    >
-                      Reactivate
-                    </button>
-                  )}
-                  
-                  {user.role !== 'superadmin' && user.is_active && !user.pending_approval && (
-                    <button
-                      onClick={() => handleMakeSuperadmin(user.id)}
-                      className="text-purple-600 hover:text-purple-900"
-                    >
-                      Make Superadmin
-                    </button>
-                  )}
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div className="flex justify-end gap-2">
+                    {user.pending_approval && (
+                      <button
+                        onClick={() => handleApproveUser(user.id)}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        Approve
+                      </button>
+                    )}
+                    
+                    {user.is_active && !user.pending_approval && (
+                      <button
+                        onClick={() => handleDeactivateUser(user.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Deactivate
+                      </button>
+                    )}
+                    
+                    {!user.is_active && !user.pending_approval && (
+                      <button
+                        onClick={() => handleReactivateUser(user.id)}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        Reactivate
+                      </button>
+                    )}
+                    
+                    {user.role !== 'superadmin' && user.is_active && !user.pending_approval && (
+                      <button
+                        onClick={() => handleMakeSuperadmin(user.id)}
+                        className="text-purple-600 hover:text-purple-900"
+                      >
+                        Make Superadmin
+                      </button>
+                    )}
+
+                    {user.id !== currentUserId && (
+                      <button
+                        onClick={() => handleDeleteUser(user.id, user.email)}
+                        className="text-red-700 hover:text-red-900 font-semibold"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

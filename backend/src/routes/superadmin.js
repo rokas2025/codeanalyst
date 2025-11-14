@@ -3,6 +3,7 @@ import { DatabaseService } from '../services/DatabaseService.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { isSuperAdmin } from '../middleware/roleMiddleware.js';
 import logger from '../utils/logger.js';
+import { supabase } from '../config/supabase.js';
 
 const router = express.Router();
 
@@ -111,11 +112,7 @@ router.post('/users/:userId/deactivate', async (req, res) => {
   }
 });
 
-/**
- * POST /api/superadmin/users/:userId/activate
- * Reactivate a deactivated user
- */
-router.post('/users/:userId/activate', async (req, res) => {
+const reactivateUserHandler = async (req, res) => {
   try {
     const { userId } = req.params;
     const superadminId = req.user.id;
@@ -141,6 +138,80 @@ router.post('/users/:userId/activate', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to reactivate user'
+    });
+  }
+};
+
+/**
+ * POST /api/superadmin/users/:userId/activate
+ * Legacy alias for reactivation
+ */
+router.post('/users/:userId/activate', reactivateUserHandler);
+
+/**
+ * POST /api/superadmin/users/:userId/reactivate
+ * Reactivate a deactivated user (new endpoint)
+ */
+router.post('/users/:userId/reactivate', reactivateUserHandler);
+
+/**
+ * DELETE /api/superadmin/users/:userId
+ * Permanently delete a user and their data
+ */
+router.delete('/users/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const superadminId = req.user.id;
+
+    if (userId === superadminId) {
+      return res.status(400).json({
+        success: false,
+        error: 'You cannot delete your own account'
+      });
+    }
+
+    const targetUser = await DatabaseService.getUserById(userId);
+
+    if (!targetUser) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    logger.info('🗑️ Permanently deleting user', { userId, superadminId });
+
+    const deletedUser = await DatabaseService.deleteUser(userId, superadminId);
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    if (targetUser.auth_provider === 'supabase' && supabase) {
+      try {
+        await supabase.auth.admin.deleteUser(userId);
+        logger.info('🧹 Supabase auth user removed', { userId });
+      } catch (supabaseError) {
+        logger.warn('Failed to delete Supabase auth user', {
+          userId,
+          error: supabaseError.message
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'User deleted successfully',
+      user: deletedUser
+    });
+  } catch (error) {
+    logger.error('Failed to delete user:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to delete user'
     });
   }
 });
