@@ -408,7 +408,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         frameworks: codeAnalysis.frameworks,
         code_quality_score: codeAnalysis.qualityScore,
         technical_debt_percentage: codeAnalysis.technicalDebt,
-        test_coverage_percentage: codeAnalysis.testCoverage,
+        test_coverage_percentage: typeof codeAnalysis.testCoverage === 'object' ? (codeAnalysis.testCoverage?.percentage || 0) : (codeAnalysis.testCoverage || 0),
         complexity_score: codeAnalysis.complexity,
         test_results: codeAnalysis.testResults,
         build_results: codeAnalysis.buildResults,
