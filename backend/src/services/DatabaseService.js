@@ -1404,7 +1404,7 @@ export class DatabaseService {
    * @param {string} deletedBy - Superadmin performing the deletion
    */
   static async deleteUser(userId, deletedBy) {
-    const client = await db.connect()
+    const client = await db.getClient()
     try {
       await client.query('BEGIN')
 
