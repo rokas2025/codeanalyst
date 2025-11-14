@@ -1408,21 +1408,33 @@ export class DatabaseService {
     try {
       await client.query('BEGIN')
 
-      await client.query(`
-        INSERT INTO user_activation_log (user_id, action, performed_by, reason)
-        VALUES ($1::UUID, 'deactivated', $2::UUID, $3)
-      `, [userId, deletedBy, 'User permanently deleted by superadmin'])
+      // Log deletion BEFORE deleting user (so user_id FK is still valid)
+      try {
+        await client.query(`
+          INSERT INTO user_activation_log (user_id, action, performed_by, reason)
+          VALUES ($1::UUID, 'deactivated', $2::UUID, $3)
+        `, [userId, deletedBy, 'User permanently deleted by superadmin'])
+      } catch (logError) {
+        // If logging fails (e.g., table doesn't exist), continue with deletion
+        logger.warn('Failed to log user deletion', { userId, error: logError.message })
+      }
 
+      // Delete user - CASCADE will handle related records
       const result = await client.query(`
         DELETE FROM users
         WHERE id = $1::UUID
-        RETURNING id, email, name
+        RETURNING id, email, name, auth_provider
       `, [userId])
+
+      if (result.rows.length === 0) {
+        await client.query('ROLLBACK')
+        return null
+      }
 
       await client.query('COMMIT')
 
       logger.logDatabase('delete', 'users', result.rows.length, { userId, action: 'deleted' })
-      return result.rows[0] || null
+      return result.rows[0]
     } catch (error) {
       await client.query('ROLLBACK')
       logger.logError('Database deleteUser', error, { userId, deletedBy })
