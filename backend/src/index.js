@@ -1,6 +1,6 @@
 // CodeAnalyst Backend Server - Development Mode
 // Handles all analysis processing, AI integration, and data storage
-// Test: Railway auto-deploy after enabling Wait for CI - Nov 18, 2025
+// Test: Railway auto-deploy after re-authorizing GitHub - Nov 18, 2025
 
 import express from 'express'
 import cors from 'cors'
