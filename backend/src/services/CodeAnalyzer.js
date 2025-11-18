@@ -5,6 +5,7 @@ import { exec } from 'child_process'
 import { promisify } from 'util'
 import { logger } from '../utils/logger.js'
 import axios from 'axios'
+import { ESLint } from 'eslint'
 
 const execAsync = promisify(exec)
 
@@ -30,7 +31,28 @@ export class CodeAnalyzer {
       ['Flask', [/from flask/, /import Flask/, /@app\.route/, /Flask\(__name__\)/]],
       ['Spring Boot', [/import.*springframework/, /@SpringBootApplication/, /@RestController/]],
       ['Laravel', [/use Illuminate/, /extends Controller/, /Route::/]],
-      ['Ruby on Rails', [/require.*rails/, /class.*Controller/, /belongs_to/, /has_many/]]
+      ['Ruby on Rails', [/require.*rails/, /class.*Controller/, /belongs_to/, /has_many/]],
+      ['WordPress', [
+        /wp-config\.php/i,
+        /wp-content\//i,
+        /wp-includes\//i,
+        /get_header\(\)/i,
+        /wp_enqueue_script/i,
+        /wp_enqueue_style/i,
+        /add_action\(/i,
+        /add_filter\(/i,
+        /\$wpdb->/i,
+        /register_post_type\(/i,
+        /register_taxonomy\(/i,
+        /wp_query/i,
+        /the_post\(\)/i,
+        /have_posts\(\)/i,
+        /get_template_part\(/i,
+        /wp_footer\(\)/i,
+        /wp_head\(\)/i,
+        /Theme Name:/i,
+        /Plugin Name:/i
+      ]]
     ])
     
     // Security vulnerability patterns
@@ -69,10 +91,17 @@ export class CodeAnalyzer {
         complexity: await this.analyzeComplexity(files),
         dependencies: await this.analyzeDependencies(files, projectPath),
         security: await this.analyzeSecurityIssues(files),
+        wordpressSecurity: await this.analyzeWordPressSecurityIssues(files),
         performance: await this.analyzePerformance(files),
         maintainability: await this.analyzeMaintainability(files),
         testCoverage: await this.analyzeTestCoverage(files, projectPath),
         documentation: await this.analyzeDocumentation(files)
+      }
+      
+      // Merge WordPress security into main security object
+      if (analysis.wordpressSecurity.vulnerabilities.length > 0) {
+        analysis.security.vulnerabilities.push(...analysis.wordpressSecurity.vulnerabilities)
+        analysis.security.totalIssues += analysis.wordpressSecurity.totalIssues
       }
       
       // Calculate overall scores
@@ -154,6 +183,7 @@ export class CodeAnalyzer {
       complexMethods: 0
     }
 
+    // Run basic quality checks
     for (const file of files) {
       if (!file.content) continue
       
@@ -172,6 +202,17 @@ export class CodeAnalyzer {
         }
       })
     }
+    
+    // Run ESLint analysis on JavaScript/TypeScript files
+    const eslintIssues = await this.analyzeWithESLint(files, projectPath)
+    quality.issues.push(...eslintIssues)
+    
+    // Count ESLint linting errors
+    eslintIssues.forEach(issue => {
+      if (issue.type === 'linting') {
+        quality.lintingErrors++
+      }
+    })
     
     return quality
   }
@@ -212,6 +253,93 @@ export class CodeAnalyzer {
     })
     
     return issues
+  }
+
+  /**
+   * Run ESLint analysis on JavaScript/TypeScript files
+   */
+  async analyzeWithESLint(files, projectPath) {
+    const eslintIssues = []
+    
+    try {
+      // Initialize ESLint with basic configuration
+      const eslint = new ESLint({
+        useEslintrc: false,
+        overrideConfig: {
+          env: {
+            browser: true,
+            node: true,
+            es2021: true
+          },
+          parserOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            ecmaFeatures: {
+              jsx: true
+            }
+          },
+          plugins: ['security'],
+          extends: ['eslint:recommended', 'plugin:security/recommended'],
+          rules: {
+            'no-unused-vars': 'warn',
+            'no-console': 'off', // Allow console in analysis
+            'no-undef': 'error',
+            'no-var': 'warn',
+            'prefer-const': 'warn',
+            'eqeqeq': 'warn',
+            'security/detect-object-injection': 'warn',
+            'security/detect-non-literal-regexp': 'warn',
+            'security/detect-unsafe-regex': 'error'
+          }
+        }
+      })
+      
+      // Filter JS/TS files
+      const jsFiles = files.filter(f => 
+        ['.js', '.jsx', '.ts', '.tsx'].includes(path.extname(f.name))
+      )
+      
+      if (jsFiles.length === 0) {
+        return eslintIssues
+      }
+      
+      logger.info(`🔍 Running ESLint on ${jsFiles.length} JavaScript/TypeScript files`)
+      
+      // Analyze each file
+      for (const file of jsFiles.slice(0, 50)) { // Limit to 50 files for performance
+        try {
+          const results = await eslint.lintText(file.content, {
+            filePath: file.path
+          })
+          
+          for (const result of results) {
+            for (const message of result.messages) {
+              eslintIssues.push({
+                type: 'linting',
+                severity: message.severity === 2 ? 'high' : 'medium',
+                message: message.message,
+                file: file.path,
+                line: message.line,
+                column: message.column,
+                rule: message.ruleId,
+                source: 'eslint'
+              })
+            }
+          }
+        } catch (error) {
+          logger.warn(`ESLint failed for ${file.path}:`, error.message)
+        }
+      }
+      
+      if (eslintIssues.length > 0) {
+        logger.info(`✅ ESLint found ${eslintIssues.length} issues`)
+      }
+      
+    } catch (error) {
+      logger.warn('ESLint initialization failed:', error.message)
+    }
+    
+    return eslintIssues
   }
 
   /**
@@ -296,7 +424,7 @@ export class CodeAnalyzer {
   }
 
   /**
-   * Analyze dependencies
+   * Analyze dependencies (Node.js + PHP + WordPress)
    */
   async analyzeDependencies(files, projectPath) {
     const dependencies = {
@@ -305,28 +433,148 @@ export class CodeAnalyzer {
       vulnerable: 0,
       unused: 0,
       packages: [],
-      circular: []
+      circular: [],
+      byType: {
+        npm: 0,
+        composer: 0,
+        wordpress: 0
+      }
     }
     
-    // Analyze package.json for Node.js projects
+    // 1. Analyze package.json for Node.js projects
     const packageJsonFile = files.find(f => f.name === 'package.json')
     if (packageJsonFile) {
       try {
         const packageData = JSON.parse(packageJsonFile.content)
         const deps = { ...packageData.dependencies, ...packageData.devDependencies }
         
-        dependencies.total = Object.keys(deps).length
-        dependencies.packages = Object.entries(deps).map(([name, version]) => ({
+        const npmPackages = Object.entries(deps).map(([name, version]) => ({
           name,
           version,
-          type: packageData.dependencies?.[name] ? 'production' : 'development'
+          type: packageData.dependencies?.[name] ? 'production' : 'development',
+          manager: 'npm'
         }))
+        
+        dependencies.packages.push(...npmPackages)
+        dependencies.total += npmPackages.length
+        dependencies.byType.npm = npmPackages.length
+        
+        logger.info(`📦 Found ${npmPackages.length} npm dependencies`)
       } catch (error) {
         logger.warn('Failed to parse package.json:', error)
       }
     }
     
+    // 2. Analyze composer.json for PHP projects
+    const composerJsonFile = files.find(f => f.name === 'composer.json')
+    if (composerJsonFile) {
+      try {
+        const composerData = JSON.parse(composerJsonFile.content)
+        const deps = { 
+          ...composerData.require, 
+          ...composerData['require-dev'] 
+        }
+        
+        const composerPackages = Object.entries(deps)
+          .filter(([name]) => name !== 'php') // Exclude PHP version requirement
+          .map(([name, version]) => ({
+            name,
+            version,
+            type: composerData.require?.[name] ? 'production' : 'development',
+            manager: 'composer'
+          }))
+        
+        dependencies.packages.push(...composerPackages)
+        dependencies.total += composerPackages.length
+        dependencies.byType.composer = composerPackages.length
+        
+        logger.info(`📦 Found ${composerPackages.length} composer dependencies`)
+      } catch (error) {
+        logger.warn('Failed to parse composer.json:', error)
+      }
+    }
+    
+    // 3. Detect WordPress plugins and themes
+    const wpPlugins = this.detectWordPressPlugins(files)
+    const wpThemes = this.detectWordPressThemes(files)
+    
+    const wordpressPackages = [
+      ...wpPlugins.map(p => ({ ...p, type: 'wordpress-plugin', manager: 'wordpress' })),
+      ...wpThemes.map(t => ({ ...t, type: 'wordpress-theme', manager: 'wordpress' }))
+    ]
+    
+    dependencies.packages.push(...wordpressPackages)
+    dependencies.total += wordpressPackages.length
+    dependencies.byType.wordpress = wordpressPackages.length
+    
+    if (wordpressPackages.length > 0) {
+      logger.info(`📦 Found ${wpPlugins.length} WordPress plugins and ${wpThemes.length} themes`)
+    }
+    
     return dependencies
+  }
+
+  /**
+   * Detect WordPress plugins from file structure
+   */
+  detectWordPressPlugins(files) {
+    const plugins = []
+    const pluginFiles = files.filter(f => 
+      f.path.includes('wp-content/plugins/') && 
+      f.name.endsWith('.php')
+    )
+    
+    for (const file of pluginFiles) {
+      if (!file.content) continue
+      
+      // Look for plugin header in main plugin file
+      const headerMatch = file.content.match(/Plugin Name:\s*(.+)/i)
+      const versionMatch = file.content.match(/Version:\s*([0-9.]+)/i)
+      
+      if (headerMatch) {
+        const pluginDir = file.path.split('wp-content/plugins/')[1]?.split('/')[0]
+        plugins.push({
+          name: headerMatch[1].trim(),
+          version: versionMatch ? versionMatch[1] : 'unknown',
+          directory: pluginDir,
+          file: file.path
+        })
+      }
+    }
+    
+    return plugins
+  }
+
+  /**
+   * Detect WordPress themes from file structure
+   */
+  detectWordPressThemes(files) {
+    const themes = []
+    const themeFiles = files.filter(f => 
+      f.path.includes('wp-content/themes/') && 
+      f.name === 'style.css'
+    )
+    
+    for (const file of themeFiles) {
+      if (!file.content) continue
+      
+      const themeNameMatch = file.content.match(/Theme Name:\s*(.+)/i)
+      const versionMatch = file.content.match(/Version:\s*([0-9.]+)/i)
+      const authorMatch = file.content.match(/Author:\s*(.+)/i)
+      
+      if (themeNameMatch) {
+        const themeDir = file.path.split('wp-content/themes/')[1]?.split('/')[0]
+        themes.push({
+          name: themeNameMatch[1].trim(),
+          version: versionMatch ? versionMatch[1] : 'unknown',
+          author: authorMatch ? authorMatch[1].trim() : 'unknown',
+          directory: themeDir,
+          file: file.path
+        })
+      }
+    }
+    
+    return themes
   }
 
   /**
@@ -368,6 +616,98 @@ export class CodeAnalyzer {
     
     security.totalIssues = security.vulnerabilities.length
     return security
+  }
+
+  /**
+   * Analyze WordPress-specific security issues
+   */
+  async analyzeWordPressSecurityIssues(files) {
+    const wordpressSecurity = {
+      vulnerabilities: [],
+      totalIssues: 0
+    }
+    
+    const wpSecurityPatterns = [
+      // Nonce verification missing
+      { 
+        pattern: /\$_POST\[/gi, 
+        checkPattern: /wp_verify_nonce/i,
+        type: 'missing-nonce-verification',
+        severity: 'high',
+        message: '$_POST used without nonce verification'
+      },
+      // Direct database queries without prepare
+      { 
+        pattern: /\$wpdb->query\s*\(\s*["'][^"']*\$|->query\s*\(\s*["'][^"']*\./gi,
+        checkPattern: null,
+        type: 'sql-injection',
+        severity: 'critical',
+        message: 'Direct SQL query without prepare() - SQL injection risk'
+      },
+      // Unescaped output
+      { 
+        pattern: /echo\s+\$_(GET|POST|REQUEST)/gi,
+        checkPattern: /esc_html|esc_attr|esc_url|sanitize_/i,
+        type: 'xss-vulnerability',
+        severity: 'high',
+        message: 'User input echoed without escaping - XSS risk'
+      },
+      // File inclusion vulnerability
+      { 
+        pattern: /require\s*\(\s*\$_(GET|POST|REQUEST)|include\s*\(\s*\$_(GET|POST|REQUEST)/gi,
+        checkPattern: null,
+        type: 'file-inclusion',
+        severity: 'critical',
+        message: 'Dynamic file inclusion from user input'
+      },
+      // Unsafe deserialization
+      { 
+        pattern: /unserialize\s*\(\s*\$_(GET|POST|REQUEST|COOKIE)/gi,
+        checkPattern: null,
+        type: 'unsafe-deserialization',
+        severity: 'critical',
+        message: 'Unsafe deserialization of user input'
+      }
+    ]
+    
+    for (const file of files) {
+      if (!file.content || !file.name.endsWith('.php')) continue
+      
+      wpSecurityPatterns.forEach(({ pattern, checkPattern, type, severity, message }) => {
+        const matches = [...file.content.matchAll(pattern)]
+        
+        matches.forEach(match => {
+          // If checkPattern exists, verify if security function is missing
+          if (checkPattern) {
+            const surroundingCode = file.content.substring(
+              Math.max(0, match.index - 500),
+              Math.min(file.content.length, match.index + 500)
+            )
+            if (checkPattern.test(surroundingCode)) {
+              // Security function found, skip
+              return
+            }
+          }
+          
+          wordpressSecurity.vulnerabilities.push({
+            type,
+            severity,
+            message,
+            file: file.path,
+            line: file.content.substring(0, match.index).split('\n').length,
+            code: match[0]
+          })
+        })
+      })
+    }
+    
+    wordpressSecurity.totalIssues = wordpressSecurity.vulnerabilities.length
+    
+    if (wordpressSecurity.totalIssues > 0) {
+      logger.warn(`⚠️ Found ${wordpressSecurity.totalIssues} WordPress security issues`)
+    }
+    
+    return wordpressSecurity
   }
 
   /**

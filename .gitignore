@@ -118,3 +118,29 @@ website_analysis_*.json
 *.tmp
 *.temp
 .vercel
+
+# Sensitive documentation (may contain tokens/credentials)
+**/backend/.env
+PLATFORM_ACCESS_STATUS.md
+*_CREDENTIALS.md
+*_TOKENS.md
+*_SECRETS.md
+
+# Railway and deployment configs with secrets
+railway.development.toml
+.railway/
+
+# PowerShell scripts with credentials
+configure-supabase-auth.ps1
+configure-auth.ps1
+get-supabase-keys.ps1
+add-railway-var.json
+
+# Documentation files with API keys
+IMPLEMENTATION_SUMMARY_FOR_USER.md
+IMPLEMENTATION_COMPLETE.md
+ENV_SETUP_INSTRUCTIONS.md
+USER_MANAGEMENT_IMPLEMENTATION_COMPLETE.md
+env.production
+SECURITY_AUDIT_COMPLETE.md
+SECURITY_FIX_SUMMARY.md
