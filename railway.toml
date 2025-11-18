@@ -14,4 +14,4 @@ restartPolicyMaxRetries = 10
 [env]
 NODE_ENV = "production"
 
-# This service will deploy from the 'main' branch
+# This service will deploy from the 'main' branch automatically via GitHub
