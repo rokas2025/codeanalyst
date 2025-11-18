@@ -1,5 +1,6 @@
 // CodeAnalyst Backend Server - Development Mode
 // Handles all analysis processing, AI integration, and data storage
+// Test: GitHub auto-deployment verification - Nov 18, 2025
 
 import express from 'express'
 import cors from 'cors'

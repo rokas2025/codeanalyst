@@ -1,3 +1,4 @@
+// Test: Vercel auto-deployment verification - Nov 18, 2025
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
