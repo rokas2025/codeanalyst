@@ -30,10 +30,18 @@ class CodeAnalyst_REST_API {
         ));
         
         // Get specific theme file content
-        register_rest_route('codeanalyst/v1', '/theme-file/(?P<file>.+)', array(
+        register_rest_route('codeanalyst/v1', '/theme-file', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_theme_file_content'),
-            'permission_callback' => array($this, 'check_permission')
+            'permission_callback' => array($this, 'check_permission'),
+            'args' => array(
+                'file' => array(
+                    'required' => true,
+                    'type' => 'string',
+                    'description' => 'Relative path to the theme file',
+                    'sanitize_callback' => 'sanitize_text_field'
+                )
+            )
         ));
         
         // Get site information (theme, builders, versions)

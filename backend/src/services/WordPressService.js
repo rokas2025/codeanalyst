@@ -577,9 +577,13 @@ export class WordPressService {
       
       const axios = (await import('axios')).default
       
+      // Use query parameter instead of path parameter to avoid slash encoding issues
       const response = await axios.get(
-        `${connection.site_url}/wp-json/codeanalyst/v1/theme-file/${encodeURIComponent(filePath)}`,
+        `${connection.site_url}/wp-json/codeanalyst/v1/theme-file`,
         {
+          params: {
+            file: filePath
+          },
           headers: {
             'X-API-Key': connection.api_key
           },

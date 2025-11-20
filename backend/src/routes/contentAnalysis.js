@@ -557,9 +557,12 @@ Focus on:
 
     let analysisData
     try {
-      analysisData = JSON.parse(response.choices[0].message.content)
+      const rawContent = response.choices[0].message.content
+      logger.info(`OpenAI response length: ${rawContent.length} chars`)
+      analysisData = JSON.parse(rawContent)
     } catch (parseError) {
-      console.error('Failed to parse OpenAI response:', parseError)
+      logger.error('Failed to parse OpenAI response:', parseError)
+      logger.error('Raw OpenAI response:', response.choices[0].message.content?.substring(0, 500))
       // Fallback analysis with real keywords
       const fallbackKeywords = extractKeywords(textToAnalyze, '')
         
