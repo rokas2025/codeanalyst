@@ -33,14 +33,12 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
-# Copy WordPress plugin from parent directory (repository root)
-COPY ../wordpress-plugin ./wordpress-plugin
-
-# Build WordPress plugin ZIP
-RUN npm run build:plugin
-
 # Create necessary directories
 RUN mkdir -p uploads temp logs
+
+# Note: WordPress plugin ZIP should be pre-built and committed to repository root
+# The download endpoint looks for it at multiple locations including process.cwd()
+# Run "npm run build:plugin" locally before committing if plugin code changes
 
 # Set environment variable for Railway
 ENV RAILWAY_ENVIRONMENT=true
