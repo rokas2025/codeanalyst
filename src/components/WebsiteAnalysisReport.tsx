@@ -494,7 +494,10 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-1">Page Load Performance</h4>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-medium text-gray-900">Page Load Performance</h4>
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Google Lighthouse</span>
+                      </div>
                       <p className="text-sm text-gray-600">Complete loading timeline with Core Web Vitals</p>
                     </div>
                     <ClockIcon className="w-8 h-8 text-blue-500" />
@@ -705,14 +708,18 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
           {activeTab === 'seo' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Comprehensive SEO Analysis</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-semibold">Comprehensive SEO Analysis</h3>
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-medium">AI Analysis</span>
+                </div>
                 <div className="flex items-center space-x-4">
                   <div className={`px-4 py-2 rounded-full text-sm font-medium ${getScoreColor(seoScore)}`}>
                     SEO Score: {seoScore}/100
                   </div>
                   {lighthouseSeoScore && lighthouseSeoScore !== seoScore && (
-                    <div className="text-xs text-gray-500">
-                      (Lighthouse: {lighthouseSeoScore}/100)
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Lighthouse</span>
+                      <span>{lighthouseSeoScore}/100</span>
                     </div>
                   )}
                 </div>
@@ -738,10 +745,13 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
               {/* Content Analysis */}
               {seo.contentDepth && (
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
-                  <h4 className="font-medium text-gray-900 mb-4 flex items-center">
-                    <DocumentTextIcon className="w-5 h-5 text-blue-600 mr-2" />
-                    Content Quality Analysis
-                  </h4>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h4 className="font-medium text-gray-900 flex items-center">
+                      <DocumentTextIcon className="w-5 h-5 text-blue-600 mr-2" />
+                      Content Quality Analysis
+                    </h4>
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-medium">AI Analysis</span>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-gray-900">{seo.contentDepth.wordCount || 0}</div>
@@ -771,10 +781,13 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
               {/* Technical SEO */}
               {seo.technicalSEO && (
                 <div className="bg-white border rounded-lg p-6">
-                  <h4 className="font-medium text-gray-900 mb-4 flex items-center">
-                    <Cog6ToothIcon className="w-5 h-5 text-gray-600 mr-2" />
-                    Technical SEO Health
-                  </h4>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h4 className="font-medium text-gray-900 flex items-center">
+                      <Cog6ToothIcon className="w-5 h-5 text-gray-600 mr-2" />
+                      Technical SEO Health
+                    </h4>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Google Lighthouse</span>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Title Analysis */}
                     {seo.technicalSEO.factors?.titleOptimization && (
@@ -1282,11 +1295,17 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
           {/* Security Tab */}
           {activeTab === 'security' && (
             <div className="space-y-6">
-              <h3 className="text-lg font-semibold">Security Analysis</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-semibold">Security Analysis</h3>
+                <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-medium">Mozilla Observatory</span>
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-4">Security Headers</h4>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h4 className="font-medium text-gray-900">Security Headers</h4>
+                    <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-medium">Mozilla Observatory</span>
+                  </div>
                   <div className="space-y-2">
                     {security.headers ? (
                       Object.entries(security.headers).map(([header, present]: [string, any]) => (
@@ -1306,7 +1325,10 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                 </div>
 
                 <div className="bg-white border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-4">HTTPS & Certificates</h4>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h4 className="font-medium text-gray-900">HTTPS & Certificates</h4>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Google Lighthouse</span>
+                  </div>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       {results.url?.startsWith('https://') ? (
@@ -1561,15 +1583,45 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                       <span className="text-sm text-gray-600">{overallScore}/100</span>
                     </div>
                     <div className="text-xs text-gray-500 space-y-1">
-                      <p>• Performance: {performanceScore}/100 (25% weight)</p>
-                      <p>• SEO: {seoScore}/100 (25% weight)</p>
-                      <p>• Accessibility: {accessibilityScore}/100 (25% weight)</p>
-                      <p>• Security: {securityScore}/100 (15% weight)</p>
-                      <p>• Best Practices: {bestPracticesScore}/100 (10% weight)</p>
+                      <p className="flex items-center gap-2">
+                        • Performance: {performanceScore}/100 (25% weight)
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Lighthouse</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        • SEO: {seoScore}/100 (25% weight)
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-medium">AI + Lighthouse</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        • Accessibility: {accessibilityScore}/100 (25% weight)
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Lighthouse</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        • Security: {securityScore}/100 (15% weight)
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-medium">Mozilla Observatory</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        • Best Practices: {bestPracticesScore}/100 (10% weight)
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Lighthouse</span>
+                      </p>
                     </div>
                   </div>
                   
                   <div className="pt-4 border-t">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-medium text-gray-700">Data Sources:</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium">Google Lighthouse</span>
+                      {pageSpeed && pageSpeed.success && (
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded font-medium">Google PageSpeed Insights</span>
+                      )}
+                      <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded font-medium">Mozilla Observatory</span>
+                      {analysisMetadata.provider_used && (
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded font-medium">
+                          AI Analysis ({analysisMetadata.provider_used === 'openai' ? 'OpenAI' : 'Anthropic'})
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-gray-500">
                       Scores are based on industry standards including Google Lighthouse metrics, 
                       WCAG accessibility guidelines, and modern web best practices. 
