@@ -310,7 +310,7 @@ Please respond in JSON format with the following structure:
         const completion = await this.providers.openai.chat.completions.create({
           model: modelUsed,
           messages: [{ role: 'user', content: prompt }],
-          max_tokens: 2000,
+          max_completion_tokens: 2000,
           temperature: 0.3
         })
         

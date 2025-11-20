@@ -542,6 +542,7 @@ export class WordPressService {
       logger.info(`📁 Fetching theme files from ${connection.site_url}...`)
       
       const axios = (await import('axios')).default
+      const startTime = Date.now()
       
       const response = await axios.get(
         `${connection.site_url}/wp-json/codeanalyst/v1/theme-files`,
@@ -553,14 +554,42 @@ export class WordPressService {
         }
       )
       
+      const responseTime = Date.now() - startTime
+      
+      // Log raw response for debugging
+      logger.info(`📦 WordPress REST API Response (${responseTime}ms):`, {
+        success: response.data?.success,
+        total_files: response.data?.total_files,
+        theme: response.data?.theme,
+        filesArrayLength: Array.isArray(response.data?.files) ? response.data.files.length : 'not-array',
+        responseKeys: Object.keys(response.data || {}),
+        statusCode: response.status
+      })
+      
       if (response.data && response.data.success) {
-        logger.info(`✅ Fetched ${response.data.total_files} theme files from ${response.data.theme}`)
-        return response.data.files
+        const fileCount = response.data.total_files || (Array.isArray(response.data.files) ? response.data.files.length : 0)
+        logger.info(`✅ Fetched ${fileCount} theme files from ${response.data.theme}`)
+        
+        // Log if we got 0 files - this is suspicious
+        if (fileCount === 0) {
+          logger.warn(`⚠️ WordPress returned 0 theme files! Site: ${connection.site_url}, Theme: ${response.data.theme}`)
+          logger.warn(`⚠️ Raw response data:`, JSON.stringify(response.data).substring(0, 500))
+        }
+        
+        return response.data.files || []
       } else {
+        logger.error('❌ Invalid response from WordPress REST API:', response.data)
         throw new Error('Invalid response from WordPress REST API')
       }
     } catch (error) {
       logger.error('Failed to fetch theme files:', error.message)
+      if (error.response) {
+        logger.error('Error response from WordPress:', {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data
+        })
+      }
       throw new Error(`Failed to fetch theme files: ${error.message}`)
     }
   }

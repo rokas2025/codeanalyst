@@ -584,9 +584,20 @@ function CodeAnalystContent() {
                     console.log('🚀 Starting analysis with files:', response.files.length)
                     handleAnalyze(response.files)
                   }, 500)
+                } else if (response.success && response.files && response.files.length === 0) {
+                  // Specific error for 0 files
+                  console.error('❌ WordPress returned 0 theme files')
+                  toast.error(
+                    'No theme files found. Please check:\n' +
+                    '1. Plugin is installed and active\n' +
+                    '2. WordPress site is accessible\n' +
+                    '3. Theme directory contains files\n' +
+                    '4. Plugin has correct permissions',
+                    { duration: 8000 }
+                  )
                 } else {
                   console.error('❌ WordPress theme fetch failed:', response)
-                  toast.error(response.error || 'Failed to fetch theme files or no files found')
+                  toast.error(response.error || 'Failed to fetch theme files')
                 }
               } catch (error) {
                 console.error('❌ WordPress theme fetch exception:', error)
