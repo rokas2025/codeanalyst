@@ -247,6 +247,13 @@ export class ZipService {
     const fileNames = files.map(f => f.name.toLowerCase())
     const paths = files.map(f => f.path.toLowerCase())
     
+    // WordPress detection (comprehensive content-based + path-based)
+    const isWordPress = this.detectWordPress(files, paths, fileNames)
+    if (isWordPress) {
+      frameworks.push('WordPress')
+      logger.info('✅ WordPress framework detected')
+    }
+    
     // Frontend frameworks
     if (paths.some(p => p.includes('react') || p.includes('jsx'))) frameworks.push('React')
     if (paths.some(p => p.includes('vue') || p.includes('.vue'))) frameworks.push('Vue.js')
@@ -277,6 +284,88 @@ export class ZipService {
     if (paths.some(p => p.includes('mocha'))) frameworks.push('Mocha')
     
     return [...new Set(frameworks)] // Remove duplicates
+  }
+
+  /**
+   * Detect WordPress from file paths and content
+   * Matches the comprehensive detection used in CodeAnalyzer.js
+   */
+  detectWordPress(files, paths, fileNames) {
+    // Path-based detection
+    const hasWordPressPath = paths.some(p => 
+      p.includes('wp-content/') || 
+      p.includes('wp-includes/') ||
+      p.includes('wp-config.php') ||
+      p.includes('wp-content\\') || 
+      p.includes('wp-includes\\')
+    )
+    
+    if (hasWordPressPath) {
+      logger.info('WordPress detected via path structure')
+      return true
+    }
+    
+    // Content-based detection for PHP files
+    const phpFiles = files.filter(f => {
+      const ext = f.extension || (f.path ? path.extname(f.path).toLowerCase() : '')
+      return ext === '.php'
+    })
+    
+    if (phpFiles.length === 0) {
+      return false
+    }
+    
+    // WordPress function patterns (same as CodeAnalyzer.js)
+    const wordpressPatterns = [
+      /get_header\(\)/i,
+      /wp_enqueue_script/i,
+      /wp_enqueue_style/i,
+      /add_action\(/i,
+      /add_filter\(/i,
+      /\$wpdb->/i,
+      /register_post_type\(/i,
+      /register_taxonomy\(/i,
+      /wp_query/i,
+      /the_post\(\)/i,
+      /have_posts\(\)/i,
+      /get_template_part\(/i,
+      /wp_footer\(\)/i,
+      /wp_head\(\)/i,
+      /Theme Name:/i,
+      /Plugin Name:/i
+    ]
+    
+    // Check content of PHP files (limit to first 50 files for performance)
+    const filesToCheck = phpFiles.slice(0, 50)
+    let wordpressMatchCount = 0
+    
+    for (const file of filesToCheck) {
+      const content = file.content || ''
+      if (!content) continue
+      
+      // Check if file content matches WordPress patterns
+      for (const pattern of wordpressPatterns) {
+        if (pattern.test(content)) {
+          wordpressMatchCount++
+          logger.info(`WordPress pattern matched in ${file.path}: ${pattern}`)
+          break // Move to next file once we find a match
+        }
+      }
+      
+      // If we find 3+ files with WordPress patterns, it's definitely WordPress
+      if (wordpressMatchCount >= 3) {
+        logger.info(`WordPress detected via content patterns (${wordpressMatchCount} matches)`)
+        return true
+      }
+    }
+    
+    // Even 1-2 matches are strong indicators for WordPress
+    if (wordpressMatchCount > 0) {
+      logger.info(`WordPress likely detected (${wordpressMatchCount} pattern matches)`)
+      return true
+    }
+    
+    return false
   }
 
   /**

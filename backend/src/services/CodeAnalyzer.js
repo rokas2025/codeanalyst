@@ -6,6 +6,8 @@ import { promisify } from 'util'
 import { logger } from '../utils/logger.js'
 import axios from 'axios'
 import { ESLint } from 'eslint'
+import { EscomplexService } from './EscomplexService.js'
+import { PHPStanService } from './PHPStanService.js'
 
 const execAsync = promisify(exec)
 
@@ -214,6 +216,36 @@ export class CodeAnalyzer {
       }
     })
     
+    // Run PHPStan analysis on PHP files
+    try {
+      const phpstanService = new PHPStanService()
+      const phpstanResults = await phpstanService.analyzeCode(files, projectPath)
+      
+      // Add PHPStan results to quality
+      if (phpstanResults && !phpstanResults.error) {
+        quality.phpstan = phpstanResults
+        quality.lintingErrors += phpstanResults.totalErrors || 0
+        
+        // Convert PHPStan errors to quality issues
+        if (phpstanResults.errors) {
+          phpstanResults.errors.forEach(error => {
+            quality.issues.push({
+              type: 'php-static-analysis',
+              severity: 'error',
+              file: error.file,
+              line: error.line,
+              message: error.message
+            })
+          })
+        }
+        
+        logger.info(`✅ PHPStan found ${phpstanResults.totalErrors} errors`)
+      }
+    } catch (error) {
+      logger.warn('PHPStan analysis skipped:', error.message)
+      // Don't fail the entire analysis if PHPStan fails
+    }
+    
     return quality
   }
 
@@ -343,9 +375,56 @@ export class CodeAnalyzer {
   }
 
   /**
-   * Analyze code complexity
+   * Analyze code complexity using escomplex
    */
   async analyzeComplexity(files) {
+    try {
+      // Use escomplex for JavaScript/TypeScript files
+      const escomplexService = new EscomplexService()
+      const escomplexResults = await escomplexService.analyzeComplexity(files)
+      
+      // Also run basic complexity for non-JS files
+      const basicComplexity = await this.calculateBasicComplexity(files)
+      
+      // Merge results
+      const complexity = {
+        // Escomplex results for JS/TS
+        maintainabilityIndex: escomplexResults.maintainabilityIndex || 0,
+        cyclomaticComplexity: escomplexResults.averageComplexity || basicComplexity.cyclomaticComplexity,
+        averageComplexity: escomplexResults.averageComplexity || basicComplexity.averageComplexity,
+        totalFunctions: escomplexResults.functionsAnalyzed || basicComplexity.totalFunctions,
+        
+        // Detailed escomplex data
+        complexFunctions: escomplexResults.complexFunctions || [],
+        perFileComplexity: escomplexResults.perFileComplexity || [],
+        halstead: escomplexResults.aggregateMetrics || {},
+        
+        // Legacy format for backward compatibility
+        highComplexityFiles: escomplexResults.complexFunctions.map(f => ({
+          path: f.file,
+          complexity: f.cyclomatic,
+          function: f.name
+        })) || basicComplexity.highComplexityFiles,
+        
+        // Metadata
+        filesAnalyzed: escomplexResults.filesAnalyzed || 0,
+        recommendations: escomplexService.getRecommendations(escomplexResults)
+      }
+      
+      logger.info(`✅ Complexity analysis complete: MI=${complexity.maintainabilityIndex.toFixed(1)}`)
+      
+      return complexity
+    } catch (error) {
+      logger.error('Complexity analysis failed:', error)
+      // Fallback to basic complexity
+      return await this.calculateBasicComplexity(files)
+    }
+  }
+
+  /**
+   * Calculate basic complexity for non-JS files (fallback)
+   */
+  async calculateBasicComplexity(files) {
     const complexity = {
       cyclomaticComplexity: 0,
       averageComplexity: 0,
@@ -377,7 +456,7 @@ export class CodeAnalyzer {
   }
 
   /**
-   * Calculate file complexity
+   * Calculate file complexity (basic method for non-JS files)
    */
   async calculateFileComplexity(file) {
     let complexity = 1 // Base complexity

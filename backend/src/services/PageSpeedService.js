@@ -1,287 +1,412 @@
-/**
- * Google PageSpeed Insights Service
- * Provides performance, SEO, accessibility, and best practices analysis
- * FREE: 25,000 requests/day!
- */
-
-import axios from 'axios';
-import logger from '../utils/logger.js';
+// Google PageSpeed Insights Service - Performance Analysis
+import axios from 'axios'
+import { logger } from '../utils/logger.js'
 
 export class PageSpeedService {
   constructor() {
-    this.apiKey = process.env.GOOGLE_PAGESPEED_API_KEY;
-    this.baseUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
+    this.apiKey = process.env.GOOGLE_PAGESPEED_API_KEY
+    this.baseUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed'
+    this.timeout = 60000 // 60 seconds
   }
 
   /**
-   * Analyze URL with PageSpeed Insights
-   * @param {string} url - URL to analyze
-   * @param {string} strategy - 'mobile' or 'desktop'
-   * @returns {Object} Analysis results
+   * Analyze website performance using Google PageSpeed Insights
+   * @param {string} url - Website URL to analyze
+   * @param {Object} options - Analysis options
+   * @param {string} options.strategy - 'mobile' or 'desktop' (default: both)
+   * @param {Array} options.categories - Categories to analyze (performance, accessibility, best-practices, seo)
+   * @returns {Object} - Performance analysis results
    */
-  async analyzeUrl(url, strategy = 'mobile') {
+  async analyzePerformance(url, options = {}) {
     try {
       if (!this.apiKey) {
-        throw new Error('Google PageSpeed API key not configured');
+        logger.warn('Google PageSpeed API key not configured')
+        return this.getErrorResult('API key not configured')
       }
 
-      logger.info(`Analyzing ${url} with PageSpeed Insights (${strategy})`);
+      logger.info(`🚀 Starting PageSpeed analysis for: ${url}`)
+
+      const strategies = options.strategy ? [options.strategy] : ['mobile', 'desktop']
+      const results = {}
+
+      // Analyze for each strategy
+      for (const strategy of strategies) {
+        try {
+          const result = await this.runPageSpeedTest(url, strategy, options.categories)
+          results[strategy] = result
+        } catch (error) {
+          logger.warn(`PageSpeed ${strategy} analysis failed:`, error.message)
+          results[strategy] = this.getErrorResult(`${strategy} analysis failed: ${error.message}`)
+        }
+      }
+
+      // Format combined results
+      const formatted = this.formatResults(results, url)
+
+      logger.info(`✅ PageSpeed analysis complete: Performance ${formatted.scores.performance}/100`)
+
+      return formatted
+
+    } catch (error) {
+      logger.error('PageSpeed analysis failed:', error)
+      return this.getErrorResult(error.message)
+    }
+  }
+
+  /**
+   * Run PageSpeed test for a single strategy
+   */
+  async runPageSpeedTest(url, strategy = 'mobile', categories = null) {
+    try {
+      const params = {
+        url: url,
+        key: this.apiKey,
+        strategy: strategy
+      }
+
+      // Add categories if specified
+      if (categories && Array.isArray(categories)) {
+        params.category = categories
+      }
+
+      logger.info(`📊 Running PageSpeed test: ${strategy}`)
 
       const response = await axios.get(this.baseUrl, {
-        params: {
-          url: url,
-          key: this.apiKey,
-          strategy: strategy,
-          category: ['performance', 'accessibility', 'best-practices', 'seo']
-        },
-        timeout: 60000 // 60 seconds
-      });
+        params: params,
+        timeout: this.timeout
+      })
 
-      const lighthouse = response.data.lighthouseResult;
-      const categories = lighthouse.categories;
-      const audits = lighthouse.audits;
+      return response.data
 
-      return {
-        success: true,
-        strategy: strategy,
-        scores: {
-          performance: Math.round((categories.performance?.score || 0) * 100),
-          accessibility: Math.round((categories.accessibility?.score || 0) * 100),
-          bestPractices: Math.round((categories['best-practices']?.score || 0) * 100),
-          seo: Math.round((categories.seo?.score || 0) * 100)
-        },
-        coreWebVitals: {
-          lcp: {
-            value: audits['largest-contentful-paint']?.displayValue || 'N/A',
-            score: audits['largest-contentful-paint']?.score || 0,
-            numericValue: audits['largest-contentful-paint']?.numericValue || 0,
-            description: 'Largest Contentful Paint',
-            passing: (audits['largest-contentful-paint']?.numericValue || 9999) < 2500
-          },
-          fid: {
-            value: audits['max-potential-fid']?.displayValue || 'N/A',
-            score: audits['max-potential-fid']?.score || 0,
-            numericValue: audits['max-potential-fid']?.numericValue || 0,
-            description: 'Max Potential First Input Delay',
-            passing: (audits['max-potential-fid']?.numericValue || 9999) < 100
-          },
-          cls: {
-            value: audits['cumulative-layout-shift']?.displayValue || 'N/A',
-            score: audits['cumulative-layout-shift']?.score || 0,
-            numericValue: audits['cumulative-layout-shift']?.numericValue || 0,
-            description: 'Cumulative Layout Shift',
-            passing: (audits['cumulative-layout-shift']?.numericValue || 9999) < 0.1
-          },
-          fcp: {
-            value: audits['first-contentful-paint']?.displayValue || 'N/A',
-            score: audits['first-contentful-paint']?.score || 0,
-            numericValue: audits['first-contentful-paint']?.numericValue || 0,
-            description: 'First Contentful Paint'
-          },
-          tti: {
-            value: audits['interactive']?.displayValue || 'N/A',
-            score: audits['interactive']?.score || 0,
-            numericValue: audits['interactive']?.numericValue || 0,
-            description: 'Time to Interactive'
-          },
-          tbt: {
-            value: audits['total-blocking-time']?.displayValue || 'N/A',
-            score: audits['total-blocking-time']?.score || 0,
-            numericValue: audits['total-blocking-time']?.numericValue || 0,
-            description: 'Total Blocking Time'
-          },
-          speedIndex: {
-            value: audits['speed-index']?.displayValue || 'N/A',
-            score: audits['speed-index']?.score || 0,
-            numericValue: audits['speed-index']?.numericValue || 0,
-            description: 'Speed Index'
-          }
-        },
-        opportunities: this.extractOpportunities(audits),
-        diagnostics: this.extractDiagnostics(audits),
-        loadingExperience: response.data.loadingExperience || null,
-        timestamp: new Date().toISOString()
-      };
     } catch (error) {
-      logger.error('PageSpeed analysis error:', error.message);
-      
       if (error.response?.status === 429) {
-        return {
-          success: false,
-          error: 'Rate limit exceeded. Please try again later.',
-          code: 'RATE_LIMIT'
-        };
+        throw new Error('Rate limit exceeded. Please try again later.')
       }
+      if (error.response?.status === 400) {
+        throw new Error('Invalid URL or request parameters')
+      }
+      throw error
+    }
+  }
+
+  /**
+   * Format results for our system
+   */
+  formatResults(results, url) {
+    const formatted = {
+      url: url,
+      analyzedAt: new Date().toISOString(),
       
-      return {
-        success: false,
-        error: error.message,
-        code: 'ANALYSIS_FAILED'
-      };
-    }
-  }
-
-  /**
-   * Analyze with both mobile and desktop strategies
-   */
-  async analyzeWithBothStrategies(url) {
-    try {
-      const [mobile, desktop] = await Promise.all([
-        this.analyzeUrl(url, 'mobile'),
-        this.analyzeUrl(url, 'desktop')
-      ]);
-
-      return {
-        success: true,
-        mobile: mobile,
-        desktop: desktop,
-        comparison: this.compareStrategies(mobile, desktop),
-        timestamp: new Date().toISOString()
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message
-      };
-    }
-  }
-
-  /**
-   * Extract optimization opportunities
-   */
-  extractOpportunities(audits) {
-    const opportunityKeys = [
-      'render-blocking-resources',
-      'unused-css-rules',
-      'unused-javascript',
-      'modern-image-formats',
-      'offscreen-images',
-      'unminified-css',
-      'unminified-javascript',
-      'efficient-animated-content',
-      'duplicated-javascript',
-      'legacy-javascript'
-    ];
-
-    return opportunityKeys
-      .filter(key => audits[key] && audits[key].score !== null && audits[key].score < 1)
-      .map(key => ({
-        title: audits[key].title,
-        description: audits[key].description,
-        score: audits[key].score,
-        displayValue: audits[key].displayValue,
-        savings: {
-          ms: audits[key].details?.overallSavingsMs || 0,
-          bytes: audits[key].details?.overallSavingsBytes || 0
-        }
-      }))
-      .sort((a, b) => b.savings.ms - a.savings.ms)
-      .slice(0, 10); // Top 10 opportunities
-  }
-
-  /**
-   * Extract diagnostic information
-   */
-  extractDiagnostics(audits) {
-    const diagnosticKeys = [
-      'mainthread-work-breakdown',
-      'bootup-time',
-      'uses-long-cache-ttl',
-      'total-byte-weight',
-      'dom-size',
-      'critical-request-chains',
-      'user-timings',
-      'network-rtt',
-      'network-server-latency'
-    ];
-
-    return diagnosticKeys
-      .filter(key => audits[key])
-      .map(key => ({
-        id: key,
-        title: audits[key].title,
-        description: audits[key].description,
-        displayValue: audits[key].displayValue,
-        score: audits[key].score
-      }));
-  }
-
-  /**
-   * Compare mobile vs desktop performance
-   */
-  compareStrategies(mobile, desktop) {
-    if (!mobile.success || !desktop.success) {
-      return null;
+      // Scores (0-100)
+      scores: {
+        performance: 0,
+        accessibility: 0,
+        bestPractices: 0,
+        seo: 0
+      },
+      
+      // Core Web Vitals
+      coreWebVitals: {
+        lcp: null, // Largest Contentful Paint
+        fid: null, // First Input Delay (deprecated, now INP)
+        cls: null, // Cumulative Layout Shift
+        fcp: null, // First Contentful Paint
+        tti: null, // Time to Interactive
+        tbt: null, // Total Blocking Time
+        si: null   // Speed Index
+      },
+      
+      // Mobile and Desktop results
+      mobile: null,
+      desktop: null,
+      
+      // Opportunities and diagnostics
+      opportunities: [],
+      diagnostics: [],
+      
+      // Recommendations
+      recommendations: []
     }
 
-    return {
-      performance: {
-        mobile: mobile.scores.performance,
-        desktop: desktop.scores.performance,
-        difference: desktop.scores.performance - mobile.scores.performance,
-        winner: desktop.scores.performance > mobile.scores.performance ? 'desktop' : 'mobile'
-      },
-      accessibility: {
-        mobile: mobile.scores.accessibility,
-        desktop: desktop.scores.accessibility,
-        difference: desktop.scores.accessibility - mobile.scores.accessibility
-      },
-      seo: {
-        mobile: mobile.scores.seo,
-        desktop: desktop.scores.seo,
-        difference: desktop.scores.seo - mobile.scores.seo
-      },
-      recommendations: this.getComparisonRecommendations(mobile, desktop)
-    };
+    // Process mobile results
+    if (results.mobile && !results.mobile.error) {
+      formatted.mobile = this.extractStrategyData(results.mobile)
+      this.mergeScores(formatted.scores, formatted.mobile.scores, 0.6) // Weight mobile 60%
+      this.mergeCoreWebVitals(formatted.coreWebVitals, formatted.mobile.coreWebVitals)
+      formatted.opportunities.push(...(formatted.mobile.opportunities || []))
+      formatted.diagnostics.push(...(formatted.mobile.diagnostics || []))
+    }
+
+    // Process desktop results
+    if (results.desktop && !results.desktop.error) {
+      formatted.desktop = this.extractStrategyData(results.desktop)
+      const weight = formatted.mobile ? 0.4 : 1.0 // Weight desktop 40% if mobile exists, else 100%
+      this.mergeScores(formatted.scores, formatted.desktop.scores, weight)
+      if (!formatted.mobile) {
+        this.mergeCoreWebVitals(formatted.coreWebVitals, formatted.desktop.coreWebVitals)
+      }
+    }
+
+    // Round scores
+    Object.keys(formatted.scores).forEach(key => {
+      formatted.scores[key] = Math.round(formatted.scores[key])
+    })
+
+    // Generate recommendations
+    formatted.recommendations = this.generateRecommendations(formatted)
+
+    return formatted
   }
 
   /**
-   * Get recommendations based on comparison
+   * Extract data from a single strategy result
    */
-  getComparisonRecommendations(mobile, desktop) {
-    const recommendations = [];
+  extractStrategyData(data) {
+    const lighthouse = data.lighthouseResult
+    const categories = lighthouse.categories
+
+    const strategyData = {
+      scores: {
+        performance: Math.round((categories.performance?.score || 0) * 100),
+        accessibility: Math.round((categories.accessibility?.score || 0) * 100),
+        bestPractices: Math.round((categories['best-practices']?.score || 0) * 100),
+        seo: Math.round((categories.seo?.score || 0) * 100)
+      },
+      coreWebVitals: {},
+      opportunities: [],
+      diagnostics: [],
+      loadingExperience: data.loadingExperience
+    }
+
+    // Extract Core Web Vitals from audits
+    const audits = lighthouse.audits
     
-    const perfDiff = desktop.scores.performance - mobile.scores.performance;
-    if (perfDiff > 20) {
-      recommendations.push({
-        priority: 'high',
-        message: 'Mobile performance is significantly lower than desktop. Optimize for mobile first.',
-        focus: 'mobile'
-      });
+    if (audits['largest-contentful-paint']) {
+      strategyData.coreWebVitals.lcp = {
+        value: audits['largest-contentful-paint'].numericValue,
+        displayValue: audits['largest-contentful-paint'].displayValue,
+        score: audits['largest-contentful-paint'].score
+      }
     }
 
-    if (mobile.scores.performance < 50) {
+    if (audits['cumulative-layout-shift']) {
+      strategyData.coreWebVitals.cls = {
+        value: audits['cumulative-layout-shift'].numericValue,
+        displayValue: audits['cumulative-layout-shift'].displayValue,
+        score: audits['cumulative-layout-shift'].score
+      }
+    }
+
+    if (audits['first-contentful-paint']) {
+      strategyData.coreWebVitals.fcp = {
+        value: audits['first-contentful-paint'].numericValue,
+        displayValue: audits['first-contentful-paint'].displayValue,
+        score: audits['first-contentful-paint'].score
+      }
+    }
+
+    if (audits['interactive']) {
+      strategyData.coreWebVitals.tti = {
+        value: audits['interactive'].numericValue,
+        displayValue: audits['interactive'].displayValue,
+        score: audits['interactive'].score
+      }
+    }
+
+    if (audits['total-blocking-time']) {
+      strategyData.coreWebVitals.tbt = {
+        value: audits['total-blocking-time'].numericValue,
+        displayValue: audits['total-blocking-time'].displayValue,
+        score: audits['total-blocking-time'].score
+      }
+    }
+
+    if (audits['speed-index']) {
+      strategyData.coreWebVitals.si = {
+        value: audits['speed-index'].numericValue,
+        displayValue: audits['speed-index'].displayValue,
+        score: audits['speed-index'].score
+      }
+    }
+
+    // Extract opportunities (performance improvements)
+    Object.entries(audits).forEach(([id, audit]) => {
+      if (audit.details?.type === 'opportunity' && audit.score < 1) {
+        strategyData.opportunities.push({
+          id: id,
+          title: audit.title,
+          description: audit.description,
+          score: audit.score,
+          displayValue: audit.displayValue,
+          numericValue: audit.numericValue
+        })
+      }
+    })
+
+    // Extract diagnostics
+    Object.entries(audits).forEach(([id, audit]) => {
+      if (audit.details?.type === 'debugdata' || (audit.score !== null && audit.score < 1 && audit.details)) {
+        strategyData.diagnostics.push({
+          id: id,
+          title: audit.title,
+          description: audit.description,
+          score: audit.score,
+          displayValue: audit.displayValue
+        })
+      }
+    })
+
+    // Limit opportunities and diagnostics
+    strategyData.opportunities = strategyData.opportunities.slice(0, 10)
+    strategyData.diagnostics = strategyData.diagnostics.slice(0, 10)
+
+    return strategyData
+  }
+
+  /**
+   * Merge scores with weights
+   */
+  mergeScores(target, source, weight) {
+    Object.keys(source).forEach(key => {
+      if (target[key] === 0) {
+        target[key] = source[key] * weight
+      } else {
+        target[key] += source[key] * weight
+      }
+    })
+  }
+
+  /**
+   * Merge Core Web Vitals (prefer mobile values)
+   */
+  mergeCoreWebVitals(target, source) {
+    Object.keys(source).forEach(key => {
+      if (!target[key] && source[key]) {
+        target[key] = source[key]
+      }
+    })
+  }
+
+  /**
+   * Generate actionable recommendations
+   */
+  generateRecommendations(results) {
+    const recommendations = []
+
+    // Performance recommendations
+    if (results.scores.performance < 50) {
       recommendations.push({
         priority: 'critical',
-        message: 'Mobile performance is poor. This affects user experience and SEO rankings.',
-        focus: 'mobile'
-      });
-    }
-
-    if (mobile.scores.seo < 90) {
+        category: 'performance',
+        message: 'Critical: Website performance is very poor. Immediate optimization required.',
+        score: results.scores.performance
+      })
+    } else if (results.scores.performance < 70) {
       recommendations.push({
         priority: 'high',
-        message: 'Mobile SEO score can be improved. Check mobile-friendliness and page structure.',
-        focus: 'seo'
-      });
+        category: 'performance',
+        message: 'Warning: Website performance needs improvement.',
+        score: results.scores.performance
+      })
     }
 
-    return recommendations;
+    // Core Web Vitals recommendations
+    if (results.coreWebVitals.lcp?.score < 0.5) {
+      recommendations.push({
+        priority: 'high',
+        category: 'core-web-vitals',
+        message: 'Largest Contentful Paint (LCP) is too slow. Optimize main content loading.',
+        metric: 'LCP',
+        value: results.coreWebVitals.lcp.displayValue
+      })
+    }
+
+    if (results.coreWebVitals.cls?.score < 0.5) {
+      recommendations.push({
+        priority: 'high',
+        category: 'core-web-vitals',
+        message: 'Cumulative Layout Shift (CLS) is too high. Fix layout shifts.',
+        metric: 'CLS',
+        value: results.coreWebVitals.cls.displayValue
+      })
+    }
+
+    // Accessibility recommendations
+    if (results.scores.accessibility < 70) {
+      recommendations.push({
+        priority: 'high',
+        category: 'accessibility',
+        message: 'Accessibility issues detected. Improve for all users.',
+        score: results.scores.accessibility
+      })
+    }
+
+    // SEO recommendations
+    if (results.scores.seo < 80) {
+      recommendations.push({
+        priority: 'medium',
+        category: 'seo',
+        message: 'SEO score can be improved. Check meta tags and mobile-friendliness.',
+        score: results.scores.seo
+      })
+    }
+
+    // Mobile vs Desktop gap
+    if (results.mobile && results.desktop) {
+      const gap = Math.abs(results.mobile.scores.performance - results.desktop.scores.performance)
+      if (gap > 20) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'responsive',
+          message: 'Large performance gap between mobile and desktop. Optimize mobile experience.',
+          gap: gap
+        })
+      }
+    }
+
+    // Sort by priority
+    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 }
+    recommendations.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+
+    return recommendations
   }
 
   /**
-   * Get overall grade (A-F)
+   * Get error result structure
    */
-  getOverallGrade(scores) {
-    const avg = (scores.performance + scores.accessibility + scores.bestPractices + scores.seo) / 4;
-    
-    if (avg >= 90) return 'A';
-    if (avg >= 80) return 'B';
-    if (avg >= 70) return 'C';
-    if (avg >= 60) return 'D';
-    return 'F';
+  getErrorResult(errorMessage) {
+    return {
+      url: null,
+      error: errorMessage,
+      analyzedAt: new Date().toISOString(),
+      scores: {
+        performance: 0,
+        accessibility: 0,
+        bestPractices: 0,
+        seo: 0
+      },
+      coreWebVitals: {
+        lcp: null,
+        fid: null,
+        cls: null,
+        fcp: null,
+        tti: null,
+        tbt: null,
+        si: null
+      },
+      mobile: null,
+      desktop: null,
+      opportunities: [],
+      diagnostics: [],
+      recommendations: [
+        {
+          priority: 'high',
+          category: 'error',
+          message: `Performance analysis failed: ${errorMessage}`
+        }
+      ]
+    }
   }
 }
 
-export default PageSpeedService;
-
+export default PageSpeedService

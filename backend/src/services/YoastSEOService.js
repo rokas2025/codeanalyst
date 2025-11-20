@@ -1,552 +1,387 @@
-/**
- * Yoast SEO Service - Content SEO Analysis
- * Based on Yoast SEO's open-source analysis
- * 100% FREE, no API key required!
- * Used by 5+ million WordPress sites
- */
-
-import { Paper } from 'yoastseo';
-import logger from '../utils/logger.js';
+// Yoast SEO Service - Content SEO Analysis
+import { Paper, ContentAssessor, SEOAssessor } from 'yoastseo'
+import { logger } from '../utils/logger.js'
 
 export class YoastSEOService {
+  constructor() {
+    this.contentAssessor = new ContentAssessor()
+    this.seoAssessor = new SEOAssessor()
+  }
+
   /**
    * Analyze content for SEO
-   * @param {string} content - The content to analyze
-   * @param {string} keyword - Focus keyword/phrase
-   * @param {string} title - Page title
-   * @param {string} metaDescription - Meta description
-   * @param {string} url - Page URL (optional)
-   * @returns {Object} SEO analysis results
+   * @param {string} content - HTML or text content to analyze
+   * @param {Object} options - Analysis options
+   * @param {string} options.keyword - Target keyword (optional)
+   * @param {string} options.title - Page title (optional)
+   * @param {string} options.description - Meta description (optional)
+   * @param {string} options.url - Page URL (optional)
+   * @returns {Object} - SEO analysis results
    */
-  analyzeSEO(content, keyword, title = '', metaDescription = '', url = '') {
+  async analyzeSEO(content, options = {}) {
     try {
-      if (!content || content.trim().length === 0) {
-        return {
-          success: false,
-          error: 'No content provided for analysis'
-        };
-      }
+      logger.info('🎯 Starting Yoast SEO analysis')
 
-      if (!keyword || keyword.trim().length === 0) {
-        return {
-          success: false,
-          error: 'No focus keyword provided'
-        };
-      }
+      const {
+        keyword = '',
+        title = '',
+        description = '',
+        url = '',
+        locale = 'en_US'
+      } = options
 
+      // Create Paper object (Yoast's content wrapper)
       const paper = new Paper(content, {
         keyword: keyword,
         title: title,
-        description: metaDescription,
+        description: description,
         url: url,
-        locale: 'en_US'
-      });
+        locale: locale,
+        permalink: url
+      })
 
-      const seoScore = this.calculateSEOScore(paper);
-      
-      return {
-        success: true,
-        overallScore: seoScore.score,
-        grade: seoScore.grade,
-        analysis: {
-          keywordDensity: this.analyzeKeywordDensity(paper),
-          titleAnalysis: this.analyzeTitleTag(paper),
-          metaDescription: this.analyzeMetaDescription(paper),
-          contentLength: this.analyzeContentLength(paper),
-          headings: this.analyzeHeadings(content, keyword),
-          links: this.analyzeLinks(content),
-          images: this.analyzeImages(content),
-          keywordPosition: this.analyzeKeywordPosition(content, keyword),
-          readability: this.analyzeReadability(content)
-        },
-        recommendations: this.getRecommendations(paper, content, keyword),
-        passedChecks: seoScore.passedChecks,
-        failedChecks: seoScore.failedChecks,
-        timestamp: new Date().toISOString()
-      };
+      // Run assessments
+      const contentResults = this.assessContent(paper)
+      const seoResults = keyword ? this.assessSEO(paper) : null
+
+      // Calculate overall scores
+      const overallScore = this.calculateOverallScore(contentResults, seoResults)
+
+      // Extract readability metrics
+      const readability = this.extractReadabilityMetrics(contentResults)
+
+      // Extract SEO metrics
+      const seo = seoResults ? this.extractSEOMetrics(seoResults, keyword) : null
+
+      // Generate recommendations
+      const recommendations = this.generateRecommendations(contentResults, seoResults)
+
+      const result = {
+        overallScore: overallScore,
+        readabilityScore: contentResults.score || 0,
+        seoScore: seoResults?.score || 0,
+        
+        readability: readability,
+        seo: seo,
+        
+        recommendations: recommendations,
+        
+        // Metadata
+        hasKeyword: !!keyword,
+        contentLength: content.length,
+        wordCount: this.countWords(content),
+        analyzedAt: new Date().toISOString()
+      }
+
+      logger.info(`✅ Yoast SEO analysis complete: Score ${overallScore}/100`)
+
+      return result
+
     } catch (error) {
-      logger.error('Yoast SEO analysis error:', error.message);
-      
+      logger.error('Yoast SEO analysis failed:', error)
+      return this.getErrorResult(error.message)
+    }
+  }
+
+  /**
+   * Assess content readability
+   */
+  assessContent(paper) {
+    try {
+      this.contentAssessor.assess(paper)
+      const results = this.contentAssessor.getValidResults()
+      const score = this.contentAssessor.calculateOverallScore()
+
       return {
-        success: false,
-        error: error.message,
-        code: 'ANALYSIS_FAILED'
-      };
+        score: score,
+        results: results
+      }
+    } catch (error) {
+      logger.warn('Content assessment failed:', error.message)
+      return { score: 0, results: [] }
     }
   }
 
   /**
-   * Analyze keyword density
+   * Assess SEO optimization
    */
-  analyzeKeywordDensity(paper) {
-    const wordCount = paper.getWordCount();
-    const keyword = paper.getKeyword().toLowerCase();
-    const content = paper.getText().toLowerCase();
-    
-    // Count exact matches and variations
-    const keywordRegex = new RegExp(keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi');
-    const matches = content.match(keywordRegex) || [];
-    const occurrences = matches.length;
-    const density = wordCount > 0 ? (occurrences / wordCount) * 100 : 0;
-    
-    // Optimal density: 0.5% - 2.5%
-    let status = 'good';
-    let message = 'Keyword density is optimal';
-    
-    if (density < 0.5) {
-      status = 'warning';
-      message = 'Keyword appears too few times. Add it a few more times naturally.';
-    } else if (density > 2.5) {
-      status = 'error';
-      message = 'Keyword density too high! Risk of keyword stuffing. Remove some occurrences.';
-    }
+  assessSEO(paper) {
+    try {
+      this.seoAssessor.assess(paper)
+      const results = this.seoAssessor.getValidResults()
+      const score = this.seoAssessor.calculateOverallScore()
 
-    return {
-      keyword: keyword,
-      occurrences: occurrences,
-      density: density.toFixed(2) + '%',
-      status: status,
-      message: message,
-      optimal: density >= 0.5 && density <= 2.5
-    };
+      return {
+        score: score,
+        results: results
+      }
+    } catch (error) {
+      logger.warn('SEO assessment failed:', error.message)
+      return { score: 0, results: [] }
+    }
   }
 
   /**
-   * Analyze title tag
+   * Calculate overall score (0-100)
    */
-  analyzeTitleTag(paper) {
-    const title = paper.getTitle();
-    const keyword = paper.getKeyword().toLowerCase();
-    const titleLength = title.length;
-    const hasKeyword = title.toLowerCase().includes(keyword);
-    
-    // Optimal: 30-60 characters
-    let status = 'good';
-    const issues = [];
-
-    if (titleLength < 30) {
-      status = 'warning';
-      issues.push(`Title is too short (${titleLength} chars). Aim for 30-60 characters.`);
-    } else if (titleLength > 60) {
-      status = 'warning';
-      issues.push(`Title is too long (${titleLength} chars). It may be truncated in search results.`);
+  calculateOverallScore(contentResults, seoResults) {
+    if (!seoResults) {
+      // Only readability score available
+      return contentResults.score || 0
     }
 
-    if (!hasKeyword) {
-      status = 'error';
-      issues.push('Focus keyword not found in title. Add it for better SEO.');
-    } else {
-      // Check keyword position (earlier is better)
-      const keywordPosition = title.toLowerCase().indexOf(keyword);
-      if (keywordPosition > title.length / 2) {
-        issues.push('Consider moving focus keyword closer to the beginning of the title.');
+    // Average of readability and SEO scores
+    const readabilityScore = contentResults.score || 0
+    const seoScore = seoResults.score || 0
+    
+    return Math.round((readabilityScore + seoScore) / 2)
+  }
+
+  /**
+   * Extract readability metrics from assessment results
+   */
+  extractReadabilityMetrics(contentResults) {
+    const metrics = {
+      score: contentResults.score || 0,
+      grade: this.getScoreGrade(contentResults.score || 0),
+      issues: {
+        good: [],
+        improvements: [],
+        problems: []
       }
     }
 
-    return {
-      title: title,
-      length: titleLength,
-      hasKeyword: hasKeyword,
-      status: status,
-      optimal: titleLength >= 30 && titleLength <= 60 && hasKeyword,
-      issues: issues,
-      recommendation: issues.length === 0 ? 'Title is well optimized!' : issues.join(' ')
-    };
+    if (!contentResults.results || contentResults.results.length === 0) {
+      return metrics
+    }
+
+    // Categorize results by score
+    contentResults.results.forEach(result => {
+      const item = {
+        identifier: result.getIdentifier(),
+        text: result.getText(),
+        score: result.getScore()
+      }
+
+      if (result.getScore() >= 7) {
+        metrics.issues.good.push(item)
+      } else if (result.getScore() >= 4) {
+        metrics.issues.improvements.push(item)
+      } else {
+        metrics.issues.problems.push(item)
+      }
+    })
+
+    return metrics
   }
 
   /**
-   * Analyze meta description
+   * Extract SEO metrics from assessment results
    */
-  analyzeMetaDescription(paper) {
-    const description = paper.getDescription();
-    const keyword = paper.getKeyword().toLowerCase();
-    const length = description.length;
-    const hasKeyword = description.toLowerCase().includes(keyword);
-    
-    // Optimal: 120-160 characters
-    let status = 'good';
-    const issues = [];
-
-    if (length < 120) {
-      status = 'warning';
-      issues.push(`Meta description is too short (${length} chars). Aim for 120-160 characters.`);
-    } else if (length > 160) {
-      status = 'warning';
-      issues.push(`Meta description is too long (${length} chars). It may be truncated.`);
+  extractSEOMetrics(seoResults, keyword) {
+    const metrics = {
+      score: seoResults.score || 0,
+      grade: this.getScoreGrade(seoResults.score || 0),
+      keyword: keyword,
+      issues: {
+        good: [],
+        improvements: [],
+        problems: []
+      },
+      keywordDensity: 0,
+      keywordInTitle: false,
+      keywordInDescription: false,
+      keywordInUrl: false
     }
 
-    if (!hasKeyword) {
-      status = 'warning';
-      issues.push('Focus keyword not found in meta description.');
+    if (!seoResults.results || seoResults.results.length === 0) {
+      return metrics
     }
 
-    return {
-      description: description,
-      length: length,
-      hasKeyword: hasKeyword,
-      status: status,
-      optimal: length >= 120 && length <= 160 && hasKeyword,
-      issues: issues,
-      recommendation: issues.length === 0 ? 'Meta description is well optimized!' : issues.join(' ')
-    };
+    // Categorize results by score
+    seoResults.results.forEach(result => {
+      const identifier = result.getIdentifier()
+      const item = {
+        identifier: identifier,
+        text: result.getText(),
+        score: result.getScore()
+      }
+
+      // Extract specific metrics
+      if (identifier === 'keywordDensity') {
+        // Parse keyword density from text if available
+        const densityMatch = result.getText().match(/(\d+\.?\d*)%/)
+        if (densityMatch) {
+          metrics.keywordDensity = parseFloat(densityMatch[1])
+        }
+      }
+
+      if (identifier === 'introductionKeyword' || identifier === 'keyphraseInSEOTitle') {
+        metrics.keywordInTitle = result.getScore() >= 6
+      }
+
+      if (identifier === 'metaDescriptionKeyword') {
+        metrics.keywordInDescription = result.getScore() >= 6
+      }
+
+      if (identifier === 'slugKeyword' || identifier === 'keyphraseInSlug') {
+        metrics.keywordInUrl = result.getScore() >= 6
+      }
+
+      // Categorize by score
+      if (result.getScore() >= 7) {
+        metrics.issues.good.push(item)
+      } else if (result.getScore() >= 4) {
+        metrics.issues.improvements.push(item)
+      } else {
+        metrics.issues.problems.push(item)
+      }
+    })
+
+    return metrics
   }
 
   /**
-   * Analyze content length
+   * Generate actionable recommendations
    */
-  analyzeContentLength(paper) {
-    const wordCount = paper.getWordCount();
-    
-    // Minimum 300 words for SEO
-    let status = 'good';
-    let message = 'Content length is sufficient';
-    
-    if (wordCount < 300) {
-      status = 'error';
-      message = `Content is too short (${wordCount} words). Add at least ${300 - wordCount} more words for better SEO.`;
-    } else if (wordCount < 600) {
-      status = 'warning';
-      message = `Content is acceptable but could be longer. Aim for 600+ words for comprehensive coverage.`;
-    } else {
-      message = `Excellent! ${wordCount} words provide comprehensive content.`;
+  generateRecommendations(contentResults, seoResults) {
+    const recommendations = []
+
+    // Content/Readability recommendations
+    if (contentResults.results) {
+      contentResults.results.forEach(result => {
+        if (result.getScore() < 4) {
+          recommendations.push({
+            priority: 'high',
+            category: 'readability',
+            issue: result.getIdentifier(),
+            message: result.getText(),
+            score: result.getScore()
+          })
+        } else if (result.getScore() < 7) {
+          recommendations.push({
+            priority: 'medium',
+            category: 'readability',
+            issue: result.getIdentifier(),
+            message: result.getText(),
+            score: result.getScore()
+          })
+        }
+      })
     }
 
-    return {
-      wordCount: wordCount,
-      status: status,
-      message: message,
-      optimal: wordCount >= 600
-    };
+    // SEO recommendations
+    if (seoResults && seoResults.results) {
+      seoResults.results.forEach(result => {
+        if (result.getScore() < 4) {
+          recommendations.push({
+            priority: 'high',
+            category: 'seo',
+            issue: result.getIdentifier(),
+            message: result.getText(),
+            score: result.getScore()
+          })
+        } else if (result.getScore() < 7) {
+          recommendations.push({
+            priority: 'medium',
+            category: 'seo',
+            issue: result.getIdentifier(),
+            message: result.getText(),
+            score: result.getScore()
+          })
+        }
+      })
+    }
+
+    // Sort by priority
+    const priorityOrder = { high: 0, medium: 1, low: 2 }
+    recommendations.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+
+    // Limit to top 20 recommendations
+    return recommendations.slice(0, 20)
   }
 
   /**
-   * Analyze headings structure
+   * Count words in content
    */
-  analyzeHeadings(content, keyword) {
-    const h1Matches = content.match(/<h1[^>]*>(.*?)<\/h1>/gi) || [];
-    const h2Matches = content.match(/<h2[^>]*>(.*?)<\/h2>/gi) || [];
-    const h3Matches = content.match(/<h3[^>]*>(.*?)<\/h3>/gi) || [];
-    
-    const h1Texts = h1Matches.map(h => h.replace(/<[^>]*>/g, ''));
-    const h2Texts = h2Matches.map(h => h.replace(/<[^>]*>/g, ''));
-    
-    const h1HasKeyword = h1Texts.some(h => 
-      h.toLowerCase().includes(keyword.toLowerCase())
-    );
-    
-    const h2HasKeyword = h2Texts.some(h => 
-      h.toLowerCase().includes(keyword.toLowerCase())
-    );
-
-    let status = 'good';
-    const issues = [];
-
-    if (h1Matches.length === 0) {
-      status = 'error';
-      issues.push('Add one H1 heading (main title)');
-    } else if (h1Matches.length > 1) {
-      status = 'warning';
-      issues.push('Multiple H1 headings found. Use only one H1 per page.');
-    }
-
-    if (h2Matches.length === 0) {
-      status = 'warning';
-      issues.push('Add H2 subheadings to structure your content');
-    }
-
-    if (!h1HasKeyword && h1Matches.length > 0) {
-      issues.push('Include focus keyword in H1 heading');
-    }
-
-    return {
-      h1Count: h1Matches.length,
-      h2Count: h2Matches.length,
-      h3Count: h3Matches.length,
-      h1HasKeyword: h1HasKeyword,
-      h2HasKeyword: h2HasKeyword,
-      status: status,
-      issues: issues,
-      optimal: h1Matches.length === 1 && h2Matches.length > 0 && h1HasKeyword
-    };
+  countWords(content) {
+    // Strip HTML tags
+    const text = content.replace(/<[^>]*>/g, ' ')
+    // Count words
+    const words = text.trim().split(/\s+/)
+    return words.filter(word => word.length > 0).length
   }
 
   /**
-   * Analyze links
+   * Get score grade (A-F)
    */
-  analyzeLinks(content) {
-    // Internal links (relative URLs)
-    const internalLinks = (content.match(/<a[^>]*href=["'](?!http)[^"']*["'][^>]*>/gi) || []).length;
-    
-    // External links (http/https)
-    const externalLinks = (content.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length;
-    
-    let status = 'good';
-    const issues = [];
-
-    if (internalLinks === 0) {
-      status = 'warning';
-      issues.push('Add internal links to related content on your site');
-    }
-
-    if (externalLinks === 0) {
-      issues.push('Consider adding 1-2 external links to authoritative sources');
-    }
-
-    return {
-      internalLinks: internalLinks,
-      externalLinks: externalLinks,
-      totalLinks: internalLinks + externalLinks,
-      status: status,
-      issues: issues,
-      optimal: internalLinks > 0
-    };
+  getScoreGrade(score) {
+    if (score >= 90) return 'A'
+    if (score >= 80) return 'B'
+    if (score >= 70) return 'C'
+    if (score >= 60) return 'D'
+    return 'F'
   }
 
   /**
-   * Analyze images
+   * Get error result structure
    */
-  analyzeImages(content) {
-    const images = content.match(/<img[^>]*>/gi) || [];
-    const imagesWithAlt = (content.match(/<img[^>]*alt=["'][^"']+["'][^>]*>/gi) || []).length;
-    const imagesWithoutAlt = images.length - imagesWithAlt;
-    
-    let status = 'good';
-    const issues = [];
-
-    if (images.length === 0) {
-      status = 'warning';
-      issues.push('Consider adding images to enhance your content');
-    }
-
-    if (imagesWithoutAlt > 0) {
-      status = 'warning';
-      issues.push(`${imagesWithoutAlt} image(s) missing alt text. Add descriptive alt text for SEO and accessibility.`);
-    }
-
+  getErrorResult(errorMessage) {
     return {
-      totalImages: images.length,
-      imagesWithAlt: imagesWithAlt,
-      imagesWithoutAlt: imagesWithoutAlt,
-      status: status,
-      issues: issues,
-      optimal: images.length > 0 && imagesWithoutAlt === 0
-    };
+      overallScore: 0,
+      readabilityScore: 0,
+      seoScore: 0,
+      readability: {
+        score: 0,
+        grade: 'F',
+        issues: { good: [], improvements: [], problems: [] }
+      },
+      seo: null,
+      recommendations: [
+        {
+          priority: 'high',
+          category: 'error',
+          message: `SEO analysis failed: ${errorMessage}`
+        }
+      ],
+      hasKeyword: false,
+      contentLength: 0,
+      wordCount: 0,
+      analyzedAt: new Date().toISOString(),
+      error: errorMessage
+    }
   }
 
   /**
-   * Analyze keyword position in content
+   * Analyze multiple pages/content items
+   * @param {Array} contents - Array of content objects with { content, title, description, keyword, url }
+   * @returns {Array} - Array of SEO analysis results
    */
-  analyzeKeywordPosition(content, keyword) {
-    const cleanContent = content.replace(/<[^>]*>/g, ' ').trim();
-    const firstParagraph = cleanContent.split(/\n\n/)[0] || '';
-    const words = cleanContent.split(/\s+/);
-    const firstHundredWords = words.slice(0, 100).join(' ');
-    
-    const keywordInFirst100 = firstHundredWords.toLowerCase().includes(keyword.toLowerCase());
-    const keywordInFirstParagraph = firstParagraph.toLowerCase().includes(keyword.toLowerCase());
-    
-    let status = 'good';
-    let message = 'Focus keyword appears early in content';
-    
-    if (!keywordInFirst100) {
-      status = 'warning';
-      message = 'Consider including focus keyword in the first 100 words';
+  async analyzeBatch(contents) {
+    const results = []
+
+    for (const item of contents) {
+      try {
+        const result = await this.analyzeSEO(item.content, {
+          keyword: item.keyword,
+          title: item.title,
+          description: item.description,
+          url: item.url
+        })
+
+        results.push({
+          ...result,
+          sourceUrl: item.url,
+          sourceTitle: item.title
+        })
+      } catch (error) {
+        logger.warn(`Failed to analyze content: ${item.url}`, error)
+        results.push(this.getErrorResult(error.message))
+      }
     }
 
-    return {
-      inFirst100Words: keywordInFirst100,
-      inFirstParagraph: keywordInFirstParagraph,
-      status: status,
-      message: message,
-      optimal: keywordInFirst100
-    };
-  }
-
-  /**
-   * Basic readability analysis
-   */
-  analyzeReadability(content) {
-    const cleanContent = content.replace(/<[^>]*>/g, ' ');
-    const sentences = cleanContent.split(/[.!?]+/).filter(s => s.trim().length > 0);
-    const words = cleanContent.split(/\s+/).filter(w => w.length > 0);
-    
-    const avgWordsPerSentence = words.length / sentences.length;
-    
-    let status = 'good';
-    let message = 'Content is readable';
-    
-    if (avgWordsPerSentence > 25) {
-      status = 'warning';
-      message = 'Sentences are quite long. Try breaking them into shorter sentences.';
-    } else if (avgWordsPerSentence > 20) {
-      status = 'warning';
-      message = 'Some sentences are long. Consider shortening them for better readability.';
-    }
-
-    return {
-      averageWordsPerSentence: avgWordsPerSentence.toFixed(1),
-      status: status,
-      message: message
-    };
-  }
-
-  /**
-   * Calculate overall SEO score
-   */
-  calculateSEOScore(paper) {
-    let score = 70; // Start at 70 instead of 100 for more realistic scoring
-    let passedChecks = 0;
-    let failedChecks = 0;
-
-    // Title (15 points) - Add points for good practices
-    const title = paper.getTitle();
-    const keyword = paper.getKeyword().toLowerCase();
-    if (title.length >= 30 && title.length <= 60) {
-      score += 7; // Add points for optimal length
-      passedChecks++;
-    } else {
-      score -= 5; // Smaller deduction
-      failedChecks++;
-    }
-    
-    if (title.toLowerCase().includes(keyword)) {
-      score += 8; // Add points for keyword presence
-      passedChecks++;
-    } else {
-      score -= 6; // Smaller deduction
-      failedChecks++;
-    }
-
-    // Content length (15 points) - Weight critical factors more heavily
-    const wordCount = paper.getWordCount();
-    if (wordCount >= 1000) {
-      score += 15; // Excellent content length
-      passedChecks++;
-    } else if (wordCount >= 600) {
-      score += 10; // Good content length
-      passedChecks++;
-    } else if (wordCount >= 300) {
-      score += 5; // Adequate content length
-      passedChecks++;
-    } else {
-      score -= 10; // Critical issue
-      failedChecks++;
-    }
-
-    // Meta description (10 points)
-    const desc = paper.getDescription();
-    if (desc.length >= 120 && desc.length <= 160) {
-      score += 5; // Add points for optimal length
-      passedChecks++;
-    } else {
-      score -= 3; // Smaller deduction
-      failedChecks++;
-    }
-    
-    if (desc.toLowerCase().includes(keyword)) {
-      score += 5; // Add points for keyword presence
-      passedChecks++;
-    } else {
-      score -= 3; // Smaller deduction
-      failedChecks++;
-    }
-
-    // Keyword density (15 points) - Consider content quality
-    const content = paper.getText();
-    const matches = (content.toLowerCase().match(new RegExp(keyword, 'gi')) || []).length;
-    const density = (matches / wordCount) * 100;
-    if (density >= 0.5 && density <= 2.5) {
-      score += 10; // Optimal keyword density
-      passedChecks++;
-    } else if (density > 0 && density < 0.5) {
-      score += 3; // Some keyword presence
-      passedChecks++;
-    } else {
-      score -= 8; // Poor keyword optimization
-      failedChecks++;
-    }
-
-    score = Math.max(0, Math.min(100, score)); // Cap at 0-100
-    
-    let grade = 'F';
-    if (score >= 90) grade = 'A';
-    else if (score >= 80) grade = 'B';
-    else if (score >= 70) grade = 'C';
-    else if (score >= 60) grade = 'D';
-
-    return {
-      score: score,
-      grade: grade,
-      passedChecks: passedChecks,
-      failedChecks: failedChecks
-    };
-  }
-
-  /**
-   * Get actionable recommendations
-   */
-  getRecommendations(paper, content, keyword) {
-    const recommendations = [];
-    
-    const titleAnalysis = this.analyzeTitleTag(paper);
-    const metaAnalysis = this.analyzeMetaDescription(paper);
-    const contentAnalysis = this.analyzeContentLength(paper);
-    const headingsAnalysis = this.analyzeHeadings(content, keyword);
-    const linksAnalysis = this.analyzeLinks(content);
-    const imagesAnalysis = this.analyzeImages(content);
-
-    // Priority recommendations
-    if (!titleAnalysis.optimal) {
-      recommendations.push({
-        priority: 'high',
-        category: 'Title Tag',
-        message: titleAnalysis.recommendation
-      });
-    }
-
-    if (!contentAnalysis.optimal) {
-      recommendations.push({
-        priority: 'high',
-        category: 'Content Length',
-        message: contentAnalysis.message
-      });
-    }
-
-    if (!metaAnalysis.optimal) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'Meta Description',
-        message: metaAnalysis.recommendation
-      });
-    }
-
-    if (!headingsAnalysis.optimal) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'Headings',
-        message: headingsAnalysis.issues.join(' ')
-      });
-    }
-
-    if (linksAnalysis.issues.length > 0) {
-      recommendations.push({
-        priority: 'low',
-        category: 'Links',
-        message: linksAnalysis.issues.join(' ')
-      });
-    }
-
-    if (imagesAnalysis.issues.length > 0) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'Images',
-        message: imagesAnalysis.issues.join(' ')
-      });
-    }
-
-    return recommendations;
+    return results
   }
 }
 
-export default YoastSEOService;
-
+export default YoastSEOService

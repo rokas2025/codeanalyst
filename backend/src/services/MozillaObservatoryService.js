@@ -1,296 +1,399 @@
-/**
- * Mozilla Observatory Service
- * Security headers and best practices analysis
- * 100% FREE, no API key required!
- */
-
-import axios from 'axios';
-import logger from '../utils/logger.js';
+// Mozilla Observatory Service - Security Analysis
+import axios from 'axios'
+import { logger } from '../utils/logger.js'
 
 export class MozillaObservatoryService {
   constructor() {
-    this.baseUrl = 'https://http-observatory.security.mozilla.org/api/v1';
+    this.baseUrl = 'https://http-observatory.security.mozilla.org/api/v1'
+    this.timeout = 60000 // 60 seconds
+    this.maxRetries = 3
+    this.retryDelay = 5000 // 5 seconds
   }
 
   /**
-   * Analyze website security
-   * @param {string} url - URL to analyze
-   * @returns {Object} Security analysis results
+   * Analyze website security using Mozilla Observatory
+   * @param {string} url - Website URL to analyze
+   * @returns {Object} - Security analysis results
    */
-  async analyzeSecurity(url) {
+  async analyzeWebsiteSecurity(url) {
     try {
-      const hostname = new URL(url).hostname;
+      // Extract hostname from URL
+      const hostname = this.extractHostname(url)
       
-      logger.info(`Starting Mozilla Observatory scan for ${hostname}`);
+      if (!hostname) {
+        throw new Error('Invalid URL provided')
+      }
 
-      // Step 1: Start the scan
-      const scanResponse = await axios.post(`${this.baseUrl}/analyze`, null, {
-        params: {
-          host: hostname,
-          rescan: 'false', // Use cached results if available
-          hidden: 'true'   // Don't display on public results page
-        },
-        timeout: 30000
-      });
+      logger.info(`🔒 Starting Mozilla Observatory scan for: ${hostname}`)
 
-      const scanId = scanResponse.data.scan_id;
+      // Step 1: Initiate scan
+      const scanId = await this.initiateScan(hostname)
       
-      // Step 2: Wait for scan to complete
-      const results = await this.waitForScan(hostname, scanId);
+      // Step 2: Wait for scan completion and get results
+      const results = await this.getScanResults(hostname, scanId)
       
-      // Step 3: Get detailed test results
-      const testsResponse = await axios.get(`${this.baseUrl}/getScanResults`, {
-        params: { scan: scanId },
-        timeout: 30000
-      });
+      // Step 3: Parse and format results
+      const formatted = this.formatResults(results, hostname)
+      
+      logger.info(`✅ Mozilla Observatory scan complete: ${formatted.grade} (${formatted.score}/100)`)
+      
+      return formatted
 
-      return {
-        success: true,
-        grade: results.grade,
-        score: results.score,
-        scanId: scanId,
-        summary: {
-          grade: results.grade,
-          score: results.score,
-          testsPassed: results.tests_passed || 0,
-          testsFailed: results.tests_failed || 0,
-          testsQuantity: results.tests_quantity || 0
-        },
-        tests: this.parseTests(testsResponse.data),
-        headers: this.analyzeHeaders(testsResponse.data),
-        recommendations: this.getRecommendations(testsResponse.data, results),
-        riskLevel: this.getRiskLevel(results.score),
-        timestamp: new Date().toISOString()
-      };
     } catch (error) {
-      logger.error('Mozilla Observatory analysis error:', error.message);
-      
-      return {
-        success: false,
-        error: error.message,
-        code: 'ANALYSIS_FAILED'
-      };
+      logger.error('Mozilla Observatory analysis failed:', error)
+      return this.getErrorResult(error.message)
     }
   }
 
   /**
-   * Wait for scan to complete (with polling)
+   * Extract hostname from URL
    */
-  async waitForScan(hostname, scanId, maxAttempts = 15) {
-    for (let i = 0; i < maxAttempts; i++) {
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+  extractHostname(url) {
+    try {
+      // Add protocol if missing
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url
+      }
       
-      try {
-        const response = await axios.get(`${this.baseUrl}/analyze`, {
-          params: { host: hostname },
-          timeout: 30000
-        });
+      const urlObj = new URL(url)
+      return urlObj.hostname
+    } catch (error) {
+      logger.warn(`Failed to extract hostname from ${url}:`, error.message)
+      return null
+    }
+  }
 
-        const state = response.data.state;
+  /**
+   * Initiate security scan
+   */
+  async initiateScan(hostname) {
+    try {
+      const response = await axios.post(
+        `${this.baseUrl}/analyze`,
+        { 
+          host: hostname,
+          rescan: false, // Use cached results if available
+          hidden: true // Don't show in public results
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          timeout: this.timeout
+        }
+      )
+
+      const scanId = response.data.scan_id
+      logger.info(`📋 Scan initiated: ${scanId}`)
+      
+      return scanId
+
+    } catch (error) {
+      if (error.response?.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.')
+      }
+      throw error
+    }
+  }
+
+  /**
+   * Get scan results (with retries for pending scans)
+   */
+  async getScanResults(hostname, scanId) {
+    let retries = 0
+    
+    while (retries < this.maxRetries) {
+      try {
+        const response = await axios.get(
+          `${this.baseUrl}/analyze`,
+          {
+            params: { host: hostname },
+            timeout: this.timeout
+          }
+        )
+
+        const state = response.data.state
         
         if (state === 'FINISHED') {
-          return response.data;
+          logger.info('✅ Scan completed successfully')
+          return response.data
         } else if (state === 'FAILED') {
-          throw new Error('Scan failed');
+          throw new Error('Security scan failed')
+        } else if (state === 'PENDING' || state === 'RUNNING') {
+          logger.info(`⏳ Scan in progress (${state}), waiting...`)
+          retries++
+          
+          if (retries < this.maxRetries) {
+            await this.sleep(this.retryDelay)
+          } else {
+            // Return partial results if available
+            logger.warn('Scan still pending after max retries, returning partial results')
+            return response.data
+          }
+        } else {
+          logger.info(`Scan state: ${state}`)
+          return response.data
         }
-        
-        logger.info(`Scan state: ${state}, attempt ${i + 1}/${maxAttempts}`);
+
       } catch (error) {
-        if (i === maxAttempts - 1) throw error;
+        if (retries >= this.maxRetries - 1) {
+          throw error
+        }
+        retries++
+        await this.sleep(this.retryDelay)
       }
     }
-    
-    throw new Error('Scan timeout - took too long to complete');
+
+    throw new Error('Scan timed out')
   }
 
   /**
-   * Parse test results
+   * Format results for our system
    */
-  parseTests(testsData) {
-    const tests = {};
-    
-    for (const [testName, testResult] of Object.entries(testsData)) {
-      if (testResult && typeof testResult === 'object' && testResult.pass !== undefined) {
-        tests[testName] = {
-          name: this.getTestDisplayName(testName),
-          passed: testResult.pass,
-          score: testResult.score_modifier || 0,
-          description: testResult.score_description || '',
-          result: testResult.result || 'unknown'
-        };
-      }
+  formatResults(data, hostname) {
+    const result = {
+      hostname: hostname,
+      grade: data.grade || 'N/A',
+      score: data.score || 0,
+      state: data.state,
+      scanDate: new Date().toISOString(),
+      
+      // Summary
+      summary: {
+        testsTotal: data.tests_quantity || 0,
+        testsPassed: data.tests_passed || 0,
+        testsFailed: data.tests_failed || 0,
+        testsMissing: 0
+      },
+      
+      // Security headers
+      headers: {},
+      
+      // Recommendations
+      recommendations: [],
+      
+      // Raw data for detailed analysis
+      rawData: data
     }
-    
-    return tests;
+
+    // Calculate missing tests
+    result.summary.testsMissing = 
+      result.summary.testsTotal - result.summary.testsPassed - result.summary.testsFailed
+
+    // Parse test results into headers and recommendations
+    if (data.tests) {
+      result.headers = this.parseHeaders(data.tests)
+      result.recommendations = this.generateRecommendations(data.tests, data.grade)
+    }
+
+    return result
   }
 
   /**
-   * Analyze security headers
+   * Parse security header tests
    */
-  analyzeHeaders(testsData) {
-    const headers = {
-      contentSecurityPolicy: {
-        present: testsData['content-security-policy']?.pass || false,
-        status: testsData['content-security-policy']?.result || 'missing',
-        description: 'Prevents XSS attacks and data injection'
-      },
-      strictTransportSecurity: {
-        present: testsData['strict-transport-security']?.pass || false,
-        status: testsData['strict-transport-security']?.result || 'missing',
-        description: 'Forces HTTPS connections'
-      },
-      xFrameOptions: {
-        present: testsData['x-frame-options']?.pass || false,
-        status: testsData['x-frame-options']?.result || 'missing',
-        description: 'Prevents clickjacking attacks'
-      },
-      xContentTypeOptions: {
-        present: testsData['x-content-type-options']?.pass || false,
-        status: testsData['x-content-type-options']?.result || 'missing',
-        description: 'Prevents MIME type sniffing'
-      },
-      referrerPolicy: {
-        present: testsData['referrer-policy']?.pass || false,
-        status: testsData['referrer-policy']?.result || 'missing',
-        description: 'Controls referrer information'
-      },
-      cookies: {
-        secure: testsData['cookies']?.pass || false,
-        status: testsData['cookies']?.result || 'unknown',
-        description: 'Cookie security attributes'
-      }
-    };
+  parseHeaders(tests) {
+    const headers = {}
+    
+    const headerTests = {
+      'content-security-policy': 'Content-Security-Policy',
+      'strict-transport-security': 'HTTP Strict Transport Security (HSTS)',
+      'x-content-type-options': 'X-Content-Type-Options',
+      'x-frame-options': 'X-Frame-Options',
+      'x-xss-protection': 'X-XSS-Protection',
+      'referrer-policy': 'Referrer-Policy',
+      'permissions-policy': 'Permissions-Policy'
+    }
 
-    return headers;
+    for (const [testKey, headerName] of Object.entries(headerTests)) {
+      const test = tests[testKey]
+      if (test) {
+        headers[headerName] = {
+          present: test.pass || false,
+          result: test.result || 'not-implemented',
+          scoreModifier: test.score_modifier || 0,
+          expectation: test.expectation || 'unknown'
+        }
+      }
+    }
+
+    return headers
   }
 
   /**
-   * Get actionable recommendations
+   * Generate actionable recommendations
    */
-  getRecommendations(testsData, results) {
-    const recommendations = [];
-
-    // CSP
-    if (!testsData['content-security-policy']?.pass) {
+  generateRecommendations(tests, grade) {
+    const recommendations = []
+    
+    // Priority recommendations based on grade
+    if (grade === 'F') {
       recommendations.push({
-        severity: 'high',
-        header: 'Content-Security-Policy',
-        issue: 'Missing or weak Content Security Policy',
-        fix: "Add 'Content-Security-Policy' header to prevent XSS attacks",
-        example: "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'",
-        priority: 1
-      });
+        priority: 'critical',
+        category: 'security',
+        message: 'Critical: Website has major security issues. Immediate action required.',
+        impact: 'high'
+      })
+    } else if (grade === 'D' || grade === 'E') {
+      recommendations.push({
+        priority: 'high',
+        category: 'security',
+        message: 'Warning: Website security needs significant improvement.',
+        impact: 'high'
+      })
     }
 
-    // HSTS
-    if (!testsData['strict-transport-security']?.pass) {
-      recommendations.push({
-        severity: 'high',
-        header: 'Strict-Transport-Security',
-        issue: 'Missing HSTS header',
-        fix: "Add 'Strict-Transport-Security' header to enforce HTTPS",
-        example: "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload",
-        priority: 2
-      });
-    }
+    // Check specific tests
+    if (tests) {
+      // CSP
+      if (tests['content-security-policy'] && !tests['content-security-policy'].pass) {
+        recommendations.push({
+          priority: 'high',
+          category: 'headers',
+          message: 'Implement Content-Security-Policy (CSP) header to prevent XSS attacks.',
+          header: 'Content-Security-Policy',
+          impact: 'high'
+        })
+      }
 
-    // X-Frame-Options
-    if (!testsData['x-frame-options']?.pass) {
-      recommendations.push({
-        severity: 'medium',
-        header: 'X-Frame-Options',
-        issue: 'Missing X-Frame-Options header',
-        fix: "Add 'X-Frame-Options' to prevent clickjacking",
-        example: "X-Frame-Options: DENY",
-        priority: 3
-      });
-    }
+      // HSTS
+      if (tests['strict-transport-security'] && !tests['strict-transport-security'].pass) {
+        recommendations.push({
+          priority: 'high',
+          category: 'headers',
+          message: 'Enable HTTP Strict Transport Security (HSTS) to enforce HTTPS.',
+          header: 'Strict-Transport-Security',
+          impact: 'high'
+        })
+      }
 
-    // X-Content-Type-Options
-    if (!testsData['x-content-type-options']?.pass) {
-      recommendations.push({
-        severity: 'medium',
-        header: 'X-Content-Type-Options',
-        issue: 'Missing X-Content-Type-Options header',
-        fix: "Add 'X-Content-Type-Options' to prevent MIME sniffing",
-        example: "X-Content-Type-Options: nosniff",
-        priority: 4
-      });
-    }
+      // X-Frame-Options
+      if (tests['x-frame-options'] && !tests['x-frame-options'].pass) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'headers',
+          message: 'Add X-Frame-Options header to prevent clickjacking attacks.',
+          header: 'X-Frame-Options',
+          impact: 'medium'
+        })
+      }
 
-    // Referrer Policy
-    if (!testsData['referrer-policy']?.pass) {
-      recommendations.push({
-        severity: 'low',
-        header: 'Referrer-Policy',
-        issue: 'Missing Referrer-Policy header',
-        fix: "Add 'Referrer-Policy' to control referrer information",
-        example: "Referrer-Policy: strict-origin-when-cross-origin",
-        priority: 5
-      });
-    }
+      // X-Content-Type-Options
+      if (tests['x-content-type-options'] && !tests['x-content-type-options'].pass) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'headers',
+          message: 'Add X-Content-Type-Options: nosniff to prevent MIME type sniffing.',
+          header: 'X-Content-Type-Options',
+          impact: 'medium'
+        })
+      }
 
-    // Cookies
-    if (!testsData['cookies']?.pass) {
-      recommendations.push({
-        severity: 'medium',
-        header: 'Set-Cookie',
-        issue: 'Cookies missing security attributes',
-        fix: "Add 'Secure', 'HttpOnly', and 'SameSite' attributes to cookies",
-        example: "Set-Cookie: sessionId=abc123; Secure; HttpOnly; SameSite=Strict",
-        priority: 3
-      });
+      // Referrer-Policy
+      if (tests['referrer-policy'] && !tests['referrer-policy'].pass) {
+        recommendations.push({
+          priority: 'low',
+          category: 'headers',
+          message: 'Implement Referrer-Policy to control referrer information.',
+          header: 'Referrer-Policy',
+          impact: 'low'
+        })
+      }
+
+      // Cookie security
+      if (tests['cookies'] && !tests['cookies'].pass) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'cookies',
+          message: 'Secure cookies with HttpOnly and Secure flags.',
+          impact: 'medium'
+        })
+      }
+
+      // HTTPS redirect
+      if (tests['redirection'] && !tests['redirection'].pass) {
+        recommendations.push({
+          priority: 'high',
+          category: 'https',
+          message: 'Redirect all HTTP traffic to HTTPS.',
+          impact: 'high'
+        })
+      }
     }
 
     // Sort by priority
-    return recommendations.sort((a, b) => a.priority - b.priority);
+    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 }
+    recommendations.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+
+    return recommendations
   }
 
   /**
-   * Get risk level based on score
+   * Get error result structure
    */
-  getRiskLevel(score) {
-    if (score >= 90) return { level: 'low', color: 'green', message: 'Excellent security posture' };
-    if (score >= 70) return { level: 'medium', color: 'yellow', message: 'Good security, some improvements possible' };
-    if (score >= 50) return { level: 'high', color: 'orange', message: 'Moderate security risks present' };
-    return { level: 'critical', color: 'red', message: 'Significant security vulnerabilities' };
+  getErrorResult(errorMessage) {
+    return {
+      hostname: null,
+      grade: 'N/A',
+      score: 0,
+      state: 'ERROR',
+      error: errorMessage,
+      scanDate: new Date().toISOString(),
+      summary: {
+        testsTotal: 0,
+        testsPassed: 0,
+        testsFailed: 0,
+        testsMissing: 0
+      },
+      headers: {},
+      recommendations: [
+        {
+          priority: 'high',
+          category: 'scan',
+          message: `Security scan failed: ${errorMessage}`,
+          impact: 'unknown'
+        }
+      ]
+    }
   }
 
   /**
-   * Get display name for test
+   * Sleep helper for retries
    */
-  getTestDisplayName(testName) {
-    const names = {
-      'content-security-policy': 'Content Security Policy',
-      'strict-transport-security': 'HTTP Strict Transport Security (HSTS)',
-      'x-frame-options': 'X-Frame-Options',
-      'x-content-type-options': 'X-Content-Type-Options',
-      'referrer-policy': 'Referrer Policy',
-      'cookies': 'Cookie Security',
-      'subresource-integrity': 'Subresource Integrity',
-      'cross-origin-resource-sharing': 'Cross-Origin Resource Sharing (CORS)',
-      'public-key-pinning': 'HTTP Public Key Pinning'
-    };
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  /**
+   * Get security grade color/severity
+   */
+  getGradeSeverity(grade) {
+    const severityMap = {
+      'A+': 'excellent',
+      'A': 'good',
+      'A-': 'good',
+      'B+': 'fair',
+      'B': 'fair',
+      'B-': 'fair',
+      'C+': 'warning',
+      'C': 'warning',
+      'C-': 'warning',
+      'D+': 'poor',
+      'D': 'poor',
+      'D-': 'poor',
+      'E': 'critical',
+      'F': 'critical'
+    }
     
-    return names[testName] || testName;
+    return severityMap[grade] || 'unknown'
   }
 
   /**
-   * Get overall security grade interpretation
+   * Alias for backward compatibility with existing route
    */
-  getGradeInterpretation(grade) {
-    const interpretations = {
-      'A+': 'Exceptional - Best-in-class security',
-      'A': 'Excellent - Strong security posture',
-      'B': 'Good - Security is adequate with minor issues',
-      'C': 'Fair - Multiple security improvements needed',
-      'D': 'Poor - Significant security vulnerabilities',
-      'F': 'Fail - Critical security issues must be addressed'
-    };
-    
-    return interpretations[grade] || 'Unknown';
+  async analyzeSecurity(url) {
+    return this.analyzeWebsiteSecurity(url)
   }
 }
 
-export default MozillaObservatoryService;
-
+export default MozillaObservatoryService
