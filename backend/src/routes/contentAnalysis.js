@@ -40,7 +40,7 @@ function estimateTokens(text) {
  * Truncate content to fit within token limits
  * Keeps the beginning and end of content for context
  */
-function truncateContent(text, maxTokens = 6000) {
+function truncateContent(text, maxTokens = 3000) {
   const estimatedTokens = estimateTokens(text)
   
   if (estimatedTokens <= maxTokens) {
@@ -50,9 +50,9 @@ function truncateContent(text, maxTokens = 6000) {
   // Convert tokens to characters (rough approximation)
   const maxChars = maxTokens * 4
   
-  // Keep 80% from the beginning, 20% from the end for context
-  const beginChars = Math.floor(maxChars * 0.8)
-  const endChars = Math.floor(maxChars * 0.2)
+  // Keep 70% from the beginning, 30% from the end for better context
+  const beginChars = Math.floor(maxChars * 0.7)
+  const endChars = Math.floor(maxChars * 0.3)
   
   const beginning = text.substring(0, beginChars)
   const ending = text.substring(text.length - endChars)
@@ -471,10 +471,10 @@ router.post('/analyze', authMiddleware, async (req, res) => {
     const languageDetection = languageDetector.detectLanguage(content || '', textToAnalyze)
     const detectedLanguage = languageDetection.language
     
-    // Truncate content to fit within token limits (6000 tokens for input, leaving room for response)
+    // Truncate content to fit within token limits (3000 tokens for input, leaving room for response)
     const originalLength = textToAnalyze.length
     const originalTokens = estimateTokens(textToAnalyze)
-    textToAnalyze = truncateContent(textToAnalyze, 6000)
+    textToAnalyze = truncateContent(textToAnalyze, 3000)
     const truncatedTokens = estimateTokens(textToAnalyze)
     
     if (originalTokens > truncatedTokens) {
@@ -557,13 +557,25 @@ Focus on:
 
     let analysisData
     try {
-      const rawContent = response.choices[0].message.content
+      const rawContent = response.choices[0].message.content?.trim() || ''
       logger.info(`OpenAI response length: ${rawContent.length} chars`)
+      
+      // Validate JSON structure before parsing
+      if (!rawContent.startsWith('{') || !rawContent.endsWith('}')) {
+        logger.error('OpenAI response is not complete JSON')
+        logger.error('Raw OpenAI response (first 500 chars):', rawContent.substring(0, 500))
+        logger.error('Raw OpenAI response (last 500 chars):', rawContent.substring(Math.max(0, rawContent.length - 500)))
+        throw new Error('OpenAI response is incomplete. The content may be too long.')
+      }
+      
       analysisData = JSON.parse(rawContent)
     } catch (parseError) {
-      logger.error('Failed to parse OpenAI response:', parseError)
-      logger.error('Raw OpenAI response:', response.choices[0].message.content?.substring(0, 500))
-      throw new Error('AI content analysis failed: Unable to parse OpenAI response. The AI service may be experiencing issues. Please try again later.')
+      const rawContent = response.choices[0].message.content || ''
+      logger.error('Failed to parse OpenAI response:', parseError.message)
+      logger.error('Raw OpenAI response (first 500 chars):', rawContent.substring(0, 500))
+      logger.error('Raw OpenAI response (last 500 chars):', rawContent.substring(Math.max(0, rawContent.length - 500)))
+      logger.error('Parse error stack:', parseError.stack)
+      throw new Error(`AI content analysis failed: ${parseError.message}. The content may be too long or the AI response was incomplete. Try with shorter content.`)
     }
 
     // Calculate real scores based on content analysis

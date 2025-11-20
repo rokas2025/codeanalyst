@@ -609,7 +609,7 @@ function CodeAnalystContent() {
                     <option value="all">All Theme Files ({wordpressPages.length > 0 ? 'All pages' : 'Entire theme'})</option>
                     {wordpressPages.map((page) => (
                       <option key={page.id} value={page.id}>
-                        {page.title} ({page.template || 'default template'})
+                        {page.is_home ? '🏠 ' : ''}{page.title} ({page.template || 'default template'})
                       </option>
                     ))}
                   </select>

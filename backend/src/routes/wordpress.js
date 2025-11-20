@@ -728,7 +728,7 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
       })
     }
 
-    // Get optional pageId filter from query params
+    // Get optional pageId filter from query params (for context only, not for filtering)
     const { pageId } = req.query
     
     // Fetch theme files list using WordPressService
@@ -737,20 +737,9 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
     let fileList = await wordpressService.fetchThemeFiles(connection)
     logger.info(`📋 [WordPress CodeAnalyst] Got ${fileList.length} files from WordPress REST API`)
     
-    // Filter files by page if pageId is provided
-    // Note: This is a simplified filter. Full page-to-template mapping requires WordPress plugin enhancement
-    if (pageId && pageId !== 'all') {
-      const originalCount = fileList.length
-      // For now, just filter to core template files (excluding helpers, partials, etc.)
-      // This reduces the file count significantly for faster analysis
-      fileList = fileList.filter(file => {
-        const path = file.path.toLowerCase()
-        // Include main template files and exclude inc/ subdirectories
-        return !path.startsWith('inc/') && 
-               (path.endsWith('.php') || path.includes('template'))
-      })
-      logger.info(`📋 [WordPress CodeAnalyst] Filtered to ${fileList.length} template files (from ${originalCount} total)`)
-    }
+    // NO FILTERING: CodeAnalyst needs ALL theme files for comprehensive code analysis
+    // The pageId parameter is only used for user context, not for file filtering
+    logger.info(`📋 [WordPress CodeAnalyst] Fetching ALL ${fileList.length} theme files (no filtering)`)
 
     // Fetch content for each file in batches to prevent overwhelming WordPress server
     logger.info(`📄 [WordPress CodeAnalyst] Fetching content for ${fileList.length} theme files...`)

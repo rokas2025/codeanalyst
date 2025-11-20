@@ -439,7 +439,7 @@ function WebsiteAnalystContent() {
                   <option value="">Homepage</option>
                   {wordpressPages.map((page) => (
                     <option key={page.id} value={page.id}>
-                      {page.title}
+                      {page.is_home ? '🏠 ' : ''}{page.title}
                     </option>
                   ))}
                 </select>
