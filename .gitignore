@@ -144,3 +144,8 @@ USER_MANAGEMENT_IMPLEMENTATION_COMPLETE.md
 env.production
 SECURITY_AUDIT_COMPLETE.md
 SECURITY_FIX_SUMMARY.md
+# Security - Prevent accidental secret commits
+configure-supabase-auth.ps1
+get-supabase-keys.ps1
+setup-supabase-auth.ps1
+*IMPLEMENTATION_SUMMARY*.md
