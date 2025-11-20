@@ -698,21 +698,29 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
     const { connectionId } = req.params
     const userId = req.user.id
 
-    logger.info('📁 Fetching theme files for connection', { connectionId, userId })
+    logger.info('📁 [WordPress CodeAnalyst] Fetching theme files', { connectionId, userId })
 
     // Verify connection belongs to user
     const connections = await DatabaseService.getWordPressConnections(userId)
     const connection = connections.find(c => c.id === connectionId)
 
     if (!connection) {
+      logger.error('❌ [WordPress CodeAnalyst] Connection not found', { connectionId, userId })
       return res.status(404).json({
         success: false,
         error: 'Connection not found'
       })
     }
 
+    logger.info('🔗 [WordPress CodeAnalyst] Connection verified', {
+      site_url: connection.site_url,
+      site_name: connection.site_name,
+      is_connected: connection.is_connected
+    })
+
     // Check if site is connected
     if (!connection.is_connected) {
+      logger.error('❌ [WordPress CodeAnalyst] Site not connected', { connectionId })
       return res.status(400).json({
         success: false,
         error: 'WordPress site is not connected',
@@ -722,18 +730,22 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
 
     // Fetch theme files list using WordPressService
     const wordpressService = new WordPressService()
+    logger.info('📋 [WordPress CodeAnalyst] Fetching file list from WordPress...')
     const fileList = await wordpressService.fetchThemeFiles(connection)
-
-    logger.info(`📄 Fetching content for ${fileList.length} theme files...`)
+    logger.info(`📋 [WordPress CodeAnalyst] Got ${fileList.length} files from WordPress REST API`)
 
     // Fetch content for each file
+    logger.info(`📄 [WordPress CodeAnalyst] Fetching content for ${fileList.length} theme files...`)
     const filesWithContent = await Promise.all(
-      fileList.map(async (file) => {
+      fileList.map(async (file, index) => {
         try {
+          logger.info(`📄 [${index + 1}/${fileList.length}] Fetching: ${file.path}`)
           const fileData = await wordpressService.fetchThemeFileContent(connection, file.path)
           
           // Decode base64 content
           const content = Buffer.from(fileData.content, 'base64').toString('utf-8')
+          
+          logger.info(`✅ [${index + 1}/${fileList.length}] Success: ${file.path} (${content.length} chars)`)
           
           return {
             path: file.path,
@@ -741,7 +753,7 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
             size: fileData.size || file.size
           }
         } catch (error) {
-          logger.warn(`⚠️ Failed to fetch content for ${file.path}:`, error.message)
+          logger.warn(`⚠️ [${index + 1}/${fileList.length}] Failed: ${file.path} - ${error.message}`)
           // Return file without content if fetch fails
           return {
             path: file.path,
@@ -755,7 +767,18 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
     // Filter out empty files
     const validFiles = filesWithContent.filter(f => f.content.length > 0)
 
-    logger.info(`✅ Successfully fetched ${validFiles.length}/${fileList.length} theme files with content`)
+    logger.info(`✅ [WordPress CodeAnalyst] Successfully fetched ${validFiles.length}/${fileList.length} theme files with content`)
+    
+    // Log sample of returned data
+    logger.info(`📦 [WordPress CodeAnalyst] Response structure:`, {
+      success: true,
+      filesCount: validFiles.length,
+      sampleFile: validFiles[0] ? {
+        path: validFiles[0].path,
+        contentLength: validFiles[0].content.length,
+        size: validFiles[0].size
+      } : null
+    })
 
     res.json({
       success: true,
@@ -768,7 +791,7 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
     })
 
   } catch (error) {
-    logger.error('Failed to fetch theme files:', error)
+    logger.error('❌ [WordPress CodeAnalyst] Failed to fetch theme files:', error)
     res.status(500).json({
       success: false,
       error: 'Failed to fetch theme files',

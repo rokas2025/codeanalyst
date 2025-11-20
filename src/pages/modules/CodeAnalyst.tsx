@@ -188,6 +188,13 @@ function CodeAnalystContent() {
   })
 
   const handleAnalyze = async (providedFiles?: { path: string; content: string; size: number }[]) => {
+    console.log('🔍 handleAnalyze called with:', {
+      providedFilesCount: providedFiles?.length || 0,
+      uploadedFilesCount: uploadedFiles.length,
+      userProfile,
+      selectedRepository: selectedRepository?.name
+    })
+    
     if (userProfile === 'github' && !selectedRepository) {
       alert('Please select a GitHub repository first')
       return
@@ -195,8 +202,10 @@ function CodeAnalystContent() {
     
     // Use provided files or fall back to state
     const filesToUse = providedFiles || uploadedFiles
+    console.log('📂 Files to use for analysis:', filesToUse.length)
     
     if ((userProfile === 'zip' || userProfile === 'wordpress') && filesToUse.length === 0) {
+      console.error('❌ No files to analyze!')
       alert('Please upload files first')
       return
     }
@@ -551,24 +560,38 @@ function CodeAnalystContent() {
           <WordPressSiteSelector 
             onSiteSelect={async (site) => {
               try {
+                console.log('🔍 WordPress site selected:', { siteId: site.id, siteName: site.site_name })
                 toast.loading('Fetching theme files...')
+                
                 const response = await wordpressService.getThemeFiles(site.id)
+                console.log('📦 WordPress theme files response:', {
+                  success: response.success,
+                  filesCount: response.files?.length || 0,
+                  error: response.error,
+                  firstFile: response.files?.[0],
+                  responseKeys: Object.keys(response)
+                })
+                
                 toast.dismiss()
                 
-                if (response.success && response.files) {
+                if (response.success && response.files && response.files.length > 0) {
+                  console.log('✅ Setting uploaded files:', response.files.length, 'files')
                   setUploadedFiles(response.files)
                   toast.success(`Loaded ${response.files.length} theme files. Starting analysis...`)
                   
                   // Auto-start analysis - pass files directly!
                   setTimeout(() => {
+                    console.log('🚀 Starting analysis with files:', response.files.length)
                     handleAnalyze(response.files)
                   }, 500)
                 } else {
-                  toast.error(response.error || 'Failed to fetch theme files')
+                  console.error('❌ WordPress theme fetch failed:', response)
+                  toast.error(response.error || 'Failed to fetch theme files or no files found')
                 }
               } catch (error) {
+                console.error('❌ WordPress theme fetch exception:', error)
                 toast.dismiss()
-                toast.error('Failed to fetch theme files')
+                toast.error(`Error: ${error instanceof Error ? error.message : 'Failed to fetch theme files'}`)
               }
             }}
             label="Choose a WordPress site to analyze its theme"
