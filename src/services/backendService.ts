@@ -462,12 +462,13 @@ class BackendService {
         opportunities: urlResult.lighthouse?.opportunities || []
       },
       
-      // Ensure SEO data is properly structured
+      // Ensure SEO data is properly structured with type safety
       seo: {
         score: seoScore,
-        title: urlResult.seo?.title || urlResult.basic?.title || '',
-        description: urlResult.seo?.description || urlResult.basic?.description || '',
-        keywords: urlResult.seo?.keywords || urlResult.basic?.keywords || [],
+        title: String(urlResult.seo?.title || urlResult.basic?.title || ''),
+        description: String(urlResult.seo?.description || urlResult.basic?.description || ''),
+        keywords: Array.isArray(urlResult.seo?.keywords) ? urlResult.seo.keywords : 
+                  Array.isArray(urlResult.basic?.keywords) ? urlResult.basic.keywords : [],
         headings: urlResult.seo?.headings || urlResult.basic?.headingStructure || {},
         // CRITICAL: Preserve comprehensive SEO analysis
         comprehensive: urlResult.seo?.comprehensive,

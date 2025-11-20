@@ -75,11 +75,11 @@ export class AIAnalysisService {
    * Generate AI insights for URL analysis
    */
   async generateURLInsights(analysisData, options = {}) {
-    try {
-      if (!this.hasAnyProvider()) {
-        return this.generateFallbackURLInsights(analysisData)
-      }
+    if (!this.hasAnyProvider()) {
+      throw new Error('No AI provider available. Please configure OpenAI or Anthropic API keys.')
+    }
 
+    try {
       // Track available providers for transparency
       const availableProviders = this.getAvailableProviders()
       const analysisMetadata = {
@@ -104,7 +104,7 @@ export class AIAnalysisService {
       return insights
     } catch (error) {
       logger.error('AI URL analysis failed:', error)
-      return this.generateFallbackURLInsights(analysisData)
+      throw new Error(`AI URL analysis failed: ${error.message}`)
     }
   }
 
@@ -112,18 +112,18 @@ export class AIAnalysisService {
    * Generate AI insights for code analysis
    */
   async generateCodeInsights(analysisData, files, options = {}) {
-    try {
-      if (!this.hasAnyProvider()) {
-        return this.generateFallbackCodeInsights(analysisData)
-      }
+    if (!this.hasAnyProvider()) {
+      throw new Error('No AI provider available. Please configure OpenAI or Anthropic API keys.')
+    }
 
+    try {
       const prompt = this.buildCodeAnalysisPrompt(analysisData, files, options)
       const response = await this.callAI(prompt, 'code-analysis', options)
       
       return this.parseCodeInsights(response, analysisData)
     } catch (error) {
       logger.error('AI code analysis failed:', error)
-      return this.generateFallbackCodeInsights(analysisData)
+      throw new Error(`AI code analysis failed: ${error.message}`)
     }
   }
 
@@ -450,8 +450,8 @@ Please respond in JSON format with the following structure:
         provider: 'ai-generated'
       }
     } catch (error) {
-      logger.warn('Failed to parse AI response, using fallback')
-      return this.generateFallbackURLInsights(data)
+      logger.error('Failed to parse AI URL insights response:', error)
+      throw new Error('Failed to parse AI response. The AI service returned invalid data.')
     }
   }
 
@@ -475,95 +475,11 @@ Please respond in JSON format with the following structure:
         provider: 'ai-generated'
       }
     } catch (error) {
-      logger.warn('Failed to parse AI response, using fallback')
-      return this.generateFallbackCodeInsights(data)
+      logger.error('Failed to parse AI code insights response:', error)
+      throw new Error('Failed to parse AI response. The AI service returned invalid data.')
     }
   }
 
-  /**
-   * Generate fallback insights for URL analysis
-   */
-  generateFallbackURLInsights(data) {
-    const insights = {
-      summary: `Analyzed website: ${data.url}`,
-      technicalInsights: {
-        strengths: [],
-        weaknesses: [],
-        recommendations: []
-      },
-      businessInsights: {
-        opportunities: [],
-        risks: [],
-        recommendations: []
-      },
-      priority: 'medium',
-      confidence: 0.6,
-      provider: 'rule-based'
-    }
-
-    // Add rule-based insights based on scores
-    if (data.performance?.performance < 60) {
-      insights.technicalInsights.weaknesses.push('Poor website performance')
-      insights.technicalInsights.recommendations.push('Optimize images and reduce script loading times')
-    }
-
-    if (data.seo?.score < 70) {
-      insights.businessInsights.opportunities.push('Improve SEO optimization')
-      insights.businessInsights.recommendations.push('Add meta descriptions and optimize title tags')
-    }
-
-    if (data.security?.score < 80) {
-      insights.technicalInsights.weaknesses.push('Security improvements needed')
-      insights.technicalInsights.recommendations.push('Implement HTTPS and security headers')
-    }
-
-    return insights
-  }
-
-  /**
-   * Generate fallback insights for code analysis
-   */
-  generateFallbackCodeInsights(data) {
-    const insights = {
-      systemOverview: {
-        architecture: 'Standard project structure detected',
-        strengths: [],
-        weaknesses: []
-      },
-      technicalInsights: {
-        codeQuality: 'Automated analysis completed',
-        security: 'Security scan performed',
-        performance: 'Performance analysis completed',
-        recommendations: []
-      },
-      businessInsights: {
-        risks: [],
-        opportunities: [],
-        recommendations: []
-      },
-      priority: 'medium',
-      confidence: 0.6,
-      provider: 'rule-based'
-    }
-
-    // Add rule-based insights
-    if (data.scores?.overall < 60) {
-      insights.systemOverview.weaknesses.push('Code quality needs improvement')
-      insights.technicalInsights.recommendations.push('Focus on refactoring and code cleanup')
-    }
-
-    if (data.testCoverage?.coverageRatio < 50) {
-      insights.businessInsights.risks.push('Low test coverage increases deployment risk')
-      insights.technicalInsights.recommendations.push('Increase test coverage to at least 70%')
-    }
-
-    if (data.scores?.security < 70) {
-      insights.businessInsights.risks.push('Security vulnerabilities detected')
-      insights.technicalInsights.recommendations.push('Address security issues before production deployment')
-    }
-
-    return insights
-  }
 
   /**
    * Get AI service health status

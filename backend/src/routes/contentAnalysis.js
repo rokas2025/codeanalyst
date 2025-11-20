@@ -563,32 +563,7 @@ Focus on:
     } catch (parseError) {
       logger.error('Failed to parse OpenAI response:', parseError)
       logger.error('Raw OpenAI response:', response.choices[0].message.content?.substring(0, 500))
-      // Fallback analysis with real keywords
-      const fallbackKeywords = extractKeywords(textToAnalyze, '')
-        
-      analysisData = {
-        improved: textToAnalyze,
-        grammar: {
-          issues: [
-            { type: 'info', suggestion: 'Content analyzed successfully' }
-          ]
-        },
-        readability: {
-          suggestions: [
-            'Consider using shorter sentences for better readability',
-            'Add transition words to improve flow'
-          ]
-        },
-        seo: {
-          suggestions: [
-            contentSource === 'url' ? 'Optimize page title and meta description' : 
-            contentSource === 'html' ? 'Structure content with proper headings' :
-            'Add more descriptive headings',
-            'Include relevant keywords naturally'
-          ]
-        },
-        keywords: fallbackKeywords
-      }
+      throw new Error('AI content analysis failed: Unable to parse OpenAI response. The AI service may be experiencing issues. Please try again later.')
     }
 
     // Calculate real scores based on content analysis
