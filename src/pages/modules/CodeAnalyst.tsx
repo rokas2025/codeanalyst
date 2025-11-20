@@ -119,7 +119,7 @@ function CodeAnalystContent() {
       
       // Show success toast for file upload
       if (files.length > 0) {
-        toast.success(`Successfully uploaded ${files.length} files! 📁`, {
+        toast.success(`Successfully uploaded ${files.length} files! Click "Analyze" to start.`, {
           duration: 3000,
           position: 'top-right',
         })
@@ -398,8 +398,16 @@ function CodeAnalystContent() {
       // Use uploaded files or create demo files if project selected
       let filesToAnalyze = providedFiles || uploadedFiles
       
-      if (uploadedFiles.length === 0 && selectedProject) {
+      console.log('🔍 Files check:', {
+        providedFiles: providedFiles?.length || 0,
+        uploadedFilesState: uploadedFiles.length,
+        filesToAnalyze: filesToAnalyze.length,
+        selectedProject
+      })
+      
+      if (filesToAnalyze.length === 0 && selectedProject) {
         // Create realistic demo files based on selected project
+        console.log('📝 Using demo files for project:', selectedProject)
         const demoFiles = {
           portfolio: [
             { path: 'src/components/Header.tsx', content: 'import React from "react"\nimport { Link } from "react-router-dom"\n\nexport default function Header() {\n  return (\n    <header className="bg-white shadow">\n      <nav className="container mx-auto px-4">\n        <Link to="/" className="text-2xl font-bold">Portfolio</Link>\n      </nav>\n    </header>\n  )\n}', size: 320 },
@@ -424,6 +432,7 @@ function CodeAnalystContent() {
         filesToAnalyze = demoFiles[selectedProject as keyof typeof demoFiles] || demoFiles.portfolio
       }
       
+      console.log('🚀 Creating analyzer with files:', filesToAnalyze.length)
       const analyzer = new AdoreInoAnalyzer(filesToAnalyze)
       
       // Step 2: Code Quality Analysis
