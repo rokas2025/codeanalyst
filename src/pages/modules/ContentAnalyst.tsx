@@ -68,6 +68,21 @@ const uiLabels = {
 
 import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 
+// Helper function to strip HTML tags and decode HTML entities
+function stripHtml(html: string): string {
+  if (!html) return ''
+  
+  // Create a temporary div element to parse HTML
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html
+  
+  // Get text content (automatically handles HTML entities)
+  const text = tmp.textContent || tmp.innerText || ''
+  
+  // Clean up extra whitespace
+  return text.trim().replace(/\s+/g, ' ')
+}
+
 function ContentAnalystContent() {
   const location = useLocation()
   const [content, setContent] = useState<string>('')
@@ -410,13 +425,13 @@ function ContentAnalystContent() {
                 <>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto">
                     <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans leading-relaxed">
-                      {result.original}
+                      {result.contentSource === 'html' ? stripHtml(result.original) : result.original}
                     </pre>
                   </div>
                   
                   {/* Character count comparison */}
                   <div className="flex items-center justify-between text-xs text-gray-600 px-2">
-                    <span>Original: {result.original.length} characters</span>
+                    <span>Original: {(result.contentSource === 'html' ? stripHtml(result.original) : result.original).length} characters</span>
                     <span className="text-green-600 font-medium">
                       Improved: {result.improved.length} characters
                       {result.improved.length > result.original.length && (

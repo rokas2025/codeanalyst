@@ -445,6 +445,22 @@ function WebsiteAnalystContent() {
                 </select>
               )}
             </div>
+            
+            {/* Analyze Button */}
+            <button
+              onClick={() => {
+                if (!urlInput) {
+                  toast.error('Please select a page to analyze')
+                  return
+                }
+                handleAnalyze()
+              }}
+              disabled={loadingPages || isAnalyzing}
+              className="w-full btn-primary flex items-center justify-center"
+            >
+              <GlobeAltIcon className="h-5 w-5 mr-2" />
+              {isAnalyzing ? 'Analyzing...' : 'Analyze Selected Page'}
+            </button>
           </div>
         )}
       </div>

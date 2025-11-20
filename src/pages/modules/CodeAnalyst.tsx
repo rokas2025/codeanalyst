@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { CodeBracketIcon, DocumentArrowUpIcon, ChartBarIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import { CodeBracketIcon, DocumentArrowUpIcon, ChartBarIcon, ExclamationTriangleIcon, CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useDropzone } from 'react-dropzone'
 import JSZip from 'jszip'
 import toast from 'react-hot-toast'
