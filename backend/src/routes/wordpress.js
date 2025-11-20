@@ -691,7 +691,7 @@ router.get('/elementor-pages/:connectionId', authMiddleware, async (req, res) =>
 
 /**
  * GET /api/wordpress/theme-files/:connectionId
- * Fetch theme files from connected WordPress site via REST API
+ * Fetch theme files from connected WordPress site via REST API WITH CONTENT
  */
 router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
   try {
@@ -720,16 +720,47 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
       })
     }
 
-    // Fetch theme files using WordPressService
+    // Fetch theme files list using WordPressService
     const wordpressService = new WordPressService()
-    const files = await wordpressService.fetchThemeFiles(connection)
+    const fileList = await wordpressService.fetchThemeFiles(connection)
 
-    logger.info(`✅ Successfully fetched ${files.length} theme files`)
+    logger.info(`📄 Fetching content for ${fileList.length} theme files...`)
+
+    // Fetch content for each file
+    const filesWithContent = await Promise.all(
+      fileList.map(async (file) => {
+        try {
+          const fileData = await wordpressService.fetchThemeFileContent(connection, file.path)
+          
+          // Decode base64 content
+          const content = Buffer.from(fileData.content, 'base64').toString('utf-8')
+          
+          return {
+            path: file.path,
+            content: content,
+            size: fileData.size || file.size
+          }
+        } catch (error) {
+          logger.warn(`⚠️ Failed to fetch content for ${file.path}:`, error.message)
+          // Return file without content if fetch fails
+          return {
+            path: file.path,
+            content: '',
+            size: file.size
+          }
+        }
+      })
+    )
+
+    // Filter out empty files
+    const validFiles = filesWithContent.filter(f => f.content.length > 0)
+
+    logger.info(`✅ Successfully fetched ${validFiles.length}/${fileList.length} theme files with content`)
 
     res.json({
       success: true,
-      files,
-      total_files: files.length,
+      files: validFiles,
+      total_files: validFiles.length,
       connection: {
         site_url: connection.site_url,
         site_name: connection.site_name
