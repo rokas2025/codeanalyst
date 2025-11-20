@@ -65,7 +65,7 @@ export class AIAnalysisService {
    */
   getAvailableProviders() {
     const available = []
-    if (this.providers.openai) available.push({ name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: process.env.OPENAI_API_KEY ? 'environment' : 'demo' })
+    if (this.providers.openai) available.push({ name: 'OpenAI GPT-5 mini', model: 'gpt-5-mini', source: process.env.OPENAI_API_KEY ? 'environment' : 'demo' })
     if (this.providers.anthropic) available.push({ name: 'Anthropic Claude', model: 'claude-3-sonnet', source: process.env.ANTHROPIC_API_KEY ? 'environment' : 'demo' })
     if (this.providers.google) available.push({ name: 'Google Gemini', model: 'gemini-2.5-flash', source: process.env.GOOGLE_AI_API_KEY ? 'environment' : 'demo' })
     return available
@@ -306,7 +306,7 @@ Please respond in JSON format with the following structure:
       let modelUsed = 'unknown'
       
       if (provider === 'openai' && this.providers.openai) {
-        modelUsed = options.model || 'gpt-4-turbo'
+        modelUsed = options.model || 'gpt-5-mini'
         const completion = await this.providers.openai.chat.completions.create({
           model: modelUsed,
           messages: [{ role: 'user', content: prompt }],
@@ -421,7 +421,7 @@ Please respond in JSON format with the following structure:
    */
   calculateCost(provider, tokens) {
     const costs = {
-      openai: { input: 0.03 / 1000, output: 0.06 / 1000 }, // GPT-4 pricing per 1K tokens
+      openai: { input: 0.00025 / 1000, output: 0.002 / 1000 }, // GPT-5 mini pricing per 1K tokens
       anthropic: { input: 0.015 / 1000, output: 0.075 / 1000 }, // Claude-3 pricing
       google: { input: 0.00025 / 1000, output: 0.0005 / 1000 } // Gemini pricing
     }

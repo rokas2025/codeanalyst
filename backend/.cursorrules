@@ -1,0 +1,295 @@
+# Cursor Rules – CodeAnalyst (Backend)
+
+## 0. Environment
+
+- OS: Windows
+- Shell: PowerShell (not bash).
+- Use PowerShell syntax (no `&&`, `grep`, `sed`, etc.).
+- Paths like `.\backend`, `.\scripts\...`.
+
+---
+
+## 1. Backend Stack & Structure
+
+- Node.js 22.x + Express 4 (ES modules, `"type": "module"`).
+- PostgreSQL via Supabase.
+- Redis + Bull for queues / workers.
+- Jest + Supertest for tests.
+
+Directories:
+
+- `src/routes/**` – API endpoints.
+- `src/services/**` – Business logic, analyzers, AI provider integrations.
+- `src/middleware/**` – Auth, error handling, rate limiting.
+- `src/database/**` – DB connection & migrations.
+- `src/workers/**` – Bull workers.
+- `src/utils/**` – Logger, templates, helpers.
+
+When debugging or implementing backend features:
+
+1. Start with the **route** that handles the endpoint in `src/routes/**`.
+2. Then inspect the **service** used by that route in `src/services/**`.
+3. Only open middleware/database/workers if clearly related.
+
+---
+
+## 2. Critical "Do Not Touch" Zones – Auth
+
+Unless I explicitly say otherwise, **do not modify**:
+
+- `src/middleware/auth.js`
+- `src/routes/auth.js`
+
+You may read them, but:
+
+- Don't change JWT format, expiry (30 days), or user schema.
+- Prefer fixes in:
+  - Callers.
+  - Frontend behavior.
+  - Logging, using the existing logger.
+
+If a change is absolutely necessary:
+
+- Explain **why**.
+- Propose the **smallest possible diff**.
+- Wait for my confirmation.
+
+---
+
+## 3. Security & Env Vars
+
+Secrets (examples):
+
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `JWT_SECRET`
+- Any `*_API_KEY`, `*_SECRET`.
+
+Rules:
+
+- Never hardcode real secrets.
+- Use placeholders in examples, e.g. `JWT_SECRET=<your-secret>`.
+- Do not log secrets or full JWTs.
+- Use existing logger (no `console.log` for sensitive data).
+
+---
+
+## 4. 502 / Timeout / Scraping Issues
+
+For 502s, timeouts, Puppeteer/scraping/bot-protection issues:
+
+1. Start with the endpoint route in `src/routes/**`.
+2. Then inspect the service in `src/services/**` that performs the analysis/scraping.
+3. If background jobs are involved, look at the relevant worker in `src/workers/**`.
+
+Avoid:
+
+- Scanning all services and workers "for context".
+- Large refactors across multiple services.
+
+Prefer:
+
+- Focused fixes to:
+  - Timeout config.
+  - Error handling.
+  - Retry/backoff logic.
+  - Logging around failures.
+
+---
+
+## 5. Testing – Backend
+
+- Framework: Jest + Supertest.
+- Commands:
+  - `npm run test`
+  - `npm run test:watch`
+
+When adding/updating tests:
+
+- Put tests where the repo already keeps them (e.g. `test/**`).
+- Use existing Supertest patterns for API tests.
+- Keep tests focused on the routes/services being changed.
+
+---
+
+## 6. ES Module Style
+
+- Use `import` / `export` only.
+- No `require()` or `module.exports`.
+- Node 22 features allowed if consistent with project.
+
+---
+
+## 7. Credit Optimization & File Scope
+
+Avoid opening:
+
+- `../docs/**` (documentation in root)
+- `../wordpress-plugin/**` (WordPress plugin)
+- Build/artifact folders (`dist/`, `build/`)
+- `node_modules/`
+- Large JSON artefacts: `*_result_*.json`, `website_analysis_*.json`
+- Frontend files: `../src/**` (unless frontend-backend integration issue)
+- Root-level markdown: `../*_SUMMARY.md`, `../*_COMPLETE.md`, `../*_GUIDE.md`
+
+Focus your context on:
+
+- `src/routes/**`
+- `src/services/**`
+- `src/middleware/**`
+- `src/database/**`
+- `src/workers/**`
+- `src/utils/**`
+
+---
+
+## 8. Logging Best Practices
+
+Always use the Winston logger from `src/utils/logger.js`:
+
+```javascript
+import logger from '../utils/logger.js';
+
+// Good:
+logger.info('User authenticated', { userId });
+logger.error('Analysis failed', { error: error.message });
+
+// Bad:
+console.log('User authenticated', userId);
+console.error('Analysis failed', error);
+```
+
+Log levels:
+- `logger.error()` – Errors that need attention
+- `logger.warn()` – Warnings, degraded performance
+- `logger.info()` – Important events (user actions, API calls)
+- `logger.debug()` – Detailed debugging info
+
+---
+
+## 9. Common Backend Tasks
+
+### Adding a new API endpoint:
+1. Create route handler in `src/routes/**`
+2. Add business logic in `src/services/**`
+3. Add authentication middleware if needed
+4. Add tests in `test/**` (if exists)
+
+### Fixing timeout/502 issues:
+1. Check `src/routes/urlAnalysis.js` or `src/routes/codeAnalysis.js`
+2. Look at timeout configs in services
+3. Check `src/services/WebsiteAnalyzer.js` or `src/services/CodeAnalyzer.js`
+4. Add/improve error handling and logging
+
+### AI integration changes:
+1. Check `src/services/AIAnalysisService.js`
+2. Check `src/services/AICodeAnalysisService.js`
+3. Check prompt templates in `src/utils/promptTemplates.js`
+
+---
+
+## 10. Railway Deployment
+
+Backend is deployed on Railway from `main` branch.
+
+Environment variables are set in Railway dashboard:
+- Database: `DATABASE_URL`
+- Auth: `JWT_SECRET`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`
+- AI: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_AI_API_KEY`
+- Supabase: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+
+When suggesting environment variable changes:
+- Use PowerShell-compatible Railway CLI: `railway variables --set "KEY=value"`
+- Or instruct to update via Railway dashboard
+
+---
+
+## 11. High-Credit Operations – Confirm First
+
+Before doing these, explain your plan and ask for confirmation:
+
+- "Audit all services"
+- "Refactor error handling across all routes"
+- "Update all AI provider integrations"
+- "Scan all services for security issues"
+
+Instead, start with:
+- Specific route (e.g., "Fix urlAnalysis.js timeout")
+- Specific service (e.g., "Improve WebsiteAnalyzer error handling")
+- One feature at a time
+
+---
+
+## 12. Debugging Workflow
+
+When user reports a backend issue:
+
+1. Ask for:
+   - Specific API endpoint
+   - Error message from frontend/network tab
+   - Request payload (if applicable)
+
+2. Check in order:
+   - Route handler in `src/routes/**`
+   - Service method in `src/services/**`
+   - Logs in Railway dashboard
+   - Middleware (if auth/validation issue)
+
+3. Don't:
+   - Open all routes/services "to understand the system"
+   - Scan multiple unrelated files
+   - Open frontend files unless integration issue confirmed
+
+---
+
+## 13. Migration Scripts
+
+Database migrations are in:
+- `src/database/migrations.js` – Main migration script
+- `scripts/migrate.js` – Migration runner
+
+When working on migrations:
+- Use `DATABASE_URL` format (Supabase connection string)
+- Test locally first
+- Don't modify existing migration history
+- Add new migrations, don't edit old ones
+
+---
+
+## 14. Performance Optimization
+
+For performance issues:
+
+1. Check for:
+   - Missing timeouts (Puppeteer, axios, fetch)
+   - Blocking operations (should be async)
+   - Missing error handling (causes hangs)
+   - Redis connection issues
+
+2. Common locations:
+   - `src/services/WebsiteAnalyzer.js` – Website scraping
+   - `src/services/CodeAnalyzer.js` – Code analysis
+   - `src/workers/analysisWorker.js` – Background jobs
+
+3. Don't:
+   - Refactor entire service for one timeout issue
+   - Add caching without understanding the flow
+   - Change Bull queue config without testing
+
+---
+
+## Summary: Backend Work Focus
+
+✅ **DO**:
+- Start with specific route/service
+- Use logger, not console.log
+- Keep changes small and focused
+- Ask before large refactors
+
+❌ **DON'T**:
+- Open frontend files
+- Scan all services "for context"
+- Touch auth files without approval
+- Use bash commands
+- Open documentation files
+- Hardcode secrets
+
