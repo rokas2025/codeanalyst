@@ -406,6 +406,38 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         projectPath: null
       })
       
+      // Run PHPStan analysis if PHP files detected
+      let phpStanResults = null
+      const phpFiles = extractedData.extractedFiles.filter(f => 
+        f.path?.toLowerCase().endsWith('.php')
+      )
+      
+      if (phpFiles.length > 0) {
+        try {
+          logger.info(`🐘 Running PHPStan analysis on ${phpFiles.length} PHP files`)
+          const { PHPStanService } = await import('../services/PHPStanService.js')
+          const phpStanService = new PHPStanService()
+          phpStanResults = await phpStanService.analyzeCode(phpFiles, null)
+          logger.info('✅ PHPStan analysis completed', { 
+            totalIssues: phpStanResults.totalIssues || 0,
+            errorCount: phpStanResults.errorCount || 0
+          })
+          
+          // Add PHPStan results to code analysis
+          if (phpStanResults && !phpStanResults.error) {
+            codeAnalysis.phpStan = phpStanResults
+          }
+        } catch (error) {
+          logger.warn('⚠️ PHPStan analysis failed, continuing without it:', error.message)
+          codeAnalysis.phpStan = {
+            success: false,
+            error: error.message,
+            filesAnalyzed: 0,
+            totalIssues: 0
+          }
+        }
+      }
+      
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
       
       // Step 3: Store code analysis data
@@ -422,7 +454,10 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         complexity_score: codeAnalysis.complexityScore || 0,
         test_results: codeAnalysis.testResults || {},
         build_results: codeAnalysis.buildResults || {},
-        static_analysis_results: codeAnalysis.staticAnalysis || {}
+        static_analysis_results: {
+          ...(codeAnalysis.staticAnalysis || {}),
+          phpStan: codeAnalysis.phpStan || null
+        }
       })
       
       // Step 4: AI Analysis
