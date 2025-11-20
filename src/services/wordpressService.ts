@@ -296,9 +296,9 @@ class WordPressService {
     /**
      * Get theme files from WordPress site
      */
-    async getThemeFiles(connectionId: string): Promise<{ success: boolean; files?: any[]; error?: string }> {
+    async getThemeFiles(connectionId: string, params: string = ''): Promise<{ success: boolean; files?: any[]; error?: string }> {
         try {
-            const response = await fetch(`${API_BASE_URL}/wordpress/theme-files/${connectionId}`, {
+            const response = await fetch(`${API_BASE_URL}/wordpress/theme-files/${connectionId}${params}`, {
                 method: 'GET',
                 headers: this.getAuthHeaders()
             })

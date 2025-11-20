@@ -596,7 +596,13 @@ Focus on:
         wordCount
       },
       keywords: analysisData.keywords || extractKeywords(textToAnalyze, analysisData.improved),
-      urlInfo: urlInfo, // Include URL info if available
+      // Ensure urlInfo fields are strings to prevent trim() errors on frontend
+      urlInfo: urlInfo ? {
+        url: String(urlInfo.url || ''),
+        title: String(urlInfo.title || ''),
+        metaDescription: String(urlInfo.metaDescription || ''),
+        content: String(urlInfo.content || '')
+      } : null,
       contentSource: contentSource, // Track what type of content was analyzed
       detectedLanguage: detectedLanguage // Include detected language for frontend localization
     }

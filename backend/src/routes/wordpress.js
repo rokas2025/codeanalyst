@@ -728,41 +728,82 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
       })
     }
 
+    // Get optional pageId filter from query params
+    const { pageId } = req.query
+    
     // Fetch theme files list using WordPressService
     const wordpressService = new WordPressService()
-    logger.info('📋 [WordPress CodeAnalyst] Fetching file list from WordPress...')
-    const fileList = await wordpressService.fetchThemeFiles(connection)
+    logger.info('📋 [WordPress CodeAnalyst] Fetching file list from WordPress...', { pageId: pageId || 'all' })
+    let fileList = await wordpressService.fetchThemeFiles(connection)
     logger.info(`📋 [WordPress CodeAnalyst] Got ${fileList.length} files from WordPress REST API`)
-
-    // Fetch content for each file
-    logger.info(`📄 [WordPress CodeAnalyst] Fetching content for ${fileList.length} theme files...`)
-    const filesWithContent = await Promise.all(
-      fileList.map(async (file, index) => {
-        try {
-          logger.info(`📄 [${index + 1}/${fileList.length}] Fetching: ${file.path}`)
-          const fileData = await wordpressService.fetchThemeFileContent(connection, file.path)
-          
-          // Decode base64 content
-          const content = Buffer.from(fileData.content, 'base64').toString('utf-8')
-          
-          logger.info(`✅ [${index + 1}/${fileList.length}] Success: ${file.path} (${content.length} chars)`)
-          
-          return {
-            path: file.path,
-            content: content,
-            size: fileData.size || file.size
-          }
-        } catch (error) {
-          logger.warn(`⚠️ [${index + 1}/${fileList.length}] Failed: ${file.path} - ${error.message}`)
-          // Return file without content if fetch fails
-          return {
-            path: file.path,
-            content: '',
-            size: file.size
-          }
-        }
+    
+    // Filter files by page if pageId is provided
+    // Note: This is a simplified filter. Full page-to-template mapping requires WordPress plugin enhancement
+    if (pageId && pageId !== 'all') {
+      const originalCount = fileList.length
+      // For now, just filter to core template files (excluding helpers, partials, etc.)
+      // This reduces the file count significantly for faster analysis
+      fileList = fileList.filter(file => {
+        const path = file.path.toLowerCase()
+        // Include main template files and exclude inc/ subdirectories
+        return !path.startsWith('inc/') && 
+               (path.endsWith('.php') || path.includes('template'))
       })
-    )
+      logger.info(`📋 [WordPress CodeAnalyst] Filtered to ${fileList.length} template files (from ${originalCount} total)`)
+    }
+
+    // Fetch content for each file in batches to prevent overwhelming WordPress server
+    logger.info(`📄 [WordPress CodeAnalyst] Fetching content for ${fileList.length} theme files...`)
+    const BATCH_SIZE = 25
+    const BATCH_DELAY_MS = 500 // Wait 500ms between batches
+    const totalBatches = Math.ceil(fileList.length / BATCH_SIZE)
+    const filesWithContent = []
+    
+    for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
+      const batchStart = batchIndex * BATCH_SIZE
+      const batchEnd = Math.min(batchStart + BATCH_SIZE, fileList.length)
+      const batch = fileList.slice(batchStart, batchEnd)
+      
+      logger.info(`📦 [WordPress CodeAnalyst] Processing batch ${batchIndex + 1}/${totalBatches} (${batch.length} files)`)
+      
+      const batchResults = await Promise.all(
+        batch.map(async (file, indexInBatch) => {
+          const globalIndex = batchStart + indexInBatch
+          try {
+            logger.info(`📄 [${globalIndex + 1}/${fileList.length}] Fetching: ${file.path}`)
+            const fileData = await wordpressService.fetchThemeFileContent(connection, file.path)
+            
+            // Decode base64 content
+            const content = Buffer.from(fileData.content, 'base64').toString('utf-8')
+            
+            logger.debug(`✅ [${globalIndex + 1}/${fileList.length}] Success: ${file.path} (${content.length} chars)`)
+            
+            return {
+              path: file.path,
+              content: content,
+              size: fileData.size || file.size
+            }
+          } catch (error) {
+            logger.warn(`⚠️ [${globalIndex + 1}/${fileList.length}] Failed: ${file.path} - ${error.message}`)
+            // Return file without content if fetch fails
+            return {
+              path: file.path,
+              content: '',
+              size: file.size
+            }
+          }
+        })
+      )
+      
+      filesWithContent.push(...batchResults)
+      logger.info(`✅ [WordPress CodeAnalyst] Batch ${batchIndex + 1}/${totalBatches} complete (${filesWithContent.filter(f => f.content.length > 0).length} files with content so far)`)
+      
+      // Wait between batches to avoid overwhelming WordPress server (except for last batch)
+      if (batchIndex < totalBatches - 1) {
+        logger.debug(`⏱️  [WordPress CodeAnalyst] Waiting ${BATCH_DELAY_MS}ms before next batch...`)
+        await new Promise(resolve => setTimeout(resolve, BATCH_DELAY_MS))
+      }
+    }
 
     // Filter out empty files
     const validFiles = filesWithContent.filter(f => f.content.length > 0)

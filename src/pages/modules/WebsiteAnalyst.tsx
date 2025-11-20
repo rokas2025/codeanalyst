@@ -32,6 +32,10 @@ function WebsiteAnalystContent() {
   const [usePageSpeed, setUsePageSpeed] = useState<boolean>(true)
   const [useSecurityScan, setUseSecurityScan] = useState<boolean>(true)
   const [useSSLScan, setUseSSLScan] = useState<boolean>(false)
+  const [wordpressSite, setWordpressSite] = useState<any>(null)
+  const [wordpressPages, setWordpressPages] = useState<any[]>([])
+  const [selectedPageId, setSelectedPageId] = useState<string>('')
+  const [loadingPages, setLoadingPages] = useState(false)
 
   // Check backend availability on component mount
   useEffect(() => {
@@ -71,14 +75,32 @@ function WebsiteAnalystContent() {
     }
   }, [location.state])
 
-  const handleWordPressSiteSelect = (site: WordPressConnection) => {
-    setUrlInput(site.site_url)
-    toast.success(`Selected ${site.site_name || site.site_url}. Starting analysis...`)
-    
-    // Auto-start analysis - pass URL directly!
-    setTimeout(() => {
-      handleAnalyze(site.site_url)
-    }, 500)
+  const handleWordPressSiteSelect = async (site: WordPressConnection) => {
+    try {
+      setWordpressSite(site)
+      setLoadingPages(true)
+      
+      // Load pages from WordPress site
+      const { wordpressService } = await import('../../services/wordpressService')
+      const pagesResponse = await wordpressService.getPages(site.id)
+      setLoadingPages(false)
+      
+      if (pagesResponse.success && pagesResponse.pages) {
+        setWordpressPages(pagesResponse.pages)
+        // Set default URL to homepage
+        setUrlInput(site.site_url)
+        toast.success(`Site connected! Select a page to analyze.`)
+      } else {
+        setWordpressPages([])
+        setUrlInput(site.site_url)
+        toast.info('Site connected! Analyzing homepage.')
+      }
+    } catch (error) {
+      console.error('Failed to load WordPress pages:', error)
+      setLoadingPages(false)
+      setUrlInput(site.site_url)
+      toast.info('Site connected! Analyzing homepage.')
+    }
   }
 
   const isValidUrl = (url: string): boolean => {
@@ -382,6 +404,49 @@ function WebsiteAnalystContent() {
           onSiteSelect={handleWordPressSiteSelect}
           label="Choose a WordPress site to analyze"
         />
+        
+        {/* Page Selection (shown after site is selected) */}
+        {wordpressSite && (
+          <div className="mt-4 space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Page to Analyze
+              </label>
+              {loadingPages ? (
+                <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                  <span className="text-sm text-gray-600">Loading pages...</span>
+                </div>
+              ) : (
+                <select
+                  value={selectedPageId}
+                  onChange={(e) => {
+                    const pageId = e.target.value
+                    setSelectedPageId(pageId)
+                    
+                    // Update URL input based on selected page
+                    if (pageId === '') {
+                      setUrlInput(wordpressSite.site_url)
+                    } else {
+                      const selectedPage = wordpressPages.find(p => p.id === pageId)
+                      if (selectedPage) {
+                        setUrlInput(selectedPage.url)
+                      }
+                    }
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Homepage</option>
+                  {wordpressPages.map((page) => (
+                    <option key={page.id} value={page.id}>
+                      {page.title}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Divider */}

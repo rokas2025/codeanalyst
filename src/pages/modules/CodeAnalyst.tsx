@@ -31,6 +31,10 @@ function CodeAnalystContent() {
   const [analysisStep, setAnalysisStep] = useState<string>('')
   const [userProfile, setUserProfile] = useState<'github' | 'zip' | 'wordpress'>('zip')
   const [aiProviderUsed, setAiProviderUsed] = useState<{ provider: string; model: string } | null>(null)
+  const [wordpressSite, setWordpressSite] = useState<any>(null)
+  const [wordpressPages, setWordpressPages] = useState<any[]>([])
+  const [selectedPageId, setSelectedPageId] = useState<string>('all')
+  const [loadingPages, setLoadingPages] = useState(false)
   const { user, isAuthenticated } = useAuthStore()
 
   // Load GitHub repositories when user selects GitHub profile
@@ -561,52 +565,112 @@ function CodeAnalystContent() {
             onSiteSelect={async (site) => {
               try {
                 console.log('🔍 WordPress site selected:', { siteId: site.id, siteName: site.site_name })
-                toast.loading('Fetching theme files...')
+                setWordpressSite(site)
+                setLoadingPages(true)
                 
-                const response = await wordpressService.getThemeFiles(site.id)
-                console.log('📦 WordPress theme files response:', {
-                  success: response.success,
-                  filesCount: response.files?.length || 0,
-                  error: response.error,
-                  firstFile: response.files?.[0],
-                  responseKeys: Object.keys(response)
-                })
+                // Load pages from this WordPress site
+                const pagesResponse = await wordpressService.getPages(site.id)
+                setLoadingPages(false)
                 
-                toast.dismiss()
-                
-                if (response.success && response.files && response.files.length > 0) {
-                  console.log('✅ Setting uploaded files:', response.files.length, 'files')
-                  setUploadedFiles(response.files)
-                  toast.success(`Loaded ${response.files.length} theme files. Starting analysis...`)
-                  
-                  // Auto-start analysis - pass files directly!
-                  setTimeout(() => {
-                    console.log('🚀 Starting analysis with files:', response.files.length)
-                    handleAnalyze(response.files)
-                  }, 500)
-                } else if (response.success && response.files && response.files.length === 0) {
-                  // Specific error for 0 files
-                  console.error('❌ WordPress returned 0 theme files')
-                  toast.error(
-                    'No theme files found. Please check:\n' +
-                    '1. Plugin is installed and active\n' +
-                    '2. WordPress site is accessible\n' +
-                    '3. Theme directory contains files\n' +
-                    '4. Plugin has correct permissions',
-                    { duration: 8000 }
-                  )
+                if (pagesResponse.success && pagesResponse.pages) {
+                  setWordpressPages(pagesResponse.pages)
+                  toast.success(`Site connected! Select a page to analyze or analyze all files.`)
                 } else {
-                  console.error('❌ WordPress theme fetch failed:', response)
-                  toast.error(response.error || 'Failed to fetch theme files')
+                  setWordpressPages([])
+                  toast.info('Site connected! You can analyze all theme files.')
                 }
               } catch (error) {
-                console.error('❌ WordPress theme fetch exception:', error)
-                toast.dismiss()
-                toast.error(`Error: ${error instanceof Error ? error.message : 'Failed to fetch theme files'}`)
+                console.error('❌ WordPress site selection error:', error)
+                setLoadingPages(false)
+                toast.error(`Error: ${error instanceof Error ? error.message : 'Failed to load site'}`)
               }
             }}
             label="Choose a WordPress site to analyze its theme"
           />
+          
+          {/* Page Selection (shown after site is selected) */}
+          {wordpressSite && (
+            <div className="mt-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Page to Analyze
+                </label>
+                {loadingPages ? (
+                  <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <span className="text-sm text-gray-600">Loading pages...</span>
+                  </div>
+                ) : (
+                  <select
+                    value={selectedPageId}
+                    onChange={(e) => setSelectedPageId(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="all">All Theme Files ({wordpressPages.length > 0 ? 'All pages' : 'Entire theme'})</option>
+                    {wordpressPages.map((page) => (
+                      <option key={page.id} value={page.id}>
+                        {page.title} ({page.template || 'default template'})
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+              
+              <button
+                onClick={async () => {
+                  try {
+                    toast.loading('Fetching theme files...')
+                    
+                    // Fetch theme files with optional page filter
+                    const params = selectedPageId !== 'all' ? `?pageId=${selectedPageId}` : ''
+                    const response = await wordpressService.getThemeFiles(wordpressSite.id, params)
+                    
+                    console.log('📦 WordPress theme files response:', {
+                      success: response.success,
+                      filesCount: response.files?.length || 0,
+                      pageFilter: selectedPageId
+                    })
+                    
+                    toast.dismiss()
+                    
+                    if (response.success && response.files && response.files.length > 0) {
+                      console.log('✅ Setting uploaded files:', response.files.length, 'files')
+                      setUploadedFiles(response.files)
+                      toast.success(`Loaded ${response.files.length} theme files. Starting analysis...`)
+                      
+                      // Auto-start analysis - pass files directly!
+                      setTimeout(() => {
+                        console.log('🚀 Starting analysis with files:', response.files.length)
+                        handleAnalyze(response.files)
+                      }, 500)
+                    } else if (response.success && response.files && response.files.length === 0) {
+                      console.error('❌ WordPress returned 0 theme files')
+                      toast.error(
+                        'No theme files found. Please check:\n' +
+                        '1. Plugin is installed and active\n' +
+                        '2. WordPress site is accessible\n' +
+                        '3. Theme directory contains files\n' +
+                        '4. Plugin has correct permissions',
+                        { duration: 8000 }
+                      )
+                    } else {
+                      console.error('❌ WordPress theme fetch failed:', response)
+                      toast.error(response.error || 'Failed to fetch theme files')
+                    }
+                  } catch (error) {
+                    console.error('❌ WordPress theme fetch exception:', error)
+                    toast.dismiss()
+                    toast.error(`Error: ${error instanceof Error ? error.message : 'Failed to fetch theme files'}`)
+                  }
+                }}
+                disabled={loadingPages}
+                className="w-full btn-primary"
+              >
+                <ArrowPathIcon className="h-5 w-5 mr-2" />
+                Start Analysis
+              </button>
+            </div>
+          )}
         </div>
       )}
 
