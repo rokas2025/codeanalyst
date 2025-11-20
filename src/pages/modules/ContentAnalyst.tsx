@@ -378,71 +378,130 @@ function ContentAnalystContent() {
         </div>
       )}
 
+      {/* Analyzed URL Bar (shown after analysis for URL input type) */}
+      {result && inputType === 'url' && result.urlInfo?.url && (
+        <div className="card p-4 bg-blue-50 border-blue-200">
+          <div className="flex items-center gap-3">
+            <GlobeAltIcon className="h-5 w-5 text-blue-600 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-blue-600 font-medium mb-1">Analyzed URL</p>
+              <p className="text-sm text-blue-900 truncate">{result.urlInfo.url}</p>
+            </div>
+            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded font-medium whitespace-nowrap">
+              AI Analysis
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Input Section */}
+        {/* Input/Original Section */}
         <div className="space-y-4">
           <div className="card p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
               <DocumentTextIcon className="h-5 w-5 text-blue-500 mr-2" />
-              {inputType === 'text' ? 'Your Content' : 'Website URL'}
+              {result ? 'Original Content' : (inputType === 'text' ? 'Your Content' : 'Website URL')}
             </h3>
             
             <div className="space-y-4">
-              {inputType === 'text' ? (
-                <div className="space-y-3">
-                  <textarea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="Paste your content here:
+              {result ? (
+                /* Show original content after analysis */
+                <>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto">
+                    <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans leading-relaxed">
+                      {result.original}
+                    </pre>
+                  </div>
+                  
+                  {/* Character count comparison */}
+                  <div className="flex items-center justify-between text-xs text-gray-600 px-2">
+                    <span>Original: {result.original.length} characters</span>
+                    <span className="text-green-600 font-medium">
+                      Improved: {result.improved.length} characters
+                      {result.improved.length > result.original.length && (
+                        <span className="ml-1">
+                          (+{result.improved.length - result.original.length})
+                        </span>
+                      )}
+                      {result.improved.length < result.original.length && (
+                        <span className="ml-1 text-blue-600">
+                          (-{result.original.length - result.improved.length})
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  
+                  <button
+                    onClick={() => {
+                      setResult(null)
+                      setContent('')
+                      setUrl('')
+                    }}
+                    className="w-full bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors font-medium text-lg"
+                  >
+                    Analyze New Content
+                  </button>
+                </>
+              ) : (
+                /* Show input before analysis */
+                <>
+                  {inputType === 'text' ? (
+                    <div className="space-y-3">
+                      <textarea
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        placeholder="Paste your content here:
 • Plain text content
 • HTML code (will be automatically cleaned)
 • Blog posts, articles, or any text content
 • Product descriptions, web copy, etc."
-                    className="w-full h-80 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm resize-none"
-                  />
-                </div>
-              ) : (
-                <div className="h-80 flex flex-col space-y-4">
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://example.com/your-page"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
-                  />
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex-1 flex items-center justify-center">
-                    <div className="text-center">
-                      <GlobeAltIcon className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                      <p className="text-sm text-blue-800 font-medium mb-1">Live Website Analysis</p>
-                      <div className="text-xs text-blue-700 space-y-1">
-                        <div>• Fetches real content from any website</div>
-                        <div>• Extracts main content (removes nav, ads, etc.)</div>
-                        <div>• Analyzes actual readable text</div>
-                        <div>• Provides website-specific SEO insights</div>
+                        className="w-full h-80 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm resize-none"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-80 flex flex-col space-y-4">
+                      <input
+                        type="url"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="https://example.com/your-page"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                      />
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex-1 flex items-center justify-center">
+                        <div className="text-center">
+                          <GlobeAltIcon className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                          <p className="text-sm text-blue-800 font-medium mb-1">Live Website Analysis</p>
+                          <div className="text-xs text-blue-700 space-y-1">
+                            <div>• Fetches real content from any website</div>
+                            <div>• Extracts main content (removes nav, ads, etc.)</div>
+                            <div>• Analyzes actual readable text</div>
+                            <div>• Provides website-specific SEO insights</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  )}
 
-              <button
-                onClick={() => analyzeContent()}
-                disabled={isAnalyzing || (typeof content === 'string' && !content.trim() && typeof url === 'string' && !url.trim())}
-                className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-lg"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <ArrowPathIcon className="animate-spin inline-block w-5 h-5 mr-2" />
-                    Analyzing Content...
-                  </>
-                ) : (
-                  <>
-                    <SparklesIcon className="inline-block w-5 h-5 mr-2" />
-                    Analyze & Improve Content
-                  </>
-                )}
-              </button>
+                  <button
+                    onClick={() => analyzeContent()}
+                    disabled={isAnalyzing || (typeof content === 'string' && !content.trim() && typeof url === 'string' && !url.trim())}
+                    className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <ArrowPathIcon className="animate-spin inline-block w-5 h-5 mr-2" />
+                        Analyzing Content...
+                      </>
+                    ) : (
+                      <>
+                        <SparklesIcon className="inline-block w-5 h-5 mr-2" />
+                        Analyze & Improve Content
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -451,9 +510,14 @@ function ContentAnalystContent() {
         <div className="space-y-4">
           <div className="card p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center justify-between">
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <SparklesIcon className="h-5 w-5 text-green-500 mr-2" />
-                Improved Content
+                <span>Improved Content</span>
+                {result && (
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-medium">
+                    AI Enhanced
+                  </span>
+                )}
               </div>
               {result && (
                 <button
