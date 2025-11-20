@@ -119,10 +119,16 @@ function CodeAnalystContent() {
       
       // Show success toast for file upload
       if (files.length > 0) {
-        toast.success(`Successfully uploaded ${files.length} files! Click "Analyze" to start.`, {
+        toast.success(`Successfully uploaded ${files.length} files! Starting analysis...`, {
           duration: 3000,
           position: 'top-right',
         })
+        
+        // CRITICAL FIX: Pass files directly to handleAnalyze instead of relying on state
+        // This prevents state timing issues where handleAnalyze reads stale uploadedFiles
+        setTimeout(() => {
+          handleAnalyze(files)
+        }, 100) // Small delay to ensure toast shows
       } else {
         toast.error('No valid files found in upload. Please check file types.', {
           duration: 4000,

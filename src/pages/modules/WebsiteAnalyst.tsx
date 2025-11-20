@@ -30,6 +30,7 @@ function WebsiteAnalystContent() {
   const [backendStatus, setBackendStatus] = useState<'checking' | 'available' | 'unavailable'>('checking')
   const [currentAnalysisId, setCurrentAnalysisId] = useState<string | null>(null)
   const [usePageSpeed, setUsePageSpeed] = useState<boolean>(true)
+  const [useSecurityScan, setUseSecurityScan] = useState<boolean>(true)
 
   // Check backend availability on component mount
   useEffect(() => {
@@ -130,7 +131,8 @@ function WebsiteAnalystContent() {
                 aiProfile: 'mixed', // For URL analysis, use mixed profile
                 deepAnalysis: true,
                 includeScreenshots: false,
-                usePageSpeed: usePageSpeed // Enable/disable PageSpeed API
+                usePageSpeed: usePageSpeed, // Enable/disable PageSpeed API
+                useSecurityScan: useSecurityScan // Enable/disable Mozilla Observatory
               }
             })
             
@@ -448,6 +450,28 @@ function WebsiteAnalystContent() {
             <div className="flex items-center space-x-1 text-xs text-gray-400">
               <SparklesIcon className="w-4 h-4" />
               <span>Powered by Google</span>
+            </div>
+          </div>
+          
+          {/* Security Scan Toggle */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+            <div>
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useSecurityScan}
+                  onChange={(e) => setUseSecurityScan(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-900">Security Headers Analysis</span>
+                  <p className="text-xs text-gray-500">Scan security headers with Mozilla Observatory (adds ~15s)</p>
+                </div>
+              </label>
+            </div>
+            <div className="flex items-center space-x-1 text-xs text-gray-400">
+              <SparklesIcon className="w-4 h-4" />
+              <span>Powered by Mozilla</span>
             </div>
           </div>
         </div>

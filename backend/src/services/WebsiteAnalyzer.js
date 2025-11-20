@@ -189,6 +189,26 @@ export class WebsiteAnalyzer {
         }
       }
 
+      // Optionally run Mozilla Observatory Security Scan
+      let securityScanResult = null
+      if (options.useSecurityScan !== false) {
+        try {
+          logger.info('🔒 Running Mozilla Observatory security scan...')
+          const { MozillaObservatoryService } = await import('./MozillaObservatoryService.js')
+          const mozillaService = new MozillaObservatoryService()
+          securityScanResult = await mozillaService.analyzeSecurity(validatedUrl)
+          logger.info('✅ Security scan completed')
+        } catch (error) {
+          logger.warn('⚠️ Security scan failed, continuing without it:', error.message)
+          securityScanResult = {
+            success: false,
+            error: error.message,
+            score: null,
+            headers: {}
+          }
+        }
+      }
+
       // Combine all results
       const analysisResult = {
         url: validatedUrl,
@@ -203,6 +223,9 @@ export class WebsiteAnalyzer {
         
         // Google PageSpeed Insights (optional)
         pageSpeed: pageSpeedResult,
+        
+        // Mozilla Observatory Security Scan (optional)
+        securityScan: securityScanResult,
         
         // Comprehensive SEO Analysis (replaces basic lighthouse SEO)
         comprehensiveSEO: comprehensiveSEO,

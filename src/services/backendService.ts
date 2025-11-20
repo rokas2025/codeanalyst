@@ -586,6 +586,22 @@ class BackendService {
       }
     }
   }
+
+  /**
+   * Analyze website security headers using Mozilla Observatory
+   */
+  async analyzeSecurityHeaders(url: string): Promise<any> {
+    const response = await api.post('/url-analysis/security', { url })
+    return response.data
+  }
+
+  /**
+   * Analyze SSL/TLS using SSL Labs
+   */
+  async analyzeSSL(hostname: string, fromCache = true): Promise<any> {
+    const response = await api.post('/url-analysis/ssl', { hostname, fromCache })
+    return response.data
+  }
 }
 
 // Export singleton instance
