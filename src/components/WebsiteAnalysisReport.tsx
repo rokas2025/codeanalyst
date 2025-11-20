@@ -18,6 +18,9 @@ import {
   ArrowTrendingDownIcon,
   InformationCircleIcon,
   ArrowsRightLeftIcon,
+  SparklesIcon,
+  DevicePhoneMobileIcon,
+  ComputerDesktopIcon,
   CursorArrowRaysIcon,
   UserIcon
 } from '@heroicons/react/24/outline'
@@ -104,6 +107,7 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
   // Parse performance data
   const performance = results.performance || {}
   const lighthouse = results.lighthouse || {}
+  const pageSpeed = results.pageSpeed || null
   const seo = results.seo || {}
   const accessibility = results.accessibility || {}
   const security = results.security || {}
@@ -581,6 +585,94 @@ export const WebsiteAnalysisReport: React.FC<WebsiteAnalysisReportProps> = ({ re
                       </div>
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Google PageSpeed Insights */}
+              {pageSpeed && pageSpeed.success && (
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-1 flex items-center">
+                        <SparklesIcon className="w-5 h-5 text-purple-500 mr-2" />
+                        Google PageSpeed Insights
+                      </h4>
+                      <p className="text-sm text-gray-600">Real-world performance data from Google</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Mobile Results */}
+                    {pageSpeed.mobile && (
+                      <div className="bg-white/80 rounded-lg p-4 border border-purple-100">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center">
+                            <DevicePhoneMobileIcon className="w-5 h-5 text-purple-600 mr-2" />
+                            <h5 className="font-medium text-gray-900">Mobile</h5>
+                          </div>
+                          <div className={`text-2xl font-bold ${pageSpeed.mobile.scores?.performance >= 90 ? 'text-green-600' : pageSpeed.mobile.scores?.performance >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                            {pageSpeed.mobile.scores?.performance || 0}
+                          </div>
+                        </div>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Performance:</span>
+                            <span className="font-medium">{pageSpeed.mobile.scores?.performance || 0}/100</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Accessibility:</span>
+                            <span className="font-medium">{pageSpeed.mobile.scores?.accessibility || 0}/100</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Best Practices:</span>
+                            <span className="font-medium">{pageSpeed.mobile.scores?.bestPractices || 0}/100</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">SEO:</span>
+                            <span className="font-medium">{pageSpeed.mobile.scores?.seo || 0}/100</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Desktop Results */}
+                    {pageSpeed.desktop && (
+                      <div className="bg-white/80 rounded-lg p-4 border border-purple-100">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center">
+                            <ComputerDesktopIcon className="w-5 h-5 text-purple-600 mr-2" />
+                            <h5 className="font-medium text-gray-900">Desktop</h5>
+                          </div>
+                          <div className={`text-2xl font-bold ${pageSpeed.desktop.scores?.performance >= 90 ? 'text-green-600' : pageSpeed.desktop.scores?.performance >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                            {pageSpeed.desktop.scores?.performance || 0}
+                          </div>
+                        </div>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Performance:</span>
+                            <span className="font-medium">{pageSpeed.desktop.scores?.performance || 0}/100</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Accessibility:</span>
+                            <span className="font-medium">{pageSpeed.desktop.scores?.accessibility || 0}/100</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Best Practices:</span>
+                            <span className="font-medium">{pageSpeed.desktop.scores?.bestPractices || 0}/100</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">SEO:</span>
+                            <span className="font-medium">{pageSpeed.desktop.scores?.seo || 0}/100</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-4 text-xs text-gray-500 flex items-center">
+                    <SparklesIcon className="w-4 h-4 mr-1" />
+                    Data from Google PageSpeed Insights API
+                  </div>
                 </div>
               )}
 

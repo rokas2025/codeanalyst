@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Flow Diagram (DFD) - CodeAnalyst System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .section {
+            scroll-margin-top: 80px;
+        }
+        .mermaid {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { curve: 'basis' }
+        });
+    </script>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Data Flow Diagram (DFD)</h1>
+            <p class="text-gray-600 mt-1">CodeAnalyst System - Complete Data Flow Analysis</p>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="lg:col-span-1">
+                <nav class="sticky top-24 bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="font-semibold text-gray-900 mb-4">Contents</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#context" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Context Diagram</a></li>
+                        <li><a href="#system" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">System Overview</a></li>
+                        <li><a href="#auth" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Authentication Flow</a></li>
+                        <li><a href="#code" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Code Analysis Flow</a></li>
+                        <li><a href="#website" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Website Analysis Flow</a></li>
+                        <li><a href="#content" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Content Analysis Flow</a></li>
+                        <li><a href="#autoprog" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Auto Programmer Flow</a></li>
+                        <li><a href="#creator" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Content Creator Flow</a></li>
+                        <li><a href="#wordpress" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">WordPress Integration</a></li>
+                        <li><a href="#datastores" class="nav-link block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Data Stores</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-3 space-y-8">
+                <!-- Overview -->
+                <section class="bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        This document provides comprehensive Data Flow Diagrams for the CodeAnalyst system, including all implemented modules and planned features. 
+                        The diagrams show how data flows through the system from external entities to processes, data stores, and back.
+                    </p>
+                </section>
+
+                <!-- Context Diagram -->
+                <section id="context" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Context Diagram (Level 0)</h2>
+                    <p class="text-gray-700 mb-6">High-level system view showing external entities and main data flows.</p>
+                    
+                    <div class="mermaid">
+graph TB
+    User[User Browser]
+    System[CodeAnalyst System<br/>AI-Powered Website Support Tool]
+    GitHub[GitHub API]
+    OpenAI[OpenAI API]
+    Anthropic[Anthropic API]
+    Google[Google AI API]
+    Supabase[Supabase Auth & DB]
+    WP[WordPress Sites]
+    
+    User -->|HTTP Requests<br/>Login, Analysis, Content| System
+    System -->|API Calls| GitHub
+    System -->|API Calls| OpenAI
+    System -->|API Calls| Anthropic
+    System -->|API Calls| Google
+    System -->|Auth & Data| Supabase
+    System -->|REST API| WP
+    
+    style System fill:#3b82f6,stroke:#1e40af,color:#fff
+    style User fill:#10b981,stroke:#059669,color:#fff
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
+                        <h3 class="font-semibold text-blue-900 mb-3">External Entities</h3>
+                        <ul class="space-y-2 text-sm text-blue-800">
+                            <li><strong>User:</strong> End-user accessing the system through web browser</li>
+                            <li><strong>GitHub:</strong> OAuth provider and repository source</li>
+                            <li><strong>WordPress Sites:</strong> Connected WordPress installations</li>
+                            <li><strong>AI Providers:</strong> OpenAI, Anthropic, Google Gemini</li>
+                            <li><strong>Supabase:</strong> Authentication and database services</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- System Overview -->
+                <section id="system" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">System Overview (Level 1)</h2>
+                    <p class="text-gray-700 mb-6">Main data flows between frontend, backend, and external services.</p>
+                    
+                    <div class="mermaid">
+graph TB
+    User[User]
+    Frontend[CodeAnalyst Frontend<br/>React + TypeScript]
+    Gateway[API Gateway / Router<br/>Express.js]
+    Auth[Auth Service]
+    Code[Code Analyst]
+    Website[Website Analyst]
+    Content[Content Analyst]
+    Auto[Auto Programmer]
+    Creator[Content Creator]
+    AI[AI Service Layer<br/>OpenAI/Claude/Gemini]
+    DB[(PostgreSQL Database<br/>Supabase)]
+    
+    User -->|1. Login Credentials<br/>2. Analysis Requests<br/>3. Content Input| Frontend
+    Frontend -->|API Requests JSON/HTTP| Gateway
+    Gateway --> Auth
+    Gateway --> Code
+    Gateway --> Website
+    Gateway --> Content
+    Gateway --> Auto
+    Gateway --> Creator
+    
+    Code --> AI
+    Website --> AI
+    Content --> AI
+    Auto --> AI
+    Creator --> AI
+    
+    Auth --> DB
+    Code --> DB
+    Website --> DB
+    Content --> DB
+    Auto --> DB
+    Creator --> DB
+    
+    style Frontend fill:#3b82f6,stroke:#1e40af,color:#fff
+    style Gateway fill:#8b5cf6,stroke:#6d28d9,color:#fff
+    style AI fill:#f59e0b,stroke:#d97706,color:#fff
+    style DB fill:#10b981,stroke:#059669,color:#fff
+                    </div>
+                </section>
+
+                <!-- Authentication Flow -->
+                <section id="auth" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Authentication Flow</h2>
+                    <p class="text-gray-700 mb-6">Hybrid authentication supporting GitHub OAuth, Email/Password, and Google OAuth.</p>
+                    
+                    <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend
+    participant G as GitHub OAuth
+    participant S as Supabase Auth
+    participant DB as Database
+    
+    U->>F: Click "Login with GitHub"
+    F->>B: GET /api/auth/github
+    B->>F: Return authUrl + state
+    F->>G: Redirect to OAuth
+    G->>U: Request authorization
+    U->>G: Approve
+    G->>B: Callback with code
+    B->>G: Exchange code for token
+    G->>B: Return access_token
+    B->>G: Fetch user profile
+    B->>DB: Create/update user
+    B->>F: Return JWT token
+    F->>F: Store token in LocalStorage
+    F->>U: Redirect to Dashboard
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-900 mb-2">Input Data</h3>
+                            <ul class="text-sm text-green-800 space-y-1">
+                                <li>• Login credentials</li>
+                                <li>• OAuth codes</li>
+                                <li>• OAuth tokens</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-blue-900 mb-2">Output Data</h3>
+                            <ul class="text-sm text-blue-800 space-y-1">
+                                <li>• JWT token</li>
+                                <li>• User profile</li>
+                                <li>• Session data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Code Analysis Flow -->
+                <section id="code" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Code Analysis Flow</h2>
+                    <p class="text-gray-700 mb-6">Analyzes source code from GitHub, ZIP uploads, or WordPress themes.</p>
+                    
+                    <div class="mermaid">
+flowchart TD
+    Start([User Starts Analysis])
+    Input{Select Input Method}
+    GitHub[GitHub Repository]
+    ZIP[ZIP Upload]
+    WP[WordPress Theme]
+    
+    Fetch[Fetch/Extract Files]
+    Parse[Parse Files & Build Structure]
+    Static[Static Code Analysis<br/>Languages, Frameworks, Metrics]
+    AI[AI-Powered Analysis<br/>Quality, Security, Architecture]
+    Report[Generate Analysis Report]
+    Store[(Store in Database)]
+    Display[Display Report to User]
+    
+    Start --> Input
+    Input -->|GitHub URL| GitHub
+    Input -->|Upload ZIP| ZIP
+    Input -->|Select Theme| WP
+    
+    GitHub --> Fetch
+    ZIP --> Fetch
+    WP --> Fetch
+    
+    Fetch --> Parse
+    Parse --> Static
+    Static --> AI
+    AI --> Report
+    Report --> Store
+    Store --> Display
+    
+    style Start fill:#10b981,stroke:#059669,color:#fff
+    style AI fill:#f59e0b,stroke:#d97706,color:#fff
+    style Store fill:#3b82f6,stroke:#1e40af,color:#fff
+    style Display fill:#10b981,stroke:#059669,color:#fff
+                    </div>
+
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
+                        <h3 class="font-semibold text-yellow-900 mb-3">Analysis Metrics</h3>
+                        <ul class="grid grid-cols-2 gap-2 text-sm text-yellow-800">
+                            <li>• Code quality score (0-100)</li>
+                            <li>• Complexity metrics</li>
+                            <li>• Security vulnerabilities</li>
+                            <li>• Technical debt %</li>
+                            <li>• Test coverage</li>
+                            <li>• Architecture assessment</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Website Analysis Flow -->
+                <section id="website" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Website Analysis Flow</h2>
+                    <p class="text-gray-700 mb-6">Comprehensive website analysis including performance, SEO, accessibility, and security.</p>
+                    
+                    <div class="mermaid">
+flowchart TD
+    Start([Enter Website URL])
+    Validate[Validate URL]
+    Fetch[Fetch Website Content]
+    Parse[Parse HTML<br/>Meta, Headings, Links, Images]
+    
+    Perf[Performance Analysis<br/>Load Time, Resources]
+    SEO[SEO Analysis<br/>Meta Tags, Keywords]
+    A11y[Accessibility Analysis<br/>ARIA, Semantic HTML]
+    Sec[Security Analysis<br/>HTTPS, Headers]
+    PageSpeed[PageSpeed Integration<br/>Core Web Vitals]
+    
+    Report[Generate Report]
+    Store[(Store Results)]
+    Display[Display to User]
+    
+    Start --> Validate
+    Validate --> Fetch
+    Fetch --> Parse
+    Parse --> Perf
+    Parse --> SEO
+    Parse --> A11y
+    Parse --> Sec
+    Parse --> PageSpeed
+    
+    Perf --> Report
+    SEO --> Report
+    A11y --> Report
+    Sec --> Report
+    PageSpeed --> Report
+    
+    Report --> Store
+    Store --> Display
+    
+    style Start fill:#10b981,stroke:#059669,color:#fff
+    style Report fill:#f59e0b,stroke:#d97706,color:#fff
+    style Display fill:#10b981,stroke:#059669,color:#fff
+                    </div>
+                </section>
+
+                <!-- Content Creator Flow -->
+                <section id="creator" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Content Creator Flow</h2>
+                    <p class="text-gray-700 mb-6">AI-powered content generation with templates and multilingual support.</p>
+                    
+                    <div class="mermaid">
+flowchart TD
+    Start([Select Template])
+    Load[Load Template<br/>Structure & Fields]
+    Form[User Fills Form<br/>Topic, Keywords, Tone]
+    Build[Build AI Prompt]
+    AI[Send to AI Service<br/>OpenAI/Anthropic/Gemini]
+    Process[Post-Process Content<br/>Format HTML/Markdown]
+    Analyze[Analyze Content<br/>SEO & Readability Scores]
+    Store[(Save to Database)]
+    Display[Display to User]
+    Translate{Translate?}
+    Trans[AI Translation]
+    Export[Export Options<br/>HTML/MD/TXT]
+    
+    Start --> Load
+    Load --> Form
+    Form --> Build
+    Build --> AI
+    AI --> Process
+    Process --> Analyze
+    Analyze --> Store
+    Store --> Display
+    Display --> Translate
+    Translate -->|Yes| Trans
+    Trans --> Export
+    Translate -->|No| Export
+    
+    style Start fill:#10b981,stroke:#059669,color:#fff
+    style AI fill:#f59e0b,stroke:#d97706,color:#fff
+    style Store fill:#3b82f6,stroke:#1e40af,color:#fff
+    style Export fill:#10b981,stroke:#059669,color:#fff
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mt-6">
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-900 text-sm mb-2">Templates</h4>
+                            <ul class="text-xs text-purple-800 space-y-1">
+                                <li>• Blog Post</li>
+                                <li>• Product Description</li>
+                                <li>• Social Media</li>
+                                <li>• Email Newsletter</li>
+                                <li>• Landing Page</li>
+                            </ul>
+                        </div>
+                        <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-pink-900 text-sm mb-2">Settings</h4>
+                            <ul class="text-xs text-pink-800 space-y-1">
+                                <li>• Language</li>
+                                <li>• Tone/Style</li>
+                                <li>• Target Audience</li>
+                                <li>• Word Count</li>
+                                <li>• Creativity Level</li>
+                            </ul>
+                        </div>
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-indigo-900 text-sm mb-2">Output</h4>
+                            <ul class="text-xs text-indigo-800 space-y-1">
+                                <li>• Generated Content</li>
+                                <li>• SEO Score</li>
+                                <li>• Readability Score</li>
+                                <li>• Keywords</li>
+                                <li>• Translations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WordPress Integration -->
+                <section id="wordpress" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">WordPress Integration Flow</h2>
+                    <p class="text-gray-700 mb-6">Connect WordPress sites for theme analysis and content management.</p>
+                    
+                    <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant S as Settings Page
+    participant B as Backend
+    participant DB as Database
+    participant WP as WordPress Plugin
+    participant API as WordPress REST API
+    
+    U->>S: Click "Generate API Key"
+    S->>B: POST /api/wordpress/generate-key
+    B->>DB: Create encrypted API key
+    B->>S: Return API key
+    S->>U: Display API key
+    U->>WP: Install plugin & enter API key
+    WP->>B: POST /api/wordpress/connect
+    B->>DB: Verify API key
+    B->>WP: Request site info
+    WP->>B: Send site info (name, URL, theme)
+    B->>DB: Store connection
+    B->>WP: Connection successful
+    WP->>U: Show success message
+    U->>S: View connected sites
+    S->>B: GET /api/wordpress/sites
+    B->>DB: Fetch connections
+    B->>S: Return site list
+    S->>U: Display connected sites
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mt-6">
+                        <h3 class="font-semibold text-green-900 mb-3">WordPress Features</h3>
+                        <ul class="grid grid-cols-2 gap-2 text-sm text-green-800">
+                            <li>✓ Secure API key generation</li>
+                            <li>✓ One-click site connection</li>
+                            <li>✓ Theme file analysis</li>
+                            <li>✓ Page content fetching</li>
+                            <li>✓ Builder detection (Elementor, Gutenberg)</li>
+                            <li>✓ Content sync</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Data Stores -->
+                <section id="datastores" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Data Stores</h2>
+                    <p class="text-gray-700 mb-6">PostgreSQL database schema overview (Supabase hosted).</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-blue-900 mb-3">Core Tables</h3>
+                            <ul class="text-sm text-blue-800 space-y-2">
+                                <li><strong>users</strong> - User accounts & authentication</li>
+                                <li><strong>code_analyses</strong> - Code analysis results</li>
+                                <li><strong>url_analyses</strong> - Website analysis results</li>
+                                <li><strong>projects</strong> - User projects</li>
+                                <li><strong>project_members</strong> - Team members</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-purple-900 mb-3">WordPress Tables</h3>
+                            <ul class="text-sm text-purple-800 space-y-2">
+                                <li><strong>wordpress_connections</strong> - Connected sites</li>
+                                <li><strong>wordpress_pages</strong> - Pages & posts</li>
+                                <li><strong>wordpress_files</strong> - Theme files</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-900 mb-3">Content Tables</h3>
+                            <ul class="text-sm text-green-800 space-y-2">
+                                <li><strong>content_templates</strong> - Generation templates</li>
+                                <li><strong>generated_content</strong> - AI-generated content</li>
+                            </ul>
+                        </div>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-yellow-900 mb-3">Config Tables</h3>
+                            <ul class="text-sm text-yellow-800 space-y-2">
+                                <li><strong>user_api_keys</strong> - Encrypted AI API keys</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mt-6">
+                        <h3 class="font-semibold text-gray-900 mb-3">Data Security</h3>
+                        <ul class="grid grid-cols-2 gap-3 text-sm text-gray-700">
+                            <li><strong>Encryption:</strong> All API keys encrypted at rest (AES-256)</li>
+                            <li><strong>HTTPS:</strong> All communications over TLS 1.3</li>
+                            <li><strong>JWT:</strong> Secure token-based auth (30-day expiration)</li>
+                            <li><strong>CORS:</strong> Strict origin policies</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Data Flow Summary</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-3">Key Data Flows</h3>
+                            <ol class="space-y-2 text-sm text-gray-700">
+                                <li><strong>1. Authentication:</strong> Credentials → Backend → DB → JWT</li>
+                                <li><strong>2. Code Analysis:</strong> Files → Parser → AI → DB → Report</li>
+                                <li><strong>3. Website Analysis:</strong> URL → Fetcher → Analyzers → Report</li>
+                                <li><strong>4. Content Analysis:</strong> Text → Detectors → AI → Report</li>
+                                <li><strong>5. Auto Programmer:</strong> Message → AI → Parser → Preview</li>
+                                <li><strong>6. Content Creator:</strong> Template → AI → Content → DB</li>
+                                <li><strong>7. WordPress:</strong> API Key → Connection → Data Sync</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-3">Performance</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li><strong>Streaming:</strong> AI responses streamed for better UX</li>
+                                <li><strong>Caching:</strong> Analysis results cached in database</li>
+                                <li><strong>Async:</strong> Long tasks processed asynchronously</li>
+                                <li><strong>Pooling:</strong> Database connection pooling (max 5)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 text-sm">
+            <p>This Data Flow Diagram documentation provides a comprehensive view of how data moves through the CodeAnalyst system.</p>
+            <p class="mt-2">CodeAnalyst System © 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+

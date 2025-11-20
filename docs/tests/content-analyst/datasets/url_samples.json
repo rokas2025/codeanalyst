@@ -1,0 +1,18 @@
+[
+  {
+    "id": "URL_NEWS_EN",
+    "description": "Technology news article hosted on a static site.",
+    "url": "https://www.theguardian.com/technology/2024/oct/01/example-ai-report"
+  },
+  {
+    "id": "URL_DOCS_MULTI",
+    "description": "Documentation style page with tables and code snippets.",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP"
+  },
+  {
+    "id": "URL_CASE_STUDY",
+    "description": "Long-form case study without WordPress backend.",
+    "url": "https://cloud.google.com/blog/products/ai-machine-learning/example-generative-ai-case-study"
+  }
+]
+

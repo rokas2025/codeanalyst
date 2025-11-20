@@ -1,67 +1,295 @@
-# Cursor AI Rules for CodeAnalyst Project
+# Cursor AI Rules for CodeAnalyst Project (Root – Frontend + Global)
 
-## Platform: Windows
+## 0. Platform / Environment (Windows + PowerShell)
+
 - **OS**: Windows 10/11
 - **Shell**: PowerShell (not bash)
-- **No `&&` operator**: PowerShell doesn't support `&&` - use separate commands or `;` for same line
-- **Path separators**: Use backslashes `\` for Windows paths
+- **Path separators**: Prefer backslashes `\` and relative paths like `.\backend`, `.\scripts\...`
 - **Line endings**: CRLF (Windows style)
 
-## Terminal Commands
-- Always use PowerShell-compatible syntax
-- Avoid bash-specific commands (grep, sed, awk, etc.) - use PowerShell equivalents
-- For multiple commands: Use separate `run_terminal_cmd` calls, NOT `&&`
-- Example: Instead of `cd dir && npm install`, use two separate commands
+### Terminal Commands
 
-## Project Structure
-- **Frontend**: React + TypeScript + Vite (deployed on Vercel)
-- **Backend**: Node.js + Express (deployed on Railway)
-- **Database**: PostgreSQL (Supabase)
-- **Auth**: Hybrid system (GitHub OAuth custom + Supabase Auth for email/Google)
+- Always use **PowerShell-compatible** syntax.
+- Do **NOT** use bash operators or tools:
+  - ❌ `&&`, `grep`, `sed`, `awk`, `curl | sh`, etc.
+- Use either:
+  - Separate lines, or
+  - `;` to chain commands in PowerShell.
 
-## Environment Variables
-### Backend (Railway):
+Examples:
+
+- ✅ `cd backend; npm install; npm run dev`
+- ✅ `Get-ChildItem -Recurse src | Select-String "TODO"`
+- ❌ `cd backend && npm install && npm run dev`
+- ❌ `grep -R "TODO" src`
+
+When generating scripts:
+- Prefer `.ps1` scripts for PowerShell.
+- Don’t assume a bash shell.
+
+---
+
+## 1. Project Overview & Structure
+
+- **Frontend**: React 18 + TypeScript (strict) + Vite, Tailwind CSS, Zustand.
+- **Backend**: Node.js 22.x + Express (ES modules, `"type": "module"`) in `/backend`.
+- **Database**: PostgreSQL (Supabase).
+- **Cache / Jobs**: Redis + Bull.
+- **Auth**: Hybrid system (custom GitHub OAuth + Supabase Auth).
+- **WordPress plugin**: `/wordpress-plugin` for WP integration.
+
+Root-level structure (simplified):
+
+- `/src/**` – Frontend (React, TS).
+- `/backend/**` – Backend API (Express, Node).
+- `/wordpress-plugin/**` – WordPress connector plugin.
+- `/docs/**` – Documentation.
+- `/scripts/**` – Migration & deployment scripts.
+
+When working from root:
+- Assume the main concern is **frontend** unless I explicitly say “backend” or “WordPress plugin”.
+
+---
+
+## 2. Environment Variables & Secrets
+
+### Backend (Railway) – examples
+
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY` (secret, for admin operations)
+- `SUPABASE_SERVICE_ROLE_KEY` (secret, admin only)
 - `DATABASE_URL`
 - `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`
 - `JWT_SECRET`
-- `OPENAI_API_KEY`, `GOOGLE_AI_API_KEY`
+- `OPENAI_API_KEY`, `GOOGLE_AI_API_KEY`, other provider keys
 
-### Frontend (Vercel):
+### Frontend (Vercel) – examples
+
 - `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY` (public, for client-side)
+- `VITE_SUPABASE_ANON_KEY` (public, client-side)
 - `VITE_API_URL`
 - `VITE_GITHUB_CLIENT_ID`
 - `VITE_FRONTEND_URL`
 
-## Authentication System
-- **GitHub OAuth**: Custom implementation (existing, keep as-is)
-- **Email/Password**: Supabase Auth
-- **Google OAuth**: Supabase Auth
-- All users synced to PostgreSQL `users` table
-- JWT tokens used for session management (30-day expiration)
+**Rules:**
 
-## Deployment
-- **Frontend**: Vercel (auto-deploy from main branch)
-- **Backend**: Railway (auto-deploy from main branch)
-- **Database**: Supabase PostgreSQL
+- Treat all `*_SECRET`, `*_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY` as **secrets**.
+- **Never** expose or hardcode real values in code snippets or docs.
+- Frontend:
+  - Use only `VITE_*` vars (e.g. `VITE_SUPABASE_ANON_KEY`).
+  - **Never** use `SUPABASE_SERVICE_ROLE_KEY` on the client.
+- Backend:
+  - Keep secrets only in server config / env.
+  - When editing env docs, use placeholders:
+    - `JWT_SECRET=<your-secret-here>`
 
-## CLI Tools Available
-- `railway` - Railway CLI (use `railway variables --set "KEY=value"`)
-- `vercel` - Vercel CLI (use `echo "value" | vercel env add KEY production`)
-- `git` - Git for version control
-- `npm` - Package manager
+---
 
-## Code Style
-- TypeScript for frontend
-- ES modules for backend (`.js` with `"type": "module"` in package.json)
-- Use `logger` for backend logging (not `console.log`)
-- Follow existing patterns in the codebase
+## 3. Authentication System (Hybrid – handle with care)
 
-## Important Notes
-- Never use `&&` in PowerShell commands
-- Always check if tools/CLIs are available before using
-- Use Windows-compatible paths
-- Test commands work on Windows before suggesting
+- **GitHub OAuth**: Custom implementation (keep backward compatible).
+- **Email/Password + Google OAuth**: via Supabase Auth.
+- Users are synced to PostgreSQL `users` table.
+- JWT tokens used for sessions (30 days).
+
+**Critical files (do NOT modify unless I explicitly allow):**
+
+- `/backend/src/middleware/auth.js` – Hybrid auth logic.
+- `/backend/src/routes/auth.js` – Auth routes.
+
+You may **read** these files to understand behavior, but:
+
+- Prefer fixes in:
+  - Frontend flows (`src/pages`, `src/pages/modules`, `src/services`).
+  - Callers / non-auth routes in backend.
+  - Logging / error reporting around auth (using logger).
+
+If a change in these files is truly required:
+- Explain **why** and propose the **smallest possible diff**.
+- Wait for my explicit approval.
+
+---
+
+## 4. Code Style & Logging
+
+- Frontend:
+  - TypeScript strict mode enabled (`"strict": true`).
+  - Use React function components + hooks.
+  - Tailwind CSS is the styling system.
+  - Path alias: `@/*` → `./src/*`.
+- Backend:
+  - ES modules only (`import`/`export`), no `require()` or `module.exports`.
+  - Node 22.x, Express 4.
+  - Use the existing **logger** (e.g. Winston), **not `console.log`**.
+
+When editing backend code:
+- Replace or avoid `console.log` with the existing logger.
+
+---
+
+## 5. Frontend – Files & Directory Priorities
+
+High priority when working on frontend features or bugs:
+
+- `src/pages/modules/**` – Main app modules (CodeAnalyst, WebsiteAnalyst, ContentCreator, etc.).
+- `src/components/**` – Reusable UI components.
+- `src/services/**` – API clients and business logic.
+- `src/stores/**` – Zustand state management.
+- `src/utils/**` and `src/types/**` – Shared helpers & types.
+
+When I describe a frontend feature/bug:
+
+1. Start from the relevant **page/module** under `src/pages/modules/**`.
+2. Then look at the **service** in `src/services/**` used by that module.
+3. Only then touch shared `components/`, `stores/`, `utils/` if clearly required.
+
+Do **not** open or edit other modules or docs “for context” unless I request it.
+
+---
+
+## 6. Other folders from root perspective
+
+- `/backend/**` – Treat as **separate backend subsystem**.
+  - Only open when I explicitly say we’re working on backend or a specific API issue.
+- `/wordpress-plugin/**` – Treat as **separate WordPress subsystem**.
+  - Only open when I mention WordPress or the plugin.
+- `/docs/**` – Documentation, usually not needed for coding tasks.
+- Build / dependencies:
+  - `dist/`, `build/`, `node_modules/` – do not open.
+
+---
+
+## 7. Credit Optimization – What NOT to open by default
+
+To save tokens/credits, **avoid reading/opening** these unless I explicitly ask:
+
+- `/docs/**` – any markdown docs.
+- Any file matching:
+  - `*_SUMMARY.md`
+  - `*_COMPLETE.md`
+  - `*_GUIDE.md`
+- `/wordpress-plugin/**` – only for WP-specific tasks.
+- `/backend/**` – unless backend/API work is explicitly requested.
+- Build / dependency folders:
+  - `node_modules/`
+  - `dist/`
+  - `build/`
+- Large result/analysis JSON:
+  - `*_result_*.json`
+  - `website_analysis_*.json`
+
+When I ask a question:
+- Work in the **smallest relevant subset** of files instead of scanning the entire repo.
+
+---
+
+## 8. Testing – Frontend
+
+Frontend tests:
+
+- Framework: **Vitest + React Testing Library (jsdom)**.
+- Commands:
+  - `npm run test`
+  - `npm run test:coverage`
+
+Rules:
+
+- Reuse existing test patterns and structure.
+- Don’t scan the entire `src/` just to “learn how tests work”.
+- Keep tests focused on the component/module being changed.
+
+---
+
+## 9. High-Credit Operations – Ask First
+
+Before performing expensive operations that likely open many files or use a lot of context:
+
+- “Audit entire repo”
+- “Explain all modules”
+- “Update error handling everywhere”
+- “Refactor all services”
+- Large search/replace across many folders
+
+You must:
+
+1. Explain your intended **scope and plan** briefly.
+2. Ask me to **confirm** or narrow the scope.
+3. Prefer a **smaller** initial batch (e.g. one module, one folder).
+
+---
+
+## 10. Multi-file Edits
+
+When using multi-file edits (Composer):
+
+1. Keep the changed file list as **small as possible**.
+2. After applying changes, provide a **summary**:
+   - Which files were changed.
+   - Short description of what changed in each file.
+3. If more than ~10 files are needed, propose:
+   - “Batch 1: X, Y, Z files”
+   - “Batch 2: …”
+   - and ask me which batch to apply first.
+
+---
+
+## 11. Deployment & CLI Tools (for reference)
+
+- **Frontend**: Vercel (auto-deploy from `main`).
+- **Backend**: Railway (auto-deploy from `main`).
+- **Database**: Supabase PostgreSQL.
+
+CLI tools commonly used (on Windows / PowerShell):
+
+- `railway` – Railway CLI (e.g. `railway variables --set "KEY=value"`).
+- `vercel` – Vercel CLI (e.g. `echo "value" | vercel env add KEY production`).
+- `git` – Version control.
+- `npm` – Package manager.
+
+When suggesting CLI usage:
+- Assume these tools may be installed.
+- Use **PowerShell-friendly** commands only.
+
+---
+
+## 12. Testing & Deployment Strategy
+
+### Testing Policy
+- **DO NOT test local server builds** unless explicitly requested by user
+- **ALWAYS test on deployed environments:**
+  - Frontend: Vercel (production environment)
+  - Backend: Railway (production environment)
+- Local testing is only for quick syntax/linting checks
+- Full integration testing happens post-deployment
+
+### Deployment Architecture
+- **Frontend**: Vercel
+  - Auto-deploys from `main` branch
+  - Env vars managed via Vercel dashboard
+  
+- **Backend**: Railway
+  - Auto-deploys from `main` branch
+  - Env vars managed via Railway dashboard
+
+### Workflow
+1. Make code changes
+2. Lint/verify syntax locally (if needed)
+3. Commit and push to GitHub
+4. Wait for auto-deployment (Vercel + Railway)
+5. Test on deployed URLs
+6. Check Railway logs if backend issues
+7. Check Vercel logs if frontend issues
+
+### Why This Approach?
+- Avoids "works on my machine" issues
+- Environment parity (local ≠ production)
+- Railway/Vercel handle dependencies, not local Node
+- Saves time (no local server startup debugging)
+- Credits saved (no testing failed local builds)
+
+### Exception - When to Test Locally
+Only start local servers if:
+- User explicitly requests local testing
+- Debugging Railway/Vercel-specific deployment issues
+- Testing new npm packages before committing
+- Quick development iteration (user-initiated)
 

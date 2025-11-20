@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+This workspace is the CodeAnalyst project.
+
+Context:
+- Frontend: React 18 + TypeScript (strict), Vite, Tailwind, Zustand in /src.
+- Backend: Node 22 + Express (ES modules) in /backend.
+- Database: Supabase Postgres.
+- Extra: WordPress integration plugin in /wordpress-plugin.
+
+Rules:
+- For frontend work, focus on: src/pages/modules/**, src/services/**, src/components/**, src/stores/**, src/utils/** and src/types/**.
+- For backend work, focus on: backend/src/routes/**, backend/src/services/**, backend/src/middleware/**, backend/src/database/**, backend/src/workers/**.
+- Do NOT modify backend/src/middleware/auth.js or backend/src/routes/auth.js unless I explicitly say you're allowed to. You may read them, but prefer fixes in callers (routes/services/frontend).
+- Avoid opening /docs/**, /wordpress-plugin/**, node_modules/, dist/, build/, and large JSON result files unless I explicitly ask.
+- When in doubt, obey the .cursorrules files in the root and in /backend; they contain the detailed project rules.

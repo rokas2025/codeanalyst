@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UML Documentation by Modules - CodeAnalyst System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .section {
+            scroll-margin-top: 80px;
+        }
+        .mermaid {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+        .nav-link {
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { curve: 'basis' }
+        });
+    </script>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">UML Documentation by Modules</h1>
+            <p class="text-gray-600 mt-1">CodeAnalyst System - Complete UML Architecture</p>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="lg:col-span-1">
+                <nav class="sticky top-24 bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="font-semibold text-gray-900 mb-4">Modules</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#auth" class="nav-link block px-3 py-2 rounded text-gray-700">1. Authentication</a></li>
+                        <li><a href="#code" class="nav-link block px-3 py-2 rounded text-gray-700">2. Code Analyst</a></li>
+                        <li><a href="#website" class="nav-link block px-3 py-2 rounded text-gray-700">3. Website Analyst</a></li>
+                        <li><a href="#content" class="nav-link block px-3 py-2 rounded text-gray-700">4. Content Analyst</a></li>
+                        <li><a href="#autoprog" class="nav-link block px-3 py-2 rounded text-gray-700">5. Auto Programmer</a></li>
+                        <li><a href="#creator" class="nav-link block px-3 py-2 rounded text-gray-700">6. Content Creator</a></li>
+                        <li><a href="#wordpress" class="nav-link block px-3 py-2 rounded text-gray-700">7. WordPress Integration</a></li>
+                        <li><a href="#usermgmt" class="nav-link block px-3 py-2 rounded text-gray-700">8. User Management</a></li>
+                        <li><a href="#settings" class="nav-link block px-3 py-2 rounded text-gray-700">9. Settings</a></li>
+                        <li><a href="#projects" class="nav-link block px-3 py-2 rounded text-gray-700">10. Projects</a></li>
+                        <li><a href="#tech" class="nav-link block px-3 py-2 rounded text-gray-700">Tech Stack</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-3 space-y-8">
+                <!-- Overview -->
+                <section class="bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        This document provides comprehensive UML diagrams for all modules in the CodeAnalyst system. 
+                        Each module includes class diagrams, sequence diagrams, and component diagrams to illustrate 
+                        the system architecture and interactions.
+                    </p>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <p class="text-sm text-blue-800">
+                            <strong>Architecture:</strong> The system follows a modular architecture with clear separation 
+                            of concerns. Each module is independent but can interact with others through well-defined interfaces.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 1. Authentication Module -->
+                <section id="auth" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">1. Authentication Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Hybrid authentication system supporting GitHub OAuth, Email/Password, and Google OAuth with JWT-based session management.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class AuthService {
+        -jwtSecret: string
+        -tokenExpiry: string
+        +initiateGitHubOAuth()
+        +handleGitHubCallback()
+        +registerEmailUser()
+        +loginEmailUser()
+        +loginWithGoogle()
+        +generateJWT()
+        +verifyJWT()
+        +refreshToken()
+    }
+    
+    class DatabaseService {
+        +createUser()
+        +getUserByEmail()
+        +getUserById()
+        +updateUserToken()
+        +syncSupabaseUser()
+    }
+    
+    class User {
+        -id: UUID
+        -email: string
+        -name: string
+        -avatar_url: string
+        -auth_provider: enum
+        -github_id: bigint
+        -github_username: string
+        -github_access_token: string
+        -plan: string
+        -role: string
+        -is_active: boolean
+        -pending_approval: boolean
+        -created_at: timestamp
+    }
+    
+    AuthService --> DatabaseService
+    DatabaseService --> User
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 mt-8">Sequence Diagram - GitHub OAuth Flow</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant GitHub
+    participant Database
+    
+    User->>Frontend: Click "Login with GitHub"
+    Frontend->>Backend: GET /api/auth/github
+    Backend->>Frontend: Return authUrl + state
+    Frontend->>GitHub: Redirect to OAuth
+    GitHub->>User: Request authorization
+    User->>GitHub: Approve
+    GitHub->>Backend: Callback with code
+    Backend->>GitHub: Exchange code for token
+    GitHub->>Backend: Return access_token
+    Backend->>GitHub: Fetch user profile
+    Backend->>Database: Create/update user
+    Backend->>Frontend: Return JWT token
+    Frontend->>Frontend: Store in LocalStorage
+    Frontend->>User: Redirect to Dashboard
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mt-6">
+                        <h4 class="font-semibold text-green-900 mb-3">Key Components</h4>
+                        <ul class="space-y-2 text-sm text-green-800">
+                            <li><strong>Routes:</strong> /api/auth/github, /api/auth/github/callback, /api/auth/register, /api/auth/login</li>
+                            <li><strong>Middleware:</strong> authMiddleware (JWT verification)</li>
+                            <li><strong>Database Tables:</strong> users</li>
+                            <li><strong>External Services:</strong> GitHub OAuth API, Supabase Auth</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 2. Code Analyst Module -->
+                <section id="code" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">2. AI Code Analyst Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Analyzes source code from GitHub repositories, ZIP uploads, or WordPress themes using AI to provide 
+                        quality scores, security assessments, and improvement recommendations.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class CodeAnalystService {
+        -aiService: AIService
+        -analyzer: AdoreInoAnalyzer
+        +analyzeGitHubRepo()
+        +analyzeZipUpload()
+        +analyzeWordPressTheme()
+        +generateReport()
+        +calculateQualityScore()
+    }
+    
+    class AdoreInoAnalyzer {
+        +analyzeFiles()
+        +detectLanguages()
+        +detectFrameworks()
+        +calculateComplexity()
+        +assessSecurity()
+        +detectCodeSmells()
+    }
+    
+    class AIService {
+        +analyzeCodeQuality()
+        +generateRecommendations()
+        +assessArchitecture()
+    }
+    
+    class CodeAnalysis {
+        -id: UUID
+        -user_id: UUID
+        -repo_url: string
+        -status: enum
+        -progress: integer
+        -system_overview: JSONB
+        -technical_structure: JSONB
+        -maintenance_needs: JSONB
+        -ai_explanations: JSONB
+        -code_quality_score: integer
+        -total_files: integer
+        -total_lines: integer
+        -languages: JSONB
+        -frameworks: JSONB
+        -created_at: timestamp
+    }
+    
+    CodeAnalystService --> AdoreInoAnalyzer
+    CodeAnalystService --> AIService
+    CodeAnalystService --> CodeAnalysis
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 mt-8">Activity Diagram - Analysis Flow</h3>
+                    <div class="mermaid">
+flowchart TD
+    Start([Start]) --> Input{Select Input Method}
+    Input -->|GitHub| GitHub[Fetch Repository]
+    Input -->|ZIP| ZIP[Extract ZIP]
+    Input -->|WordPress| WP[Fetch Theme]
+    
+    GitHub --> Parse[Parse Files]
+    ZIP --> Parse
+    WP --> Parse
+    
+    Parse --> Detect[Detect Languages/Frameworks]
+    Detect --> Metrics[Calculate Metrics]
+    Metrics --> AI[Run AI Analysis]
+    AI --> Score[Generate Quality Score]
+    Score --> Rec[Create Recommendations]
+    Rec --> Store[(Store Results)]
+    Store --> Display[Display Report]
+    Display --> End([End])
+    
+    style Start fill:#10b981,stroke:#059669,color:#fff
+    style AI fill:#f59e0b,stroke:#d97706,color:#fff
+    style End fill:#10b981,stroke:#059669,color:#fff
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-900 mb-2">Input Methods</h4>
+                            <ul class="text-sm text-blue-800 space-y-1">
+                                <li>• GitHub repository URL</li>
+                                <li>• ZIP file upload</li>
+                                <li>• WordPress theme analysis</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-900 mb-2">Analysis Types</h4>
+                            <ul class="text-sm text-purple-800 space-y-1">
+                                <li>• Architecture assessment</li>
+                                <li>• Security vulnerabilities</li>
+                                <li>• Code smells</li>
+                                <li>• Dependency analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Website Analyst Module -->
+                <section id="website" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">3. AI Website Analyst Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Comprehensive website analysis including performance metrics, SEO evaluation, accessibility checks, 
+                        and security headers assessment.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class WebsiteAnalystService {
+        -urlFetcher: URLFetcher
+        -aiService: AIService
+        +analyzeURL()
+        +fetchPageContent()
+        +analyzePerformance()
+        +analyzeSEO()
+        +analyzeAccessibility()
+        +analyzeSecurityHeaders()
+        +generateReport()
+    }
+    
+    class URLFetcher {
+        +fetchHTML()
+        +extractMetaTags()
+        +extractLinks()
+        +extractImages()
+        +measureLoadTime()
+    }
+    
+    class URLAnalysis {
+        -id: UUID
+        -user_id: UUID
+        -url: string
+        -status: enum
+        -meta_tags: JSONB
+        -performance_metrics: JSONB
+        -seo_score: integer
+        -accessibility_score: integer
+        -security_headers: JSONB
+        -page_speed_results: JSONB
+        -detected_language: string
+        -created_at: timestamp
+    }
+    
+    WebsiteAnalystService --> URLFetcher
+    WebsiteAnalystService --> URLAnalysis
+                    </div>
+
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
+                        <h4 class="font-semibold text-yellow-900 mb-3">Key Features</h4>
+                        <div class="grid grid-cols-2 gap-3 text-sm text-yellow-800">
+                            <div>
+                                <strong>Performance Analysis:</strong>
+                                <ul class="mt-1 space-y-1">
+                                    <li>• Load time measurement</li>
+                                    <li>• Resource size analysis</li>
+                                    <li>• HTTP requests count</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong>SEO Evaluation:</strong>
+                                <ul class="mt-1 space-y-1">
+                                    <li>• Meta tags check</li>
+                                    <li>• Heading structure</li>
+                                    <li>• Keyword density</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Content Analyst Module -->
+                <section id="content" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">4. AI Content Analyst Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Analyzes text content for grammar, readability, SEO optimization, and provides improvement suggestions 
+                        with multilingual support.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class ContentAnalystService {
+        -aiService: AIService
+        -languageDetector: LanguageDetect
+        +analyzeContent()
+        +checkGrammar()
+        +calculateReadability()
+        +analyzeSEO()
+        +extractKeywords()
+        +detectLanguage()
+        +generateImprovedVersion()
+    }
+    
+    class ContentAnalysis {
+        -original: string
+        -improved: string
+        -grammar: GrammarResult
+        -readability: ReadabilityResult
+        -seo: SEOResult
+        -keywords: string[]
+        -detectedLanguage: string
+    }
+    
+    class GrammarResult {
+        -score: number
+        -issues: Issue[]
+    }
+    
+    class ReadabilityResult {
+        -score: number
+        -suggestions: string[]
+        -fleschKincaid: number
+    }
+    
+    class SEOResult {
+        -score: number
+        -suggestions: string[]
+        -factors: string[]
+        -metrics: SEOMetrics
+    }
+    
+    ContentAnalystService --> ContentAnalysis
+    ContentAnalysis --> GrammarResult
+    ContentAnalysis --> ReadabilityResult
+    ContentAnalysis --> SEOResult
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mt-6">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-900 text-sm mb-2">Input Methods</h4>
+                            <ul class="text-xs text-green-800 space-y-1">
+                                <li>• Direct text</li>
+                                <li>• URL scraping</li>
+                                <li>• WordPress page</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-900 text-sm mb-2">Analysis Types</h4>
+                            <ul class="text-xs text-blue-800 space-y-1">
+                                <li>• Grammar checking</li>
+                                <li>• Readability metrics</li>
+                                <li>• SEO analysis</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-900 text-sm mb-2">Language Support</h4>
+                            <ul class="text-xs text-purple-800 space-y-1">
+                                <li>• Auto-detection</li>
+                                <li>• English</li>
+                                <li>• Lithuanian</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Auto Programmer Module -->
+                <section id="autoprog" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">5. AI Auto Programmer Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Chat-based AI assistant for code generation, feature implementation, and automated code changes 
+                        with support for GitHub projects and WordPress sites.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class AutoProgrammerService {
+        -chatService: ChatService
+        -githubService: GitHubService
+        -wordpressService: WordPressService
+        +sendChatMessage()
+        +generateCode()
+        +parseCodeChanges()
+        +applyChanges()
+        +previewChanges()
+    }
+    
+    class ChatService {
+        -openaiClient: OpenAI
+        -conversationHistory: Message[]
+        +streamResponse()
+        +buildContext()
+        +formatResponse()
+    }
+    
+    class Message {
+        -id: string
+        -role: user|assistant
+        -content: string
+        -timestamp: Date
+        -parts: MessagePart[]
+    }
+    
+    class CodeChange {
+        -id: string
+        -file: string
+        -type: create|modify|delete
+        -content: string
+        -approved: boolean
+    }
+    
+    AutoProgrammerService --> ChatService
+    ChatService --> Message
+    AutoProgrammerService --> CodeChange
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 mt-8">State Diagram - Chat Session</h3>
+                    <div class="mermaid">
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> ProjectSelected: User selects project
+    ProjectSelected --> WaitingForResponse: User sends message
+    WaitingForResponse --> ReceivingResponse: Streaming starts
+    ReceivingResponse --> ResponseComplete: Stream complete
+    ResponseComplete --> ChangesPendingReview: Code changes detected
+    ChangesPendingReview --> ApplyingChanges: User approves
+    ApplyingChanges --> ChangesApplied: Changes applied
+    ChangesApplied --> Idle: Ready for next message
+    ResponseComplete --> Idle: No code changes
+                    </div>
+
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mt-6">
+                        <h4 class="font-semibold text-indigo-900 mb-3">Key Features</h4>
+                        <ul class="grid grid-cols-2 gap-2 text-sm text-indigo-800">
+                            <li>• Real-time streaming responses</li>
+                            <li>• Code generation (GitHub)</li>
+                            <li>• HTML generation (WordPress)</li>
+                            <li>• Builder detection</li>
+                            <li>• Live preview</li>
+                            <li>• Context awareness</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 6. Content Creator Module -->
+                <section id="creator" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">6. AI Content Creator Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Generates new content with AI using customizable templates, SEO optimization, and multilingual support 
+                        with translation capabilities.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class ContentCreatorService {
+        -aiService: AIService
+        -templateService: TemplateService
+        -translationService: Translation
+        +generateContent()
+        +applyTemplate()
+        +optimizeForSEO()
+        +translateContent()
+        +exportContent()
+    }
+    
+    class TemplateService {
+        +getTemplates()
+        +createTemplate()
+        +updateTemplate()
+        +deleteTemplate()
+    }
+    
+    class ContentTemplate {
+        -id: UUID
+        -name: string
+        -category: string
+        -structure: JSONB
+        -prompt_template: text
+        -is_system: boolean
+        -translations: JSONB
+        -created_at: timestamp
+    }
+    
+    class GeneratedContent {
+        -id: UUID
+        -user_id: UUID
+        -template_id: UUID
+        -content: text
+        -metadata: JSONB
+        -language: string
+        -translations: JSONB
+        -seo_score: integer
+        -created_at: timestamp
+    }
+    
+    ContentCreatorService --> TemplateService
+    TemplateService --> ContentTemplate
+    ContentCreatorService --> GeneratedContent
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mt-6">
+                        <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-pink-900 text-sm mb-2">Templates</h4>
+                            <ul class="text-xs text-pink-800 space-y-1">
+                                <li>• Blog Post</li>
+                                <li>• Product Description</li>
+                                <li>• Social Media</li>
+                                <li>• Email Newsletter</li>
+                                <li>• Landing Page</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-900 text-sm mb-2">Features</h4>
+                            <ul class="text-xs text-purple-800 space-y-1">
+                                <li>• AI generation</li>
+                                <li>• SEO optimization</li>
+                                <li>• Multilingual support</li>
+                                <li>• Translation</li>
+                                <li>• Export formats</li>
+                            </ul>
+                        </div>
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-indigo-900 text-sm mb-2">Export</h4>
+                            <ul class="text-xs text-indigo-800 space-y-1">
+                                <li>• HTML</li>
+                                <li>• Markdown</li>
+                                <li>• Plain Text</li>
+                                <li>• Copy to clipboard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. WordPress Integration -->
+                <section id="wordpress" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">7. WordPress Integration Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Connects WordPress sites to CodeAnalyst for theme analysis, content management, and page editing 
+                        through a WordPress plugin.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class WordPressService {
+        -apiUrl: string
+        -apiKey: string
+        +generateApiKey()
+        +connectSite()
+        +getSites()
+        +getPages()
+        +getThemeFiles()
+        +getPageContent()
+        +detectBuilder()
+        +disconnectSite()
+    }
+    
+    class WordPressConnection {
+        -id: UUID
+        -user_id: UUID
+        -site_url: string
+        -site_name: string
+        -api_key: string (encrypted)
+        -site_info: JSONB
+        -is_active: boolean
+        -last_sync: timestamp
+        -created_at: timestamp
+    }
+    
+    class WordPressPage {
+        -id: UUID
+        -connection_id: UUID
+        -post_id: bigint
+        -post_title: string
+        -post_type: string
+        -editor_type: string
+        -content: text
+        -elementor_data: JSONB
+        -blocks: JSONB
+        -page_url: string
+        -last_modified: timestamp
+    }
+    
+    class WordPressFile {
+        -id: UUID
+        -connection_id: UUID
+        -file_path: string
+        -file_type: string
+        -file_content: text
+        -file_size: integer
+        -uploaded_at: timestamp
+    }
+    
+    WordPressService --> WordPressConnection
+    WordPressConnection --> WordPressPage
+    WordPressConnection --> WordPressFile
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 mt-8">Sequence Diagram - Site Connection</h3>
+                    <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Settings
+    participant Backend
+    participant Database
+    participant WPPlugin as WordPress Plugin
+    
+    User->>Settings: Click "Generate API Key"
+    Settings->>Backend: POST /api/wordpress/generate-key
+    Backend->>Database: Create encrypted key
+    Backend->>Settings: Return API key
+    Settings->>User: Display key
+    User->>WPPlugin: Install & enter key
+    WPPlugin->>Backend: POST /api/wordpress/connect
+    Backend->>Database: Verify key
+    Backend->>WPPlugin: Request site info
+    WPPlugin->>Backend: Send site info
+    Backend->>Database: Store connection
+    Backend->>WPPlugin: Success
+    WPPlugin->>User: Show success
+                    </div>
+                </section>
+
+                <!-- 8. User Management -->
+                <section id="usermgmt" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">8. User Management & Permissions Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Role-based access control system with user approval workflow, project assignments, and module-level permissions.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class UserManagementService {
+        +getAllUsers()
+        +approveUser()
+        +deactivateUser()
+        +assignRole()
+        +assignToProject()
+        +setModulePermissions()
+    }
+    
+    class RoleMiddleware {
+        +isSuperAdmin()
+        +isAdmin()
+        +hasProjectAccess()
+        +hasModuleAccess()
+        +isActiveUser()
+    }
+    
+    class User {
+        -id: UUID
+        -email: string
+        -role: enum
+        -is_active: boolean
+        -pending_approval: boolean
+        -plan: string
+    }
+    
+    class ProjectMember {
+        -id: UUID
+        -project_id: UUID
+        -user_id: UUID
+        -role: string
+        -permissions: JSONB
+        -invited_at: timestamp
+    }
+    
+    UserManagementService --> RoleMiddleware
+    RoleMiddleware --> User
+    User --> ProjectMember
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 mt-8">State Diagram - User Lifecycle</h3>
+                    <div class="mermaid">
+stateDiagram-v2
+    [*] --> PendingApproval: New user registers
+    PendingApproval --> AdminReview: Submitted
+    AdminReview --> Active: Approved
+    AdminReview --> Rejected: Rejected
+    Rejected --> PendingApproval: Re-apply
+    Active --> AssignedToProjects: Admin assigns
+    AssignedToProjects --> ModulePermissionsSet: Permissions set
+    ModulePermissionsSet --> CanAccessSystem: Ready
+    CanAccessSystem --> Inactive: Admin deactivates
+    Inactive --> [*]
+                    </div>
+
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-6 mt-6">
+                        <h4 class="font-semibold text-orange-900 mb-3">Permission Hierarchy</h4>
+                        <div class="space-y-3 text-sm text-orange-800">
+                            <div>
+                                <strong>Superadmin:</strong> Full system access, user management, all projects, all modules
+                            </div>
+                            <div>
+                                <strong>Admin:</strong> Own projects management, invite users, set module permissions
+                            </div>
+                            <div>
+                                <strong>User:</strong> Access assigned projects only, use permitted modules only
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. Settings Module -->
+                <section id="settings" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">9. Settings & Configuration Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Centralized configuration management for AI providers, API keys, integrations, and user preferences.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class SettingsService {
+        +getUserSettings()
+        +updateSettings()
+        +setApiKey()
+        +validateApiKey()
+        +getAvailableProviders()
+        +resetToDefaults()
+    }
+    
+    class UserSettings {
+        -preferredAiModel: string
+        -userApiKeys: APIKeys
+        -beenexApiUrl: string
+        -beenexApiKey: string
+        -theme: light|dark
+    }
+    
+    class APIKeys {
+        -openai: string (encrypted)
+        -anthropic: string (encrypted)
+        -google: string (encrypted)
+    }
+    
+    class UserApiKey {
+        -id: UUID
+        -user_id: UUID
+        -provider: string
+        -api_key: string (encrypted)
+        -is_active: boolean
+        -created_at: timestamp
+    }
+    
+    SettingsService --> UserSettings
+    UserSettings --> APIKeys
+    SettingsService --> UserApiKey
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-900 mb-2">AI Providers</h4>
+                            <ul class="text-sm text-blue-800 space-y-1">
+                                <li>• OpenAI (GPT-4)</li>
+                                <li>• Anthropic (Claude)</li>
+                                <li>• Google (Gemini)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-900 mb-2">Integrations</h4>
+                            <ul class="text-sm text-green-800 space-y-1">
+                                <li>• WordPress plugin</li>
+                                <li>• GitHub OAuth</li>
+                                <li>• Beenex CRM (planned)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 10. Projects Module -->
+                <section id="projects" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">10. Projects Management Module</h2>
+                    <p class="text-gray-700 mb-4">
+                        Organize and manage GitHub repositories and WordPress sites as projects with team collaboration 
+                        and module access control.
+                    </p>
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Class Diagram</h3>
+                    <div class="mermaid">
+classDiagram
+    class ProjectService {
+        +createProject()
+        +getProjects()
+        +getProjectById()
+        +updateProject()
+        +deleteProject()
+        +inviteUser()
+        +removeUser()
+        +setModuleAccess()
+    }
+    
+    class Project {
+        -id: UUID
+        -name: string
+        -description: text
+        -type: github|wordpress
+        -owner_id: UUID
+        -repo_url: string
+        -wordpress_site_id: UUID
+        -is_active: boolean
+        -created_at: timestamp
+    }
+    
+    class ProjectMember {
+        -id: UUID
+        -project_id: UUID
+        -user_id: UUID
+        -role: owner|member
+        -modules_access: string[]
+        -invited_by: UUID
+        -invited_at: timestamp
+    }
+    
+    ProjectService --> Project
+    Project --> ProjectMember
+                    </div>
+
+                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 mt-6">
+                        <h4 class="font-semibold text-purple-900 mb-3">Key Features</h4>
+                        <ul class="grid grid-cols-2 gap-2 text-sm text-purple-800">
+                            <li>• GitHub repositories</li>
+                            <li>• WordPress sites</li>
+                            <li>• Team collaboration</li>
+                            <li>• Module access control</li>
+                            <li>• Project dashboard</li>
+                            <li>• Activity tracking</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Tech Stack -->
+                <section id="tech" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Technology Stack Summary</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h3 class="font-semibold text-blue-900 mb-4">Frontend</h3>
+                            <ul class="space-y-2 text-sm text-blue-800">
+                                <li><strong>Framework:</strong> React 18 + TypeScript</li>
+                                <li><strong>Build Tool:</strong> Vite</li>
+                                <li><strong>Routing:</strong> React Router v6</li>
+                                <li><strong>State:</strong> Zustand</li>
+                                <li><strong>UI:</strong> Headless UI, Heroicons</li>
+                                <li><strong>Styling:</strong> Tailwind CSS</li>
+                                <li><strong>HTTP:</strong> Axios</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h3 class="font-semibold text-green-900 mb-4">Backend</h3>
+                            <ul class="space-y-2 text-sm text-green-800">
+                                <li><strong>Runtime:</strong> Node.js</li>
+                                <li><strong>Framework:</strong> Express.js</li>
+                                <li><strong>Language:</strong> JavaScript (ES Modules)</li>
+                                <li><strong>Database:</strong> PostgreSQL (Supabase)</li>
+                                <li><strong>Auth:</strong> JWT, GitHub OAuth</li>
+                                <li><strong>AI:</strong> OpenAI, Anthropic, Google</li>
+                                <li><strong>Logging:</strong> Winston</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                            <h3 class="font-semibold text-purple-900 mb-4">Infrastructure</h3>
+                            <ul class="space-y-2 text-sm text-purple-800">
+                                <li><strong>Frontend:</strong> Vercel</li>
+                                <li><strong>Backend:</strong> Railway</li>
+                                <li><strong>Database:</strong> Supabase PostgreSQL</li>
+                                <li><strong>Version Control:</strong> Git + GitHub</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Naming Conventions -->
+                <section class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Naming Conventions</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-3">Database Tables</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>• Lowercase with underscores</li>
+                                <li>• Plural nouns for entity tables</li>
+                                <li>• Examples: <code class="bg-gray-200 px-2 py-1 rounded">users</code>, <code class="bg-gray-200 px-2 py-1 rounded">code_analyses</code></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-3">API Endpoints</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>• RESTful conventions</li>
+                                <li>• Action-based for operations</li>
+                                <li>• Examples: <code class="bg-gray-200 px-2 py-1 rounded">/api/resource</code>, <code class="bg-gray-200 px-2 py-1 rounded">/api/auth/login</code></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-3">Frontend Code</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>• camelCase for variables/functions</li>
+                                <li>• PascalCase for components</li>
+                                <li>• UPPER_SNAKE_CASE for constants</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-3">Backend Code</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>• camelCase for variables/functions</li>
+                                <li>• PascalCase for classes</li>
+                                <li>• UPPER_SNAKE_CASE for constants</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 text-sm">
+            <p>This UML documentation provides a comprehensive module-by-module breakdown of the CodeAnalyst system architecture.</p>
+            <p class="mt-2">CodeAnalyst System © 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Highlight active section
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('bg-blue-50', 'text-blue-700', 'font-semibold');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('bg-blue-50', 'text-blue-700', 'font-semibold');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+

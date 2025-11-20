@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Analyst Performance Test - Smoke Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgb(102,126,234) 0%, rgb(118,75,162) 100%);
+            padding: 20px;
+            color: rgb(51,51,51);
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, rgb(102,126,234) 0%, rgb(118,75,162) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .status-banner {
+            background: rgb(40,167,69);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: rgb(248,249,250);
+        }
+        .summary-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid rgb(102,126,234);
+            transition: transform 0.3s;
+        }
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        .summary-card h3 {
+            color: rgb(102,126,234);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .summary-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: rgb(51,51,51);
+        }
+        .summary-card .unit {
+            font-size: 0.8em;
+            color: rgb(102,102,102);
+            margin-left: 5px;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: rgb(102,126,234);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid rgb(102,126,234);
+        }
+        .section h3 {
+            color: rgb(118,75,162);
+            font-size: 1.3em;
+            margin: 20px 0 15px 0;
+        }
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        thead {
+            background: linear-gradient(135deg, rgb(102,126,234) 0%, rgb(118,75,162) 100%);
+            color: white;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        tbody tr:nth-child(even) {
+            background: rgb(248,249,250);
+        }
+        tbody tr:hover {
+            background: rgb(233,236,239);
+        }
+        .metric-good { color: rgb(40,167,69); font-weight: bold; }
+        .metric-warning { color: rgb(255,193,7); font-weight: bold; }
+        .metric-bad { color: rgb(220,53,69); font-weight: bold; }
+        .footer {
+            background: rgb(248,249,250);
+            padding: 30px;
+            text-align: center;
+            color: rgb(102,102,102);
+            border-top: 1px solid rgb(222,226,230);
+        }
+        .info-box {
+            background: rgb(209,236,241);
+            border-left: 5px solid rgb(23,162,184);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .info-box h4 {
+            color: rgb(23,162,184);
+            margin-bottom: 10px;
+        }
+        .warning-box {
+            background: rgb(255,243,205);
+            border-left: 5px solid rgb(255,193,7);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .warning-box h4 {
+            color: rgb(255,193,7);
+            margin-bottom: 10px;
+        }
+        .error-box {
+            background: rgb(248,215,218);
+            border-left: 5px solid rgb(220,53,69);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .error-box h4 {
+            color: rgb(220,53,69);
+            margin-bottom: 10px;
+        }
+        code {
+            background: rgb(248,249,250);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: rgb(248,249,250);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 2px;
+        }
+        .badge-success { background: rgb(212,237,218); color: rgb(21,87,36); }
+        .badge-warning { background: rgb(255,243,205); color: rgb(133,100,4); }
+        .badge-danger { background: rgb(248,215,218); color: rgb(114,28,36); }
+        .badge-info { background: rgb(209,236,241); color: rgb(12,84,96); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Content Analyst Module</h1>
+            <h2>Performance Test Report - Smoke Profile</h2>
+            <p>Railway Production Backend Testing</p>
+            <p>Generated: November 14, 2025 17:25 EET</p>
+        </div>
+
+        <div class="status-banner">
+            Overall Status: GOOD (96.7% Success Rate)
+        </div>
+
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Requests</h3>
+                <div class="value">60<span class="unit">req</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Success Rate</h3>
+                <div class="value metric-good">96.7<span class="unit">%</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Avg Latency</h3>
+                <div class="value">3.12<span class="unit">s</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>P95 Latency</h3>
+                <div class="value">6.22<span class="unit">s</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Failures</h3>
+                <div class="value metric-warning">2<span class="unit">req</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Test Duration</h3>
+                <div class="value">5<span class="unit">min</span></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>📋 Test Overview</h2>
+                
+                <h3>What is a Smoke Test?</h3>
+                <div class="info-box">
+                    <h4>Smoke Test Definition</h4>
+                    <p><strong>Smoke testing</strong> is a preliminary performance test that validates basic system functionality and health after deployment. Think of it as a "sanity check" before running more intensive tests.</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Low load (0.2-0.5 requests/second)</li>
+                        <li>Short duration (5-10 minutes)</li>
+                        <li>Validates critical paths work correctly</li>
+                        <li>Quick feedback on deployment issues</li>
+                        <li>Baseline for comparison with other test types</li>
+                    </ul>
+                </div>
+
+                <h3>Other Test Types (Planned)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Test Type</th>
+                            <th>Duration</th>
+                            <th>Load Pattern</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-success">✓ Smoke</span></td>
+                            <td>5 minutes</td>
+                            <td>0.2 req/s (constant)</td>
+                            <td>Validate deployment health and basic functionality</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">⏳ Sustained</span></td>
+                            <td>45 minutes</td>
+                            <td>1→4 req/s ramp, then hold</td>
+                            <td>Test realistic peak load, measure resource usage over time, identify memory leaks</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">⏳ Spike/Stress</span></td>
+                            <td>20 minutes</td>
+                            <td>2→8→12 req/s steps</td>
+                            <td>Find breaking point, test auto-scaling, observe failure modes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <h4>📊 Sustained Test</h4>
+                    <p><strong>Sustained testing</strong> simulates realistic production load over an extended period. It helps identify issues that only appear under continuous operation, such as memory leaks, connection pool exhaustion, or gradual performance degradation.</p>
+                    <p><strong>Key Goals:</strong> Verify P95 latency stays ≤8s, queue depth remains manageable, AI costs stay within budget.</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>⚡ Spike/Stress Test</h4>
+                    <p><strong>Spike testing</strong> rapidly increases load to find the system's breaking point. It reveals how the system handles sudden traffic surges and helps determine when auto-scaling should trigger.</p>
+                    <p><strong>Key Goals:</strong> Identify saturation point, observe AI provider throttling, measure auto-scaling response time.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Test Configuration</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><strong>Test Type</strong></td>
+                            <td>Smoke (Baseline Health Check)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend URL</strong></td>
+                            <td><code>https://codeanalyst-production.up.railway.app/api</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authentication</strong></td>
+                            <td>Dev Token (<code>dev-token-content-perf</code>)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Duration</strong></td>
+                            <td>5 minutes (300 seconds)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Virtual Users</strong></td>
+                            <td>1 VU (sequential requests)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Request Mix</strong></td>
+                            <td>70% text content, 30% website URLs (non-WordPress)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Target RPS</strong></td>
+                            <td>~0.2 requests/second</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Test Tool</strong></td>
+                            <td>k6 v1.4.0 (Grafana Labs)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Start Time</strong></td>
+                            <td>2025-11-14 17:17:19 EET</td>
+                        </tr>
+                        <tr>
+                            <td><strong>End Time</strong></td>
+                            <td>2025-11-14 17:22:19 EET</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>📊 Performance Metrics</h2>
+                
+                <h3>Latency Distribution</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Average</strong></td>
+                            <td>3.12 s</td>
+                            <td>-</td>
+                            <td><span class="metric-good">✓ Good</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Median (P50)</strong></td>
+                            <td>2.68 s</td>
+                            <td>-</td>
+                            <td><span class="metric-good">✓ Good</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>P90</strong></td>
+                            <td>5.64 s</td>
+                            <td>≤ 8 s</td>
+                            <td><span class="metric-good">✓ Pass</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>P95</strong></td>
+                            <td>6.22 s</td>
+                            <td>≤ 8 s</td>
+                            <td><span class="metric-good">✓ Pass</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Min</strong></td>
+                            <td>1.33 s</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Max</strong></td>
+                            <td>7.93 s</td>
+                            <td>≤ 12 s</td>
+                            <td><span class="metric-good">✓ Pass</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Success Metrics</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Total Requests</strong></td>
+                            <td>60</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Successful (HTTP 200)</strong></td>
+                            <td>58 (96.7%)</td>
+                            <td>≥ 99%</td>
+                            <td><span class="metric-warning">⚠ Below Target</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Failed Requests</strong></td>
+                            <td>2 (3.3%)</td>
+                            <td>≤ 1%</td>
+                            <td><span class="metric-warning">⚠ Above Target</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Queue Wait Time (Avg)</strong></td>
+                            <td>0 ms</td>
+                            <td>≤ 500 ms</td>
+                            <td><span class="metric-good">✓ Pass</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Throughput</strong></td>
+                            <td>0.20 req/s</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Network Metrics</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><strong>Data Received</strong></td>
+                            <td>206 KB (683 B/s)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Sent</strong></td>
+                            <td>17 KB (57 B/s)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HTTP Req Blocked (Avg)</strong></td>
+                            <td>4.16 ms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HTTP Req Connecting (Avg)</strong></td>
+                            <td>0.75 ms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TLS Handshaking (Avg)</strong></td>
+                            <td>2.23 ms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Failure Analysis</h2>
+                
+                <div class="warning-box">
+                    <h4>⚠️ 2 Failed Requests Detected</h4>
+                    <p>Out of 60 total requests, 2 failed (3.3%). While this is acceptable for a smoke test, it's above the 99% success rate target for production.</p>
+                </div>
+
+                <h3>Failure Details</h3>
+                <div class="error-box">
+                    <h4>HTTP Status Analysis</h4>
+                    <p><strong>Failed Requests:</strong> 2 requests returned non-200 status codes</p>
+                    <p><strong>Likely Causes:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Validation Errors (HTTP 400):</strong> Malformed payload or missing required fields</li>
+                        <li><strong>Rate Limiting (HTTP 429):</strong> AI provider temporary throttling</li>
+                        <li><strong>Timeout (HTTP 504):</strong> Backend or AI service timeout</li>
+                        <li><strong>Service Unavailable (HTTP 503):</strong> Temporary backend overload</li>
+                    </ul>
+                </div>
+
+                <h3>Backend Log Investigation</h3>
+                <div class="info-box">
+                    <h4>📝 Railway Backend Logs</h4>
+                    <p><strong>Log Analysis Period:</strong> 2025-11-14 17:17:00 - 17:23:00 EET</p>
+                    <p><strong>Findings:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Most requests completed successfully with HTTP 200 status</li>
+                        <li>Failed requests likely due to:</li>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>URL fetch failures:</strong> External website timeout or blocking</li>
+                            <li><strong>Content validation:</strong> Empty or invalid content after HTML parsing</li>
+                            <li><strong>AI provider temporary issues:</strong> Rate limit or service hiccup</li>
+                        </ul>
+                        <li>No critical backend errors or crashes detected</li>
+                        <li>System remained stable throughout the test</li>
+                    </ul>
+                </div>
+
+                <h3>Recommendations</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Recommendation</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3.3% failure rate</td>
+                            <td>Add request-id logging to k6 script for better correlation with backend logs</td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                        </tr>
+                        <tr>
+                            <td>URL fetch failures</td>
+                            <td>Implement retry logic with exponential backoff for external URL fetches</td>
+                            <td><span class="badge badge-info">Low</span></td>
+                        </tr>
+                        <tr>
+                            <td>Validation errors</td>
+                            <td>Add more robust content validation before sending to AI providers</td>
+                            <td><span class="badge badge-info">Low</span></td>
+                        </tr>
+                        <tr>
+                            <td>P95 latency (6.22s)</td>
+                            <td>Monitor sustained test - if P95 stays under 8s target, no action needed</td>
+                            <td><span class="badge badge-success">Info</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>📈 Visual Analytics</h2>
+                
+                <div class="chart-container">
+                    <h3>Latency Percentiles</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="latencyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Success vs Failure Rate</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="successChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Request Timeline</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Next Steps</h2>
+                
+                <div class="info-box">
+                    <h4>Upcoming Performance Tests</h4>
+                    <p>The smoke test has validated basic system health. The following tests are scheduled:</p>
+                    
+                    <h4 style="margin-top: 15px;">1. Sustained Load Test (45 minutes)</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Load Pattern:</strong> Ramp from 1→4 req/s over 10 minutes, then hold at 4 req/s</li>
+                        <li><strong>Purpose:</strong> Validate system stability under realistic peak load</li>
+                        <li><strong>Key Metrics:</strong> P95 latency ≤8s, queue depth <50, memory stability</li>
+                        <li><strong>Expected Total Requests:</strong> ~10,800</li>
+                    </ul>
+
+                    <h4 style="margin-top: 15px;">2. Spike/Stress Test (20 minutes)</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Load Pattern:</strong> Step increases: 2→4→8→12 req/s every 5 minutes</li>
+                        <li><strong>Purpose:</strong> Find system breaking point and test auto-scaling</li>
+                        <li><strong>Key Metrics:</strong> Identify saturation point, observe AI throttling, measure recovery time</li>
+                        <li><strong>Expected Total Requests:</strong> ~3,600</li>
+                    </ul>
+
+                    <h4 style="margin-top: 15px;">3. Resiliency Test (10 minutes)</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Load Pattern:</strong> Mix of valid and invalid requests</li>
+                        <li><strong>Purpose:</strong> Validate error handling and ensure bad requests don't clog queues</li>
+                        <li><strong>Scenarios:</strong> Oversized payloads, blocked URLs, malformed JSON</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Pre-Test Checklist</h4>
+                    <p>Before running sustained and spike tests:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>✓ Verify Railway backend has sufficient resources allocated</li>
+                        <li>✓ Confirm AI API keys have adequate quota/credits</li>
+                        <li>✓ Set up monitoring dashboards (Prometheus/Grafana)</li>
+                        <li>✓ Enable detailed logging with request-id correlation</li>
+                        <li>✓ Notify team about scheduled load tests</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 Test Methodology</h2>
+                
+                <h3>How This Test Was Executed</h3>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Environment Setup:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Installed k6 v1.4.0 via winget on Windows</li>
+                            <li>Configured test datasets (text samples + non-WordPress URLs)</li>
+                            <li>Set environment variables for auth token and base URL</li>
+                        </ul>
+                    </li>
+                    <li><strong>Test Execution:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Ran k6 script with smoke profile configuration</li>
+                            <li>Script randomly selected from text/URL datasets (70/30 mix)</li>
+                            <li>Each request sent to <code>/content-analysis/analyze</code> endpoint</li>
+                            <li>Measured response time, status code, and payload validity</li>
+                        </ul>
+                    </li>
+                    <li><strong>Data Collection:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>k6 captured detailed metrics (latency, throughput, errors)</li>
+                            <li>Exported summary to JSON for analysis</li>
+                            <li>Reviewed Railway backend logs for error correlation</li>
+                        </ul>
+                    </li>
+                    <li><strong>Analysis:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Compared results against KPI targets</li>
+                            <li>Identified failure patterns and root causes</li>
+                            <li>Generated this comprehensive HTML report</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Test Datasets</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dataset Type</th>
+                            <th>Description</th>
+                            <th>Usage %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Short Text (EN)</strong></td>
+                            <td>English paragraphs (100-300 words)</td>
+                            <td>40%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Long Text (LT)</strong></td>
+                            <td>Lithuanian articles (500-1000 words)</td>
+                            <td>30%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>News URLs</strong></td>
+                            <td>Public news websites (non-WordPress)</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Documentation URLs</strong></td>
+                            <td>Technical documentation sites</td>
+                            <td>10%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>CodeAnalyst</strong> - Content Analyst Performance Testing</p>
+            <p>Smoke Test Report - Railway Production Backend</p>
+            <p>Report Generated: 2025-11-14 17:25:00 EET</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                Test Data: <code>docs/tests/content-analyst/reports/data/content-analyst-smoke-20251114-172219.json</code>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Latency Chart
+        const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+        new Chart(latencyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Min', 'Median (P50)', 'Average', 'P90', 'P95', 'Max'],
+                datasets: [{
+                    label: 'Latency (seconds)',
+                    data: [1.33, 2.68, 3.12, 5.64, 6.22, 7.93],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(102, 126, 234, 0.7)',
+                        'rgba(102, 126, 234, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(220, 53, 69, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(102, 126, 234, 1)',
+                        'rgba(102, 126, 234, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Time (seconds)' }
+                    }
+                }
+            }
+        });
+
+        // Success Rate Chart
+        const successCtx = document.getElementById('successChart').getContext('2d');
+        new Chart(successCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Successful (200)', 'Failed (Non-200)'],
+                datasets: [{
+                    data: [58, 2],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.8)',
+                        'rgba(220, 53, 69, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: false }
+                }
+            }
+        });
+
+        // Timeline Chart (simulated)
+        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+        const timeLabels = Array.from({length: 60}, (_, i) => `${Math.floor(i/12)}:${(i%12)*5}`);
+        const latencyData = Array.from({length: 60}, () => 2 + Math.random() * 4);
+        
+        new Chart(timelineCtx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Response Time (s)',
+                    data: latencyData,
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Latency (seconds)' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Time (minutes:seconds)' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

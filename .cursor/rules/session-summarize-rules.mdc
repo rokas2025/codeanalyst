@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+CodeAnalyst session notes convention:
+
+- When the conversation has covered a full feature, multiple bugfixes, or is getting long, you should:
+  1) Create a concise session summary, and
+  2) Suggest writing it into: docs/SESSION_NOTES.md (or docs/session-notes/<date>-<topic>.md)
+
+The summary should include:
+- Title with date and topic, e.g. "2025-11-20 – WebsiteAnalyst module updates"
+- Goals for this session
+- Key decisions (APIs, architecture choices, auth implications, etc.)
+- Files touched, with short notes (e.g. src/pages/modules/WebsiteAnalyst/index.tsx – added UI for X)
+- PowerShell commands used to run dev servers/tests
+- TODO list / next steps
+
+After generating the summary, tell me explicitly:
+- That the chat is now a good point to close
+- That I should open a new chat for the next chunk of work
+- That I should paste this summary or at least the TODO section as the starting context of the new chat.
+
+Never rely solely on the old chat history when continuing work in a new chat; always base continuation on the written summary.

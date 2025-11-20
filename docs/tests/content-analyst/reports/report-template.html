@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Analyst Performance Report - {{RUN_ID}}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgb(6,182,212) 0%, rgb(8,145,178) 100%);
+            padding: 24px;
+            color: rgb(31,41,55);
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(15,23,42,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, rgb(6,182,212) 0%, rgb(45,212,191) 100%);
+            color: white;
+            padding: 48px 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.6rem;
+            margin-bottom: 8px;
+        }
+        .header p {
+            opacity: 0.9;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 32px;
+            background: rgb(248,250,252);
+        }
+        .summary-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            border-left: 6px solid rgb(6,182,212);
+            box-shadow: 0 8px 18px rgba(15,23,42,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .summary-card h3 {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: rgb(14,116,144);
+            letter-spacing: 1px;
+        }
+        .summary-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .summary-card small {
+            color: rgb(100,116,139);
+        }
+        .content {
+            padding: 36px;
+        }
+        .section {
+            margin-bottom: 42px;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            color: rgb(6,95,122);
+            border-bottom: 3px solid rgba(6,182,212,0.3);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 18px rgba(15,23,42,0.08);
+        }
+        .chart-container {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 18px rgba(15,23,42,0.08);
+            margin-bottom: 24px;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 320px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(15,23,42,0.08);
+        }
+        th, td {
+            padding: 16px;
+            text-align: left;
+        }
+        thead {
+            background: rgb(6,182,212);
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        tbody tr:nth-child(even) {
+            background: rgb(248,250,252);
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-good { background: rgba(16,185,129,0.15); color: rgb(5,150,105); }
+        .badge-warn { background: rgba(249,115,22,0.15); color: rgb(194,65,12); }
+        .badge-bad { background: rgba(239,68,68,0.15); color: rgb(185,28,28); }
+        .footer {
+            background: rgb(248,250,252);
+            padding: 24px;
+            text-align: center;
+            color: rgb(71,85,105);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Content Analyst Performance Report</h1>
+            <p>Profile: {{PROFILE}} &bullet; Generated: {{GENERATED_AT}}</p>
+            <p>Dataset Mix: Text {{TEXT_SHARE}} / URL {{URL_SHARE}} (non-WordPress)</p>
+        </div>
+
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Requests</h3>
+                <div class="value">{{TOTAL_REQUESTS}}</div>
+                <small>Across all VUs</small>
+            </div>
+            <div class="summary-card">
+                <h3>Success Rate</h3>
+                <div class="value">{{SUCCESS_RATE}}%</div>
+                <small class="badge badge-good">{{FAILED_REQUESTS}} failed</small>
+            </div>
+            <div class="summary-card">
+                <h3>P95 TTFT</h3>
+                <div class="value">{{P95_TTFT}} ms</div>
+                <small>Target ≤ 2500 ms</small>
+            </div>
+            <div class="summary-card">
+                <h3>P95 Full Latency</h3>
+                <div class="value">{{P95_TOTAL}} ms</div>
+                <small>Target ≤ 8000 ms</small>
+            </div>
+            <div class="summary-card">
+                <h3>Queue Wait (P95)</h3>
+                <div class="value">{{P95_QUEUE}} ms</div>
+                <small>Target ≤ 500 ms</small>
+            </div>
+            <div class="summary-card">
+                <h3>AI Cost</h3>
+                <div class="value">${{TOTAL_COST}}</div>
+                <small>{{COST_PER_REQ}} per request</small>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>Run Configuration</h2>
+                <table>
+                    <tbody>
+                        <tr><td><strong>Environment</strong></td><td>{{ENVIRONMENT}}</td></tr>
+                        <tr><td><strong>Profile</strong></td><td>{{PROFILE_DESCRIPTION}}</td></tr>
+                        <tr><td><strong>Duration</strong></td><td>{{DURATION}}</td></tr>
+                        <tr><td><strong>Concurrent VUs</strong></td><td>{{VUS}}</td></tr>
+                        <tr><td><strong>Text Payloads</strong></td><td>{{TEXT_VARIANTS}}</td></tr>
+                        <tr><td><strong>URL Payloads</strong></td><td>{{URL_VARIANTS}}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>KPI Compliance</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Latency Targets</h3>
+                        <p class="{{TTFT_STATUS_BADGE}}">TTFT P95: {{P95_TTFT}} ms</p>
+                        <p class="{{TOTAL_STATUS_BADGE}}">Full Latency P95: {{P95_TOTAL}} ms</p>
+                        <p class="{{P99_STATUS_BADGE}}">Full Latency P99: {{P99_TOTAL}} ms</p>
+                    </div>
+                    <div class="card">
+                        <h3>Queue Health</h3>
+                        <p>Wait P95: <span class="{{QUEUE_STATUS_BADGE}}">{{P95_QUEUE}} ms</span></p>
+                        <p>Max Depth: {{MAX_QUEUE_DEPTH}}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Cost & Providers</h3>
+                        <p>Cost / req: ${{COST_PER_REQ}}</p>
+                        <p>Provider mix: OpenAI {{OPENAI_SHARE}}% / Claude {{CLAUDE_SHARE}}% / Gemini {{GEMINI_SHARE}}%</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Visual Analytics</h2>
+                <div class="chart-container">
+                    <h3>Latency Distribution</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="latencyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>Throughput Over Time</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="throughputChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>Provider Utilization</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="providerChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Recommendations</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Area</th>
+                            <th>Observation</th>
+                            <th>Recommendation</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{RECOMMENDATION_ROWS}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>CodeAnalyst &mdash; Content Analyst Performance Suite</p>
+            <p>Report ID: {{RUN_ID}}</p>
+        </div>
+    </div>
+
+    <script>
+        const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+        new Chart(latencyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Average', 'P50', 'P95', 'P99'],
+                datasets: [
+                    {
+                        label: 'Text Payloads',
+                        data: {{LATENCY_TEXT_ARRAY}},
+                        backgroundColor: 'rgba(6,182,212,0.7)',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'URL Payloads',
+                        data: {{LATENCY_URL_ARRAY}},
+                        backgroundColor: 'rgba(59,130,246,0.7)',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Milliseconds' } }
+                }
+            }
+        });
+
+        const throughputCtx = document.getElementById('throughputChart').getContext('2d');
+        new Chart(throughputCtx, {
+            type: 'line',
+            data: {
+                labels: {{THROUGHPUT_TIMESTAMPS}},
+                datasets: [{
+                    label: 'Requests per Minute',
+                    data: {{THROUGHPUT_VALUES}},
+                    borderColor: 'rgba(14,165,233,1)',
+                    backgroundColor: 'rgba(14,165,233,0.2)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { ticks: { maxTicksLimit: 8 } }
+                }
+            }
+        });
+
+        const providerCtx = document.getElementById('providerChart').getContext('2d');
+        new Chart(providerCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['OpenAI', 'Anthropic Claude', 'Google Gemini'],
+                datasets: [{
+                    data: [{{OPENAI_SHARE}}, {{CLAUDE_SHARE}}, {{GEMINI_SHARE}}],
+                    backgroundColor: [
+                        'rgba(6,182,212,0.85)',
+                        'rgba(236,72,153,0.85)',
+                        'rgba(34,197,94,0.85)'
+                    ],
+                    borderColor: 'white',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.label}: ${ctx.parsed}%`
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

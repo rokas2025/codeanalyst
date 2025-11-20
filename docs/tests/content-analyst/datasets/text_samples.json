@@ -1,0 +1,21 @@
+[
+  {
+    "id": "TEXT_SHORT_EN",
+    "language": "en",
+    "description": "Short marketing blurb (~450 words) with HTML tags.",
+    "content": "<h2>Build smarter content experiences</h2><p>Our analytics pipeline ...</p>"
+  },
+  {
+    "id": "TEXT_LONG_LT",
+    "language": "lt",
+    "description": "Long-form Lithuanian article (~1800 words) covering AI adoption.",
+    "content": "<article><p>Dirbtinio intelekto sprendimai Baltijos rinkose ...</p></article>"
+  },
+  {
+    "id": "TEXT_NEWS_MIX",
+    "language": "en",
+    "description": "News-style article with quotes and lists.",
+    "content": "<p>The research team announced ...</p><ul><li>Insight 1</li><li>Insight 2</li></ul>"
+  }
+]
+

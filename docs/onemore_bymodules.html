@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeAnalyst - Module-by-Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.8em;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-top: 50px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 2em;
+        }
+        
+        h3 {
+            color: #555;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+            font-size: 1.6em;
+        }
+        
+        h4 {
+            color: #666;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .module-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .module-header h2 {
+            margin: 0;
+            background: none;
+            padding: 0;
+        }
+        
+        .module-description {
+            margin-top: 15px;
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .diagram-container {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            overflow-x: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .diagram-container mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .diagram-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        
+        .feature-list {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .feature-list ul {
+            margin-left: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .tech-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            color: #667eea;
+            border: none;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+        
+        .toc li {
+            margin: 10px 0;
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1.05em;
+            transition: all 0.3s;
+        }
+        
+        .toc a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .badge-implemented {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .badge-planned {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .data-flow {
+            background: #e8f4f8;
+            border-left: 5px solid #3498db;
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .api-endpoint {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .module-nav {
+            position: sticky;
+            top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            z-index: 100;
+        }
+        
+        .module-nav a {
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .module-nav a:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .module-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 CodeAnalyst - Module-by-Module Documentation</h1>
+        <p style="font-size: 1.2em; color: #666; margin-bottom: 30px; text-align: center;">
+            Comprehensive technical documentation with UML diagrams, data flows, and architecture details for each module
+        </p>
+        
+        <div class="toc">
+            <h3>📋 Table of Contents</h3>
+            <ul>
+                <li><a href="#module-1">1. Authentication Module</a></li>
+                <li><a href="#module-2">2. AI Code Analyst Module</a></li>
+                <li><a href="#module-3">3. AI Website Analyst Module</a></li>
+                <li><a href="#module-4">4. AI Content Analyst Module</a></li>
+                <li><a href="#module-5">5. AI Auto Programmer Module</a></li>
+                <li><a href="#module-6">6. AI Content Creator Module</a></li>
+                <li><a href="#module-7">7. WordPress Integration Module</a></li>
+                <li><a href="#module-8">8. User Management & Permissions Module</a></li>
+                <li><a href="#module-9">9. Settings & Configuration Module</a></li>
+                <li><a href="#module-10">10. Projects Management Module</a></li>
+            </ul>
+        </div>
+        
+        <div class="module-nav">
+            <strong>Quick Navigation:</strong>
+            <a href="#module-1">Auth</a>
+            <a href="#module-2">Code</a>
+            <a href="#module-3">Website</a>
+            <a href="#module-4">Content</a>
+            <a href="#module-5">AutoProg</a>
+            <a href="#module-6">Creator</a>
+            <a href="#module-7">WordPress</a>
+            <a href="#module-8">Users</a>
+            <a href="#module-9">Settings</a>
+            <a href="#module-10">Projects</a>
+        </div>
+        
+        <!-- MODULE 1: AUTHENTICATION -->
+        <div id="module-1">
+            <div class="module-header">
+                <h2>1. Authentication Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Hybrid authentication system supporting GitHub OAuth, Email/Password, and Google OAuth with JWT-based session management
+                </div>
+            </div>
+            
+            <h3>Class Diagram</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Authentication System Architecture</div>
+                <div class="mermaid">
+classDiagram
+    class AuthService {
+        -jwtSecret: string
+        -tokenExpiry: string
+        +initiateGitHubOAuth()
+        +handleGitHubCallback()
+        +registerEmailUser()
+        +loginEmailUser()
+        +loginWithGoogle()
+        +generateJWT()
+        +verifyJWT()
+        +refreshToken()
+    }
+    
+    class DatabaseService {
+        +createUser()
+        +getUserByEmail()
+        +getUserById()
+        +updateUserToken()
+        +syncSupabaseUser()
+    }
+    
+    class User {
+        -id: UUID
+        -email: string
+        -name: string
+        -avatar_url: string
+        -auth_provider: enum
+        -github_id: bigint
+        -github_username: string
+        -role: string
+        -is_active: boolean
+        -pending_approval: boolean
+    }
+    
+    AuthService --> DatabaseService
+    DatabaseService --> User
+                </div>
+            </div>
+            
+            <h3>Sequence Diagram - GitHub OAuth Flow</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">GitHub Authentication Process</div>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant GitHub
+    participant Database
+    
+    User->>Frontend: Click "Login with GitHub"
+    Frontend->>Backend: GET /api/auth/github
+    Backend->>Frontend: Return authUrl + state
+    Frontend->>GitHub: Redirect to OAuth
+    GitHub->>User: Request authorization
+    User->>GitHub: Approve
+    GitHub->>Backend: Callback with code
+    Backend->>GitHub: Exchange code for token
+    GitHub->>Backend: Return access_token
+    Backend->>GitHub: Fetch user profile
+    GitHub->>Backend: User data
+    Backend->>Database: Create/Update user
+    Database->>Backend: User record
+    Backend->>Backend: Generate JWT
+    Backend->>Frontend: Return JWT token
+    Frontend->>Frontend: Store in localStorage
+    Frontend->>User: Redirect to Dashboard
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Multi-Provider Support:</strong> GitHub OAuth, Email/Password (Supabase), Google OAuth (Supabase)</li>
+                    <li><strong>JWT Tokens:</strong> 30-day expiration, secure signing with HS256</li>
+                    <li><strong>Session Persistence:</strong> Tokens stored in localStorage, auto-refresh on page load</li>
+                    <li><strong>User Approval Workflow:</strong> New users require admin approval before activation</li>
+                    <li><strong>Role-Based Access:</strong> Superadmin, Admin, User roles</li>
+                </ul>
+            </div>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/auth/github - Initiate GitHub OAuth
+            </div>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/auth/github/callback - Handle GitHub callback
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/auth/register - Register with email/password
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/auth/login - Login with email/password
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/auth/login-supabase - Supabase auth (email/Google)
+            </div>
+            
+            <h3>Database Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Key Columns</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>users</code></td>
+                        <td>id, email, github_id, auth_provider, role, is_active, pending_approval</td>
+                        <td>Store user accounts and authentication data</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">JWT (jsonwebtoken)</div>
+                <div class="tech-item">GitHub OAuth API</div>
+                <div class="tech-item">Supabase Auth</div>
+                <div class="tech-item">bcrypt (password hashing)</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 2: CODE ANALYST -->
+        <div id="module-2">
+            <div class="module-header">
+                <h2>2. AI Code Analyst Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Analyzes source code from GitHub repositories, ZIP uploads, or WordPress themes using AI to provide quality scores, security assessments, and improvement recommendations
+                </div>
+            </div>
+            
+            <h3>Component Diagram</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Code Analysis System Components</div>
+                <div class="mermaid">
+graph TB
+    subgraph Frontend["Frontend Components"]
+        UI[Code Analyst UI]
+        Upload[File Upload]
+        GitHub[GitHub Input]
+        WordPress[WordPress Theme Selector]
+    end
+    
+    subgraph Backend["Backend Services"]
+        API[Code Analysis API]
+        Parser[Code Parser]
+        Analyzer[AdoreIno Analyzer]
+        AI[AI Analysis Service]
+    end
+    
+    subgraph External["External Services"]
+        GitHubAPI[GitHub API]
+        OpenAI[OpenAI GPT-4]
+        WP[WordPress API]
+    end
+    
+    subgraph Database["Data Storage"]
+        CodeDB[(code_analyses)]
+    end
+    
+    UI --> Upload
+    UI --> GitHub
+    UI --> WordPress
+    Upload --> API
+    GitHub --> GitHubAPI
+    WordPress --> WP
+    GitHubAPI --> API
+    WP --> API
+    API --> Parser
+    Parser --> Analyzer
+    Analyzer --> AI
+    AI --> OpenAI
+    API --> CodeDB
+                </div>
+            </div>
+            
+            <h3>Activity Diagram - Analysis Flow</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Code Analysis Process</div>
+                <div class="mermaid">
+stateDiagram-v2
+    [*] --> SelectInput
+    SelectInput --> GitHubRepo: GitHub URL
+    SelectInput --> ZIPUpload: ZIP File
+    SelectInput --> WordPressTheme: WordPress Theme
+    
+    GitHubRepo --> FetchCode
+    ZIPUpload --> ExtractFiles
+    WordPressTheme --> FetchTheme
+    
+    FetchCode --> ParseFiles
+    ExtractFiles --> ParseFiles
+    FetchTheme --> ParseFiles
+    
+    ParseFiles --> DetectLanguages
+    DetectLanguages --> CalculateMetrics
+    CalculateMetrics --> AIAnalysis
+    AIAnalysis --> GenerateReport
+    GenerateReport --> StoreResults
+    StoreResults --> DisplayReport
+    DisplayReport --> [*]
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Multiple Input Methods:</strong> GitHub URL, ZIP upload, WordPress theme analysis</li>
+                    <li><strong>Language Detection:</strong> Automatic detection of programming languages and frameworks</li>
+                    <li><strong>Quality Metrics:</strong> Code quality score (0-100), complexity, technical debt, test coverage</li>
+                    <li><strong>AI-Powered Insights:</strong> Architecture analysis, security vulnerabilities, code smells</li>
+                    <li><strong>Detailed Reports:</strong> System overview, technical structure, maintenance needs, recommendations</li>
+                    <li><strong>Real-Time Progress:</strong> Step-by-step progress tracking during analysis</li>
+                </ul>
+            </div>
+            
+            <h3>Data Flow</h3>
+            <div class="data-flow">
+                <strong>Input:</strong> GitHub URL / ZIP file / WordPress theme<br>
+                <strong>Processing:</strong> File parsing → Language detection → Metrics calculation → AI analysis<br>
+                <strong>Output:</strong> Quality score, recommendations, visualizations, detailed report<br>
+                <strong>Storage:</strong> code_analyses table (JSONB fields for flexible data)
+            </div>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/code-analysis - Start code analysis
+            </div>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/code-analysis/:id - Get analysis results
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/code-analysis/upload - Upload ZIP file
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">AdoreIno Analyzer</div>
+                <div class="tech-item">OpenAI GPT-4</div>
+                <div class="tech-item">JSZip (file extraction)</div>
+                <div class="tech-item">GitHub REST API</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 3: WEBSITE ANALYST -->
+        <div id="module-3">
+            <div class="module-header">
+                <h2>3. AI Website Analyst Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Comprehensive website analysis including performance metrics, SEO evaluation, accessibility checks, and security headers assessment
+                </div>
+            </div>
+            
+            <h3>System Architecture</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Website Analysis Architecture</div>
+                <div class="mermaid">
+graph LR
+    subgraph Input["Input Sources"]
+        URL[URL Input]
+        WP[WordPress Site]
+    end
+    
+    subgraph Analysis["Analysis Modules"]
+        Fetch[URL Fetcher]
+        Parse[HTML Parser]
+        Perf[Performance Analyzer]
+        SEO[SEO Analyzer]
+        Access[Accessibility Checker]
+        Sec[Security Analyzer]
+        PS[PageSpeed API]
+    end
+    
+    subgraph Output["Output"]
+        Report[Analysis Report]
+        DB[(url_analyses)]
+    end
+    
+    URL --> Fetch
+    WP --> Fetch
+    Fetch --> Parse
+    Parse --> Perf
+    Parse --> SEO
+    Parse --> Access
+    Parse --> Sec
+    Fetch --> PS
+    Perf --> Report
+    SEO --> Report
+    Access --> Report
+    Sec --> Report
+    PS --> Report
+    Report --> DB
+                </div>
+            </div>
+            
+            <h3>Analysis Components</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Website Analysis Breakdown</div>
+                <div class="mermaid">
+mindmap
+    root((Website<br/>Analysis))
+        Performance
+            Load Time
+            Resource Size
+            HTTP Requests
+            Render Blocking
+        SEO
+            Meta Tags
+            Headings
+            Keywords
+            Open Graph
+            Canonical URLs
+        Accessibility
+            ARIA Labels
+            Semantic HTML
+            Alt Text
+            Color Contrast
+        Security
+            HTTPS
+            Security Headers
+            CSP Policy
+            Mixed Content
+        PageSpeed
+            Mobile Score
+            Desktop Score
+            Core Web Vitals
+            Opportunities
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Performance Analysis:</strong> Load time, resource optimization, HTTP request analysis</li>
+                    <li><strong>SEO Evaluation:</strong> Meta tags, heading structure, keyword density, Open Graph</li>
+                    <li><strong>Accessibility Checks:</strong> ARIA compliance, semantic HTML, alt text coverage</li>
+                    <li><strong>Security Assessment:</strong> HTTPS verification, security headers (CSP, HSTS, X-Frame-Options)</li>
+                    <li><strong>PageSpeed Integration:</strong> Google PageSpeed Insights API for mobile/desktop scores</li>
+                    <li><strong>Language Detection:</strong> Automatic detection of page language</li>
+                </ul>
+            </div>
+            
+            <h3>Scoring System</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Weight</th>
+                        <th>Range</th>
+                        <th>Good Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Performance</td>
+                        <td>30%</td>
+                        <td>0-100</td>
+                        <td>≥ 80</td>
+                    </tr>
+                    <tr>
+                        <td>SEO</td>
+                        <td>30%</td>
+                        <td>0-100</td>
+                        <td>≥ 75</td>
+                    </tr>
+                    <tr>
+                        <td>Accessibility</td>
+                        <td>20%</td>
+                        <td>0-100</td>
+                        <td>≥ 85</td>
+                    </tr>
+                    <tr>
+                        <td>Security</td>
+                        <td>20%</td>
+                        <td>0-100</td>
+                        <td>≥ 90</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/analysis/url - Analyze website URL
+            </div>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/analysis/:id - Get analysis results
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">URL Fetcher</div>
+                <div class="tech-item">HTML Parser</div>
+                <div class="tech-item">Google PageSpeed API</div>
+                <div class="tech-item">Language Detector</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 4: CONTENT ANALYST -->
+        <div id="module-4">
+            <div class="module-header">
+                <h2>4. AI Content Analyst Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Analyzes text content for grammar, readability, SEO optimization, and provides improvement suggestions with multilingual support
+                </div>
+            </div>
+            
+            <h3>Analysis Pipeline</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Content Analysis Flow</div>
+                <div class="mermaid">
+flowchart TD
+    Start([User Input]) --> Input{Input Type?}
+    Input -->|Text| DirectText[Use Text Directly]
+    Input -->|URL| FetchURL[Fetch URL Content]
+    Input -->|WordPress| FetchWP[Fetch WP Page]
+    
+    DirectText --> Detect[Language Detection]
+    FetchURL --> Extract[Extract Text]
+    FetchWP --> Extract
+    Extract --> Detect
+    
+    Detect --> Grammar[Grammar Analysis]
+    Detect --> Readability[Readability Analysis]
+    Detect --> SEO[SEO Analysis]
+    Detect --> Keywords[Keyword Extraction]
+    
+    Grammar --> AI[AI Improvement]
+    Readability --> AI
+    SEO --> AI
+    Keywords --> AI
+    
+    AI --> Report[Generate Report]
+    Report --> End([Display Results])
+                </div>
+            </div>
+            
+            <h3>Analysis Components</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Content Analysis Metrics</div>
+                <div class="mermaid">
+graph TB
+    subgraph Grammar["Grammar Analysis"]
+        G1[Spelling Errors]
+        G2[Grammar Rules]
+        G3[Issue Detection]
+        G4[Suggestions]
+    end
+    
+    subgraph Readability["Readability Analysis"]
+        R1[Flesch-Kincaid Score]
+        R2[Sentence Complexity]
+        R3[Paragraph Structure]
+        R4[Lexical Diversity]
+    end
+    
+    subgraph SEO["SEO Analysis"]
+        S1[Word Count]
+        S2[Keyword Density]
+        S3[Heading Usage]
+        S4[Meta Quality]
+    end
+    
+    subgraph Output["Output"]
+        O1[Improved Version]
+        O2[Scores 0-100]
+        O3[Key Terms]
+        O4[Recommendations]
+    end
+    
+    Grammar --> Output
+    Readability --> Output
+    SEO --> Output
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Multi-Input Support:</strong> Direct text, URL scraping, WordPress page selection</li>
+                    <li><strong>Language Detection:</strong> Automatic detection (English, Lithuanian, and more)</li>
+                    <li><strong>Grammar Checking:</strong> AI-powered grammar and spelling error detection</li>
+                    <li><strong>Readability Metrics:</strong> Flesch-Kincaid score, sentence complexity, paragraph analysis</li>
+                    <li><strong>SEO Optimization:</strong> Keyword analysis, heading structure, meta description quality</li>
+                    <li><strong>AI Improvement:</strong> Generate improved version of content with better grammar and structure</li>
+                    <li><strong>Keyword Extraction:</strong> Identify and rank important terms</li>
+                </ul>
+            </div>
+            
+            <h3>Multilingual Support</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Language</th>
+                        <th>Code</th>
+                        <th>Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>English</td>
+                        <td>en</td>
+                        <td>Full support (grammar, readability, SEO)</td>
+                    </tr>
+                    <tr>
+                        <td>Lithuanian</td>
+                        <td>lt</td>
+                        <td>Full support with localized UI</td>
+                    </tr>
+                    <tr>
+                        <td>Others</td>
+                        <td>auto-detect</td>
+                        <td>Basic analysis (readability, SEO)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/content-analysis - Analyze content
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">Language Detector</div>
+                <div class="tech-item">OpenAI GPT-4</div>
+                <div class="tech-item">Readability Algorithms</div>
+                <div class="tech-item">Keyword Extractor</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 5: AUTO PROGRAMMER -->
+        <div id="module-5">
+            <div class="module-header">
+                <h2>5. AI Auto Programmer Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Chat-based AI assistant for code generation, feature implementation, and automated code changes with support for GitHub projects and WordPress sites
+                </div>
+            </div>
+            
+            <h3>System Architecture</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Auto Programmer Architecture</div>
+                <div class="mermaid">
+graph TB
+    subgraph Frontend["Frontend"]
+        Chat[Chat Interface]
+        Preview[Code Preview]
+        FileTree[File Tree]
+    end
+    
+    subgraph Backend["Backend"]
+        ChatAPI[Chat API]
+        Context[Context Builder]
+        Parser[Code Parser]
+    end
+    
+    subgraph AI["AI Service"]
+        GPT4[OpenAI GPT-4]
+        Stream[Streaming Response]
+    end
+    
+    subgraph Projects["Project Types"]
+        GitHub[GitHub Repo]
+        WordPress[WordPress Site]
+    end
+    
+    Chat --> ChatAPI
+    ChatAPI --> Context
+    Context --> GitHub
+    Context --> WordPress
+    Context --> GPT4
+    GPT4 --> Stream
+    Stream --> Parser
+    Parser --> Preview
+    Parser --> FileTree
+                </div>
+            </div>
+            
+            <h3>Chat Flow Sequence</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">AI Chat Interaction Flow</div>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant OpenAI
+    
+    User->>Frontend: Select Project
+    Frontend->>Backend: Load project context
+    Backend->>Frontend: Project details
+    
+    User->>Frontend: Type message
+    Frontend->>Backend: POST /api/chat
+    Backend->>Backend: Build context
+    Backend->>OpenAI: Stream chat completion
+    
+    loop Streaming Response
+        OpenAI->>Backend: Text delta
+        Backend->>Frontend: Stream chunk
+        Frontend->>User: Display text
+    end
+    
+    OpenAI->>Backend: Complete
+    Backend->>Frontend: Parse code blocks
+    Frontend->>User: Show code preview
+    
+    User->>Frontend: Approve changes
+    Frontend->>Frontend: Apply to file tree
+    Frontend->>User: Updated preview
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Dual Mode Support:</strong> GitHub projects (code generation) and WordPress sites (HTML generation)</li>
+                    <li><strong>Real-Time Streaming:</strong> AI responses stream in real-time for better UX</li>
+                    <li><strong>Context-Aware:</strong> Understands project structure, selected files, and previous conversation</li>
+                    <li><strong>Code Parsing:</strong> Automatically detects FILE/ACTION/CODE format for GitHub projects</li>
+                    <li><strong>Builder Detection:</strong> Detects Elementor, Gutenberg, Divi, Classic Editor for WordPress</li>
+                    <li><strong>Preview System:</strong> Live preview of code changes before applying</li>
+                    <li><strong>Conversation History:</strong> Maintains chat context for follow-up questions</li>
+                </ul>
+            </div>
+            
+            <h3>Code Generation Format</h3>
+            <div class="data-flow">
+                <strong>GitHub Projects:</strong><br>
+                FILE: path/to/file.tsx<br>
+                ACTION: create|modify|delete<br>
+                CODE:<br>
+                ```typescript<br>
+                // Generated code here<br>
+                ```<br><br>
+                
+                <strong>WordPress Sites:</strong><br>
+                Generates styled HTML with inline CSS<br>
+                Provides builder-specific instructions<br>
+                Preview-only mode (no direct deployment)
+            </div>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/chat - Send chat message and get AI response
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">OpenAI GPT-4</div>
+                <div class="tech-item">Streaming API</div>
+                <div class="tech-item">Code Parser</div>
+                <div class="tech-item">Virtual File System</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 6: CONTENT CREATOR -->
+        <div id="module-6">
+            <div class="module-header">
+                <h2>6. AI Content Creator Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Generates new content with AI using customizable templates, SEO optimization, and multilingual support with translation capabilities
+                </div>
+            </div>
+            
+            <h3>Content Generation Flow</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Content Creation Process</div>
+                <div class="mermaid">
+flowchart TD
+    Start([User]) --> Select[Select Template]
+    Select --> Load[Load Template Structure]
+    Load --> Form[Fill Input Form]
+    Form --> Settings[Configure Settings]
+    
+    Settings --> Build[Build AI Prompt]
+    Build --> AI[Generate with AI]
+    AI --> Format[Format Content]
+    Format --> Analyze[Analyze Quality]
+    
+    Analyze --> Store[Store in Database]
+    Store --> Preview[Preview Content]
+    
+    Preview --> Export{Export?}
+    Export -->|Yes| ExportFormat[Choose Format]
+    Export -->|Translate| Translate[Translate Content]
+    Export -->|Edit| Form
+    
+    ExportFormat --> End([Download])
+    Translate --> Store
+                </div>
+            </div>
+            
+            <h3>Template System</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Content Templates</div>
+                <div class="mermaid">
+mindmap
+    root((Content<br/>Templates))
+        Blog Post
+            Title
+            Introduction
+            Main Content
+            Conclusion
+            CTA
+        Product Description
+            Product Name
+            Features
+            Benefits
+            Specifications
+        Social Media
+            Platform Type
+            Tone
+            Hashtags
+            Call to Action
+        Email Newsletter
+            Subject Line
+            Header
+            Body Sections
+            Footer
+        Landing Page
+            Hero Section
+            Features
+            Testimonials
+            CTA Section
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Template Library:</strong> Pre-built templates for various content types</li>
+                    <li><strong>Dynamic Forms:</strong> Template-specific input fields</li>
+                    <li><strong>AI Generation:</strong> Context-aware content generation with customizable parameters</li>
+                    <li><strong>SEO Optimization:</strong> Automatic keyword integration and meta description generation</li>
+                    <li><strong>Multilingual Support:</strong> Generate content in multiple languages</li>
+                    <li><strong>Translation:</strong> Translate generated content to other languages</li>
+                    <li><strong>Export Formats:</strong> HTML, Markdown, Plain Text</li>
+                    <li><strong>Quality Analysis:</strong> SEO score and readability metrics</li>
+                </ul>
+            </div>
+            
+            <h3>Content Templates</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Template</th>
+                        <th>Category</th>
+                        <th>Fields</th>
+                        <th>Output Format</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Blog Post</td>
+                        <td>Content Marketing</td>
+                        <td>Topic, Keywords, Tone, Length</td>
+                        <td>HTML, Markdown</td>
+                    </tr>
+                    <tr>
+                        <td>Product Description</td>
+                        <td>E-commerce</td>
+                        <td>Product Name, Features, Target Audience</td>
+                        <td>HTML, Plain Text</td>
+                    </tr>
+                    <tr>
+                        <td>Social Media Post</td>
+                        <td>Social Media</td>
+                        <td>Platform, Message, Hashtags</td>
+                        <td>Plain Text</td>
+                    </tr>
+                    <tr>
+                        <td>Email Newsletter</td>
+                        <td>Email Marketing</td>
+                        <td>Subject, Sections, CTA</td>
+                        <td>HTML</td>
+                    </tr>
+                    <tr>
+                        <td>Landing Page</td>
+                        <td>Web Content</td>
+                        <td>Headline, Features, Benefits</td>
+                        <td>HTML</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/content-creator/templates - Get all templates
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/content-creator/generate - Generate content
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/content-creator/translate - Translate content
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">OpenAI GPT-4</div>
+                <div class="tech-item">Template Engine</div>
+                <div class="tech-item">SEO Analyzer</div>
+                <div class="tech-item">Multi-format Exporter</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 7: WORDPRESS INTEGRATION -->
+        <div id="module-7">
+            <div class="module-header">
+                <h2>7. WordPress Integration Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Connects WordPress sites to CodeAnalyst for theme analysis, content management, and page editing through a WordPress plugin
+                </div>
+            </div>
+            
+            <h3>Integration Architecture</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">WordPress Integration System</div>
+                <div class="mermaid">
+graph TB
+    subgraph CodeAnalyst["CodeAnalyst Platform"]
+        Settings[Settings Page]
+        KeyGen[API Key Generator]
+        Sites[Connected Sites]
+        Modules[Analysis Modules]
+    end
+    
+    subgraph WordPress["WordPress Site"]
+        Plugin[CodeAnalyst Plugin]
+        WPAPI[WordPress REST API]
+        Theme[Active Theme]
+        Pages[Pages/Posts]
+    end
+    
+    subgraph Database["Database"]
+        Connections[(wordpress_connections)]
+        WPPages[(wordpress_pages)]
+        WPFiles[(wordpress_files)]
+    end
+    
+    Settings --> KeyGen
+    KeyGen --> Plugin
+    Plugin --> WPAPI
+    WPAPI --> Sites
+    Sites --> Connections
+    
+    Modules --> WPAPI
+    WPAPI --> Theme
+    WPAPI --> Pages
+    Theme --> WPFiles
+    Pages --> WPPages
+                </div>
+            </div>
+            
+            <h3>Connection Flow</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">WordPress Site Connection Process</div>
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Settings
+    participant Backend
+    participant WPPlugin
+    participant WPAPI
+    participant Database
+    
+    User->>Settings: Generate API Key
+    Settings->>Backend: POST /wordpress/generate-key
+    Backend->>Database: Store encrypted key
+    Backend->>Settings: Return API key
+    Settings->>User: Display key
+    
+    User->>WPPlugin: Install & activate plugin
+    User->>WPPlugin: Enter API key
+    WPPlugin->>Backend: POST /wordpress/connect
+    Backend->>Database: Verify key
+    Backend->>WPPlugin: Request site info
+    WPPlugin->>WPAPI: Get site details
+    WPAPI->>WPPlugin: Site info
+    WPPlugin->>Backend: Send site info
+    Backend->>Database: Store connection
+    Backend->>WPPlugin: Connection successful
+    WPPlugin->>User: Show success message
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Secure Connection:</strong> Encrypted API keys for authentication</li>
+                    <li><strong>One-Click Setup:</strong> Simple plugin installation and connection</li>
+                    <li><strong>Theme Analysis:</strong> Fetch and analyze WordPress theme files</li>
+                    <li><strong>Page Management:</strong> List and fetch pages/posts with content</li>
+                    <li><strong>Builder Detection:</strong> Auto-detect Elementor, Gutenberg, Divi, Classic Editor</li>
+                    <li><strong>Content Sync:</strong> Synchronize page content for analysis</li>
+                    <li><strong>Site Health:</strong> Monitor WordPress version, theme, plugins</li>
+                </ul>
+            </div>
+            
+            <h3>Supported Page Builders</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Builder</th>
+                        <th>Detection Method</th>
+                        <th>Data Format</th>
+                        <th>Support Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Elementor</td>
+                        <td>_elementor_data meta</td>
+                        <td>JSON</td>
+                        <td>Full</td>
+                    </tr>
+                    <tr>
+                        <td>Gutenberg</td>
+                        <td><!-- wp: blocks</td>
+                        <td>Block HTML</td>
+                        <td>Full</td>
+                    </tr>
+                    <tr>
+                        <td>Divi</td>
+                        <td>[et_pb_ shortcodes</td>
+                        <td>Shortcodes</td>
+                        <td>Basic</td>
+                    </tr>
+                    <tr>
+                        <td>Classic Editor</td>
+                        <td>Plain HTML</td>
+                        <td>HTML</td>
+                        <td>Full</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/wordpress/generate-key - Generate API key
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/wordpress/connect - Connect WordPress site
+            </div>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/wordpress/sites - Get connected sites
+            </div>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/wordpress/pages/:connectionId - Get site pages
+            </div>
+            <div class="api-endpoint">
+                <strong>DELETE</strong> /api/wordpress/disconnect/:id - Disconnect site
+            </div>
+            
+            <h3>Database Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                        <th>Key Columns</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>wordpress_connections</code></td>
+                        <td>Store connected WordPress sites</td>
+                        <td>id, user_id, site_url, api_key, site_info</td>
+                    </tr>
+                    <tr>
+                        <td><code>wordpress_pages</code></td>
+                        <td>Store WordPress pages/posts</td>
+                        <td>id, connection_id, post_id, editor_type, content</td>
+                    </tr>
+                    <tr>
+                        <td><code>wordpress_files</code></td>
+                        <td>Store WordPress theme files</td>
+                        <td>id, connection_id, file_path, file_content</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">WordPress REST API</div>
+                <div class="tech-item">Custom WP Plugin</div>
+                <div class="tech-item">AES Encryption</div>
+                <div class="tech-item">Builder Detection</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 8: USER MANAGEMENT -->
+        <div id="module-8">
+            <div class="module-header">
+                <h2>8. User Management & Permissions Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Role-based access control system with user approval workflow, project assignments, and module-level permissions
+                </div>
+            </div>
+            
+            <h3>Role Hierarchy</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">User Roles and Permissions</div>
+                <div class="mermaid">
+graph TD
+    Superadmin[Superadmin]
+    Admin[Admin]
+    User[Regular User]
+    
+    Superadmin --> ManageAll[Manage All Users]
+    Superadmin --> ViewAll[View All Projects]
+    Superadmin --> SystemConfig[System Configuration]
+    Superadmin --> Analytics[System Analytics]
+    
+    Admin --> CreateProjects[Create Projects]
+    Admin --> InviteUsers[Invite Users]
+    Admin --> ManageModules[Manage Module Access]
+    Admin --> ViewOwn[View Own Projects]
+    
+    User --> AccessProjects[Access Assigned Projects]
+    User --> UseModules[Use Permitted Modules]
+    User --> ViewResults[View Own Results]
+    
+    style Superadmin fill:#e74c3c,color:#fff
+    style Admin fill:#3498db,color:#fff
+    style User fill:#2ecc71,color:#fff
+                </div>
+            </div>
+            
+            <h3>User Lifecycle</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">User Account States</div>
+                <div class="mermaid">
+stateDiagram-v2
+    [*] --> Registration
+    Registration --> PendingApproval
+    PendingApproval --> AdminReview
+    
+    AdminReview --> Approved: Approve
+    AdminReview --> Rejected: Reject
+    
+    Approved --> Active
+    Active --> Deactivated: Admin deactivates
+    Deactivated --> Active: Admin reactivates
+    
+    Rejected --> [*]
+    Active --> [*]: User deletes account
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Three-Tier Roles:</strong> Superadmin, Admin, Regular User</li>
+                    <li><strong>Approval Workflow:</strong> New users require admin approval</li>
+                    <li><strong>Project Assignment:</strong> Admins invite users to their projects</li>
+                    <li><strong>Module Permissions:</strong> Granular access control per module per project</li>
+                    <li><strong>Activation Logging:</strong> Audit trail for user status changes</li>
+                    <li><strong>Account Management:</strong> Activate, deactivate, approve users</li>
+                </ul>
+            </div>
+            
+            <h3>Permission Matrix</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Superadmin</th>
+                        <th>Admin</th>
+                        <th>User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Manage all users</td>
+                        <td>✓</td>
+                        <td>✗</td>
+                        <td>✗</td>
+                    </tr>
+                    <tr>
+                        <td>View all projects</td>
+                        <td>✓</td>
+                        <td>✗</td>
+                        <td>✗</td>
+                    </tr>
+                    <tr>
+                        <td>Create projects</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                        <td>✗</td>
+                    </tr>
+                    <tr>
+                        <td>Invite users to projects</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                        <td>✗</td>
+                    </tr>
+                    <tr>
+                        <td>Set module permissions</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                        <td>✗</td>
+                    </tr>
+                    <tr>
+                        <td>Run analyses</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td>View own results</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/superadmin/users - Get all users (superadmin only)
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/superadmin/users/:id/approve - Approve user
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/superadmin/users/:id/deactivate - Deactivate user
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/projects/:id/invite - Invite user to project
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">Role Middleware</div>
+                <div class="tech-item">Permission Checker</div>
+                <div class="tech-item">Audit Logging</div>
+                <div class="tech-item">JWT Claims</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 9: SETTINGS -->
+        <div id="module-9">
+            <div class="module-header">
+                <h2>9. Settings & Configuration Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Centralized configuration management for AI providers, API keys, integrations, and user preferences
+                </div>
+            </div>
+            
+            <h3>Settings Architecture</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Settings Management System</div>
+                <div class="mermaid">
+graph TB
+    subgraph Frontend["Frontend Settings"]
+        UI[Settings UI]
+        Store[Settings Store]
+    end
+    
+    subgraph Backend["Backend"]
+        API[Settings API]
+        Encryption[Key Encryption]
+        Validation[Key Validation]
+    end
+    
+    subgraph Storage["Storage"]
+        LocalStorage[Browser LocalStorage]
+        Database[(user_api_keys)]
+    end
+    
+    subgraph Providers["AI Providers"]
+        OpenAI[OpenAI]
+        Anthropic[Anthropic]
+        Google[Google AI]
+    end
+    
+    UI --> Store
+    Store --> LocalStorage
+    Store --> API
+    API --> Encryption
+    Encryption --> Database
+    API --> Validation
+    Validation --> OpenAI
+    Validation --> Anthropic
+    Validation --> Google
+                </div>
+            </div>
+            
+            <h3>API Key Priority</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">API Key Resolution Flow</div>
+                <div class="mermaid">
+flowchart TD
+    Start([AI Request]) --> Check1{User API Key?}
+    Check1 -->|Yes| UseUser[Use User Key]
+    Check1 -->|No| Check2{Environment Key?}
+    Check2 -->|Yes| UseEnv[Use Environment Key]
+    Check2 -->|No| UseMock[Use Mock/Demo Mode]
+    
+    UseUser --> Validate[Validate Key]
+    UseEnv --> Validate
+    UseMock --> End([Execute Request])
+    
+    Validate --> Valid{Valid?}
+    Valid -->|Yes| End
+    Valid -->|No| Error[Return Error]
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Multi-Provider Support:</strong> OpenAI, Anthropic (Claude), Google Gemini</li>
+                    <li><strong>API Key Management:</strong> User-provided keys with encryption</li>
+                    <li><strong>Key Priority System:</strong> User keys → Environment keys → Demo mode</li>
+                    <li><strong>WordPress Integration:</strong> Generate and manage WordPress plugin API keys</li>
+                    <li><strong>Beenex CRM:</strong> Configure CRM integration (planned)</li>
+                    <li><strong>Validation:</strong> Real-time API key format validation</li>
+                    <li><strong>Security:</strong> AES-256 encryption for stored keys</li>
+                </ul>
+            </div>
+            
+            <h3>Supported AI Providers</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>Models</th>
+                        <th>Key Format</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>OpenAI</td>
+                        <td>GPT-4 Turbo, GPT-4</td>
+                        <td>sk-...</td>
+                        <td>✓ Active</td>
+                    </tr>
+                    <tr>
+                        <td>Anthropic</td>
+                        <td>Claude 3 Sonnet</td>
+                        <td>sk-ant-...</td>
+                        <td>✓ Active</td>
+                    </tr>
+                    <tr>
+                        <td>Google AI</td>
+                        <td>Gemini 2.5 Flash</td>
+                        <td>AI...</td>
+                        <td>✓ Active</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/settings - Get user settings
+            </div>
+            <div class="api-endpoint">
+                <strong>PUT</strong> /api/settings - Update settings
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/settings/api-key - Save API key
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/settings/validate-key - Validate API key
+            </div>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">Zustand (State)</div>
+                <div class="tech-item">AES Encryption</div>
+                <div class="tech-item">Key Validation</div>
+                <div class="tech-item">LocalStorage</div>
+            </div>
+        </div>
+        
+        <!-- MODULE 10: PROJECTS -->
+        <div id="module-10">
+            <div class="module-header">
+                <h2>10. Projects Management Module <span class="badge badge-implemented">✓ Implemented</span></h2>
+                <div class="module-description">
+                    Organize and manage GitHub repositories and WordPress sites as projects with team collaboration and module access control
+                </div>
+            </div>
+            
+            <h3>Project Architecture</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Project Management System</div>
+                <div class="mermaid">
+graph TB
+    subgraph Users["Users"]
+        Admin[Admin/Owner]
+        Member[Team Members]
+    end
+    
+    subgraph Projects["Projects"]
+        GitHubProj[GitHub Project]
+        WordPressProj[WordPress Project]
+    end
+    
+    subgraph Permissions["Permissions"]
+        ModulePerm[Module Permissions]
+        RolePerm[Role Permissions]
+    end
+    
+    subgraph Analyses["Analyses"]
+        CodeAnal[Code Analyses]
+        URLAnal[URL Analyses]
+    end
+    
+    Admin --> GitHubProj
+    Admin --> WordPressProj
+    Admin --> ModulePerm
+    
+    Member --> GitHubProj
+    Member --> WordPressProj
+    
+    ModulePerm --> RolePerm
+    
+    GitHubProj --> CodeAnal
+    WordPressProj --> CodeAnal
+    GitHubProj --> URLAnal
+    WordPressProj --> URLAnal
+                </div>
+            </div>
+            
+            <h3>Project Lifecycle</h3>
+            <div class="diagram-container">
+                <div class="diagram-title">Project States</div>
+                <div class="mermaid">
+stateDiagram-v2
+    [*] --> Created
+    Created --> Active: Activate
+    Active --> InviteUsers: Add team members
+    InviteUsers --> SetPermissions: Configure access
+    SetPermissions --> Running: Start analyses
+    Running --> Active: Continue work
+    Active --> Archived: Archive project
+    Archived --> Active: Restore
+    Archived --> [*]: Delete
+                </div>
+            </div>
+            
+            <h3>Key Features</h3>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Project Types:</strong> GitHub repositories, WordPress sites</li>
+                    <li><strong>Ownership:</strong> Admin creates and owns projects</li>
+                    <li><strong>Team Collaboration:</strong> Invite multiple users to projects</li>
+                    <li><strong>Module Access Control:</strong> Per-user, per-project, per-module permissions</li>
+                    <li><strong>Analysis History:</strong> Track all analyses for each project</li>
+                    <li><strong>Project Settings:</strong> Customizable JSONB settings</li>
+                    <li><strong>Project Dashboard:</strong> Overview of project activity</li>
+                </ul>
+            </div>
+            
+            <h3>Project Types</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Source</th>
+                        <th>Supported Modules</th>
+                        <th>Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GitHub</td>
+                        <td>GitHub Repository</td>
+                        <td>Code Analyst, Auto Programmer</td>
+                        <td>Code analysis, AI code generation</td>
+                    </tr>
+                    <tr>
+                        <td>WordPress</td>
+                        <td>WordPress Site</td>
+                        <td>Code Analyst, Website Analyst, Content Analyst, Auto Programmer</td>
+                        <td>Theme analysis, site analysis, content analysis, HTML generation</td>
+                    </tr>
+                    <tr>
+                        <td>URL</td>
+                        <td>Website URL</td>
+                        <td>Website Analyst, Content Analyst</td>
+                        <td>Performance, SEO, accessibility analysis</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>API Endpoints</h3>
+            <div class="api-endpoint">
+                <strong>GET</strong> /api/projects - Get user projects
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/projects - Create new project
+            </div>
+            <div class="api-endpoint">
+                <strong>PUT</strong> /api/projects/:id - Update project
+            </div>
+            <div class="api-endpoint">
+                <strong>DELETE</strong> /api/projects/:id - Delete project
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/projects/:id/invite - Invite user to project
+            </div>
+            <div class="api-endpoint">
+                <strong>POST</strong> /api/projects/:id/permissions - Set module permissions
+            </div>
+            
+            <h3>Database Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Purpose</th>
+                        <th>Key Columns</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>projects</code></td>
+                        <td>Store project information</td>
+                        <td>id, name, type, owner_id, source_url</td>
+                    </tr>
+                    <tr>
+                        <td><code>project_members</code></td>
+                        <td>Project team members</td>
+                        <td>id, project_id, user_id, role</td>
+                    </tr>
+                    <tr>
+                        <td><code>module_permissions</code></td>
+                        <td>Module access control</td>
+                        <td>id, project_id, user_id, module_name, has_access</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Technology Stack</h3>
+            <div class="tech-stack">
+                <div class="tech-item">Project Context</div>
+                <div class="tech-item">Access Control</div>
+                <div class="tech-item">Team Management</div>
+                <div class="tech-item">Analysis Tracking</div>
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+        <div style="margin-top: 80px; padding-top: 30px; border-top: 3px solid #667eea; text-align: center; color: #666;">
+            <p style="font-size: 1.1em; margin-bottom: 10px;">
+                <strong>CodeAnalyst System Documentation</strong>
+            </p>
+            <p>Module-by-Module Technical Reference v1.0</p>
+            <p style="margin-top: 15px;">Generated: <span id="date"></span></p>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #999;">
+                This documentation provides comprehensive UML diagrams, data flows, and architecture details for each module in the CodeAnalyst system.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            sequence: {
+                diagramMarginX: 50,
+                diagramMarginY: 10,
+                actorMargin: 50,
+                width: 150,
+                height: 65,
+                boxMargin: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35
+            },
+            er: {
+                fontSize: 12
+            },
+            class: {
+                fontSize: 14
+            }
+        });
+        
+        // Set current date
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+    </script>
+</body>
+</html>
+

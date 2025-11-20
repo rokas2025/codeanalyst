@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { GlobeAltIcon, ExclamationTriangleIcon, CheckCircleIcon, ChartBarIcon } from '@heroicons/react/24/outline'
+import { GlobeAltIcon, ExclamationTriangleIcon, CheckCircleIcon, ChartBarIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 import WebsiteAnalysisReport from '../../components/WebsiteAnalysisReport'
 import { AdoreInoReport } from '../../components/AdoreInoReport'
@@ -29,6 +29,7 @@ function WebsiteAnalystContent() {
   const [useBackend, setUseBackend] = useState<boolean>(true)
   const [backendStatus, setBackendStatus] = useState<'checking' | 'available' | 'unavailable'>('checking')
   const [currentAnalysisId, setCurrentAnalysisId] = useState<string | null>(null)
+  const [usePageSpeed, setUsePageSpeed] = useState<boolean>(true)
 
   // Check backend availability on component mount
   useEffect(() => {
@@ -128,7 +129,8 @@ function WebsiteAnalystContent() {
               options: {
                 aiProfile: 'mixed', // For URL analysis, use mixed profile
                 deepAnalysis: true,
-                includeScreenshots: false
+                includeScreenshots: false,
+                usePageSpeed: usePageSpeed // Enable/disable PageSpeed API
               }
             })
             
@@ -425,6 +427,28 @@ function WebsiteAnalystContent() {
                 </>
               )}
             </button>
+          </div>
+          
+          {/* PageSpeed Toggle */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+            <div>
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={usePageSpeed}
+                  onChange={(e) => setUsePageSpeed(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-900">Use Google PageSpeed Insights</span>
+                  <p className="text-xs text-gray-500">Get real-world performance data from Google (adds ~30s)</p>
+                </div>
+              </label>
+            </div>
+            <div className="flex items-center space-x-1 text-xs text-gray-400">
+              <SparklesIcon className="w-4 h-4" />
+              <span>Powered by Google</span>
+            </div>
           </div>
         </div>
       </div>

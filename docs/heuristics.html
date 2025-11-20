@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usability Heuristics Improvement Plan - CodeAnalyst System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .section {
+            scroll-margin-top: 80px;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+        .priority-high {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .priority-medium {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .priority-low {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .nav-link {
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Usability Heuristics Improvement Plan</h1>
+            <p class="text-gray-600 mt-1">CodeAnalyst System - Nielsen Norman Group's 10 Usability Heuristics</p>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="lg:col-span-1">
+                <nav class="sticky top-24 bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="font-semibold text-gray-900 mb-4">Contents</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#h1" class="nav-link block px-3 py-2 rounded text-gray-700">1. Visibility of System Status</a></li>
+                        <li><a href="#h2" class="nav-link block px-3 py-2 rounded text-gray-700">2. Match Between System and Real World</a></li>
+                        <li><a href="#h3" class="nav-link block px-3 py-2 rounded text-gray-700">3. User Control and Freedom</a></li>
+                        <li><a href="#h4" class="nav-link block px-3 py-2 rounded text-gray-700">4. Consistency and Standards</a></li>
+                        <li><a href="#h5" class="nav-link block px-3 py-2 rounded text-gray-700">5. Error Prevention</a></li>
+                        <li><a href="#h6" class="nav-link block px-3 py-2 rounded text-gray-700">6. Recognition Rather Than Recall</a></li>
+                        <li><a href="#h7" class="nav-link block px-3 py-2 rounded text-gray-700">7. Flexibility and Efficiency of Use</a></li>
+                        <li><a href="#h8" class="nav-link block px-3 py-2 rounded text-gray-700">8. Aesthetic and Minimalist Design</a></li>
+                        <li><a href="#h9" class="nav-link block px-3 py-2 rounded text-gray-700">9. Help Users Recognize, Diagnose, and Recover from Errors</a></li>
+                        <li><a href="#h10" class="nav-link block px-3 py-2 rounded text-gray-700">10. Help and Documentation</a></li>
+                        <li><a href="#priority-matrix" class="nav-link block px-3 py-2 rounded text-gray-700">Implementation Priority Matrix</a></li>
+                        <li><a href="#metrics" class="nav-link block px-3 py-2 rounded text-gray-700">Success Metrics</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-3 space-y-8">
+                <!-- Overview -->
+                <section class="bg-white rounded-lg shadow-sm p-8">
+                    <div class="prose max-w-none">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+                        <p class="text-gray-700 leading-relaxed">
+                            This document provides a comprehensive analysis of the CodeAnalyst system against Nielsen Norman Group's 10 Usability Heuristics, 
+                            with specific recommendations for improvements that enhance user experience without requiring major redesigns.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mt-4">
+                            <strong>Reference:</strong> 
+                            <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" class="text-blue-600 hover:underline" target="_blank">
+                                Nielsen Norman Group - 10 Usability Heuristics
+                            </a>
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Heuristic 1 -->
+                <section id="h1" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">1. Visibility of System Status</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-900 mb-2">✅ Good</h3>
+                            <ul class="text-sm text-green-800 space-y-1">
+                                <li>• Analysis progress indicators show percentage</li>
+                                <li>• Loading states with spinners</li>
+                                <li>• Toast notifications for actions</li>
+                                <li>• "Analyzing..." messages with step descriptions</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-red-900 mb-2">❌ Needs Improvement</h3>
+                            <ul class="text-sm text-red-800 space-y-1">
+                                <li>• No persistent status bar for long-running operations</li>
+                                <li>• AI analysis steps not clearly visible</li>
+                                <li>• No indication of estimated time remaining</li>
+                                <li>• Background processes invisible to users</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-red-500 pl-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="priority-high">HIGH PRIORITY</span>
+                                <span class="text-gray-600">Medium Effort</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">1.1 Add Progress Timeline for Analysis</h3>
+                            <p class="text-gray-700 mb-4">Create a ProgressTimeline component to show current step, completed steps, and remaining steps with estimated time.</p>
+                            <div class="code-block">
+&lt;ProgressTimeline&gt;
+  &lt;Step status="completed"&gt;Fetching data&lt;/Step&gt;
+  &lt;Step status="in-progress"&gt;Running AI analysis (2/5)&lt;/Step&gt;
+  &lt;Step status="pending"&gt;Generating report&lt;/Step&gt;
+  &lt;Step status="pending"&gt;Calculating scores&lt;/Step&gt;
+&lt;/ProgressTimeline&gt;</div>
+                        </div>
+
+                        <div class="border-l-4 border-yellow-500 pl-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="priority-medium">MEDIUM PRIORITY</span>
+                                <span class="text-gray-600">Low Effort</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">1.2 Add Persistent Status Bar</h3>
+                            <p class="text-gray-700 mb-4">Add a status bar that allows users to navigate away while still seeing progress.</p>
+                            <div class="code-block">
+&lt;StatusBar&gt;
+  {isAnalyzing && (
+    &lt;div className="status-item"&gt;
+      &lt;Spinner size="sm" /&gt;
+      &lt;span&gt;Analyzing "My Project" - 45% complete&lt;/span&gt;
+      &lt;button onClick={viewDetails}&gt;View Details&lt;/button&gt;
+    &lt;/div&gt;
+  )}
+&lt;/StatusBar&gt;</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Heuristic 2 -->
+                <section id="h2" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">2. Match Between System and Real World</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-900 mb-2">✅ Good</h3>
+                            <ul class="text-sm text-green-800 space-y-1">
+                                <li>• Module names are descriptive</li>
+                                <li>• Clear action buttons</li>
+                                <li>• Familiar icons from Heroicons</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-red-900 mb-2">❌ Needs Improvement</h3>
+                            <ul class="text-sm text-red-800 space-y-1">
+                                <li>• Technical jargon in error messages</li>
+                                <li>• Some metrics unclear to non-technical users</li>
+                                <li>• No contextual explanations for scores</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-red-500 pl-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="priority-high">HIGH PRIORITY</span>
+                                <span class="text-gray-600">Low Effort</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">2.1 Add Plain-Language Explanations</h3>
+                            <p class="text-gray-700 mb-4">Add tooltips to technical terms and "What does this mean?" links for complex metrics.</p>
+                            <div class="code-block">
+&lt;Tooltip content="Code quality measures how maintainable and bug-free your code is."&gt;
+  &lt;span&gt;Code Quality Score: 85/100&lt;/span&gt;
+&lt;/Tooltip&gt;
+
+&lt;MetricCard&gt;
+  &lt;h4&gt;Technical Debt: 23%&lt;/h4&gt;
+  &lt;button className="text-link"&gt;What does this mean?&lt;/button&gt;
+  &lt;InfoPanel&gt;
+    Technical debt is like financial debt - it's the cost of choosing quick 
+    solutions now that will require more work later.
+  &lt;/InfoPanel&gt;
+&lt;/MetricCard&gt;</div>
+                        </div>
+
+                        <div class="border-l-4 border-yellow-500 pl-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="priority-medium">MEDIUM PRIORITY</span>
+                                <span class="text-gray-600">Low Effort</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">2.2 Use Familiar Metaphors</h3>
+                            <p class="text-gray-700 mb-4">Replace technical terms with familiar concepts:</p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                <li>"Technical Debt" → "Code Health Issues" + explanation</li>
+                                <li>"Complexity Score" → "Code Simplicity Rating" (invert scale)</li>
+                                <li>"Test Coverage" → "Code Safety Net"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Heuristic 3 -->
+                <section id="h3" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">3. User Control and Freedom</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-900 mb-2">✅ Good</h3>
+                            <ul class="text-sm text-green-800 space-y-1">
+                                <li>• Back navigation available</li>
+                                <li>• Can close modals with X button</li>
+                                <li>• Toast notifications auto-dismiss</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-red-900 mb-2">❌ Needs Improvement</h3>
+                            <ul class="text-sm text-red-800 space-y-1">
+                                <li>• No undo for applied code changes</li>
+                                <li>• Can't cancel running analysis</li>
+                                <li>• No way to save draft content</li>
+                                <li>• Can't pause long operations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-red-500 pl-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="priority-high">HIGH PRIORITY</span>
+                                <span class="text-gray-600">Medium Effort</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">3.1 Add Cancel Button for Long Operations</h3>
+                            <p class="text-gray-700 mb-4">Allow users to cancel or pause long-running analyses.</p>
+                            <div class="code-block">
+&lt;AnalysisProgress&gt;
+  &lt;ProgressBar value={45} /&gt;
+  &lt;div className="actions"&gt;
+    &lt;button onClick={handleCancel} className="btn-outline"&gt;
+      Cancel Analysis
+    &lt;/button&gt;
+    &lt;button onClick={handlePause} className="btn-outline"&gt;
+      Pause
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/AnalysisProgress&gt;</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Implementation Priority Matrix -->
+                <section id="priority-matrix" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Implementation Priority Matrix</h2>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Phase 1</span>
+                                Critical Improvements (1-2 weeks)
+                            </h3>
+                            <p class="text-gray-600 mb-4">Focus: Immediate usability wins</p>
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Progress Timeline</strong> - Show analysis steps clearly</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Plain-Language Explanations</strong> - Make metrics understandable</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Inline Validation</strong> - Real-time form feedback</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Improved Error Messages</strong> - Clear, actionable errors</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Contextual Tooltips</strong> - Help everywhere</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Confirmation Dialogs</strong> - Prevent accidental deletions</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Phase 2</span>
+                                Enhanced Experience (2-4 weeks)
+                            </h3>
+                            <p class="text-gray-600 mb-4">Focus: Smoother workflows</p>
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Cancel/Pause Operations</strong> - User control</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Recent Activity Section</strong> - Quick access to history</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Standardize Loading States</strong> - Consistency</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Progressive Disclosure</strong> - Hide advanced options</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Simplify Reports with Tabs</strong> - Organized information</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Onboarding Tutorial</strong> - Guide new users</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Phase 3</span>
+                                Power User Features (4-6 weeks)
+                            </h3>
+                            <p class="text-gray-600 mb-4">Focus: Efficiency and flexibility</p>
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-medium">MEDIUM</span>
+                                    <span class="text-gray-700"><strong>Keyboard Shortcuts</strong> - Power user efficiency</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Templates/Presets</strong> - Save configurations</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-medium">MEDIUM</span>
+                                    <span class="text-gray-700"><strong>Search with Autocomplete</strong> - Find anything fast</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-medium">MEDIUM</span>
+                                    <span class="text-gray-700"><strong>Bulk Operations</strong> - Manage multiple items</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="priority-high">HIGH</span>
+                                    <span class="text-gray-700"><strong>Undo/Redo</strong> - Reverse mistakes</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Success Metrics -->
+                <section id="metrics" class="section bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Success Metrics</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h3 class="font-semibold text-blue-900 mb-4">Quantitative Metrics</h3>
+                            <ul class="space-y-3 text-sm text-blue-800">
+                                <li class="flex justify-between">
+                                    <span>Task Completion Rate:</span>
+                                    <strong>Target 95%</strong>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>Time on Task:</span>
+                                    <strong>Reduce by 30%</strong>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>Error Rate:</span>
+                                    <strong>Reduce by 50%</strong>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>Support Tickets:</span>
+                                    <strong>Reduce by 40%</strong>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>User Retention:</span>
+                                    <strong>Increase by 25%</strong>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h3 class="font-semibold text-green-900 mb-4">Qualitative Metrics</h3>
+                            <ul class="space-y-3 text-sm text-green-800">
+                                <li class="flex justify-between">
+                                    <span>System Usability Scale (SUS):</span>
+                                    <strong>Target > 80</strong>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>Net Promoter Score (NPS):</span>
+                                    <strong>Target > 50</strong>
+                                </li>
+                                <li class="flex justify-between">
+                                    <span>User Satisfaction:</span>
+                                    <strong>Target 4.5/5 stars</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4">Tracking Methods</h3>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li><strong>Analytics:</strong> Track user flows, drop-off points, feature usage</li>
+                            <li><strong>User Testing:</strong> Conduct usability tests with 5-10 users per phase</li>
+                            <li><strong>Surveys:</strong> Post-task surveys and periodic satisfaction surveys</li>
+                            <li><strong>Support Analysis:</strong> Track common issues and questions</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Conclusion -->
+                <section class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Conclusion</h2>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        This heuristics improvement plan focuses on incremental enhancements that significantly improve usability without requiring major redesigns. 
+                        By implementing these recommendations in phases, CodeAnalyst will become:
+                    </p>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-gray-700"><strong>More Transparent:</strong> Users always know what's happening</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-gray-700"><strong>More Forgiving:</strong> Easy to undo mistakes and recover from errors</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-gray-700"><strong>More Efficient:</strong> Power users can work faster</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-gray-700"><strong>More Accessible:</strong> Clear language for all skill levels</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-gray-700"><strong>More Consistent:</strong> Predictable interface patterns</span>
+                        </li>
+                    </ul>
+                    <div class="bg-white rounded-lg p-4">
+                        <h3 class="font-semibold text-gray-900 mb-2">Next Steps:</h3>
+                        <ol class="list-decimal list-inside space-y-1 text-sm text-gray-700">
+                            <li>Review and prioritize recommendations with team</li>
+                            <li>Create detailed implementation tickets for Phase 1</li>
+                            <li>Set up analytics to measure baseline metrics</li>
+                            <li>Begin user testing to validate improvements</li>
+                            <li>Iterate based on feedback</li>
+                        </ol>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 text-sm">
+            <p>This document should be reviewed and updated quarterly as the system evolves and new usability insights are gained.</p>
+            <p class="mt-2">CodeAnalyst System © 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Highlight active section in navigation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('bg-blue-50', 'text-blue-700', 'font-semibold');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('bg-blue-50', 'text-blue-700', 'font-semibold');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+

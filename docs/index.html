@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeAnalyst Documentation Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .doc-card {
+            transition: all 0.3s;
+        }
+        .doc-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">CodeAnalyst Documentation Hub</h1>
+                <p class="text-xl text-gray-600">Comprehensive System Documentation & Diagrams</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Introduction -->
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">📚 Welcome to CodeAnalyst Documentation</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                This documentation hub provides comprehensive technical documentation for the CodeAnalyst system. 
+                All documents have been converted from Markdown to interactive HTML with beautiful visualizations, 
+                Mermaid diagrams, and easy navigation.
+            </p>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p class="text-sm text-blue-800">
+                    <strong>Note:</strong> These HTML documents are self-contained and include all diagrams, 
+                    making them perfect for presentations, reviews, and offline viewing.
+                </p>
+            </div>
+        </section>
+
+        <!-- Documentation Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Heuristics -->
+            <a href="heuristics.html" class="doc-card bg-white rounded-lg shadow-lg p-8 block hover:no-underline">
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-100 rounded-lg p-3">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Usability Heuristics</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            Nielsen Norman Group's 10 Usability Heuristics analysis with improvement recommendations, 
+                            priority matrix, and success metrics.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">UX Design</span>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Best Practices</span>
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Recommendations</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- DFD -->
+            <a href="DFD.html" class="doc-card bg-white rounded-lg shadow-lg p-8 block hover:no-underline">
+                <div class="flex items-start gap-4">
+                    <div class="bg-green-100 rounded-lg p-3">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Data Flow Diagrams</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            Complete data flow analysis with Mermaid diagrams showing how data moves through the system, 
+                            from authentication to content generation.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Architecture</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Data Flow</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Mermaid Diagrams</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- UML -->
+            <a href="UML_by_modules.html" class="doc-card bg-white rounded-lg shadow-lg p-8 block hover:no-underline">
+                <div class="flex items-start gap-4">
+                    <div class="bg-purple-100 rounded-lg p-3">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">UML by Modules</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            Comprehensive UML diagrams for all 10 modules including class diagrams, sequence diagrams, 
+                            state diagrams, and component diagrams with Mermaid visualizations.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">UML</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Class Diagrams</span>
+                            <span class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded">Sequence Diagrams</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Tests -->
+            <a href="tests.html" class="doc-card bg-white rounded-lg shadow-lg p-8 block hover:no-underline">
+                <div class="flex items-start gap-4">
+                    <div class="bg-red-100 rounded-lg p-3">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Testing Strategy</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            Comprehensive testing documentation covering unit tests, integration tests, E2E tests, 
+                            performance testing, security testing, and CI/CD automation.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Testing</span>
+                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Quality Assurance</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Test Cases</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Additional Info -->
+        <section class="mt-12 bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">📋 Documentation Status</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-3">✅ All Documentation Complete</h3>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center gap-2">
+                            <span class="text-green-500">●</span>
+                            <span>Usability Heuristics (heuristics.html)</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-green-500">●</span>
+                            <span>Data Flow Diagrams (DFD.html)</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-green-500">●</span>
+                            <span>UML by Modules (UML_by_modules.html)</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-green-500">●</span>
+                            <span>Testing Strategy (tests.html)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-3">📊 Total Files</h3>
+                    <div class="text-4xl font-bold text-green-600 mb-2">5</div>
+                    <p class="text-sm text-gray-600">HTML documentation files with interactive diagrams</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">✨ Documentation Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Interactive Diagrams</h3>
+                    <p class="text-sm text-gray-600">Mermaid.js diagrams for flowcharts, sequence diagrams, and more</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Beautiful Design</h3>
+                    <p class="text-sm text-gray-600">Tailwind CSS styling with responsive layouts and smooth animations</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Easy Navigation</h3>
+                    <p class="text-sm text-gray-600">Sticky sidebars, smooth scrolling, and active section highlighting</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 text-sm">
+            <p>CodeAnalyst System Documentation © 2025</p>
+            <p class="mt-2">Generated from Markdown files with enhanced HTML visualizations</p>
+        </div>
+    </footer>
+</body>
+</html>
+

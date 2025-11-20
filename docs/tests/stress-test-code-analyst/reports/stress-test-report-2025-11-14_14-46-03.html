@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Analysis Stress Test Report - 2025-11-14_14-46-03</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgb(102,126,234) 0%, rgb(118,75,162) 100%);
+            padding: 20px;
+            color: rgb(51,51,51);
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, rgb(102,126,234) 0%, rgb(118,75,162) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .status-banner {
+            background: rgb(40,167,69);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: rgb(248,249,250);
+        }
+        .summary-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid rgb(102,126,234);
+            transition: transform 0.3s;
+        }
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        .summary-card h3 {
+            color: rgb(102,126,234);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .summary-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: rgb(51,51,51);
+        }
+        .summary-card .unit {
+            font-size: 0.8em;
+            color: rgb(102,102,102);
+            margin-left: 5px;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: rgb(102,126,234);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid rgb(102,126,234);
+        }
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        thead {
+            background: linear-gradient(135deg, rgb(102,126,234) 0%, rgb(118,75,162) 100%);
+            color: white;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        tbody tr:nth-child(even) {
+            background: rgb(248,249,250);
+        }
+        tbody tr:hover {
+            background: rgb(233,236,239);
+        }
+        .metric-good { color: rgb(40,167,69); font-weight: bold; }
+        .metric-warning { color: rgb(255,193,7); font-weight: bold; }
+        .metric-bad { color: rgb(220,53,69); font-weight: bold; }
+        .footer {
+            background: rgb(248,249,250);
+            padding: 30px;
+            text-align: center;
+            color: rgb(102,102,102);
+            border-top: 1px solid rgb(222,226,230);
+        }
+        .error-container {
+            background: rgb(248,215,218);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid rgb(220,53,69);
+        }
+        .error-item {
+            padding: 10px;
+            border-bottom: 1px solid rgb(220,53,69);
+            font-size: 0.9em;
+        }
+        .test-files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .test-file-card {
+            background: rgb(248,249,250);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid rgb(102,126,234);
+        }
+        .test-file-card h4 {
+            color: rgb(102,126,234);
+            margin-bottom: 8px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 2px;
+        }
+        .badge-success { background: rgb(212,237,218); color: rgb(21,87,36); }
+        .badge-info { background: rgb(209,236,241); color: rgb(12,84,96); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Code Analysis Module</h1>
+            <h2>Stress Test Report</h2>
+            <p>ZIP Upload Full Flow Testing</p>
+            <p>Generated: 2025-11-14 14:42:36</p>
+        </div>
+
+        <div class="status-banner">
+            Overall Status: EXCELLENT
+        </div>
+
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Requests</h3>
+                <div class="value">578<span class="unit">req</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Success Rate</h3>
+                <div class="value metric-good">100<span class="unit">%</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Avg Upload Time</h3>
+                <div class="value">954<span class="unit">ms</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Avg Analysis Time</h3>
+                <div class="value">0.1<span class="unit">s</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Throughput</h3>
+                <div class="value">2.82<span class="unit">req/s</span></div>
+            </div>
+            <div class="summary-card">
+                <h3>Test Duration</h3>
+                <div class="value">205<span class="unit">s</span></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>Test Configuration</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><strong>Test Type</strong></td>
+                            <td>Code Analysis Module - ZIP Upload Stress Test</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Concurrent Users</strong></td>
+                            <td>5 authenticated users</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Test Duration</strong></td>
+                            <td>180 seconds</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend URL</strong></td>
+                            <td>https://codeanalyst-production.up.railway.app/api</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Test Files Used</strong></td>
+                            <td>6 sample projects</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Start Time</strong></td>
+                            <td>2025-11-14 14:42:36</td>
+                        </tr>
+                        <tr>
+                            <td><strong>End Time</strong></td>
+                            <td>2025-11-14 14:46:02</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>Test Files Used</h2>
+                <div class="test-files-grid">                    <div class="test-file-card">
+                        <h4>project1-simple-html.zip</h4>
+                        <p><span class="badge badge-info">Size: 0.8 KB</span></p>
+                    </div>                    <div class="test-file-card">
+                        <h4>project1-simple-html_2.zip</h4>
+                        <p><span class="badge badge-info">Size: 1 KB</span></p>
+                    </div>                    <div class="test-file-card">
+                        <h4>project2-basic-javascript.zip</h4>
+                        <p><span class="badge badge-info">Size: 1.7 KB</span></p>
+                    </div>                    <div class="test-file-card">
+                        <h4>project3-react-component.zip</h4>
+                        <p><span class="badge badge-info">Size: 2.3 KB</span></p>
+                    </div>                    <div class="test-file-card">
+                        <h4>project4-express-api.zip</h4>
+                        <p><span class="badge badge-info">Size: 3 KB</span></p>
+                    </div>                    <div class="test-file-card">
+                        <h4>project5-fullstack-mixed.zip</h4>
+                        <p><span class="badge badge-info">Size: 3.2 KB</span></p>
+                    </div>                </div>
+            </div>
+
+            <div class="section">
+                <h2>Performance Metrics</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Upload Time</th>
+                            <th>Analysis Time</th>
+                            <th>Total Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Average</strong></td>
+                            <td>954 ms</td>
+                            <td>0.09 s</td>
+                            <td>1.06 s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Median (P50)</strong></td>
+                            <td>894 ms</td>
+                            <td>0.09 s</td>
+                            <td>0.99 s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P95</strong></td>
+                            <td>1358 ms</td>
+                            <td>0.11 s</td>
+                            <td>1.47 s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P99</strong></td>
+                            <td>2097 ms</td>
+                            <td>0.2 s</td>
+                            <td>2.7 s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Min</strong></td>
+                            <td>720 ms</td>
+                            <td>0.08 s</td>
+                            <td>0.81 s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Max</strong></td>
+                            <td>3228 ms</td>
+                            <td>0.35 s</td>
+                            <td>3.32 s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>Visual Analytics</h2>
+                
+                <div class="chart-container">
+                    <h3>Response Time Distribution</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="responseTimeChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Success vs Failure Rate</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="successRateChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Throughput Over Time</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="throughputChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <div class="footer">
+            <p><strong>CodeAnalyst</strong> - Stress Testing Report</p>
+            <p>Code Analysis Module - ZIP Upload Full Flow</p>
+            <p>Report Generated: 2025-11-14_14-46-03</p>
+        </div>
+    </div>
+
+    <script>
+        // Response Time Chart
+        const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+        new Chart(responseTimeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Upload Time', 'Analysis Time', 'Total Time'],
+                datasets: [
+                    {
+                        label: 'Average (ms)',
+                        data: [954, 95, 1057],
+                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'P95 (ms)',
+                        data: [1358, 109, 1466],
+                        backgroundColor: 'rgba(118, 75, 162, 0.7)',
+                        borderColor: 'rgba(118, 75, 162, 1)',
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Time (milliseconds)' }
+                    }
+                }
+            }
+        });
+
+        // Success Rate Chart
+        const successRateCtx = document.getElementById('successRateChart').getContext('2d');
+        new Chart(successRateCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Successful', 'Failed'],
+                datasets: [{
+                    data: [578, 0],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.8)',
+                        'rgba(220, 53, 69, 0.8)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Throughput Chart
+        const throughputCtx = document.getElementById('throughputChart').getContext('2d');
+        new Chart(throughputCtx, {
+            type: 'line',
+            data: {
+                labels: ['Start', '25%', '50%', '75%', 'End'],
+                datasets: [{
+                    label: 'Requests per Second',
+                    data: [2.82, 3.102, 2.82, 2.538, 2.82],
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Requests/Second' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

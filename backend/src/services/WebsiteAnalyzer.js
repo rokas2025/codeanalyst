@@ -7,6 +7,7 @@ import axios from 'axios'
 import { TechnologyDetector } from './TechnologyDetector.js'
 import { SEOAnalyzer } from './SEOAnalyzer.js'
 import { LanguageDetector } from './LanguageDetector.js'
+import { PageSpeedService } from './PageSpeedService.js'
 import { logger } from '../utils/logger.js'
 
 export class WebsiteAnalyzer {
@@ -15,6 +16,7 @@ export class WebsiteAnalyzer {
     this.technologyDetector = new TechnologyDetector()
     this.seoAnalyzer = new SEOAnalyzer()
     this.languageDetector = new LanguageDetector()
+    this.pageSpeedService = new PageSpeedService()
   }
 
   /**
@@ -167,6 +169,26 @@ export class WebsiteAnalyzer {
         lighthouseResult
       )
 
+      // Optionally run Google PageSpeed Insights
+      let pageSpeedResult = null
+      if (options.usePageSpeed !== false) {
+        try {
+          logger.info('🚀 Running Google PageSpeed Insights analysis...')
+          pageSpeedResult = await this.pageSpeedService.analyzePerformance(validatedUrl, {
+            strategy: 'both' // Get both mobile and desktop
+          })
+          logger.info('✅ PageSpeed Insights analysis completed')
+        } catch (error) {
+          logger.warn('⚠️ PageSpeed Insights failed, continuing without it:', error.message)
+          pageSpeedResult = { 
+            success: false, 
+            error: error.message,
+            mobile: null,
+            desktop: null
+          }
+        }
+      }
+
       // Combine all results
       const analysisResult = {
         url: validatedUrl,
@@ -178,6 +200,9 @@ export class WebsiteAnalyzer {
         
         // Performance and SEO from Lighthouse
         lighthouse: lighthouseResult,
+        
+        // Google PageSpeed Insights (optional)
+        pageSpeed: pageSpeedResult,
         
         // Comprehensive SEO Analysis (replaces basic lighthouse SEO)
         comprehensiveSEO: comprehensiveSEO,
