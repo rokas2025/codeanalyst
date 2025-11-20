@@ -66,8 +66,7 @@
     "semver": "^7.7.3",
     "text-readability": "^1.1.1",
     "uuid": "^9.0.1",
-    "winston": "^3.11.0",
-    "yoastseo": "^3.4.0"
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

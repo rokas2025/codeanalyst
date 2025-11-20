@@ -1,12 +1,9 @@
-// Yoast SEO Service - Content SEO Analysis
-import pkg from 'yoastseo'
-const { Paper, ContentAssessor, SEOAssessor } = pkg
+// Yoast SEO Service - Content SEO Analysis (Simplified)
 import { logger } from '../utils/logger.js'
 
 export class YoastSEOService {
   constructor() {
-    this.contentAssessor = new ContentAssessor()
-    this.seoAssessor = new SEOAssessor()
+    // Simplified version without Yoast internals (no Researcher needed)
   }
 
   /**
@@ -27,54 +24,60 @@ export class YoastSEOService {
         keyword = '',
         title = '',
         description = '',
-        url = '',
-        locale = 'en_US'
+        url = ''
       } = options
 
-      // Create Paper object (Yoast's content wrapper)
-      const paper = new Paper(content, {
-        keyword: keyword,
-        title: title,
-        description: description,
-        url: url,
-        locale: locale,
-        permalink: url
-      })
-
-      // Run assessments
-      const contentResults = this.assessContent(paper)
-      const seoResults = keyword ? this.assessSEO(paper) : null
-
-      // Calculate overall scores
-      const overallScore = this.calculateOverallScore(contentResults, seoResults)
-
-      // Extract readability metrics
-      const readability = this.extractReadabilityMetrics(contentResults)
-
-      // Extract SEO metrics
-      const seo = seoResults ? this.extractSEOMetrics(seoResults, keyword) : null
-
-      // Generate recommendations
-      const recommendations = this.generateRecommendations(contentResults, seoResults)
-
+      const wordCount = this.countWords(content)
+      const hasKeyword = keyword && content.toLowerCase().includes(keyword.toLowerCase())
+      
+      // Calculate basic SEO score
+      let seoScore = 50 // Base score
+      
+      if (hasKeyword) seoScore += 20
+      if (title && title.toLowerCase().includes(keyword.toLowerCase())) seoScore += 15
+      if (description && description.toLowerCase().includes(keyword.toLowerCase())) seoScore += 15
+      if (wordCount >= 300) seoScore += 10
+      
       const result = {
-        overallScore: overallScore,
-        readabilityScore: contentResults.score || 0,
-        seoScore: seoResults?.score || 0,
+        overallScore: Math.min(seoScore, 100),
+        readabilityScore: wordCount >= 300 ? 75 : 50,
+        seoScore: seoScore,
         
-        readability: readability,
-        seo: seo,
+        readability: {
+          score: wordCount >= 300 ? 75 : 50,
+          grade: this.getScoreGrade(wordCount >= 300 ? 75 : 50),
+          wordCount: wordCount,
+          issues: {
+            good: wordCount >= 300 ? [{ message: 'Content length is adequate' }] : [],
+            improvements: wordCount < 300 ? [{ message: 'Content is too short, aim for 300+ words' }] : [],
+            problems: []
+          }
+        },
         
-        recommendations: recommendations,
+        seo: keyword ? {
+          score: seoScore,
+          grade: this.getScoreGrade(seoScore),
+          keyword: keyword,
+          keywordInContent: hasKeyword,
+          keywordInTitle: title ? title.toLowerCase().includes(keyword.toLowerCase()) : false,
+          keywordInDescription: description ? description.toLowerCase().includes(keyword.toLowerCase()) : false,
+          issues: {
+            good: hasKeyword ? [{ message: 'Keyword found in content' }] : [],
+            improvements: !hasKeyword ? [{ message: 'Add target keyword to content' }] : [],
+            problems: []
+          }
+        } : null,
+        
+        recommendations: this.generateSimpleRecommendations(content, keyword, title, description, wordCount),
         
         // Metadata
         hasKeyword: !!keyword,
         contentLength: content.length,
-        wordCount: this.countWords(content),
+        wordCount: wordCount,
         analyzedAt: new Date().toISOString()
       }
 
-      logger.info(`✅ Yoast SEO analysis complete: Score ${overallScore}/100`)
+      logger.info(`✅ Yoast SEO analysis complete: Score ${result.overallScore}/100`)
 
       return result
 
@@ -85,221 +88,65 @@ export class YoastSEOService {
   }
 
   /**
-   * Assess content readability
+   * Generate simple recommendations
    */
-  assessContent(paper) {
-    try {
-      this.contentAssessor.assess(paper)
-      const results = this.contentAssessor.getValidResults()
-      const score = this.contentAssessor.calculateOverallScore()
-
-      return {
-        score: score,
-        results: results
-      }
-    } catch (error) {
-      logger.warn('Content assessment failed:', error.message)
-      return { score: 0, results: [] }
-    }
-  }
-
-  /**
-   * Assess SEO optimization
-   */
-  assessSEO(paper) {
-    try {
-      this.seoAssessor.assess(paper)
-      const results = this.seoAssessor.getValidResults()
-      const score = this.seoAssessor.calculateOverallScore()
-
-      return {
-        score: score,
-        results: results
-      }
-    } catch (error) {
-      logger.warn('SEO assessment failed:', error.message)
-      return { score: 0, results: [] }
-    }
-  }
-
-  /**
-   * Calculate overall score (0-100)
-   */
-  calculateOverallScore(contentResults, seoResults) {
-    if (!seoResults) {
-      // Only readability score available
-      return contentResults.score || 0
-    }
-
-    // Average of readability and SEO scores
-    const readabilityScore = contentResults.score || 0
-    const seoScore = seoResults.score || 0
-    
-    return Math.round((readabilityScore + seoScore) / 2)
-  }
-
-  /**
-   * Extract readability metrics from assessment results
-   */
-  extractReadabilityMetrics(contentResults) {
-    const metrics = {
-      score: contentResults.score || 0,
-      grade: this.getScoreGrade(contentResults.score || 0),
-      issues: {
-        good: [],
-        improvements: [],
-        problems: []
-      }
-    }
-
-    if (!contentResults.results || contentResults.results.length === 0) {
-      return metrics
-    }
-
-    // Categorize results by score
-    contentResults.results.forEach(result => {
-      const item = {
-        identifier: result.getIdentifier(),
-        text: result.getText(),
-        score: result.getScore()
-      }
-
-      if (result.getScore() >= 7) {
-        metrics.issues.good.push(item)
-      } else if (result.getScore() >= 4) {
-        metrics.issues.improvements.push(item)
-      } else {
-        metrics.issues.problems.push(item)
-      }
-    })
-
-    return metrics
-  }
-
-  /**
-   * Extract SEO metrics from assessment results
-   */
-  extractSEOMetrics(seoResults, keyword) {
-    const metrics = {
-      score: seoResults.score || 0,
-      grade: this.getScoreGrade(seoResults.score || 0),
-      keyword: keyword,
-      issues: {
-        good: [],
-        improvements: [],
-        problems: []
-      },
-      keywordDensity: 0,
-      keywordInTitle: false,
-      keywordInDescription: false,
-      keywordInUrl: false
-    }
-
-    if (!seoResults.results || seoResults.results.length === 0) {
-      return metrics
-    }
-
-    // Categorize results by score
-    seoResults.results.forEach(result => {
-      const identifier = result.getIdentifier()
-      const item = {
-        identifier: identifier,
-        text: result.getText(),
-        score: result.getScore()
-      }
-
-      // Extract specific metrics
-      if (identifier === 'keywordDensity') {
-        // Parse keyword density from text if available
-        const densityMatch = result.getText().match(/(\d+\.?\d*)%/)
-        if (densityMatch) {
-          metrics.keywordDensity = parseFloat(densityMatch[1])
-        }
-      }
-
-      if (identifier === 'introductionKeyword' || identifier === 'keyphraseInSEOTitle') {
-        metrics.keywordInTitle = result.getScore() >= 6
-      }
-
-      if (identifier === 'metaDescriptionKeyword') {
-        metrics.keywordInDescription = result.getScore() >= 6
-      }
-
-      if (identifier === 'slugKeyword' || identifier === 'keyphraseInSlug') {
-        metrics.keywordInUrl = result.getScore() >= 6
-      }
-
-      // Categorize by score
-      if (result.getScore() >= 7) {
-        metrics.issues.good.push(item)
-      } else if (result.getScore() >= 4) {
-        metrics.issues.improvements.push(item)
-      } else {
-        metrics.issues.problems.push(item)
-      }
-    })
-
-    return metrics
-  }
-
-  /**
-   * Generate actionable recommendations
-   */
-  generateRecommendations(contentResults, seoResults) {
+  generateSimpleRecommendations(content, keyword, title, description, wordCount) {
     const recommendations = []
 
-    // Content/Readability recommendations
-    if (contentResults.results) {
-      contentResults.results.forEach(result => {
-        if (result.getScore() < 4) {
-          recommendations.push({
-            priority: 'high',
-            category: 'readability',
-            issue: result.getIdentifier(),
-            message: result.getText(),
-            score: result.getScore()
-          })
-        } else if (result.getScore() < 7) {
-          recommendations.push({
-            priority: 'medium',
-            category: 'readability',
-            issue: result.getIdentifier(),
-            message: result.getText(),
-            score: result.getScore()
-          })
-        }
+    if (wordCount < 300) {
+      recommendations.push({
+        priority: 'high',
+        category: 'readability',
+        message: 'Content is too short. Aim for at least 300 words for better SEO.'
       })
     }
 
-    // SEO recommendations
-    if (seoResults && seoResults.results) {
-      seoResults.results.forEach(result => {
-        if (result.getScore() < 4) {
-          recommendations.push({
-            priority: 'high',
-            category: 'seo',
-            issue: result.getIdentifier(),
-            message: result.getText(),
-            score: result.getScore()
-          })
-        } else if (result.getScore() < 7) {
-          recommendations.push({
-            priority: 'medium',
-            category: 'seo',
-            issue: result.getIdentifier(),
-            message: result.getText(),
-            score: result.getScore()
-          })
-        }
+    if (keyword) {
+      const contentLower = content.toLowerCase()
+      const keywordLower = keyword.toLowerCase()
+
+      if (!contentLower.includes(keywordLower)) {
+        recommendations.push({
+          priority: 'high',
+          category: 'seo',
+          message: `Target keyword "${keyword}" not found in content. Include it naturally.`
+        })
+      }
+
+      if (title && !title.toLowerCase().includes(keywordLower)) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'seo',
+          message: `Consider adding "${keyword}" to the title.`
+        })
+      }
+
+      if (description && !description.toLowerCase().includes(keywordLower)) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'seo',
+          message: `Consider adding "${keyword}" to the meta description.`
+        })
+      }
+    }
+
+    if (!title || title.length < 30) {
+      recommendations.push({
+        priority: 'high',
+        category: 'seo',
+        message: 'Title is too short. Aim for 50-60 characters.'
       })
     }
 
-    // Sort by priority
-    const priorityOrder = { high: 0, medium: 1, low: 2 }
-    recommendations.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+    if (!description || description.length < 120) {
+      recommendations.push({
+        priority: 'medium',
+        category: 'seo',
+        message: 'Meta description is too short. Aim for 150-160 characters.'
+      })
+    }
 
-    // Limit to top 20 recommendations
-    return recommendations.slice(0, 20)
+    return recommendations.slice(0, 10)
   }
 
   /**
