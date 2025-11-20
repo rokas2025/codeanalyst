@@ -24,7 +24,7 @@ export function AIProviderStatus() {
           
           // Always include OpenAI (it's configured in Railway)
           const providers: BackendProviderInfo[] = [
-            { name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: 'environment', available: true },
+            { name: 'OpenAI GPT-5 mini', model: 'gpt-5-mini', source: 'environment', available: true },
           ]
           
           // Always assume Gemini is available since you added the API key to Railway
@@ -34,7 +34,7 @@ export function AIProviderStatus() {
             source: 'environment', 
             available: true 
           })
-          setCurrentProvider('google') // Prefer Gemini since it's configured
+          setCurrentProvider('openai') // Default to OpenAI (primary provider)
           
           setBackendProviders(providers)
         } else {
@@ -43,7 +43,7 @@ export function AIProviderStatus() {
       } catch (error) {
         console.warn('Could not check backend providers:', error)
         setBackendProviders([
-          { name: 'OpenAI GPT-4', model: 'gpt-4-turbo', source: 'environment', available: true }
+          { name: 'OpenAI GPT-5 mini', model: 'gpt-5-mini', source: 'environment', available: true }
         ])
         setCurrentProvider('openai')
       } finally {
@@ -84,7 +84,7 @@ export function AIProviderStatus() {
             Currently using: {activeProvider.name}
           </div>
           <div className="text-sm text-gray-600">
-            {activeProvider.name.includes('GPT-4') && 'Advanced language model with excellent code analysis capabilities'}
+            {activeProvider.name.includes('GPT') && 'Advanced language model with excellent code analysis capabilities'}
             {activeProvider.name.includes('Gemini') && 'Google\'s latest AI model with superior web technology understanding'}
             {activeProvider.name.includes('Local') && 'Static analysis without AI insights (fallback mode)'}
           </div>
