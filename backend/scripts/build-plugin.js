@@ -12,9 +12,10 @@ import archiver from 'archiver'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// Paths
-const pluginSourceDir = path.join(__dirname, '../../wordpress-plugin')
-const outputZipPath = path.join(__dirname, '../../codeanalyst-connector.zip')
+// Paths - use process.cwd() for Docker compatibility
+const projectRoot = process.cwd()
+const pluginSourceDir = path.join(projectRoot, 'wordpress-plugin')
+const outputZipPath = path.join(projectRoot, 'codeanalyst-connector.zip')
 
 console.log('🔨 Building WordPress plugin ZIP...')
 console.log('📁 Source:', pluginSourceDir)
