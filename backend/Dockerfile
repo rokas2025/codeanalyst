@@ -33,6 +33,9 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
+# Build WordPress plugin ZIP
+RUN npm run build:plugin
+
 # Create necessary directories
 RUN mkdir -p uploads temp logs
 

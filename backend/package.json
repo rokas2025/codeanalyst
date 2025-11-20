@@ -16,7 +16,6 @@
     "worker": "node src/workers/analysisWorker.js",
     "build": "echo 'No build step needed for JavaScript backend'",
     "build:plugin": "node scripts/build-plugin.js",
-    "postinstall": "npm run build:plugin",
     "lint": "eslint src/**/*.js",
     "docker:build": "docker build -t c-backend .",
     "docker:run": "docker run -p 3001:3001 codeanalyst-backend",
