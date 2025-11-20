@@ -31,6 +31,7 @@ function WebsiteAnalystContent() {
   const [currentAnalysisId, setCurrentAnalysisId] = useState<string | null>(null)
   const [usePageSpeed, setUsePageSpeed] = useState<boolean>(true)
   const [useSecurityScan, setUseSecurityScan] = useState<boolean>(true)
+  const [useSSLScan, setUseSSLScan] = useState<boolean>(false)
 
   // Check backend availability on component mount
   useEffect(() => {
@@ -132,7 +133,8 @@ function WebsiteAnalystContent() {
                 deepAnalysis: true,
                 includeScreenshots: false,
                 usePageSpeed: usePageSpeed, // Enable/disable PageSpeed API
-                useSecurityScan: useSecurityScan // Enable/disable Mozilla Observatory
+                useSecurityScan: useSecurityScan, // Enable/disable Mozilla Observatory
+                useSSLScan: useSSLScan // Enable/disable SSL Labs
               }
             })
             
@@ -472,6 +474,29 @@ function WebsiteAnalystContent() {
             <div className="flex items-center space-x-1 text-xs text-gray-400">
               <SparklesIcon className="w-4 h-4" />
               <span>Powered by Mozilla</span>
+            </div>
+          </div>
+          
+          {/* SSL Labs Toggle (Optional - Off by default) */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+            <div>
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useSSLScan}
+                  onChange={(e) => setUseSSLScan(e.target.checked)}
+                  className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-900">SSL/TLS Deep Scan</span>
+                  <p className="text-xs text-gray-500">Comprehensive SSL analysis with SSL Labs (adds ~2-3 min)</p>
+                  <p className="text-xs text-yellow-600 font-semibold mt-1">⚠️ Rate limited: 1 scan per domain per 24 hours</p>
+                </div>
+              </label>
+            </div>
+            <div className="flex items-center space-x-1 text-xs text-gray-400">
+              <SparklesIcon className="w-4 h-4" />
+              <span>Powered by SSL Labs</span>
             </div>
           </div>
         </div>

@@ -438,6 +438,39 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         }
       }
       
+      // Run Escomplex analysis for JavaScript/TypeScript files
+      const jsFiles = extractedData.extractedFiles.filter(f => {
+        const path = f.path?.toLowerCase() || ''
+        return path.endsWith('.js') || path.endsWith('.jsx') || 
+               path.endsWith('.ts') || path.endsWith('.tsx') || 
+               path.endsWith('.mjs') || path.endsWith('.cjs')
+      })
+      
+      if (jsFiles.length > 0) {
+        try {
+          logger.info(`📊 Running Escomplex analysis on ${jsFiles.length} JS/TS files`)
+          const { EscomplexService } = await import('../services/EscomplexService.js')
+          const escomplexService = new EscomplexService()
+          const complexityResults = await escomplexService.analyzeComplexity(jsFiles)
+          logger.info('✅ Escomplex analysis completed', {
+            filesAnalyzed: complexityResults.filesAnalyzed || 0,
+            avgComplexity: complexityResults.averageComplexity || 0
+          })
+          
+          // Add complexity results to code analysis
+          if (complexityResults && !complexityResults.error) {
+            codeAnalysis.escomplex = complexityResults
+          }
+        } catch (error) {
+          logger.warn('⚠️ Escomplex analysis failed, continuing without it:', error.message)
+          codeAnalysis.escomplex = {
+            success: false,
+            error: error.message,
+            filesAnalyzed: 0
+          }
+        }
+      }
+      
       await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 60)
       
       // Step 3: Store code analysis data
@@ -456,7 +489,8 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
         build_results: codeAnalysis.buildResults || {},
         static_analysis_results: {
           ...(codeAnalysis.staticAnalysis || {}),
-          phpStan: codeAnalysis.phpStan || null
+          phpStan: codeAnalysis.phpStan || null,
+          escomplex: codeAnalysis.escomplex || null
         }
       })
       

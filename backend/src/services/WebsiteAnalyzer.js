@@ -209,6 +209,28 @@ export class WebsiteAnalyzer {
         }
       }
 
+      // Optionally run SSL Labs SSL/TLS Deep Scan
+      let sslScanResult = null
+      if (options.useSSLScan === true) {
+        try {
+          logger.info('🔐 Running SSL Labs SSL/TLS deep scan...')
+          const { SSLLabsService } = await import('./SSLLabsService.js')
+          const sslLabsService = new SSLLabsService()
+          
+          // Extract hostname from URL
+          const hostname = new URL(validatedUrl).hostname
+          sslScanResult = await sslLabsService.analyzeSSL(hostname, true) // Use cache
+          logger.info('✅ SSL Labs scan completed')
+        } catch (error) {
+          logger.warn('⚠️ SSL Labs scan failed, continuing without it:', error.message)
+          sslScanResult = {
+            success: false,
+            error: error.message,
+            grade: null
+          }
+        }
+      }
+
       // Combine all results
       const analysisResult = {
         url: validatedUrl,
@@ -226,6 +248,9 @@ export class WebsiteAnalyzer {
         
         // Mozilla Observatory Security Scan (optional)
         securityScan: securityScanResult,
+        
+        // SSL Labs SSL/TLS Deep Scan (optional)
+        sslScan: sslScanResult,
         
         // Comprehensive SEO Analysis (replaces basic lighthouse SEO)
         comprehensiveSEO: comprehensiveSEO,
