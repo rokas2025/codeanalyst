@@ -1,5 +1,6 @@
 // Yoast SEO Service - Content SEO Analysis
-import { Paper, ContentAssessor, SEOAssessor } from 'yoastseo'
+import pkg from 'yoastseo'
+const { Paper, ContentAssessor, SEOAssessor } = pkg
 import { logger } from '../utils/logger.js'
 
 export class YoastSEOService {
