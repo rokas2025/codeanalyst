@@ -33,6 +33,9 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
+# Copy WordPress plugin from parent directory (repository root)
+COPY ../wordpress-plugin ./wordpress-plugin
+
 # Build WordPress plugin ZIP
 RUN npm run build:plugin
 
