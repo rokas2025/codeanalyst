@@ -116,16 +116,38 @@ class CodeAnalyst_REST_API {
         $file_path = $theme_dir . '/' . $file;
         
         // Security: prevent directory traversal
+        // Use realpath on BOTH paths to handle symlinks correctly
+        $real_theme_dir = realpath($theme_dir);
         $real_path = realpath($file_path);
-        if ($real_path === false || strpos($real_path, $theme_dir) !== 0) {
-            return new WP_Error('invalid_file', 'Invalid file path', array('status' => 403));
+        
+        // If realpath returns false, file doesn't exist - try without realpath first
+        if ($real_path === false) {
+            // File might not exist or path has issues - check directly
+            if (!file_exists($file_path)) {
+                return new WP_Error('file_not_found', 'File not found: ' . $file, array('status' => 404));
+            }
+            // File exists but realpath failed (rare case) - read it anyway with manual security check
+            $normalized_file = str_replace(array('..', '//'), array('', '/'), $file);
+            if ($normalized_file !== $file || strpos($file, '..') !== false) {
+                return new WP_Error('invalid_file', 'Invalid file path (traversal attempt)', array('status' => 403));
+            }
+        } else {
+            // Both realpath worked - compare normalized paths
+            if ($real_theme_dir === false || strpos($real_path, $real_theme_dir) !== 0) {
+                return new WP_Error('invalid_file', 'Invalid file path (outside theme)', array('status' => 403));
+            }
         }
         
+        // Double-check file exists before reading
         if (!file_exists($file_path)) {
-            return new WP_Error('file_not_found', 'File not found', array('status' => 404));
+            return new WP_Error('file_not_found', 'File not found: ' . $file, array('status' => 404));
         }
         
         $content = file_get_contents($file_path);
+        
+        if ($content === false) {
+            return new WP_Error('read_error', 'Could not read file: ' . $file, array('status' => 500));
+        }
         
         return rest_ensure_response(array(
             'success' => true,
