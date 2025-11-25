@@ -197,8 +197,10 @@ Please respond in JSON format with the following structure:
    * Build prompt for code analysis
    */
   buildCodeAnalysisPrompt(analysisData, files, options) {
-    const { aiProfile = 'mixed' } = options
-    const sampleFiles = files.slice(0, 5) // Analyze first 5 files for context
+    const { aiProfile = 'mixed' } = options || {}
+    // Ensure files is an array before slicing
+    const filesArray = Array.isArray(files) ? files : []
+    const sampleFiles = filesArray.slice(0, 5) // Analyze first 5 files for context
     
     const basePrompt = `
 Analyze this codebase and provide insights:

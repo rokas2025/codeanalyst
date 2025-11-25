@@ -514,7 +514,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
             }
           }
           
-          aiInsights = await aiAnalysisService.generateCodeInsights(aiInputData, analysisOptions.aiProfile || 'mixed')
+          aiInsights = await aiAnalysisService.generateCodeInsights(aiInputData, codeAnalysis.keyFiles || [], { aiProfile: analysisOptions.aiProfile || 'mixed' })
           await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 90)
         } catch (aiError) {
           logger.warn(`AI insights generation failed: ${aiError.message}`)
