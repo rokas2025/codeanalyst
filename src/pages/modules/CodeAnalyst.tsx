@@ -804,11 +804,35 @@ function CodeAnalystContent() {
         <div className="card p-6">
           <button 
             className="btn-primary w-full"
-            onClick={handleAnalyze}
+            onClick={async () => {
+              // For WordPress, fetch files first then analyze
+              if (userProfile === 'wordpress' && wordpressSite) {
+                try {
+                  toast.loading('Fetching theme files...')
+                  const params = selectedPageId !== 'all' ? `?pageId=${selectedPageId}` : ''
+                  const response = await wordpressService.getThemeFiles(wordpressSite.id, params)
+                  toast.dismiss()
+                  
+                  if (response.success && response.files && response.files.length > 0) {
+                    console.log('✅ WordPress files fetched:', response.files.length)
+                    setUploadedFiles(response.files)
+                    handleAnalyze(response.files)
+                  } else {
+                    toast.error('No theme files found. Check plugin installation.')
+                  }
+                } catch (error) {
+                  toast.dismiss()
+                  toast.error('Failed to fetch WordPress files')
+                }
+              } else {
+                handleAnalyze()
+              }
+            }}
             disabled={
               isAnalyzing ||
               (userProfile === 'github' && !selectedRepository) ||
-              (userProfile === 'zip' && uploadedFiles.length === 0)
+              (userProfile === 'zip' && uploadedFiles.length === 0) ||
+              (userProfile === 'wordpress' && !wordpressSite)
             }
           >
             {isAnalyzing ? 'Analyzing Code...' : 'Start AI Code Analysis'}
