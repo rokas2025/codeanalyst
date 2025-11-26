@@ -965,23 +965,36 @@ export class CodeAnalyzer {
       documentation: 0
     }
     
-    // Quality score (0-100)
-    const maxIssues = Math.max(analysis.structure.totalFiles * 5, 1)
-    scores.quality = Math.max(0, 100 - Math.round((analysis.quality.issues.length / maxIssues) * 100))
+    // Quality score (0-100) - Use logarithmic scaling for better distribution
+    // This prevents score from hitting 0 immediately with many issues
+    const issueCount = analysis.quality.issues?.length || 0
+    const fileCount = analysis.structure.totalFiles || 1
+    const issuesPerFile = issueCount / fileCount
+    // Score decreases gradually: 0 issues = 100, 10 per file = ~50, 50+ per file = ~20
+    scores.quality = Math.max(10, Math.round(100 - (Math.log10(issuesPerFile + 1) * 40)))
     
-    // Security score (0-100)
-    scores.security = Math.max(0, 100 - (analysis.security.totalIssues * 10))
+    // Security score (0-100) - Weight by severity
+    const securityVulns = analysis.security.vulnerabilities || []
+    const criticalCount = securityVulns.filter(v => v.severity?.toLowerCase() === 'critical').length
+    const highCount = securityVulns.filter(v => v.severity?.toLowerCase() === 'high').length
+    const mediumCount = securityVulns.filter(v => v.severity?.toLowerCase() === 'medium').length
+    const lowCount = securityVulns.filter(v => v.severity?.toLowerCase() === 'low').length
+    // Weighted scoring: critical=-25, high=-10, medium=-3, low=-1
+    const securityPenalty = (criticalCount * 25) + (highCount * 10) + (mediumCount * 3) + (lowCount * 1)
+    scores.security = Math.max(0, 100 - securityPenalty)
     
-    // Performance score (0-100)
-    scores.performance = Math.max(0, 100 - (analysis.performance.totalIssues * 5))
+    // Performance score (0-100) - Use logarithmic scaling
+    const perfIssues = analysis.performance?.totalIssues || 0
+    scores.performance = Math.max(20, Math.round(100 - (Math.log10(perfIssues + 1) * 30)))
     
     // Maintainability score
-    scores.maintainability = analysis.maintainability.score
+    scores.maintainability = analysis.maintainability?.score || 50
     
     // Documentation score
     scores.documentation = Math.min(100, 
-      (analysis.documentation.readmeFiles > 0 ? 20 : 0) +
-      (analysis.documentation.docFiles * 10)
+      (analysis.documentation?.readmeFiles > 0 ? 20 : 0) +
+      ((analysis.documentation?.docFiles || 0) * 10) +
+      30 // Base score
     )
     
     // Overall score (weighted average)

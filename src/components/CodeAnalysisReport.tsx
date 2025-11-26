@@ -292,8 +292,8 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-gray-600">Security Score:</span>
-              <span className={`font-medium ${getScoreColor(analysis.results?.riskAssessment?.securityRisks?.score || 100)}`}>
-                {analysis.results?.riskAssessment?.securityRisks?.score || 100}/100
+              <span className={`font-medium ${getScoreColor(analysis.results?.riskAssessment?.securityRisks?.score ?? 100)}`}>
+                {analysis.results?.riskAssessment?.securityRisks?.score ?? 100}/100
               </span>
             </div>
             <div className="flex justify-between">
