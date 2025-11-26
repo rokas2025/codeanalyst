@@ -112,11 +112,21 @@ class WordPressService {
                 throw new Error('Failed to download plugin')
             }
             
+            // Get filename from Content-Disposition header or use default with version
+            const contentDisposition = response.headers.get('Content-Disposition')
+            let filename = 'codeanalyst-connector-v1.2.1.zip'
+            if (contentDisposition) {
+                const match = contentDisposition.match(/filename="?([^";\n]+)"?/)
+                if (match) {
+                    filename = match[1]
+                }
+            }
+            
             const blob = await response.blob()
             const url = window.URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
-            a.download = 'codeanalyst-connector.zip'
+            a.download = filename
             document.body.appendChild(a)
             a.click()
             window.URL.revokeObjectURL(url)
