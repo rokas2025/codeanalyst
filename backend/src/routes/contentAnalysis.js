@@ -520,7 +520,7 @@ Please provide a JSON response with the following structure:
       "Another SEO tip"
     ]
   },
-  "keywords": ["keyword1", "keyword2", "keyword3"]
+  "keywords": ["primary_topic_keyword", "secondary_keyword", "long_tail_keyword_phrase"]
 }
 
 Focus on:
@@ -529,7 +529,14 @@ Focus on:
 3. ${contentSource === 'url' ? 'Website SEO optimization' : 
      contentSource === 'html' ? 'Content structure and SEO optimization' :
      'Content SEO optimization'}
-4. Extracting relevant keywords from the actual content
+4. **SEO KEYWORD EXTRACTION** - This is critical:
+   - Identify the MAIN TOPIC/THEME of the content (what is this page really about?)
+   - Extract PRIMARY keywords that represent the core subject matter
+   - Include LONG-TAIL keyword phrases (2-4 words) that people might search for
+   - DO NOT include generic section names like "services", "testimonials", "about us", "contact"
+   - DO NOT include navigation items or menu labels
+   - Focus on industry-specific terms, product/service names, and searchable phrases
+   - Example: For a plumber's website, good keywords are "emergency plumbing repair", "water heater installation", "drain cleaning" - NOT "our services", "testimonials"
 `
 
     // Language-specific system messages (detectedLanguage already defined above)

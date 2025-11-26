@@ -185,7 +185,7 @@ function ContentAnalystContent() {
       const analysisData = data.analysis.result
       
       setResult({
-        original: inputContent,
+        original: analysisData.original || inputContent, // Use backend's cleaned text
         improved: analysisData.improved || inputContent,
         grammar: {
           score: analysisData.grammar.score,
