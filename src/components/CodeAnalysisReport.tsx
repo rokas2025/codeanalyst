@@ -49,6 +49,20 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
     return false
   }
   
+  // Detect WordPress theme - has PHP, no package.json dependencies, or WordPress in frameworks
+  const isWordPressTheme = (() => {
+    const languages = analysis.results?.languages || analysis.languages || []
+    const frameworks = analysis.results?.frameworks || analysis.frameworks || []
+    const totalDeps = analysis.results?.technicalStructure?.dependencies?.total || 0
+    const hasPhp = Array.isArray(languages) 
+      ? languages.some((l: string) => l.toLowerCase() === 'php')
+      : typeof languages === 'object' && 'PHP' in languages
+    const hasWordPress = Array.isArray(frameworks) 
+      ? frameworks.some((f: string) => f.toLowerCase().includes('wordpress'))
+      : false
+    return hasWordPress || (hasPhp && totalDeps === 0)
+  })()
+  
   const getRiskColor = (riskLevel: string) => {
     switch (riskLevel) {
       case 'low': return 'text-green-600 bg-green-100'
@@ -241,44 +255,73 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
 
       {/* Dependencies & Security */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Dependencies */}
+        {/* Dependencies - Show different content for WordPress themes */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <div className="flex items-center mb-4">
             <CpuChipIcon className="h-6 w-6 text-blue-600 mr-2" />
-            <h2 className="text-lg font-semibold text-gray-900">Dependencies</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              {isWordPressTheme ? 'Theme Info' : 'Dependencies'}
+            </h2>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Total Dependencies:</span>
-              <span className="font-medium">
-                {((analysis.results?.technicalStructure?.dependencies?.production?.length || 0) + 
-                  (analysis.results?.technicalStructure?.dependencies?.development?.length || 0))}
-              </span>
+          {isWordPressTheme ? (
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Type:</span>
+                <span className="font-medium text-purple-600">WordPress Theme</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">PHP Files:</span>
+                <span className="font-medium">
+                  {analysis.results?.totalFiles || analysis.total_files || 0}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Templates:</span>
+                <span className="font-medium">
+                  {analysis.results?.technicalStructure?.architecture?.components || 0}
+                </span>
+              </div>
+              <div className="text-sm text-gray-500 mt-4 p-3 bg-gray-50 rounded">
+                WordPress themes use PHP includes instead of npm/composer dependencies.
+                Security analysis focuses on WordPress-specific vulnerabilities.
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Production:</span>
-              <span className="font-medium">{analysis.results?.technicalStructure?.dependencies?.production?.length || 0}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Development:</span>
-              <span className="font-medium">{analysis.results?.technicalStructure?.dependencies?.development?.length || 0}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Outdated:</span>
-              <span className="font-medium text-green-600">0</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Vulnerable:</span>
-              <span className="font-medium text-green-600">0</span>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Dependencies:</span>
+                  <span className="font-medium">
+                    {((analysis.results?.technicalStructure?.dependencies?.production?.length || 0) + 
+                      (analysis.results?.technicalStructure?.dependencies?.development?.length || 0))}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Production:</span>
+                  <span className="font-medium">{analysis.results?.technicalStructure?.dependencies?.production?.length || 0}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Development:</span>
+                  <span className="font-medium">{analysis.results?.technicalStructure?.dependencies?.development?.length || 0}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Outdated:</span>
+                  <span className="font-medium text-green-600">0</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Vulnerable:</span>
+                  <span className="font-medium text-green-600">0</span>
+                </div>
+              </div>
 
-          {analysis.results?.technicalStructure?.dependencies?.packageManagers?.length > 0 && (
-            <div className="mt-4">
-              <span className="text-gray-600 text-sm">Package Managers: </span>
-              <span className="text-sm font-medium">{analysis.results.technicalStructure.dependencies.packageManagers.join(', ')}</span>
-            </div>
+              {analysis.results?.technicalStructure?.dependencies?.packageManagers?.length > 0 && (
+                <div className="mt-4">
+                  <span className="text-gray-600 text-sm">Package Managers: </span>
+                  <span className="text-sm font-medium">{analysis.results.technicalStructure.dependencies.packageManagers.join(', ')}</span>
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -332,7 +375,7 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
           <h2 className="text-xl font-semibold text-gray-900">Quality Metrics</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className={`grid grid-cols-1 ${isWordPressTheme ? 'md:grid-cols-3' : 'md:grid-cols-4'} gap-6`}>
           <div className="text-center">
             <div className={`text-2xl font-bold ${getScoreColor(analysis.results?.codeQualityScore || 0)}`}>
               {analysis.results?.codeQualityScore || 0}%
@@ -340,19 +383,32 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
             <div className="text-sm text-gray-600">Code Quality</div>
           </div>
           
-          <div className="text-center">
-            <div className={`text-2xl font-bold ${getScoreColor(100 - (analysis.results?.technicalDebtPercentage || 0))}`}>
-              {analysis.results?.technicalDebtPercentage || 0}%
-            </div>
-            <div className="text-sm text-gray-600">Technical Debt</div>
-          </div>
+          {!isWordPressTheme && (
+            <>
+              <div className="text-center">
+                <div className={`text-2xl font-bold ${getScoreColor(100 - (analysis.results?.technicalDebtPercentage || 0))}`}>
+                  {analysis.results?.technicalDebtPercentage || 0}%
+                </div>
+                <div className="text-sm text-gray-600">Technical Debt</div>
+              </div>
+              
+              <div className="text-center">
+                <div className={`text-2xl font-bold ${getScoreColor(analysis.results?.testCoveragePercentage || 0)}`}>
+                  {analysis.results?.testCoveragePercentage || 0}%
+                </div>
+                <div className="text-sm text-gray-600">Test Coverage</div>
+              </div>
+            </>
+          )}
           
-          <div className="text-center">
-            <div className={`text-2xl font-bold ${getScoreColor(analysis.results?.testCoveragePercentage || 0)}`}>
-              {analysis.results?.testCoveragePercentage || 0}%
+          {isWordPressTheme && (
+            <div className="text-center">
+              <div className={`text-2xl font-bold ${getScoreColor(analysis.results?.riskAssessment?.securityRisks?.score ?? 100)}`}>
+                {analysis.results?.riskAssessment?.securityRisks?.score ?? 100}/100
+              </div>
+              <div className="text-sm text-gray-600">Security Score</div>
             </div>
-            <div className="text-sm text-gray-600">Test Coverage</div>
-          </div>
+          )}
           
           <div className="text-center">
             <div className="text-2xl font-bold text-gray-900">

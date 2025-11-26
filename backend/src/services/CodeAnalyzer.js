@@ -54,7 +54,46 @@ export class CodeAnalyzer {
         /wp_footer\(\)/i,
         /wp_head\(\)/i,
         /Theme Name:/i,
-        /Plugin Name:/i
+        /Plugin Name:/i,
+        /functions\.php/i
+      ]],
+      // WordPress Page Builders
+      ['Elementor', [
+        /elementor/i,
+        /\\Elementor\\/i,
+        /elementor-pro/i,
+        /elementor_library/i,
+        /\[elementor-template/i
+      ]],
+      ['WPBakery', [
+        /js_composer/i,
+        /vc_map\(/i,
+        /vc_column/i,
+        /wpb_/i,
+        /WPBakeryShortCode/i
+      ]],
+      ['Divi', [
+        /et_pb_/i,
+        /et_builder/i,
+        /DiviBuilder/i,
+        /et_core_/i
+      ]],
+      ['Gutenberg', [
+        /wp\.blocks/i,
+        /registerBlockType/i,
+        /useBlockProps/i,
+        /InnerBlocks/i,
+        /block\.json/i
+      ]],
+      ['Oxygen', [
+        /oxygen/i,
+        /ct_builder/i,
+        /oxy-/i
+      ]],
+      ['Beaver Builder', [
+        /fl-builder/i,
+        /FLBuilder/i,
+        /fl_builder_/i
       ]]
     ])
     

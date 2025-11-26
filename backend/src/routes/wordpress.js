@@ -809,7 +809,7 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
       })
     }
 
-    // Get optional pageId filter from query params (for context only, not for filtering)
+    // Get optional pageId filter from query params
     const { pageId } = req.query
     
     // Fetch theme files list using WordPressService
@@ -818,9 +818,44 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
     let fileList = await wordpressService.fetchThemeFiles(connection)
     logger.info(`📋 [WordPress CodeAnalyst] Got ${fileList.length} files from WordPress REST API`)
     
-    // NO FILTERING: CodeAnalyst needs ALL theme files for comprehensive code analysis
-    // The pageId parameter is only used for user context, not for file filtering
-    logger.info(`📋 [WordPress CodeAnalyst] Fetching ALL ${fileList.length} theme files (no filtering)`)
+    // Filter files based on pageId selection
+    if (pageId && pageId !== 'all') {
+      // Page-specific scanning: Include only relevant files
+      logger.info(`📋 [WordPress CodeAnalyst] Page-specific scan requested for pageId: ${pageId}`)
+      
+      // Core WordPress theme files that should always be included
+      const coreFiles = [
+        'functions.php', 'style.css', 'header.php', 'footer.php', 
+        'sidebar.php', 'index.php', 'single.php', 'page.php',
+        'archive.php', 'search.php', '404.php', 'comments.php'
+      ]
+      
+      // Include directories that typically contain important code
+      const includeDirs = ['inc/', 'includes/', 'lib/', 'template-parts/', 'partials/']
+      
+      // Filter to core files + includes only
+      const originalCount = fileList.length
+      fileList = fileList.filter(file => {
+        const filename = file.path.split('/').pop().toLowerCase()
+        const filePath = file.path.toLowerCase()
+        
+        // Always include core theme files
+        if (coreFiles.includes(filename)) return true
+        
+        // Include files from important directories
+        if (includeDirs.some(dir => filePath.includes(dir))) return true
+        
+        // Include JavaScript and CSS files (usually shared across pages)
+        if (filename.endsWith('.js') || filename.endsWith('.css')) return true
+        
+        return false
+      })
+      
+      logger.info(`📋 [WordPress CodeAnalyst] Page-specific filter: ${fileList.length} files selected from ${originalCount} total`)
+    } else {
+      // Full theme scan - no filtering
+      logger.info(`📋 [WordPress CodeAnalyst] Full theme scan: ALL ${fileList.length} files will be fetched`)
+    }
 
     // Fetch content for each file SEQUENTIALLY to prevent ECONNRESET errors
     // Parallel fetching (even in batches) causes WordPress servers to drop connections
