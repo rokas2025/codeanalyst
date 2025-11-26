@@ -359,11 +359,76 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
             </div>
           </div>
 
-          {(analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0) === 0 && (
+          {(analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0) === 0 ? (
             <div className="mt-4 flex items-center text-green-600 text-sm">
               <CheckCircleIcon className="h-4 w-4 mr-1" />
               No security issues detected
             </div>
+          ) : (
+            /* Expandable Security Issue Details */
+            <details className="mt-4">
+              <summary className="cursor-pointer text-sm font-medium text-red-600 hover:text-red-800 flex items-center">
+                <ExclamationTriangleIcon className="h-4 w-4 mr-1" />
+                View {analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0} security issues
+              </summary>
+              <div className="mt-3 space-y-3 max-h-96 overflow-y-auto">
+                {/* Show vulnerabilities from the array */}
+                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities || []).slice(0, 10).map((vuln: any, index: number) => (
+                  <div key={index} className={`p-3 rounded-lg border text-xs ${
+                    vuln.severity?.toLowerCase() === 'critical' ? 'bg-red-50 border-red-200' :
+                    vuln.severity?.toLowerCase() === 'high' ? 'bg-orange-50 border-orange-200' :
+                    vuln.severity?.toLowerCase() === 'medium' ? 'bg-yellow-50 border-yellow-200' :
+                    'bg-blue-50 border-blue-200'
+                  }`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`font-semibold ${
+                        vuln.severity?.toLowerCase() === 'critical' ? 'text-red-800' :
+                        vuln.severity?.toLowerCase() === 'high' ? 'text-orange-800' :
+                        vuln.severity?.toLowerCase() === 'medium' ? 'text-yellow-800' :
+                        'text-blue-800'
+                      }`}>
+                        {vuln.type || vuln.message || 'Security Issue'}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                        vuln.severity?.toLowerCase() === 'critical' ? 'bg-red-200 text-red-800' :
+                        vuln.severity?.toLowerCase() === 'high' ? 'bg-orange-200 text-orange-800' :
+                        vuln.severity?.toLowerCase() === 'medium' ? 'bg-yellow-200 text-yellow-800' :
+                        'bg-blue-200 text-blue-800'
+                      }`}>
+                        {vuln.severity || 'Unknown'}
+                      </span>
+                    </div>
+                    {vuln.message && <p className="text-gray-700 mb-2">{vuln.message}</p>}
+                    {vuln.file && (
+                      <div className="text-gray-600">
+                        <span className="font-medium">File:</span> {vuln.file}
+                        {vuln.line && <span className="ml-2">Line: {vuln.line}</span>}
+                      </div>
+                    )}
+                    {vuln.code && (
+                      <div className="mt-2 p-2 bg-gray-900 rounded text-green-400 font-mono overflow-x-auto">
+                        <code>{vuln.code}</code>
+                      </div>
+                    )}
+                    <div className="mt-2 text-gray-600">
+                      <span className="font-medium">Fix:</span> {
+                        vuln.type === 'missing-nonce-verification' ? 'Add wp_verify_nonce() check before processing $_POST data' :
+                        vuln.type === 'sql-injection' ? 'Use $wpdb->prepare() for all database queries with variables' :
+                        vuln.type === 'xss-vulnerability' ? 'Escape output using esc_html(), esc_attr(), or esc_url()' :
+                        vuln.type === 'file-inclusion' ? 'Never use user input directly in include/require statements' :
+                        vuln.type === 'unsafe-deserialization' ? 'Never unserialize user-supplied data' :
+                        'Review and sanitize this code section'
+                      }
+                    </div>
+                  </div>
+                ))}
+                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) > 10 && (
+                  <div className="text-center text-gray-500 text-xs py-2">
+                    Showing 10 of {analysis.results.riskAssessment.securityRisks.vulnerabilities.length} issues
+                  </div>
+                )}
+              </div>
+            </details>
           )}
         </div>
       </div>
@@ -511,6 +576,68 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
               </div>
             ))}
           </div>
+        ) : 
+        /* Generate recommendations from actual security issues if they exist */
+        (analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0) > 0 || (analysis.results?.codeQualityScore || 0) < 50 ? (
+          <div className="space-y-4">
+            {/* Security Issues Summary */}
+            {(analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0) > 0 && (
+              <div className="border rounded-lg p-4 border-red-300 bg-red-50">
+                <div className="flex items-start space-x-3">
+                  <div className="p-1 rounded-full bg-red-100">
+                    <ShieldCheckIcon className="h-4 w-4 text-red-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-red-800">
+                        🔒 Security Vulnerabilities Detected
+                      </h4>
+                      <span className="px-2 py-1 text-xs rounded-full font-medium bg-red-200 text-red-800">
+                        HIGH PRIORITY
+                      </span>
+                    </div>
+                    <p className="text-sm mb-3 text-red-700">
+                      Found {analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0} security issues that require immediate attention.
+                      {(analysis.results?.riskAssessment?.securityRisks?.critical?.length || 0) > 0 && 
+                        ` Including ${analysis.results.riskAssessment.securityRisks.critical.length} critical vulnerabilities.`}
+                      {(analysis.results?.riskAssessment?.securityRisks?.high?.length || 0) > 0 && 
+                        ` ${analysis.results.riskAssessment.securityRisks.high.length} high-priority issues.`}
+                    </p>
+                    <div className="text-xs text-red-600">
+                      <span className="font-medium">Action Required:</span> Review the Security section below for detailed vulnerability information.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Code Quality Warning */}
+            {(analysis.results?.codeQualityScore || 0) < 50 && (
+              <div className="border rounded-lg p-4 border-orange-300 bg-orange-50">
+                <div className="flex items-start space-x-3">
+                  <div className="p-1 rounded-full bg-orange-100">
+                    <ExclamationTriangleIcon className="h-4 w-4 text-orange-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-orange-800">
+                        🔧 Code Quality Needs Improvement
+                      </h4>
+                      <span className="px-2 py-1 text-xs rounded-full font-medium bg-orange-200 text-orange-800">
+                        MEDIUM
+                      </span>
+                    </div>
+                    <p className="text-sm mb-3 text-orange-700">
+                      Code quality score is {analysis.results?.codeQualityScore || 0}%. Consider addressing code style issues, reducing complexity, and improving maintainability.
+                    </p>
+                    <div className="text-xs text-orange-600">
+                      <span className="font-medium">Suggestion:</span> Run a linter and fix reported issues. Consider refactoring complex functions.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="flex items-center text-green-600 text-sm">
             <CheckCircleIcon className="h-4 w-4 mr-2" />
@@ -519,7 +646,118 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
         )}
       </div>
 
+      {/* Top Critical Issues Section */}
+      {((analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) > 0) && (
+        <div className="bg-white rounded-lg shadow-sm border p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <ExclamationTriangleIcon className="h-6 w-6 text-red-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">Top Critical Issues</h2>
+            </div>
+            <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">
+              Requires Immediate Attention
+            </span>
+          </div>
+          
+          <p className="text-sm text-gray-600 mb-4">
+            These are the most critical security issues found in your code. Address these first to improve your security score.
+          </p>
 
+          <div className="space-y-4">
+            {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities || [])
+              .sort((a: any, b: any) => {
+                const severityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 }
+                return (severityOrder[a.severity?.toLowerCase()] || 4) - (severityOrder[b.severity?.toLowerCase()] || 4)
+              })
+              .slice(0, 5)
+              .map((issue: any, index: number) => (
+                <div key={index} className={`border-l-4 p-4 rounded-r-lg ${
+                  issue.severity?.toLowerCase() === 'critical' ? 'border-l-red-600 bg-red-50' :
+                  issue.severity?.toLowerCase() === 'high' ? 'border-l-orange-500 bg-orange-50' :
+                  issue.severity?.toLowerCase() === 'medium' ? 'border-l-yellow-500 bg-yellow-50' :
+                  'border-l-blue-500 bg-blue-50'
+                }`}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center mb-2">
+                        <span className={`text-lg font-bold mr-2 ${
+                          issue.severity?.toLowerCase() === 'critical' ? 'text-red-700' :
+                          issue.severity?.toLowerCase() === 'high' ? 'text-orange-700' :
+                          'text-yellow-700'
+                        }`}>
+                          #{index + 1}
+                        </span>
+                        <h3 className="font-semibold text-gray-900">
+                          {issue.type === 'missing-nonce-verification' ? 'Missing Nonce Verification' :
+                           issue.type === 'sql-injection' ? 'SQL Injection Risk' :
+                           issue.type === 'xss-vulnerability' ? 'Cross-Site Scripting (XSS)' :
+                           issue.type === 'file-inclusion' ? 'File Inclusion Vulnerability' :
+                           issue.type === 'unsafe-deserialization' ? 'Unsafe Deserialization' :
+                           issue.type || 'Security Issue'}
+                        </h3>
+                        <span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded ${
+                          issue.severity?.toLowerCase() === 'critical' ? 'bg-red-200 text-red-800' :
+                          issue.severity?.toLowerCase() === 'high' ? 'bg-orange-200 text-orange-800' :
+                          'bg-yellow-200 text-yellow-800'
+                        }`}>
+                          {issue.severity?.toUpperCase() || 'HIGH'}
+                        </span>
+                      </div>
+                      
+                      <p className="text-sm text-gray-700 mb-2">
+                        {issue.message || 'Security vulnerability detected that could compromise your application.'}
+                      </p>
+                      
+                      {issue.file && (
+                        <div className="text-sm mb-2">
+                          <span className="font-medium text-gray-600">Location: </span>
+                          <code className="bg-gray-100 px-2 py-0.5 rounded text-xs">
+                            {issue.file}{issue.line ? `:${issue.line}` : ''}
+                          </code>
+                        </div>
+                      )}
+                      
+                      {issue.code && (
+                        <div className="mb-3">
+                          <span className="text-xs font-medium text-gray-600 block mb-1">Problematic Code:</span>
+                          <pre className="bg-gray-900 text-red-400 p-2 rounded text-xs overflow-x-auto">
+                            <code>{issue.code}</code>
+                          </pre>
+                        </div>
+                      )}
+                      
+                      <div className="bg-green-100 border border-green-200 rounded p-3">
+                        <span className="font-medium text-green-800 text-sm block mb-1">How to Fix:</span>
+                        <p className="text-sm text-green-700">
+                          {issue.type === 'missing-nonce-verification' 
+                            ? 'Add wp_verify_nonce() check before processing any $_POST, $_GET, or $_REQUEST data. Example: if (!wp_verify_nonce($_POST[\'_wpnonce\'], \'action_name\')) { wp_die(\'Security check failed\'); }'
+                            : issue.type === 'sql-injection' 
+                            ? 'Always use $wpdb->prepare() for database queries with user input. Example: $wpdb->prepare("SELECT * FROM {$wpdb->posts} WHERE ID = %d", $post_id)'
+                            : issue.type === 'xss-vulnerability' 
+                            ? 'Escape all output using appropriate functions: esc_html() for HTML content, esc_attr() for attributes, esc_url() for URLs. Never echo user input directly.'
+                            : issue.type === 'file-inclusion' 
+                            ? 'Never use user-supplied data in include/require statements. Use a whitelist of allowed files and validate against it.'
+                            : issue.type === 'unsafe-deserialization' 
+                            ? 'Never use unserialize() on user-supplied data. Use JSON encoding/decoding instead, or validate the data strictly before deserializing.'
+                            : 'Review this code section and apply appropriate security measures based on WordPress coding standards.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+          
+          {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) > 5 && (
+            <div className="mt-4 text-center">
+              <span className="text-sm text-gray-500">
+                Showing top 5 of {analysis.results.riskAssessment.securityRisks.vulnerabilities.length} total issues. 
+                See Security section above for complete list.
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Comprehensive Technical Documentation */}
       <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg shadow-sm border p-6" data-section="documentation">

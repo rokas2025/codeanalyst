@@ -36,26 +36,27 @@ export class CodeAnalyzer {
       ['Laravel', [/use Illuminate/, /extends Controller/, /Route::/]],
       ['Ruby on Rails', [/require.*rails/, /class.*Controller/, /belongs_to/, /has_many/]],
       ['WordPress', [
-        /wp-config\.php/i,
-        /wp-content\//i,
-        /wp-includes\//i,
-        /get_header\(\)/i,
-        /wp_enqueue_script/i,
-        /wp_enqueue_style/i,
-        /add_action\(/i,
-        /add_filter\(/i,
-        /\$wpdb->/i,
-        /register_post_type\(/i,
-        /register_taxonomy\(/i,
-        /wp_query/i,
-        /the_post\(\)/i,
-        /have_posts\(\)/i,
-        /get_template_part\(/i,
-        /wp_footer\(\)/i,
-        /wp_head\(\)/i,
+        // WordPress PHP functions and patterns (content-based)
+        /get_header\s*\(/i,
+        /wp_enqueue_script\s*\(/i,
+        /wp_enqueue_style\s*\(/i,
+        /add_action\s*\(/i,
+        /add_filter\s*\(/i,
+        /\$wpdb\s*->/i,
+        /register_post_type\s*\(/i,
+        /register_taxonomy\s*\(/i,
+        /new\s+WP_Query/i,
+        /the_post\s*\(/i,
+        /have_posts\s*\(/i,
+        /get_template_part\s*\(/i,
+        /wp_footer\s*\(/i,
+        /wp_head\s*\(/i,
         /Theme Name:/i,
         /Plugin Name:/i,
-        /functions\.php/i
+        /get_option\s*\(/i,
+        /update_option\s*\(/i,
+        /wp_nonce_field/i,
+        /check_admin_referer/i
       ]],
       // WordPress Page Builders
       ['Elementor', [
@@ -1409,8 +1410,8 @@ export class CodeAnalyzer {
         languageStats.set(language, stats)
       }
       
-      // Framework detection
-      this.detectFrameworksInFile(file.content, frameworksFound)
+      // Framework detection (pass both content and file path)
+      this.detectFrameworksInFile(file.content, frameworksFound, file.path)
       
       // Module structure analysis
       if (file.extension === '.js' || file.extension === '.jsx' || file.extension === '.ts' || file.extension === '.tsx') {
@@ -1658,9 +1659,10 @@ export class CodeAnalyzer {
     return languageMap[ext] || null
   }
 
-  detectFrameworksInFile(content, frameworksFound) {
+  detectFrameworksInFile(content, frameworksFound, filePath = '') {
     if (!content) return
     
+    // Check content patterns
     for (const [framework, patterns] of this.frameworkPatterns.entries()) {
       for (const pattern of patterns) {
         if (pattern.test(content)) {
@@ -1668,6 +1670,23 @@ export class CodeAnalyzer {
           break
         }
       }
+    }
+    
+    // Additional WordPress detection from file paths
+    if (filePath) {
+      const lowerPath = filePath.toLowerCase()
+      if (lowerPath.includes('functions.php') || 
+          lowerPath.includes('style.css') && content.includes('Theme Name:') ||
+          lowerPath.includes('wp-content') ||
+          lowerPath.includes('wp-includes')) {
+        frameworksFound.add('WordPress')
+      }
+      // Detect page builders from file paths
+      if (lowerPath.includes('elementor')) frameworksFound.add('Elementor')
+      if (lowerPath.includes('js_composer') || lowerPath.includes('wpbakery')) frameworksFound.add('WPBakery')
+      if (lowerPath.includes('et_builder') || lowerPath.includes('divi')) frameworksFound.add('Divi')
+      if (lowerPath.includes('oxygen')) frameworksFound.add('Oxygen')
+      if (lowerPath.includes('fl-builder') || lowerPath.includes('beaver')) frameworksFound.add('Beaver Builder')
     }
   }
 
