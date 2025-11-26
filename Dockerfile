@@ -34,14 +34,16 @@ RUN apt-get update && apt-get install -y \
     && php -v
 
 # Install PHPCS (PHP CodeSniffer) for WordPress coding standards
-RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
+RUN wget -q https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
     && chmod +x phpcs.phar \
     && mv phpcs.phar /usr/local/bin/phpcs \
     && phpcs --version
 
 # Install WordPress Coding Standards for PHPCS
-RUN curl -OL https://github.com/WordPress/WordPress-Coding-Standards/archive/refs/heads/main.zip \
-    && unzip main.zip -d /usr/local/share/ \
+RUN apt-get update && apt-get install -y unzip --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/* \
+    && wget -q https://github.com/WordPress/WordPress-Coding-Standards/archive/refs/heads/main.zip \
+    && unzip -q main.zip -d /usr/local/share/ \
     && rm main.zip \
     && phpcs --config-set installed_paths /usr/local/share/WordPress-Coding-Standards-main
 
