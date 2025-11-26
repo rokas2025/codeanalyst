@@ -2,6 +2,12 @@
 
 All notable changes to the CodeAnalyst WordPress Connector plugin.
 
+## [1.2.2] - 2025-11-26
+
+### Fixed
+- Parent theme file fetching now works correctly with `[parent]/` prefix
+- Files from parent theme are now properly returned for child theme analysis
+
 ## [1.2.1] - 2025-11-26
 
 ### Added

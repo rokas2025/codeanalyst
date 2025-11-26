@@ -142,11 +142,23 @@ class CodeAnalyst_REST_API {
         $file = $request->get_param('file');
         $theme = wp_get_theme();
         $theme_dir = $theme->get_stylesheet_directory();
-        $file_path = $theme_dir . '/' . $file;
+        $template_dir = $theme->get_template_directory();
+        
+        // Handle [parent]/ prefix for parent theme files
+        $is_parent_file = (strpos($file, '[parent]/') === 0);
+        if ($is_parent_file) {
+            $file = substr($file, 9); // Remove '[parent]/' prefix (9 chars)
+            $file_path = $template_dir . '/' . $file;
+            $base_dir = $template_dir;
+            error_log("CodeAnalyst: Fetching parent theme file: " . $file);
+        } else {
+            $file_path = $theme_dir . '/' . $file;
+            $base_dir = $theme_dir;
+        }
         
         // Security: prevent directory traversal
         // Use realpath on BOTH paths to handle symlinks correctly
-        $real_theme_dir = realpath($theme_dir);
+        $real_base_dir = realpath($base_dir);
         $real_path = realpath($file_path);
         
         // If realpath returns false, file doesn't exist - try without realpath first
@@ -162,7 +174,7 @@ class CodeAnalyst_REST_API {
             }
         } else {
             // Both realpath worked - compare normalized paths
-            if ($real_theme_dir === false || strpos($real_path, $real_theme_dir) !== 0) {
+            if ($real_base_dir === false || strpos($real_path, $real_base_dir) !== 0) {
                 return new WP_Error('invalid_file', 'Invalid file path (outside theme)', array('status' => 403));
             }
         }

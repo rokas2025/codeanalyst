@@ -616,59 +616,6 @@ function CodeAnalystContent() {
                 )}
               </div>
               
-              <button
-                onClick={async () => {
-                  try {
-                    toast.loading('Fetching theme files...')
-                    
-                    // Fetch theme files with optional page filter
-                    const params = selectedPageId !== 'all' ? `?pageId=${selectedPageId}` : ''
-                    const response = await wordpressService.getThemeFiles(wordpressSite.id, params)
-                    
-                    console.log('📦 WordPress theme files response:', {
-                      success: response.success,
-                      filesCount: response.files?.length || 0,
-                      pageFilter: selectedPageId
-                    })
-                    
-                    toast.dismiss()
-                    
-                    if (response.success && response.files && response.files.length > 0) {
-                      console.log('✅ Setting uploaded files:', response.files.length, 'files')
-                      setUploadedFiles(response.files)
-                      toast.success(`Loaded ${response.files.length} theme files. Starting analysis...`)
-                      
-                      // Auto-start analysis - pass files directly!
-                      setTimeout(() => {
-                        console.log('🚀 Starting analysis with files:', response.files.length)
-                        handleAnalyze(response.files)
-                      }, 500)
-                    } else if (response.success && response.files && response.files.length === 0) {
-                      console.error('❌ WordPress returned 0 theme files')
-                      toast.error(
-                        'No theme files found. Please check:\n' +
-                        '1. Plugin is installed and active\n' +
-                        '2. WordPress site is accessible\n' +
-                        '3. Theme directory contains files\n' +
-                        '4. Plugin has correct permissions',
-                        { duration: 8000 }
-                      )
-                    } else {
-                      console.error('❌ WordPress theme fetch failed:', response)
-                      toast.error(response.error || 'Failed to fetch theme files')
-                    }
-                  } catch (error) {
-                    console.error('❌ WordPress theme fetch exception:', error)
-                    toast.dismiss()
-                    toast.error(`Error: ${error instanceof Error ? error.message : 'Failed to fetch theme files'}`)
-                  }
-                }}
-                disabled={loadingPages}
-                className="w-full btn-primary"
-              >
-                <ArrowPathIcon className="h-5 w-5 mr-2" />
-                Start Analysis
-              </button>
             </div>
           )}
         </div>
