@@ -112,9 +112,9 @@ class WordPressService {
                 throw new Error('Failed to download plugin')
             }
             
-            // Get filename from Content-Disposition header or use default with version
+            // Get filename from Content-Disposition header (dynamic version from backend)
             const contentDisposition = response.headers.get('Content-Disposition')
-            let filename = 'codeanalyst-connector-v1.2.1.zip'
+            let filename = 'codeanalyst-connector-latest-version-failed-contact-admin.zip'
             if (contentDisposition) {
                 const match = contentDisposition.match(/filename="?([^";\n]+)"?/)
                 if (match) {
