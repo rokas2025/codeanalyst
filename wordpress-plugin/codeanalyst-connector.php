@@ -3,7 +3,7 @@
  * Plugin Name: CodeAnalyst Connector
  * Plugin URI: https://codeanalyst.vercel.app
  * Description: Connect your WordPress site to CodeAnalyst for theme file analysis and content management
- * Version: 1.2.2
+ * Version: 1.2.3
  * Author: CodeAnalyst
  * Author URI: https://codeanalyst.vercel.app
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('CODEANALYST_VERSION', '1.2.2');
+define('CODEANALYST_VERSION', '1.2.3');
 define('CODEANALYST_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CODEANALYST_PLUGIN_URL', plugin_dir_url(__FILE__));
 

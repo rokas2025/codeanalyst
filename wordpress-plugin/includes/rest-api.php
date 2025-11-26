@@ -334,18 +334,69 @@ class CodeAnalyst_REST_API {
             $mysql_version = $wpdb->db_version();
         }
         
+        // Check for WordPress core update
+        $wp_update_available = false;
+        $wp_latest_version = $wp_version;
+        
+        // Get update info (requires update check to have run)
+        $update_core = get_site_transient('update_core');
+        if (!empty($update_core->updates) && is_array($update_core->updates)) {
+            foreach ($update_core->updates as $update) {
+                if ($update->response === 'upgrade') {
+                    $wp_update_available = true;
+                    $wp_latest_version = $update->current;
+                    break;
+                }
+            }
+        }
+        
+        // Check for plugin updates
+        $plugin_updates = array();
+        $update_plugins = get_site_transient('update_plugins');
+        if (!empty($update_plugins->response) && is_array($update_plugins->response)) {
+            foreach ($update_plugins->response as $plugin_path => $plugin_info) {
+                if (!function_exists('get_plugin_data')) {
+                    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+                }
+                $plugin_file = WP_PLUGIN_DIR . '/' . $plugin_path;
+                if (file_exists($plugin_file)) {
+                    $data = get_plugin_data($plugin_file);
+                    $plugin_updates[] = array(
+                        'name' => $data['Name'],
+                        'current_version' => $data['Version'],
+                        'new_version' => isset($plugin_info->new_version) ? $plugin_info->new_version : 'unknown'
+                    );
+                }
+            }
+        }
+        
+        // Check for theme update
+        $theme_update_available = false;
+        $theme_latest_version = $theme->get('Version');
+        $update_themes = get_site_transient('update_themes');
+        if (!empty($update_themes->response) && isset($update_themes->response[$theme->get_stylesheet()])) {
+            $theme_update_available = true;
+            $theme_latest_version = $update_themes->response[$theme->get_stylesheet()]['new_version'];
+        }
+        
         return rest_ensure_response(array(
             'success' => true,
             'data' => array(
                 'theme' => $theme->get('Name'),
                 'theme_version' => $theme->get('Version'),
                 'theme_template' => $theme->get_template(),
+                'theme_update_available' => $theme_update_available,
+                'theme_latest_version' => $theme_latest_version,
                 'builders' => $builders,
                 'builder_versions' => $builder_versions,
                 'wp_version' => $wp_version,
+                'wp_update_available' => $wp_update_available,
+                'wp_latest_version' => $wp_latest_version,
                 'php_version' => PHP_VERSION,
                 'mysql_version' => $mysql_version,
                 'active_plugins' => $plugin_data,
+                'plugin_updates' => $plugin_updates,
+                'plugins_needing_update' => count($plugin_updates),
                 'plugin_version' => defined('CODEANALYST_VERSION') ? CODEANALYST_VERSION : '1.0.0',
                 'site_url' => get_site_url(),
                 'home_url' => get_home_url(),

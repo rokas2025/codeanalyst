@@ -40,6 +40,7 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
 
   const isPremiumAnalysis = analysis?.results?.aiExplanations?.analysisType === 'Premium AI Analysis'
   const [isExporting, setIsExporting] = useState(false)
+  const [securityIssuesShown, setSecurityIssuesShown] = useState(10) // Pagination for security issues
   
   const hasDependency = (depName: string) => {
     const deps = analysis.results?.technicalStructure?.dependencies?.production
@@ -371,9 +372,9 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
                 <ExclamationTriangleIcon className="h-4 w-4 mr-1" />
                 View {analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0} security issues
               </summary>
-              <div className="mt-3 space-y-3 max-h-96 overflow-y-auto">
-                {/* Show vulnerabilities from the array */}
-                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities || []).slice(0, 10).map((vuln: any, index: number) => (
+              <div className="mt-3 space-y-3 max-h-[500px] overflow-y-auto">
+                {/* Show vulnerabilities with pagination */}
+                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities || []).slice(0, securityIssuesShown).map((vuln: any, index: number) => (
                   <div key={index} className={`p-3 rounded-lg border text-xs ${
                     vuln.severity?.toLowerCase() === 'critical' ? 'bg-red-50 border-red-200' :
                     vuln.severity?.toLowerCase() === 'high' ? 'bg-orange-50 border-orange-200' :
@@ -422,9 +423,21 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
                     </div>
                   </div>
                 ))}
-                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) > 10 && (
+                {/* Pagination controls */}
+                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) > securityIssuesShown && (
+                  <div className="text-center py-3">
+                    <button
+                      onClick={() => setSecurityIssuesShown(prev => prev + 10)}
+                      className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-lg transition-colors"
+                    >
+                      Load More ({securityIssuesShown} of {analysis.results.riskAssessment.securityRisks.vulnerabilities.length})
+                    </button>
+                  </div>
+                )}
+                {(analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) <= securityIssuesShown && 
+                 (analysis.results?.riskAssessment?.securityRisks?.vulnerabilities?.length || 0) > 0 && (
                   <div className="text-center text-gray-500 text-xs py-2">
-                    Showing 10 of {analysis.results.riskAssessment.securityRisks.vulnerabilities.length} issues
+                    Showing all {analysis.results.riskAssessment.securityRisks.vulnerabilities.length} issues
                   </div>
                 )}
               </div>
@@ -787,8 +800,15 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
                     <li><strong>Files:</strong> {analysis.results?.totalFiles || analysis.total_files || 0}</li>
                     <li><strong>Lines of Code:</strong> {(analysis.results?.totalLines || analysis.total_lines || 0).toLocaleString()}</li>
                     <li><strong>Quality Score:</strong> {analysis.results?.codeQualityScore || analysis.code_quality_score || 0}/100</li>
-                    <li><strong>Technical Debt:</strong> {analysis.results?.technicalDebtPercentage || analysis.technical_debt_percentage || 0}%</li>
-                    <li><strong>Test Coverage:</strong> {analysis.results?.testCoveragePercentage || analysis.test_coverage_percentage || 0}%</li>
+                    {!isWordPressTheme && (
+                      <>
+                        <li><strong>Technical Debt:</strong> {analysis.results?.technicalDebtPercentage || analysis.technical_debt_percentage || 0}%</li>
+                        <li><strong>Test Coverage:</strong> {analysis.results?.testCoveragePercentage || analysis.test_coverage_percentage || 0}%</li>
+                      </>
+                    )}
+                    {isWordPressTheme && (
+                      <li><strong>Security Score:</strong> {analysis.results?.riskAssessment?.securityRisks?.score ?? 100}/100</li>
+                    )}
                   </ul>
                 </div>
                 <div>
@@ -940,47 +960,49 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
             </div>
           </div>
 
-          {/* Testing & Quality Assurance */}
-          <div className="border border-green-200 rounded-lg p-6 bg-white">
-            <h3 className="font-bold text-lg text-gray-900 mb-4 flex items-center">
-              <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-              Testing & Quality Assurance
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">📊 Current Status</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Test Coverage:</span>
-                    <span className={`font-medium ${(analysis.results?.testCoveragePercentage || 0) >= 60 ? 'text-green-600' : 'text-red-600'}`}>
-                      {analysis.results?.testCoveragePercentage || 0}%
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Quality Score:</span>
-                    <span className={`font-medium ${(analysis.results?.codeQualityScore || 0) >= 70 ? 'text-green-600' : 'text-yellow-600'}`}>
-                      {analysis.results?.codeQualityScore || 0}/100
-                    </span>
+          {/* Testing & Quality Assurance - Hidden for WordPress themes */}
+          {!isWordPressTheme && (
+            <div className="border border-green-200 rounded-lg p-6 bg-white">
+              <h3 className="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                Testing & Quality Assurance
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">📊 Current Status</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Test Coverage:</span>
+                      <span className={`font-medium ${(analysis.results?.testCoveragePercentage || 0) >= 60 ? 'text-green-600' : 'text-red-600'}`}>
+                        {analysis.results?.testCoveragePercentage || 0}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Quality Score:</span>
+                      <span className={`font-medium ${(analysis.results?.codeQualityScore || 0) >= 70 ? 'text-green-600' : 'text-yellow-600'}`}>
+                        {analysis.results?.codeQualityScore || 0}/100
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">🎯 Testing Gaps</h4>
-                <div className="text-xs text-gray-700 space-y-1">
-                                     {analysis.results?.technicalStructure?.aiInsights?.testing?.gaps?.map((gap: string, i: number) => (
-                     <div key={i}>• {gap}</div>
-                   )) || <div>• No specific testing gaps identified</div>}
-                 </div>
-               </div>
-               <div>
-                 <h4 className="font-semibold text-gray-900 mb-2">📋 Strategy</h4>
-                 <div className="text-xs text-gray-700">
-                   {analysis.results?.technicalStructure?.aiInsights?.testing?.strategy || 
-                   'Implement comprehensive testing including unit tests, integration tests, and end-to-end testing for critical user flows.'}
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">🎯 Testing Gaps</h4>
+                  <div className="text-xs text-gray-700 space-y-1">
+                    {analysis.results?.technicalStructure?.aiInsights?.testing?.gaps?.map((gap: string, i: number) => (
+                      <div key={i}>• {gap}</div>
+                    )) || <div>• No specific testing gaps identified</div>}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">📋 Strategy</h4>
+                  <div className="text-xs text-gray-700">
+                    {analysis.results?.technicalStructure?.aiInsights?.testing?.strategy || 
+                    'Implement comprehensive testing including unit tests, integration tests, and end-to-end testing for critical user flows.'}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Export Options */}
           <div className="border border-green-200 rounded-lg p-4 bg-white">
