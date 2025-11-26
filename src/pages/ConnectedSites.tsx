@@ -333,9 +333,9 @@ export function ConnectedSites() {
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600">Plugin:</span>
-                                    <span className={`font-medium ${connection.plugin_version === '1.2.0' ? 'text-green-600' : 'text-orange-600'}`}>
+                                    <span className={`font-medium ${connection.plugin_version === '1.2.1' ? 'text-green-600' : 'text-orange-600'}`}>
                                         {connection.plugin_version ? `v${connection.plugin_version}` : 'Not detected'}
-                                        {connection.plugin_version && connection.plugin_version !== '1.2.0' && (
+                                        {connection.plugin_version && connection.plugin_version !== '1.2.1' && (
                                             <span className="ml-1 text-xs text-orange-600">(Update available)</span>
                                         )}
                                     </span>

@@ -93,14 +93,43 @@ class CodeAnalyst_REST_API {
     public function get_theme_files($request) {
         $theme = wp_get_theme();
         $theme_dir = $theme->get_stylesheet_directory();
+        $template_dir = $theme->get_template_directory();
         
-        $files = $this->scan_directory($theme_dir);
+        // Debug logging
+        error_log("CodeAnalyst: Scanning theme: " . $theme->get('Name'));
+        error_log("CodeAnalyst: Stylesheet dir: " . $theme_dir);
+        error_log("CodeAnalyst: Template dir: " . $template_dir);
+        
+        $files = array();
+        $is_child_theme = ($theme_dir !== $template_dir);
+        
+        // If this is a child theme, scan the parent theme first
+        if ($is_child_theme) {
+            error_log("CodeAnalyst: Child theme detected, scanning parent theme first");
+            $parent_files = $this->scan_directory($template_dir);
+            error_log("CodeAnalyst: Parent theme has " . count($parent_files) . " files");
+            
+            // Add parent theme files with [parent] prefix
+            foreach ($parent_files as $file) {
+                $file['path'] = '[parent]/' . $file['path'];
+                $files[] = $file;
+            }
+        }
+        
+        // Scan the current theme (or child theme)
+        $current_files = $this->scan_directory($theme_dir);
+        error_log("CodeAnalyst: Current theme has " . count($current_files) . " files");
+        $files = array_merge($files, $current_files);
+        
+        error_log("CodeAnalyst: Total files found: " . count($files));
         
         return rest_ensure_response(array(
             'success' => true,
             'theme' => $theme->get('Name'),
             'theme_version' => $theme->get('Version'),
             'theme_dir' => basename($theme_dir),
+            'is_child_theme' => $is_child_theme,
+            'parent_theme' => $is_child_theme ? $theme->parent()->get('Name') : null,
             'files' => $files,
             'total_files' => count($files)
         ));

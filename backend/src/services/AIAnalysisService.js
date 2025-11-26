@@ -65,7 +65,7 @@ export class AIAnalysisService {
    */
   getAvailableProviders() {
     const available = []
-    if (this.providers.openai) available.push({ name: 'OpenAI GPT-5 mini', model: 'gpt-5-mini', source: process.env.OPENAI_API_KEY ? 'environment' : 'demo' })
+    if (this.providers.openai) available.push({ name: 'OpenAI GPT-5.1 Codex', model: 'gpt-5.1-codex', source: process.env.OPENAI_API_KEY ? 'environment' : 'demo' })
     if (this.providers.anthropic) available.push({ name: 'Anthropic Claude', model: 'claude-3-sonnet', source: process.env.ANTHROPIC_API_KEY ? 'environment' : 'demo' })
     if (this.providers.google) available.push({ name: 'Google Gemini', model: 'gemini-2.5-flash', source: process.env.GOOGLE_AI_API_KEY ? 'environment' : 'demo' })
     return available
@@ -308,12 +308,12 @@ Please respond in JSON format with the following structure:
       let modelUsed = 'unknown'
       
       if (provider === 'openai' && this.providers.openai) {
-        modelUsed = options.model || 'gpt-5-mini'
+        modelUsed = options.model || 'gpt-5.1-codex'
         const completion = await this.providers.openai.chat.completions.create({
           model: modelUsed,
           messages: [{ role: 'user', content: prompt }],
-          max_completion_tokens: 2000,
-          temperature: 0.3
+          max_completion_tokens: 2000
+          // Note: temperature parameter removed - Codex models only support default (1)
         })
         
         response = completion.choices[0].message.content

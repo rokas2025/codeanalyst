@@ -8,6 +8,7 @@ import axios from 'axios'
 import { ESLint } from 'eslint'
 import { EscomplexService } from './EscomplexService.js'
 import { PHPStanService } from './PHPStanService.js'
+import { PHPCSService } from './PHPCSService.js'
 
 const execAsync = promisify(exec)
 
@@ -246,6 +247,37 @@ export class CodeAnalyzer {
       // Don't fail the entire analysis if PHPStan fails
     }
     
+    // Run PHPCS analysis for WordPress coding standards
+    try {
+      const phpcsService = new PHPCSService()
+      const phpcsResults = await phpcsService.analyzeCode(files, projectPath)
+      
+      // Add PHPCS results to quality
+      if (phpcsResults && !phpcsResults.error) {
+        quality.phpcs = phpcsResults
+        quality.lintingErrors += phpcsResults.totalViolations || 0
+        
+        // Convert PHPCS violations to quality issues
+        if (phpcsResults.violations) {
+          phpcsResults.violations.slice(0, 50).forEach(violation => { // Limit to 50
+            quality.issues.push({
+              type: 'coding-standards',
+              severity: violation.severity === 'error' ? 'error' : 'warning',
+              file: violation.file,
+              line: violation.line,
+              message: violation.message,
+              source: violation.source
+            })
+          })
+        }
+        
+        logger.info(`✅ PHPCS found ${phpcsResults.totalViolations} violations`)
+      }
+    } catch (error) {
+      logger.warn('PHPCS analysis skipped:', error.message)
+      // Don't fail the entire analysis if PHPCS fails
+    }
+    
     return quality
   }
 
@@ -294,36 +326,51 @@ export class CodeAnalyzer {
     const eslintIssues = []
     
     try {
-      // Initialize ESLint with basic configuration
+      // Import ESLint recommended config for flat config (ESLint 9+)
+      const js = await import('@eslint/js')
+      const securityPlugin = await import('eslint-plugin-security')
+      
+      // Initialize ESLint with flat config format (ESLint 9+)
       const eslint = new ESLint({
-        useEslintrc: false,
-        overrideConfig: {
-          env: {
-            browser: true,
-            node: true,
-            es2021: true
-          },
-          parserOptions: {
-            ecmaVersion: 'latest',
-            sourceType: 'module',
-            ecmaFeatures: {
-              jsx: true
+        overrideConfigFile: true,
+        overrideConfig: [
+          js.default.configs.recommended,
+          {
+            plugins: {
+              security: securityPlugin.default
+            },
+            languageOptions: {
+              ecmaVersion: 'latest',
+              sourceType: 'module',
+              globals: {
+                // Browser globals
+                window: 'readonly',
+                document: 'readonly',
+                console: 'readonly',
+                // Node globals
+                process: 'readonly',
+                __dirname: 'readonly',
+                __filename: 'readonly',
+                module: 'readonly',
+                require: 'readonly',
+                exports: 'readonly',
+                Buffer: 'readonly',
+                global: 'readonly'
+              }
+            },
+            rules: {
+              'no-unused-vars': 'warn',
+              'no-console': 'off',
+              'no-undef': 'warn',
+              'no-var': 'warn',
+              'prefer-const': 'warn',
+              'eqeqeq': 'warn',
+              'security/detect-object-injection': 'warn',
+              'security/detect-non-literal-regexp': 'warn',
+              'security/detect-unsafe-regex': 'error'
             }
-          },
-          plugins: ['security'],
-          extends: ['eslint:recommended', 'plugin:security/recommended'],
-          rules: {
-            'no-unused-vars': 'warn',
-            'no-console': 'off', // Allow console in analysis
-            'no-undef': 'error',
-            'no-var': 'warn',
-            'prefer-const': 'warn',
-            'eqeqeq': 'warn',
-            'security/detect-object-injection': 'warn',
-            'security/detect-non-literal-regexp': 'warn',
-            'security/detect-unsafe-regex': 'error'
           }
-        }
+        ]
       })
       
       // Filter JS/TS files
