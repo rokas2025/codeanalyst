@@ -259,7 +259,9 @@ BUSINESS ANALYSIS:
     }
 
     specificPrompt += `
-Please respond in JSON format with the following structure:
+IMPORTANT: Return ONLY valid JSON. Do NOT wrap the response in markdown code blocks.
+Do NOT include \`\`\`json or \`\`\` markers. Return raw JSON only, starting with { and ending with }.
+
 {
   "summary": "Brief overall assessment of the codebase",
   "systemOverview": {
@@ -466,28 +468,43 @@ Please respond in JSON format with the following structure:
    */
   parseCodeInsights(response, data) {
     try {
-      let jsonString = response.trim()
+      let jsonString = String(response || '').trim()
       
-      // Strip markdown code block wrapper if present (OpenAI often returns ```json ... ```)
-      if (jsonString.startsWith('```json')) {
-        jsonString = jsonString.slice(7) // Remove ```json
-      } else if (jsonString.startsWith('```')) {
-        jsonString = jsonString.slice(3) // Remove ```
-      }
-      if (jsonString.endsWith('```')) {
-        jsonString = jsonString.slice(0, -3) // Remove trailing ```
-      }
-      jsonString = jsonString.trim()
+      logger.info('AI raw response:', { 
+        length: jsonString.length, 
+        preview: jsonString.substring(0, 100)
+      })
       
-      logger.info('Parsing AI response:', { 
-        originalLength: response.length, 
-        cleanedLength: jsonString.length,
-        startsWithBrace: jsonString.startsWith('{')
+      // Strip ALL markdown code block variants
+      // Handle ```json, ```JSON, ``` with newlines, etc.
+      jsonString = jsonString
+        .replace(/^```json\s*/i, '')  // Remove ```json at start (case insensitive)
+        .replace(/^```\s*/i, '')       // Remove ``` at start
+        .replace(/\s*```\s*$/i, '')    // Remove ``` at end
+        .trim()
+      
+      // If still not starting with {, try to find JSON object in the response
+      if (!jsonString.startsWith('{')) {
+        const startIdx = jsonString.indexOf('{')
+        const endIdx = jsonString.lastIndexOf('}')
+        
+        if (startIdx !== -1 && endIdx !== -1 && startIdx < endIdx) {
+          logger.info('Extracting JSON from response at positions:', { startIdx, endIdx })
+          jsonString = jsonString.substring(startIdx, endIdx + 1)
+        }
+      }
+      
+      logger.info('Cleaned AI response:', { 
+        length: jsonString.length, 
+        startsWithBrace: jsonString.startsWith('{'),
+        endsWithBrace: jsonString.endsWith('}')
       })
       
       const parsed = JSON.parse(jsonString)
       
+      // Handle both "summary" and "systemOverview" formats
       return {
+        summary: parsed.summary || '',
         systemOverview: parsed.systemOverview || {},
         technicalInsights: parsed.technicalInsights || {},
         businessInsights: parsed.businessInsights || {},
@@ -501,7 +518,8 @@ Please respond in JSON format with the following structure:
       }
     } catch (error) {
       logger.error('Failed to parse AI code insights response:', error.message)
-      logger.error('Response preview:', response?.substring(0, 200))
+      logger.error('Response preview (first 500 chars):', response?.substring(0, 500))
+      logger.error('Response preview (last 200 chars):', response?.substring(response.length - 200))
       throw new Error('Failed to parse AI response. The AI service returned invalid data.')
     }
   }

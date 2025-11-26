@@ -35,6 +35,7 @@ function CodeAnalystContent() {
   const [wordpressPages, setWordpressPages] = useState<any[]>([])
   const [selectedPageId, setSelectedPageId] = useState<string>('all')
   const [loadingPages, setLoadingPages] = useState(false)
+  const [fetchProgress, setFetchProgress] = useState<{ current: number; total: number; phase: string } | null>(null)
   const { user, isAuthenticated } = useAuthStore()
 
   // Load GitHub repositories when user selects GitHub profile
@@ -807,20 +808,25 @@ function CodeAnalystContent() {
               // For WordPress, fetch files first then analyze
               if (userProfile === 'wordpress' && wordpressSite) {
                 try {
-                  toast.loading('Fetching theme files...')
+                  setFetchProgress({ current: 0, total: 0, phase: 'Connecting to WordPress...' })
                   const params = selectedPageId !== 'all' ? `?pageId=${selectedPageId}` : ''
                   const response = await wordpressService.getThemeFiles(wordpressSite.id, params)
-                  toast.dismiss()
                   
                   if (response.success && response.files && response.files.length > 0) {
+                    setFetchProgress({ current: response.files.length, total: response.files.length, phase: 'Files fetched!' })
                     console.log('✅ WordPress files fetched:', response.files.length)
                     setUploadedFiles(response.files)
+                    
+                    // Small delay to show completion before starting analysis
+                    await new Promise(r => setTimeout(r, 500))
+                    setFetchProgress(null)
                     handleAnalyze(response.files)
                   } else {
+                    setFetchProgress(null)
                     toast.error('No theme files found. Check plugin installation.')
                   }
                 } catch (error) {
-                  toast.dismiss()
+                  setFetchProgress(null)
                   toast.error('Failed to fetch WordPress files')
                 }
               } else {
@@ -829,16 +835,40 @@ function CodeAnalystContent() {
             }}
             disabled={
               isAnalyzing ||
+              fetchProgress !== null ||
               (userProfile === 'github' && !selectedRepository) ||
               (userProfile === 'zip' && uploadedFiles.length === 0) ||
               (userProfile === 'wordpress' && !wordpressSite)
             }
           >
-            {isAnalyzing ? 'Analyzing Code...' : 'Start AI Code Analysis'}
+            {fetchProgress ? 'Fetching Files...' : isAnalyzing ? 'Analyzing Code...' : 'Start AI Code Analysis'}
           </button>
           <p className="text-sm text-gray-500 mt-2 text-center">
             AI will analyze your code structure, suggest improvements, and generate documentation
           </p>
+        </div>
+      )}
+      
+      {/* File Fetch Progress */}
+      {fetchProgress && (
+        <div className="card p-6 bg-blue-50 border-blue-200">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+            <span className="font-medium text-blue-900">{fetchProgress.phase}</span>
+          </div>
+          {fetchProgress.total > 0 && (
+            <>
+              <div className="text-sm text-blue-700 mb-2">
+                {fetchProgress.current} of {fetchProgress.total} files
+              </div>
+              <div className="bg-blue-200 rounded-full h-2">
+                <div 
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${(fetchProgress.current / fetchProgress.total) * 100}%` }}
+                ></div>
+              </div>
+            </>
+          )}
         </div>
       )}
 

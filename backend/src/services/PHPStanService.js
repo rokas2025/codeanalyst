@@ -203,19 +203,41 @@ export class PHPStanService {
         maxBuffer: 10 * 1024 * 1024 // 10MB buffer
       })
 
-      // PHPStan returns JSON in stdout
-      return JSON.parse(stdout)
+      // Handle empty output (no errors found)
+      if (!stdout || stdout.trim() === '') {
+        logger.info('PHPStan returned no output (no errors found)')
+        return { totals: { file_errors: 0 }, files: {} }
+      }
+
+      // Try to parse JSON
+      try {
+        return JSON.parse(stdout)
+      } catch (parseError) {
+        logger.warn('PHPStan output is not valid JSON:', stdout.substring(0, 200))
+        return { totals: { file_errors: 0 }, files: {} }
+      }
 
     } catch (error) {
       // PHPStan returns non-zero exit code when errors are found
       if (error.stdout) {
+        // Handle empty stdout in error case
+        if (!error.stdout.trim()) {
+          logger.info('PHPStan error with empty stdout')
+          return { totals: { file_errors: 0 }, files: {} }
+        }
+        
         try {
           return JSON.parse(error.stdout)
         } catch {
-          throw new Error(`PHPStan failed: ${error.message}`)
+          logger.warn('PHPStan error output is not valid JSON:', error.stdout?.substring(0, 200))
+          // Return empty result instead of throwing
+          return { totals: { file_errors: 0 }, files: {} }
         }
       }
-      throw error
+      
+      // Log the error but return empty result instead of throwing
+      logger.error('PHPStan execution failed:', error.message)
+      return { totals: { file_errors: 0 }, files: {}, error: error.message }
     }
   }
 

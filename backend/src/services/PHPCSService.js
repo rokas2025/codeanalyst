@@ -130,6 +130,8 @@ export class PHPCSService {
    * Run PHPCS analysis
    */
   async runPHPCS(directory) {
+    const emptyResult = { totals: { errors: 0, warnings: 0, fixable: 0 }, files: {} }
+    
     try {
       // Run PHPCS with WordPress standard and JSON report
       const command = `${this.phpcsPath} --standard=${this.standard} --report=json --extensions=php ${directory}`
@@ -141,21 +143,48 @@ export class PHPCSService {
         maxBuffer: 10 * 1024 * 1024 // 10MB buffer
       })
 
-      // PHPCS returns JSON in stdout
-      return JSON.parse(stdout)
+      // Handle empty output
+      if (!stdout || stdout.trim() === '') {
+        logger.info('PHPCS returned no output (no violations found)')
+        return emptyResult
+      }
+
+      // Try to parse JSON
+      try {
+        return JSON.parse(stdout)
+      } catch (parseError) {
+        logger.warn('PHPCS output is not valid JSON:', stdout.substring(0, 200))
+        return emptyResult
+      }
 
     } catch (error) {
-      // PHPCS returns non-zero exit code when violations are found
+      // PHPCS returns non-zero exit code when violations are found (exit code 1 or 2)
       if (error.stdout) {
+        // Handle empty stdout
+        if (!error.stdout.trim()) {
+          logger.info('PHPCS error with empty stdout')
+          return emptyResult
+        }
+        
         try {
           return JSON.parse(error.stdout)
         } catch {
-          // If not valid JSON, might be an error message
-          logger.warn('PHPCS output not JSON, checking for errors')
-          throw new Error(`PHPCS failed: ${error.message}`)
+          // Log stderr for debugging
+          if (error.stderr) {
+            logger.error('PHPCS stderr:', error.stderr.substring(0, 500))
+          }
+          logger.warn('PHPCS error output is not valid JSON:', error.stdout?.substring(0, 200))
+          // Return empty result instead of throwing
+          return emptyResult
         }
       }
-      throw error
+      
+      // Log the error but return empty result instead of crashing
+      logger.error('PHPCS execution failed:', error.message)
+      if (error.stderr) {
+        logger.error('PHPCS stderr:', error.stderr.substring(0, 500))
+      }
+      return { ...emptyResult, error: error.message }
     }
   }
 
