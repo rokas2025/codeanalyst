@@ -565,25 +565,57 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
       if (aiInsights) {
         // Merge AI risk assessment with actual security scan results
         const actualSecurityResults = codeAnalysis.riskAssessment?.securityRisks || rawAnalysis?.security || {}
+        const vulnerabilities = actualSecurityResults.vulnerabilities || []
+        
+        // Log sample vulnerability to debug severity field
+        if (vulnerabilities.length > 0) {
+          logger.info(`🔍 [DEBUG] Sample vulnerability structure:`, {
+            sample: vulnerabilities[0],
+            severityField: vulnerabilities[0]?.severity,
+            totalVulns: vulnerabilities.length
+          })
+        }
+        
+        // Helper function for case-insensitive severity filtering
+        const filterBySeverity = (severity) => {
+          return vulnerabilities.filter(v => 
+            v.severity?.toLowerCase() === severity.toLowerCase()
+          )
+        }
+        
+        // Pre-categorize vulnerabilities by severity
+        const criticalIssues = filterBySeverity('critical')
+        const highIssues = filterBySeverity('high')
+        const mediumIssues = filterBySeverity('medium')
+        const lowIssues = filterBySeverity('low')
+        
+        // Calculate score based on severity (100 = no issues, lower = more severe issues)
+        const securityScore = Math.max(0, 100 - (criticalIssues.length * 25) - (highIssues.length * 10) - (mediumIssues.length * 3) - (lowIssues.length * 1))
+        
         const mergedRiskAssessment = {
           ...aiInsights.riskAssessment,
           securityRisks: {
-            // Keep actual scan results as primary source
-            score: actualSecurityResults.score ?? aiInsights.riskAssessment?.securityRisks?.score ?? 100,
-            totalIssues: actualSecurityResults.totalIssues || actualSecurityResults.vulnerabilities?.length || 0,
-            vulnerabilities: actualSecurityResults.vulnerabilities || [],
+            // Calculate score based on actual issues
+            score: securityScore,
+            totalIssues: vulnerabilities.length,
+            vulnerabilities: vulnerabilities,
+            // Pre-categorized by severity
+            critical: criticalIssues,
+            high: highIssues,
+            medium: mediumIssues,
+            low: lowIssues,
             // Add AI-identified issues as supplementary
-            aiIdentified: aiInsights.riskAssessment?.securityRisks?.vulnerabilities || [],
-            critical: actualSecurityResults.critical || [],
-            high: actualSecurityResults.high || actualSecurityResults.vulnerabilities?.filter(v => v.severity === 'high') || [],
-            medium: actualSecurityResults.medium || actualSecurityResults.vulnerabilities?.filter(v => v.severity === 'medium') || [],
-            low: actualSecurityResults.low || actualSecurityResults.vulnerabilities?.filter(v => v.severity === 'low') || []
+            aiIdentified: aiInsights.riskAssessment?.securityRisks?.vulnerabilities || []
           }
         }
         
         logger.info(`🔒 Security scan results preserved`, {
           totalIssues: mergedRiskAssessment.securityRisks.totalIssues,
-          vulnerabilities: mergedRiskAssessment.securityRisks.vulnerabilities?.length || 0
+          critical: criticalIssues.length,
+          high: highIssues.length,
+          medium: mediumIssues.length,
+          low: lowIssues.length,
+          score: securityScore
         })
         
         await db.query(`
@@ -1143,6 +1175,74 @@ router.get('/:id', authMiddleware, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to fetch analysis'
+    })
+  }
+})
+
+/**
+ * GET /api/code-analysis/:id/debug
+ * Debug endpoint - returns raw database record to inspect actual stored data
+ */
+router.get('/:id/debug', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.id
+    
+    logger.info(`🔍 [DEBUG] Fetching raw analysis ${id} for user ${userId}`)
+    
+    // Get raw database record
+    const query = `
+      SELECT * FROM code_analyses 
+      WHERE id = $1 AND user_id = $2
+    `
+    
+    const result = await db.query(query, [id, userId])
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Analysis not found'
+      })
+    }
+    
+    const row = result.rows[0]
+    
+    // Extract security details for debugging
+    const riskAssessment = row.risk_assessment || {}
+    const securityRisks = riskAssessment.securityRisks || {}
+    
+    res.json({
+      success: true,
+      debug: {
+        id: row.id,
+        status: row.status,
+        created_at: row.created_at,
+        // Raw risk_assessment from database
+        risk_assessment_raw: row.risk_assessment,
+        // Parsed security details
+        security_summary: {
+          totalIssues: securityRisks.totalIssues || 0,
+          vulnerabilitiesCount: securityRisks.vulnerabilities?.length || 0,
+          criticalCount: securityRisks.critical?.length || 0,
+          highCount: securityRisks.high?.length || 0,
+          mediumCount: securityRisks.medium?.length || 0,
+          lowCount: securityRisks.low?.length || 0,
+          // Sample vulnerability to see structure
+          sampleVulnerability: securityRisks.vulnerabilities?.[0] || null
+        },
+        // Other key fields
+        total_files: row.total_files,
+        total_lines: row.total_lines,
+        code_quality_score: row.code_quality_score
+      }
+    })
+    
+  } catch (error) {
+    logger.error('[DEBUG] Failed to get analysis:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch debug data',
+      message: error.message
     })
   }
 })
