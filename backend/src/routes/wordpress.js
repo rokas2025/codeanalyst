@@ -76,8 +76,9 @@ router.get('/plugin/download', authMiddleware, async (req, res) => {
     res.setHeader('X-Plugin-Version', '1.2.1')
     res.setHeader('X-Build-Time', new Date().toISOString())
     
-    // Send file for download
-    res.download(zipPath, 'codeanalyst-connector.zip', (err) => {
+    // Send file for download with version in filename
+    const pluginVersion = '1.2.1'
+    res.download(zipPath, `codeanalyst-connector-v${pluginVersion}.zip`, (err) => {
       if (err) {
         logger.error('Error sending plugin file', { error: err.message })
         if (!res.headersSent) {
