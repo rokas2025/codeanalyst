@@ -588,6 +588,54 @@ function CodeAnalystContent() {
             label="Choose a WordPress site to analyze its theme"
           />
           
+          {/* Theme Info (shown after site is selected) */}
+          {wordpressSite && (
+            <div className="mt-4 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+                <h4 className="font-semibold text-purple-900">Theme Information</h4>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <span className="text-gray-600">Theme: </span>
+                  <span className="font-medium text-gray-900">
+                    {wordpressSite.site_info?.theme || wordpressSite.active_theme || 'Unknown'}
+                  </span>
+                </div>
+                {wordpressSite.site_info?.theme_version && (
+                  <div>
+                    <span className="text-gray-600">Version: </span>
+                    <span className="font-medium text-gray-900">{wordpressSite.site_info.theme_version}</span>
+                  </div>
+                )}
+                <div>
+                  <span className="text-gray-600">WordPress: </span>
+                  <span className="font-medium text-gray-900">
+                    {wordpressSite.site_info?.wp_version || wordpressSite.wordpress_version || 'Unknown'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-600">PHP: </span>
+                  <span className="font-medium text-gray-900">
+                    {wordpressSite.site_info?.php_version || wordpressSite.site_health?.php_version || 'Unknown'}
+                  </span>
+                </div>
+                {wordpressSite.site_info?.builders && wordpressSite.site_info.builders.length > 0 && (
+                  <div className="col-span-2">
+                    <span className="text-gray-600">Page Builders: </span>
+                    <span className="font-medium text-gray-900">
+                      {wordpressSite.site_info.builders.map((b: string) => 
+                        `${b}${wordpressSite.site_info?.builder_versions?.[b] ? ` v${wordpressSite.site_info.builder_versions[b]}` : ''}`
+                      ).join(', ')}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Page Selection (shown after site is selected) */}
           {wordpressSite && (
             <div className="mt-4 space-y-4">

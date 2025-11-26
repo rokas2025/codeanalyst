@@ -293,3 +293,108 @@ Only start local servers if:
 - Testing new npm packages before committing
 - Quick development iteration (user-initiated)
 
+---
+
+## 13. WordPress Plugin Integration Rules
+
+### Backend ES Modules (CRITICAL)
+
+When editing files in `backend/src/services/**`:
+
+- **NEVER** use `require()` – this is an ES modules project
+- Always use ES module imports
+- Check existing imports at top of file before adding new ones
+
+```javascript
+// ❌ WRONG - CommonJS in ES module
+const file = require('fs').createWriteStream(destination)
+require('fs').unlink(destination, () => {})
+
+// ✅ CORRECT - ES module imports
+import { createWriteStream, unlink } from 'fs'
+const file = createWriteStream(destination)
+unlink(destination, () => {})
+```
+
+### WordPress Plugin Changes
+
+When editing files in `wordpress-plugin/**`:
+
+1. **Always bump version number** when making changes:
+   - Header in `codeanalyst-connector.php`: `* Version: X.Y.Z`
+   - Constant: `define('CODEANALYST_VERSION', 'X.Y.Z')`
+
+2. **Update CHANGELOG.md** with changes
+
+3. **Test with both parent themes and child themes**
+
+4. Use `error_log()` for debugging, check `wp-content/debug.log`
+
+### ZIP File Creation for WordPress Plugin
+
+When creating/updating the plugin ZIP:
+
+- Root folder inside ZIP **must be** `codeanalyst-connector/`
+- **Always use forward slashes** (`/`) not backslashes (`\`)
+- Include all subdirectories (`admin/`, `includes/`)
+
+```powershell
+# Correct approach using .NET
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory(
+    $sourceFolder,
+    $zipPath,
+    [System.IO.Compression.CompressionLevel]::Optimal,
+    $true  # Include base directory name
+)
+```
+
+### AI Response Parsing Pattern
+
+When working with `AIAnalysisService.js`:
+
+- `callAI()` returns `{response, providerUsed, model, tokensUsed, responseTime}`
+- **Always extract `.response`** before JSON.parse()
+
+```javascript
+const aiResult = await this.callAI(prompt, type, options)
+const responseText = aiResult.response || aiResult  // Handle both cases
+return this.parseInsights(responseText, data)
+```
+
+### WordPress Child Theme File Paths
+
+When working with WordPress REST API:
+
+- Child theme files from parent are prefixed with `[parent]/`
+- Example: `[parent]/functions.php` comes from template directory
+
+```php
+// Plugin must detect prefix and use correct directory
+if (strpos($file, '[parent]/') === 0) {
+    $file = str_replace('[parent]/', '', $file);
+    $base_dir = get_template_directory();  // Parent theme
+} else {
+    $base_dir = get_stylesheet_directory(); // Child theme
+}
+```
+
+### Plugin Version Update Checklist
+
+When updating plugin version:
+
+1. `wordpress-plugin/codeanalyst-connector.php` - bump version (header + constant)
+2. `wordpress-plugin/CHANGELOG.md` - add entry
+3. `src/pages/ConnectedSites.tsx` - update version check string
+4. `backend/src/routes/wordpress.js` - update X-Plugin-Version header
+5. Rebuild ZIP with correct structure
+6. Test plugin installation creates correct folder name
+
+### Reference Documentation
+
+See `docs/WORDPRESS_INTEGRATION.md` for:
+- Full architecture overview
+- Common issues and solutions
+- Debugging tips
+- REST API endpoint reference
+

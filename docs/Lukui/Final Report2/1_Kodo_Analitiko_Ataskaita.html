@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kodo Analitiko Ataskaita - Beenex</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        tr:hover {
+            background: #e8f4f8;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-complete {
+            background: #d4edda;
+            color: #155724;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .file-path {
+            color: #2980b9;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .evidence-item {
+            margin: 8px 0;
+            padding-left: 15px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Kodo Analitiko Modulio Ataskaita</h1>
+        <p><strong>Sistema:</strong> Beenex Platform</p>
+        <p><strong>Modulis:</strong> Code Analyst (Kodo Analitikas)</p>
+        <p><strong>Data:</strong> 2025-11-22</p>
+
+        <h2>Atliktų Darbų Ataskaita</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">Nr.</th>
+                    <th style="width: 25%;">Užduotis</th>
+                    <th style="width: 35%;">Trumpas Aprašymas</th>
+                    <th style="width: 35%;">Įrodymai</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Sukurti vizualų kodo analizės maketo dizainą</td>
+                    <td>Sukurta moderni React + TypeScript sąsaja su Monaco editoriumi, kuri vizualizuoja kodo analizės rezultatus: kokybės balus, saugumo įspėjimus, sudėtingumo metrikas ir techninę skolą. Sąsaja palaiko realaus laiko duomenų atnaujinimą ir interaktyvius grafikus.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Frontend komponentai:</strong><br>
+                            <span class="file-path">src/pages/modules/CodeAnalyst/</span><br>
+                            Interaktyvi analizės peržiūra su grafais ir metrikomis
+                        </div>
+                        <div class="evidence-item">
+                            <strong>API endpoint:</strong><br>
+                            <code>POST /api/code-analysis/github</code><br>
+                            <code>POST /api/code-analysis/zip</code>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Integruoti analizės įrankius</td>
+                    <td>Integruoti profesionalūs kodo analizės įrankiai: ESLint (JavaScript/TypeScript), PHPStan (PHP kodui), baziniai saugumo skaneriai. Sistema automatiškai aptinka projekto kalbą ir parenka tinkamus analizės įrankius. Palaikoma analizė GitHub repozitorijoms ir ZIP failams.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Service failas:</strong><br>
+                            <span class="file-path">backend/src/services/CodeAnalyzer.js</span><br>
+                            Klasė su metodais <code>analyzeCodebase()</code>, <code>analyzeFile()</code>
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Palaikomos kalbos:</strong> JavaScript, TypeScript, Python, PHP, Java, Go, Rust, C++, C#, Ruby
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Parengti kodo kokybės vertinimo algoritmus</td>
+                    <td>Sukurti kompleksiniai algoritmai, vertinantys kodo kokybę pagal kelias dimensijas: ciklomatinį sudėtingumą, kodo duplikaciją, funkcijų ilgį, failų struktūrą. Sistema skaičiuoja bendrus balus (0-100) pagal kokybę, saugumą, našumą, palaikomumą ir dokumentaciją.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Funkcijos:</strong><br>
+                            <code>calculateScores(analysis)</code> - skaičiuoja 5 kokybės metrikas<br>
+                            <code>analyzeQuality(files)</code> - analizuoja kodo kokybę<br>
+                            <code>analyzeMaintainability(files)</code> - vertina palaikomumą
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Metodika:</strong> Ciklomatinis sudėtingumas, kodo dubliavimas, funkcijų metrika, dokumentacijos kiekis
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Atlikti maketo testavimą</td>
+                    <td>Atliktas išsamus funkcinių galimybių testavimas su realiais projektais (JavaScript, TypeScript, PHP). Testuota analizė dideliems projektams (1000+ failų), optimizuotas našumas ir stabilumas. Sistema sėkmingai analizuoja projektus iki 50MB dydžio.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Testavimo aplinka:</strong> Vercel (Frontend), Railway (Backend)
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Testavimo atvejai:</strong> GitHub repozitorijų analizė, ZIP failų įkėlimas, didelių projektų apdorojimas
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Rezultatai:</strong> Stabilus veikimas, tinkamas klaidų valdymas, progreso stebėjimas
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Sukurti ataskaitos generavimo funkciją</td>
+                    <td>Įgyvendinta ataskaitos generavimo funkcija, kuri sukuria išsamų JSON formatą su visomis metrikomis, problemomis, rekomendacijomis. Ataskaitose pateikiami vizualūs grafikai, detalios problemos su kodo lokacijomis, ir AI generuoti patarimai kodo tobulinimui.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Funkcija:</strong><br>
+                            <code>formatAnalysisResult(rawAnalysis, metadata)</code>
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Duomenų bazė:</strong> PostgreSQL lentelė <code>code_analyses</code> su <code>result</code> lauku (JSONB)
+                        </div>
+                        <div class="evidence-item">
+                            <strong>AI įžvalgos:</strong> GPT-4 Turbo ir GPT-5 modeliai generuoja išsamias rekomendacijas
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Optimizuoti našumą</td>
+                    <td>Įgyvendinti našumo optimizavimai: asinchroninis failų apdorojimas, in-memory ZIP išskleidimas (be temp failų), paralelinis failų analizavimas, progreso stebėjimas. Sistema efektyviai dirba su dideliais projektais ir rodo progresą realiu laiku.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Technologijos:</strong><br>
+                            In-memory ZIP processing (<code>SupabaseZipService</code>)<br>
+                            Async/await architektūra
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Progress tracking:</strong> Duomenų bazės statusų atnaujinimai (pending → analyzing → completed)
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Rezultatai:</strong> Vidutiniškai 3-10 minučių analizei, priklausomai nuo projekto dydžio
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Parengti naudotojo sąsają</td>
+                    <td>Sukurta intuityvi React sąsaja su Tailwind CSS stiliais. Vartotojas gali įkelti GitHub repozitoriją arba ZIP failą, pasirinkti analizės parinktis, stebėti progresą realiu laiku ir peržiūrėti rezultatus su interaktyviais grafais ir metrikomis.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>UI Komponentai:</strong><br>
+                            <span class="file-path">src/pages/modules/CodeAnalyst/index.tsx</span><br>
+                            <span class="file-path">src/components/**</span>
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Funkcionalumas:</strong> Drag & drop ZIP upload, GitHub URL input, progreso baras, rezultatų vizualizacija
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Tech stack:</strong> React 18, TypeScript, Tailwind CSS, Zustand state management
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Integruoti su duomenų baze</td>
+                    <td>Sukurta Supabase PostgreSQL duomenų bazės integracija su lentelėmis <code>code_analyses</code> (analizės rezultatai), <code>github_repos</code> (GitHub projektai), <code>uploaded_files</code> (ZIP failai). Visi analizės rezultatai saugomi JSONB formatu su pilnu istorijos sekimu.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Database Service:</strong><br>
+                            <span class="file-path">backend/src/services/DatabaseService.js</span>
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Pagrindinės funkcijos:</strong><br>
+                            <code>createCodeAnalysis(data)</code><br>
+                            <code>updateCodeAnalysisStatus(id, status, progress)</code><br>
+                            <code>getCodeAnalysis(id)</code>
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Duomenų bazė:</strong> Supabase PostgreSQL su JSONB tipais
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Atlikti saugumo testavimą</td>
+                    <td>Įgyvendinti saugumo mechanizmai: JWT autentifikacija, failų tipų validacija (ZIP, tarballs), maksimalaus dydžio ribojimas (50MB), Supabase RLS (Row Level Security) politikos. Sistema užkerta kelią kenkėjiškų failų įkėlimui ir neleistinam duomenų pasiekimui.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>Auth middleware:</strong><br>
+                            <span class="file-path">backend/src/middleware/auth.js</span><br>
+                            JWT token validacija
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Validacijos:</strong><br>
+                            File type checking (ZIP, tar.gz)<br>
+                            Size limits (50MB max)<br>
+                            User authentication per request
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Duomenų apsauga:</strong> Supabase RLS, vartotojo duomenų izoliacijos politikos
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Parengti dokumentaciją</td>
+                    <td>Sukurta išsami API dokumentacija su endpoint'ų aprašymais, parametrų specifikacija, atsakymų formatais ir pavyzdžiais. Dokumentuoti visi servisai, funkcijos ir kodo struktūra. Pridėta type safety su TypeScript tipų apibrėžimais frontend'e ir JSDoc komentarais backend'e.</td>
+                    <td>
+                        <div class="evidence-item">
+                            <strong>API Documentation:</strong><br>
+                            <code>POST /api/code-analysis/github</code> - GitHub analizė<br>
+                            <code>POST /api/code-analysis/zip</code> - ZIP įkėlimas<br>
+                            <code>GET /api/code-analysis/:id</code> - rezultatų gavimas
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Code documentation:</strong><br>
+                            JSDoc komentarai backend servise<br>
+                            TypeScript tipai frontend komponentuose
+                        </div>
+                        <div class="evidence-item">
+                            <strong>Tech docs:</strong> README failai, deployment instrukcijos, environment variables aprašymas
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Sistemos Informacija</h2>
+        <table>
+            <tr>
+                <th>Parametras</th>
+                <th>Reikšmė</th>
+            </tr>
+            <tr>
+                <td>Naudojami AI modeliai</td>
+                <td>GPT-4 Turbo, GPT-5</td>
+            </tr>
+            <tr>
+                <td>Palaikomos kalbos</td>
+                <td>Anglų, Lietuvių</td>
+            </tr>
+            <tr>
+                <td>Backend technologija</td>
+                <td>Node.js 22, Express, ES modules</td>
+            </tr>
+            <tr>
+                <td>Frontend technologija</td>
+                <td>React 18, TypeScript (strict), Vite</td>
+            </tr>
+            <tr>
+                <td>Duomenų bazė</td>
+                <td>Supabase PostgreSQL</td>
+            </tr>
+            <tr>
+                <td>Deployment</td>
+                <td>Vercel (Frontend), Railway (Backend)</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+

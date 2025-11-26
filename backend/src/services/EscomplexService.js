@@ -16,13 +16,34 @@ export class EscomplexService {
     try {
       logger.info(`🔍 Starting escomplex analysis for ${files.length} files`)
 
+      // Log sample file structure for debugging
+      if (files.length > 0) {
+        logger.info(`📋 Sample file structure: ${JSON.stringify({
+          path: files[0].path,
+          name: files[0].name,
+          extension: files[0].extension,
+          hasContent: !!files[0].content
+        })}`)
+      }
+
       const jsFiles = files.filter(f => {
-        const ext = f.extension || (f.path ? f.path.split('.').pop() : '')
-        return this.supportedExtensions.includes(`.${ext}`.toLowerCase())
+        // Get file path from various possible properties
+        const filePath = f.path || f.name || ''
+        const ext = f.extension || (filePath ? filePath.split('.').pop() : '')
+        
+        // Check if it's a supported extension
+        const isSupported = this.supportedExtensions.includes(`.${ext}`.toLowerCase())
+        
+        // Skip minified files - they cause parsing errors and aren't useful for complexity
+        const isMinified = filePath.includes('.min.') || filePath.includes('-min.')
+        
+        return isSupported && !isMinified
       })
 
+      logger.info(`📊 Escomplex: ${files.length} total files, ${jsFiles.length} JS/TS files (excluding minified)`)
+
       if (jsFiles.length === 0) {
-        logger.info('No JavaScript/TypeScript files found for complexity analysis')
+        logger.info('No JavaScript/TypeScript files found for complexity analysis (minified files excluded)')
         return this.getEmptyResult()
       }
 

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeAnalyst - Investor Reports Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .report-header {
+            padding: 30px 25px;
+            color: white;
+            text-align: center;
+        }
+        
+        .report-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .report-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .report-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .report-4 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .report-5 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        
+        .report-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .report-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .report-subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .report-body {
+            padding: 25px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .status-complete {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-progress {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .report-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .report-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .report-features li {
+            padding: 8px 0;
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        .report-features li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .view-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .view-button:hover {
+            transform: scale(1.02);
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 CodeAnalyst Platform</h1>
+            <p>Investor Reports & Module Documentation</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">AI Moduliai</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50</div>
+                <div class="stat-label">Funkcionalumai</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4/5</div>
+                <div class="stat-label">Operational</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Best Module</div>
+            </div>
+        </div>
+        
+        <div class="reports-grid">
+            <!-- Report 1: Code Analyst -->
+            <div class="report-card" onclick="window.open('1_Kodo_Analitiko_Ataskaita.html', '_blank')">
+                <div class="report-header report-1">
+                    <div class="report-icon">🔍</div>
+                    <div class="report-title">Kodo Analitiko Modulis</div>
+                    <div class="report-subtitle">AI Code Quality Analysis</div>
+                </div>
+                <div class="report-body">
+                    <span class="status-badge status-complete">85% ĮGYVENDINTA</span>
+                    <p class="report-description">
+                        GitHub repozitorijų analizė su AI rekomendacijomis. 14 programavimo kalbų palaikymas, saugumo skenavimas, technical debt skaičiavimas.
+                    </p>
+                    <ul class="report-features">
+                        <li>GitHub OAuth integracija</li>
+                        <li>14 kalbų + 50+ frameworks</li>
+                        <li>CVE pažeidžiamumų tikrinimas</li>
+                        <li>Multi-AI rekomendacijos</li>
+                    </ul>
+                    <a href="1_Kodo_Analitiko_Ataskaita.html" class="view-button" onclick="event.stopPropagation()">
+                        Žiūrėti Ataskaitą →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Report 2: Website Analyst -->
+            <div class="report-card" onclick="window.open('2_Turinio_Analitiko_Ataskaita.html', '_blank')">
+                <div class="report-header report-2">
+                    <div class="report-icon">🌐</div>
+                    <div class="report-title">Turinio Analitiko Modulis</div>
+                    <div class="report-subtitle">Website Performance & SEO</div>
+                </div>
+                <div class="report-body">
+                    <span class="status-badge status-complete">98% ĮGYVENDINTA</span>
+                    <p class="report-description">
+                        Kompleksinė svetainių analizė: Google Lighthouse, SEO, Accessibility, Security. 5-in-1 platforma su AI insights.
+                    </p>
+                    <ul class="report-features">
+                        <li>Google Lighthouse integracija</li>
+                        <li>40+ SEO faktorių tikrinimas</li>
+                        <li>WCAG accessibility auditas</li>
+                        <li>1000+ technologijų detektavimas</li>
+                    </ul>
+                    <a href="2_Turinio_Analitiko_Ataskaita.html" class="view-button" onclick="event.stopPropagation()">
+                        Žiūrėti Ataskaitą →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Report 3: Auto Programmer -->
+            <div class="report-card" onclick="window.open('3_Autoprogramuotojo_Ataskaita.html', '_blank')">
+                <div class="report-header report-3">
+                    <div class="report-icon">🤖</div>
+                    <div class="report-title">Autoprogramuotojo Modulis</div>
+                    <div class="report-subtitle">AI Code Generation Assistant</div>
+                </div>
+                <div class="report-body">
+                    <span class="status-badge status-progress">70% ĮGYVENDINTA</span>
+                    <p class="report-description">
+                        Chat-based AI code generation su GitHub ir WordPress integracija. Real-time preview, side-by-side comparison.
+                    </p>
+                    <ul class="report-features">
+                        <li>Streaming chat interface</li>
+                        <li>GitHub + WordPress support</li>
+                        <li>Natūralios kalbos užklausos</li>
+                        <li>Side-by-side code preview</li>
+                    </ul>
+                    <a href="3_Autoprogramuotojo_Ataskaita.html" class="view-button" onclick="event.stopPropagation()">
+                        Žiūrėti Ataskaitą →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Report 4: Content Creator -->
+            <div class="report-card" onclick="window.open('4_Autokurejo_Ataskaita.html', '_blank')">
+                <div class="report-header report-4">
+                    <div class="report-icon">✍️</div>
+                    <div class="report-title">Autokūrėjo Modulis</div>
+                    <div class="report-subtitle">AI Content Generation</div>
+                </div>
+                <div class="report-body">
+                    <span class="status-badge status-progress">40% ĮGYVENDINTA</span>
+                    <p class="report-description">
+                        Template-based marketing turinio kūrimas su SEO optimizavimu. Real-time preview, multi-format export.
+                    </p>
+                    <ul class="report-features">
+                        <li>5 content templates</li>
+                        <li>SEO-first approach</li>
+                        <li>Brand voice consistency</li>
+                        <li>Multi-format export</li>
+                    </ul>
+                    <a href="4_Autokurejo_Ataskaita.html" class="view-button" onclick="event.stopPropagation()">
+                        Žiūrėti Ataskaitą →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Report 5: Module Integration -->
+            <div class="report-card" onclick="window.open('5_Moduliu_Integracijos_Ataskaita.html', '_blank')">
+                <div class="report-header report-5">
+                    <div class="report-icon">🔗</div>
+                    <div class="report-title">Modulių Integracijos</div>
+                    <div class="report-subtitle">Unified Platform Architecture</div>
+                </div>
+                <div class="report-body">
+                    <span class="status-badge status-complete">STRONG INTEGRATION</span>
+                    <p class="report-description">
+                        Visi moduliai seamlessly integruoti: unified auth, shared data, cross-module workflows, WordPress plugin connector.
+                    </p>
+                    <ul class="report-features">
+                        <li>Unified authentication system</li>
+                        <li>Cross-module data sharing</li>
+                        <li>WordPress universal connector</li>
+                        <li>Multi-agent orchestration</li>
+                    </ul>
+                    <a href="5_Moduliu_Integracijos_Ataskaita.html" class="view-button" onclick="event.stopPropagation()">
+                        Žiūrėti Ataskaitą →
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>CodeAnalyst Platform</strong> | Sukurta: 2025-11-22 | Versija: Production Ready</p>
+            <p>Deployed: <a href="https://analyst-psi.vercel.app" target="_blank">Vercel (Frontend)</a> + Railway (Backend) + Supabase (Database)</p>
+            <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.8;">
+                📄 Papildomi dokumentai: <a href="README.md">README.md</a> | <a href="EXECUTIVE_SUMMARY.md">EXECUTIVE_SUMMARY.md</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

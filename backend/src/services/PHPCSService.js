@@ -75,13 +75,36 @@ export class PHPCSService {
   }
 
   /**
-   * Check if PHPCS is available
+   * Check if PHPCS is available and configure the best available standard
    */
   async checkPHPCSAvailable() {
     try {
+      // Check PHPCS version
       await execAsync(`${this.phpcsPath} --version`, { timeout: 5000 })
+      
+      // Check which coding standards are available
+      const { stdout } = await execAsync(`${this.phpcsPath} -i`, { timeout: 5000 })
+      logger.info(`PHPCS installed standards: ${stdout.trim()}`)
+      
+      // Check if WordPress standard is available
+      if (stdout.includes('WordPress')) {
+        logger.info('✅ WordPress coding standard available')
+        this.standard = 'WordPress'
+      } else if (stdout.includes('PSR12')) {
+        logger.warn('WordPress coding standard not available, using PSR12 fallback')
+        this.standard = 'PSR12'
+      } else if (stdout.includes('PSR2')) {
+        logger.warn('WordPress coding standard not available, using PSR2 fallback')
+        this.standard = 'PSR2'
+      } else {
+        // Use PEAR as last resort (usually always available)
+        logger.warn('No preferred coding standard available, using PEAR fallback')
+        this.standard = 'PEAR'
+      }
+      
       return true
     } catch (error) {
+      logger.error('PHPCS availability check failed:', error.message)
       return false
     }
   }

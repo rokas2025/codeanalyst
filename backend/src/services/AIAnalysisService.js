@@ -118,9 +118,13 @@ export class AIAnalysisService {
 
     try {
       const prompt = this.buildCodeAnalysisPrompt(analysisData, files, options)
-      const response = await this.callAI(prompt, 'code-analysis', options)
+      const aiResult = await this.callAI(prompt, 'code-analysis', options)
       
-      return this.parseCodeInsights(response, analysisData)
+      // Extract the response string from the result object
+      // callAI returns {response, providerUsed, model, tokensUsed, responseTime}
+      const responseText = aiResult.response || aiResult
+      
+      return this.parseCodeInsights(responseText, analysisData)
     } catch (error) {
       logger.error('AI code analysis failed:', error)
       throw new Error(`AI code analysis failed: ${error.message}`)

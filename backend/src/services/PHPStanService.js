@@ -2,6 +2,7 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import fs from 'fs/promises'
+import { createWriteStream, unlink as unlinkSync } from 'fs'
 import path from 'path'
 import https from 'https'
 import { logger } from '../utils/logger.js'
@@ -127,7 +128,7 @@ export class PHPStanService {
    */
   downloadFile(url, destination) {
     return new Promise((resolve, reject) => {
-      const file = require('fs').createWriteStream(destination)
+      const file = createWriteStream(destination)
 
       https.get(url, {
         headers: {
@@ -151,12 +152,12 @@ export class PHPStanService {
           })
         }
       }).on('error', (err) => {
-        require('fs').unlink(destination, () => {}) // Delete on error
+        unlinkSync(destination, () => {}) // Delete on error
         reject(err)
       })
 
       file.on('error', (err) => {
-        require('fs').unlink(destination, () => {})
+        unlinkSync(destination, () => {})
         reject(err)
       })
     })
