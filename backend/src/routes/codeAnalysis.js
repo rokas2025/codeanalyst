@@ -502,11 +502,51 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
           const { default: AIAnalysisService } = await import('../services/AIAnalysisService.js')
           const aiAnalysisService = new AIAnalysisService()
           
+          // Select key files for AI context (prioritize important files, limit to 10)
+          const keyFiles = extractedData.extractedFiles
+            .filter(f => {
+              const path = f.path?.toLowerCase() || ''
+              // Skip minified, vendor, and build files
+              if (path.includes('.min.') || path.includes('node_modules') || 
+                  path.includes('vendor/') || path.includes('/dist/') ||
+                  path.includes('.map') || path.includes('.lock')) {
+                return false
+              }
+              // Only include analyzable code files
+              return path.endsWith('.php') || path.endsWith('.js') || 
+                     path.endsWith('.ts') || path.endsWith('.jsx') ||
+                     path.endsWith('.tsx') || path.endsWith('.css')
+            })
+            .sort((a, b) => {
+              // Prioritize key files by name
+              const aPath = a.path?.toLowerCase() || ''
+              const bPath = b.path?.toLowerCase() || ''
+              const priority = (p) => {
+                if (p.includes('functions.php')) return 0
+                if (p.includes('style.css') && !p.includes('/dist/')) return 1
+                if (p.includes('index.')) return 2
+                if (p.includes('config')) return 3
+                if (p.includes('init.php') || p.includes('setup')) return 4
+                return 10
+              }
+              return priority(aPath) - priority(bPath)
+            })
+            .slice(0, 10) // Limit to 10 key files for AI
+            .map(f => ({
+              path: f.path,
+              name: f.name || f.path?.split('/').pop(),
+              content: f.content?.substring(0, 1500), // Limit content to ~1500 chars per file
+              size: f.size || f.content?.length || 0,
+              language: f.language || codeAnalyzer.getLanguageFromExtension(f.path?.split('.').pop())
+            }))
+          
+          logger.info(`📁 Selected ${keyFiles.length} key files for AI analysis`)
+          
           const aiInputData = {
             sourceType: 'zip',
             filename: req.file.originalname,
             codeStructure: codeAnalysis,
-            files: codeAnalysis.keyFiles,
+            files: keyFiles,
             metrics: {
               quality: codeAnalysis.qualityScore,
               complexity: codeAnalysis.complexity,
@@ -514,15 +554,38 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
             }
           }
           
-          aiInsights = await aiAnalysisService.generateCodeInsights(aiInputData, codeAnalysis.keyFiles || [], { aiProfile: analysisOptions.aiProfile || 'mixed' })
+          aiInsights = await aiAnalysisService.generateCodeInsights(aiInputData, keyFiles, { aiProfile: analysisOptions.aiProfile || 'mixed' })
           await DatabaseService.updateCodeAnalysisStatus(analysisId, 'analyzing', 90)
         } catch (aiError) {
           logger.warn(`AI insights generation failed: ${aiError.message}`)
         }
       }
 
-      // Update AI insights if generated
+      // Update AI insights if generated, but preserve actual security scan results
       if (aiInsights) {
+        // Merge AI risk assessment with actual security scan results
+        const actualSecurityResults = codeAnalysis.riskAssessment?.securityRisks || rawAnalysis?.security || {}
+        const mergedRiskAssessment = {
+          ...aiInsights.riskAssessment,
+          securityRisks: {
+            // Keep actual scan results as primary source
+            score: actualSecurityResults.score ?? aiInsights.riskAssessment?.securityRisks?.score ?? 100,
+            totalIssues: actualSecurityResults.totalIssues || actualSecurityResults.vulnerabilities?.length || 0,
+            vulnerabilities: actualSecurityResults.vulnerabilities || [],
+            // Add AI-identified issues as supplementary
+            aiIdentified: aiInsights.riskAssessment?.securityRisks?.vulnerabilities || [],
+            critical: actualSecurityResults.critical || [],
+            high: actualSecurityResults.high || actualSecurityResults.vulnerabilities?.filter(v => v.severity === 'high') || [],
+            medium: actualSecurityResults.medium || actualSecurityResults.vulnerabilities?.filter(v => v.severity === 'medium') || [],
+            low: actualSecurityResults.low || actualSecurityResults.vulnerabilities?.filter(v => v.severity === 'low') || []
+          }
+        }
+        
+        logger.info(`🔒 Security scan results preserved`, {
+          totalIssues: mergedRiskAssessment.securityRisks.totalIssues,
+          vulnerabilities: mergedRiskAssessment.securityRisks.vulnerabilities?.length || 0
+        })
+        
         await db.query(`
           UPDATE code_analyses 
           SET 
@@ -540,7 +603,7 @@ router.post('/zip', authMiddleware, upload.single('zipFile'), [
           JSON.stringify(aiInsights.maintenanceNeeds || {}),
           JSON.stringify(aiInsights.aiExplanations || {}),
           JSON.stringify(aiInsights.businessRecommendations || {}),
-          JSON.stringify(aiInsights.riskAssessment || {})
+          JSON.stringify(mergedRiskAssessment)
         ])
       }
       

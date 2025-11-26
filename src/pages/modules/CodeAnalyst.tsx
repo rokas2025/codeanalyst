@@ -808,17 +808,17 @@ function CodeAnalystContent() {
               // For WordPress, fetch files first then analyze
               if (userProfile === 'wordpress' && wordpressSite) {
                 try {
-                  setFetchProgress({ current: 0, total: 0, phase: 'Connecting to WordPress...' })
+                  setFetchProgress({ current: 0, total: 0, phase: 'Fetching theme files from WordPress...' })
                   const params = selectedPageId !== 'all' ? `?pageId=${selectedPageId}` : ''
                   const response = await wordpressService.getThemeFiles(wordpressSite.id, params)
                   
                   if (response.success && response.files && response.files.length > 0) {
-                    setFetchProgress({ current: response.files.length, total: response.files.length, phase: 'Files fetched!' })
+                    setFetchProgress({ current: response.files.length, total: response.files.length, phase: `✓ ${response.files.length} files fetched successfully!` })
                     console.log('✅ WordPress files fetched:', response.files.length)
                     setUploadedFiles(response.files)
                     
-                    // Small delay to show completion before starting analysis
-                    await new Promise(r => setTimeout(r, 500))
+                    // Show completion message briefly before starting analysis
+                    await new Promise(r => setTimeout(r, 800))
                     setFetchProgress(null)
                     handleAnalyze(response.files)
                   } else {
@@ -851,21 +851,36 @@ function CodeAnalystContent() {
       
       {/* File Fetch Progress */}
       {fetchProgress && (
-        <div className="card p-6 bg-blue-50 border-blue-200">
+        <div className="card p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
           <div className="flex items-center space-x-3 mb-3">
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-            <span className="font-medium text-blue-900">{fetchProgress.phase}</span>
+            {fetchProgress.total === 0 ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+            ) : (
+              <svg className="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+            <span className={`font-medium ${fetchProgress.total > 0 ? 'text-green-700' : 'text-blue-900'}`}>
+              {fetchProgress.phase}
+            </span>
           </div>
-          {fetchProgress.total > 0 && (
+          {fetchProgress.total === 0 ? (
             <>
-              <div className="text-sm text-blue-700 mb-2">
-                {fetchProgress.current} of {fetchProgress.total} files
+              <p className="text-sm text-blue-600 mb-3">
+                Fetching all theme files from your WordPress site. This may take 1-2 minutes for large themes...
+              </p>
+              {/* Animated indeterminate progress bar */}
+              <div className="bg-blue-200 rounded-full h-2 overflow-hidden">
+                <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
               </div>
-              <div className="bg-blue-200 rounded-full h-2">
-                <div 
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(fetchProgress.current / fetchProgress.total) * 100}%` }}
-                ></div>
+            </>
+          ) : (
+            <>
+              <div className="text-sm text-green-700 mb-2">
+                {fetchProgress.current} files ready for analysis
+              </div>
+              <div className="bg-green-200 rounded-full h-2">
+                <div className="bg-green-600 h-2 rounded-full transition-all duration-300" style={{ width: '100%' }}></div>
               </div>
             </>
           )}
