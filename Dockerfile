@@ -24,14 +24,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && google-chrome-stable --version
 
-# Copy package files from backend directory
-COPY backend/package*.json ./
+# Copy package files (build context is backend/ folder)
+COPY package*.json ./
 
 # Install dependencies
 RUN npm ci --only=production
 
-# Copy backend source code
-COPY backend/ ./
+# Copy source code (build context is backend/ folder)
+COPY . ./
 
 # Create necessary directories
 RUN mkdir -p uploads temp logs
