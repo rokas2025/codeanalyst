@@ -75,6 +75,8 @@ router.get('/plugin/download', authMiddleware, async (req, res) => {
     res.setHeader('Expires', '0')
     res.setHeader('X-Plugin-Version', '1.2.1')
     res.setHeader('X-Build-Time', new Date().toISOString())
+    // Expose Content-Disposition header to frontend (CORS)
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition, X-Plugin-Version')
     
     // Send file for download with version in filename
     const pluginVersion = '1.2.1'
