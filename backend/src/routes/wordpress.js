@@ -73,7 +73,7 @@ router.get('/plugin/download', authMiddleware, async (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
     res.setHeader('Pragma', 'no-cache')
     res.setHeader('Expires', '0')
-    res.setHeader('X-Plugin-Version', '1.1.0')
+    res.setHeader('X-Plugin-Version', '1.2.0')
     res.setHeader('X-Build-Time', new Date().toISOString())
     
     // Send file for download
@@ -394,6 +394,84 @@ router.delete('/connections/:id', authMiddleware, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to delete connection',
+      message: error.message
+    })
+  }
+})
+
+/**
+ * POST /api/wordpress/connections/:id/refresh
+ * Refresh site info for a WordPress connection (PHP version, WordPress version, theme, etc.)
+ */
+router.post('/connections/:id/refresh', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const connectionId = req.params.id
+
+    logger.info('🔄 Refreshing WordPress connection info', { userId, connectionId })
+
+    // Get connection details
+    const connection = await db.query(
+      `SELECT * FROM wordpress_connections WHERE id = $1 AND user_id = $2`,
+      [connectionId, userId]
+    )
+
+    if (connection.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Connection not found',
+        message: 'WordPress connection not found'
+      })
+    }
+
+    const conn = connection.rows[0]
+
+    // Fetch fresh site info from WordPress
+    const wpService = new WordPressService()
+    const siteInfo = await wpService.fetchSiteInfo({
+      site_url: conn.site_url,
+      api_key: conn.api_key
+    })
+
+    // Update database with fresh data
+    await db.query(
+      `UPDATE wordpress_connections 
+       SET 
+         site_info = $1,
+         php_version = COALESCE($2, php_version),
+         wordpress_version = COALESCE($3, wordpress_version),
+         active_theme = COALESCE($4, active_theme),
+         plugin_version = COALESCE($5, plugin_version),
+         last_sync = CURRENT_TIMESTAMP,
+         updated_at = CURRENT_TIMESTAMP
+       WHERE id = $6`,
+      [
+        JSON.stringify(siteInfo),
+        siteInfo.php_version || null,
+        siteInfo.wp_version || null,
+        siteInfo.theme || null,
+        siteInfo.plugin_version || null,
+        connectionId
+      ]
+    )
+
+    logger.info('✅ WordPress connection refreshed', { 
+      connectionId, 
+      php_version: siteInfo.php_version,
+      wp_version: siteInfo.wp_version
+    })
+
+    res.json({
+      success: true,
+      message: 'Site info refreshed successfully',
+      site_info: siteInfo
+    })
+
+  } catch (error) {
+    logger.error('Failed to refresh WordPress connection:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to refresh site info',
       message: error.message
     })
   }

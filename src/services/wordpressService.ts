@@ -194,6 +194,28 @@ class WordPressService {
     }
 
     /**
+     * Refresh WordPress connection site info (PHP version, WordPress version, theme, etc.)
+     */
+    async refreshConnection(connectionId: string): Promise<{ success: boolean; site_info?: any; message?: string; error?: string }> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/wordpress/connections/${connectionId}/refresh`, {
+                method: 'POST',
+                headers: this.getAuthHeaders()
+            })
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error('Failed to refresh WordPress connection:', error)
+            return {
+                success: false,
+                error: 'Failed to refresh connection',
+                message: error instanceof Error ? error.message : 'Unknown error'
+            }
+        }
+    }
+
+    /**
      * Upload WordPress ZIP file
      */
     async uploadZip(connectionId: string, file: File, onProgress?: (progress: number) => void): Promise<UploadResponse> {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { wordpressService, WordPressConnection } from '../services/wordpressService'
 import toast from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon, ArrowDownTrayIcon, GlobeAltIcon, CodeBracketIcon, DocumentCheckIcon } from '@heroicons/react/24/outline'
+import { ArrowUpTrayIcon, DocumentTextIcon, FolderIcon, ArrowDownTrayIcon, GlobeAltIcon, CodeBracketIcon, DocumentCheckIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 
 export function ConnectedSites() {
     const navigate = useNavigate()
@@ -14,6 +14,7 @@ export function ConnectedSites() {
     const [expandedConnection, setExpandedConnection] = useState<string | null>(null)
     const [filesData, setFilesData] = useState<Record<string, any>>({})
     const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({})
+    const [refreshing, setRefreshing] = useState<string | null>(null)
 
     useEffect(() => {
         loadConnections()
@@ -32,6 +33,24 @@ export function ConnectedSites() {
             toast.error('Failed to load WordPress connections')
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleRefresh = async (connectionId: string) => {
+        setRefreshing(connectionId)
+        try {
+            const response = await wordpressService.refreshConnection(connectionId)
+            if (response.success) {
+                toast.success('Site info refreshed successfully')
+                // Reload connections to get updated data
+                await loadConnections()
+            } else {
+                toast.error(response.message || 'Failed to refresh site info')
+            }
+        } catch (error) {
+            toast.error('Failed to refresh site info')
+        } finally {
+            setRefreshing(null)
         }
     }
 
@@ -314,9 +333,9 @@ export function ConnectedSites() {
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600">Plugin:</span>
-                                    <span className={`font-medium ${connection.plugin_version === '1.1.0' ? 'text-green-600' : 'text-orange-600'}`}>
+                                    <span className={`font-medium ${connection.plugin_version === '1.2.0' ? 'text-green-600' : 'text-orange-600'}`}>
                                         {connection.plugin_version ? `v${connection.plugin_version}` : 'Not detected'}
-                                        {connection.plugin_version && connection.plugin_version !== '1.1.0' && (
+                                        {connection.plugin_version && connection.plugin_version !== '1.2.0' && (
                                             <span className="ml-1 text-xs text-orange-600">(Update available)</span>
                                         )}
                                     </span>
@@ -439,6 +458,14 @@ export function ConnectedSites() {
                                 </button>
 
                                 <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleRefresh(connection.id)}
+                                        disabled={refreshing === connection.id}
+                                        className="flex-1 px-3 py-2 text-sm border border-blue-300 text-blue-700 rounded-md hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
+                                    >
+                                        <ArrowPathIcon className={`h-4 w-4 ${refreshing === connection.id ? 'animate-spin' : ''}`} />
+                                        {refreshing === connection.id ? 'Refreshing...' : 'Refresh'}
+                                    </button>
                                     <button
                                         onClick={() => handleDelete(connection.id, connection.site_url)}
                                         disabled={deleting === connection.id}
