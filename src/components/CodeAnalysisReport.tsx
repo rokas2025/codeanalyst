@@ -688,57 +688,6 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
             </div>
           </div>
 
-          {/* Development Roadmap */}
-          <div className="border border-green-200 rounded-lg p-6 bg-white">
-            <h3 className="font-bold text-lg text-gray-900 mb-4 flex items-center">
-              <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-              Development Roadmap & Next Steps
-            </h3>
-            <div className="space-y-4">
-                             {analysis.results?.maintenanceNeeds?.aiRecommendations?.length > 0 && (
-                 <div>
-                   <h4 className="font-semibold text-gray-900 mb-3">🎯 Priority Actions</h4>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {analysis.results.maintenanceNeeds.aiRecommendations
-                       .filter((rec: any) => rec.priority === 'urgent' || rec.priority === 'high')
-                       .slice(0, 4)
-                       .map((rec: any, i: number) => (
-                      <div key={i} className={`p-3 rounded-lg border ${
-                        rec.priority === 'urgent' ? 'bg-red-50 border-red-200' : 'bg-orange-50 border-orange-200'
-                      }`}>
-                        <div className="font-medium text-sm">{rec.area}</div>
-                        <div className="text-xs text-gray-600 mt-1">{rec.description || 'Needs attention'}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-3">📈 Modernization Opportunities</h4>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <ul className="text-sm text-blue-800 space-y-1">
-                                         {analysis.results?.technicalStructure?.aiInsights?.modernization?.map((mod: string, i: number) => (
-                      <li key={i}>• {mod}</li>
-                    )) || [
-                      '• Implement comprehensive error handling',
-                      '• Add unit and integration testing',
-                      '• Consider TypeScript migration for better type safety',
-                      '• Implement automated code quality checks'
-                    ].map((item, i) => <li key={i}>{item}</li>)}
-                  </ul>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-3">🎯 Implementation Focus</h4>
-                <div className="text-sm text-gray-700">
-                  <strong>Priority:</strong> Focus on high-impact improvements to enhance code quality, security, and maintainability. Use AI-powered tools to accelerate implementation of critical fixes and improvements.
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Export Options */}
           <div className="border border-green-200 rounded-lg p-4 bg-white">
             <div className="flex items-center justify-between">

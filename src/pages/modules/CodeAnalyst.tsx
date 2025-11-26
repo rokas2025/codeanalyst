@@ -199,6 +199,10 @@ function CodeAnalystContent() {
       selectedRepository: selectedRepository?.name
     })
     
+    // Clear previous results immediately when starting new analysis
+    setCurrentAnalysisResult(null)
+    setAnalysis(null)
+    
     if (userProfile === 'github' && !selectedRepository) {
       alert('Please select a GitHub repository first')
       return

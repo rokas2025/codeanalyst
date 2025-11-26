@@ -466,7 +466,26 @@ Please respond in JSON format with the following structure:
    */
   parseCodeInsights(response, data) {
     try {
-      const parsed = JSON.parse(response)
+      let jsonString = response.trim()
+      
+      // Strip markdown code block wrapper if present (OpenAI often returns ```json ... ```)
+      if (jsonString.startsWith('```json')) {
+        jsonString = jsonString.slice(7) // Remove ```json
+      } else if (jsonString.startsWith('```')) {
+        jsonString = jsonString.slice(3) // Remove ```
+      }
+      if (jsonString.endsWith('```')) {
+        jsonString = jsonString.slice(0, -3) // Remove trailing ```
+      }
+      jsonString = jsonString.trim()
+      
+      logger.info('Parsing AI response:', { 
+        originalLength: response.length, 
+        cleanedLength: jsonString.length,
+        startsWithBrace: jsonString.startsWith('{')
+      })
+      
+      const parsed = JSON.parse(jsonString)
       
       return {
         systemOverview: parsed.systemOverview || {},
@@ -481,7 +500,8 @@ Please respond in JSON format with the following structure:
         provider: 'ai-generated'
       }
     } catch (error) {
-      logger.error('Failed to parse AI code insights response:', error)
+      logger.error('Failed to parse AI code insights response:', error.message)
+      logger.error('Response preview:', response?.substring(0, 200))
       throw new Error('Failed to parse AI response. The AI service returned invalid data.')
     }
   }

@@ -822,58 +822,48 @@ router.get('/theme-files/:connectionId', authMiddleware, async (req, res) => {
     // The pageId parameter is only used for user context, not for file filtering
     logger.info(`📋 [WordPress CodeAnalyst] Fetching ALL ${fileList.length} theme files (no filtering)`)
 
-    // Fetch content for each file in batches to prevent overwhelming WordPress server
-    logger.info(`📄 [WordPress CodeAnalyst] Fetching content for ${fileList.length} theme files...`)
-    const BATCH_SIZE = 25
-    const BATCH_DELAY_MS = 500 // Wait 500ms between batches
-    const totalBatches = Math.ceil(fileList.length / BATCH_SIZE)
+    // Fetch content for each file SEQUENTIALLY to prevent ECONNRESET errors
+    // Parallel fetching (even in batches) causes WordPress servers to drop connections
+    logger.info(`📄 [WordPress CodeAnalyst] Fetching content for ${fileList.length} theme files (sequential with 50ms delay)...`)
+    const REQUEST_DELAY_MS = 50 // Wait 50ms between each request
     const filesWithContent = []
+    let successCount = 0
+    let failCount = 0
     
-    for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
-      const batchStart = batchIndex * BATCH_SIZE
-      const batchEnd = Math.min(batchStart + BATCH_SIZE, fileList.length)
-      const batch = fileList.slice(batchStart, batchEnd)
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList[i]
       
-      logger.info(`📦 [WordPress CodeAnalyst] Processing batch ${batchIndex + 1}/${totalBatches} (${batch.length} files)`)
-      
-      const batchResults = await Promise.all(
-        batch.map(async (file, indexInBatch) => {
-          const globalIndex = batchStart + indexInBatch
-          try {
-            logger.info(`📄 [${globalIndex + 1}/${fileList.length}] Fetching: ${file.path}`)
-            const fileData = await wordpressService.fetchThemeFileContent(connection, file.path)
-            
-            // Decode base64 content
-            const content = Buffer.from(fileData.content, 'base64').toString('utf-8')
-            
-            logger.debug(`✅ [${globalIndex + 1}/${fileList.length}] Success: ${file.path} (${content.length} chars)`)
-            
-            return {
-              path: file.path,
-              content: content,
-              size: fileData.size || file.size
-            }
-          } catch (error) {
-            logger.warn(`⚠️ [${globalIndex + 1}/${fileList.length}] Failed: ${file.path} - ${error.message}`)
-            // Return file without content if fetch fails
-            return {
-              path: file.path,
-              content: '',
-              size: file.size
-            }
-          }
+      try {
+        // Log progress every 25 files
+        if (i % 25 === 0) {
+          logger.info(`📦 [WordPress CodeAnalyst] Progress: ${i}/${fileList.length} files (${successCount} success, ${failCount} failed)`)
+        }
+        
+        const fileData = await wordpressService.fetchThemeFileContent(connection, file.path)
+        
+        // Decode base64 content
+        const content = Buffer.from(fileData.content, 'base64').toString('utf-8')
+        
+        filesWithContent.push({
+          path: file.path,
+          content: content,
+          size: fileData.size || file.size
         })
-      )
+        successCount++
+        
+      } catch (error) {
+        logger.warn(`⚠️ [${i + 1}/${fileList.length}] Failed: ${file.path} - ${error.message}`)
+        failCount++
+        // Skip this file if fetch fails
+      }
       
-      filesWithContent.push(...batchResults)
-      logger.info(`✅ [WordPress CodeAnalyst] Batch ${batchIndex + 1}/${totalBatches} complete (${filesWithContent.filter(f => f.content.length > 0).length} files with content so far)`)
-      
-      // Wait between batches to avoid overwhelming WordPress server (except for last batch)
-      if (batchIndex < totalBatches - 1) {
-        logger.debug(`⏱️  [WordPress CodeAnalyst] Waiting ${BATCH_DELAY_MS}ms before next batch...`)
-        await new Promise(resolve => setTimeout(resolve, BATCH_DELAY_MS))
+      // Small delay between requests to prevent overwhelming WordPress server
+      if (i < fileList.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY_MS))
       }
     }
+    
+    logger.info(`✅ [WordPress CodeAnalyst] Fetch complete: ${successCount} success, ${failCount} failed out of ${fileList.length} files`)
 
     // Filter out empty files
     const validFiles = filesWithContent.filter(f => f.content.length > 0)
