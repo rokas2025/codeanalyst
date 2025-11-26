@@ -225,11 +225,11 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
         </div>
 
         {/* Organization Patterns */}
-        {analysis.technicalStructure?.architecture?.fileOrganization?.directoryStructure?.commonPatterns?.length > 0 && (
+        {analysis.results?.technicalStructure?.architecture?.fileOrganization?.directoryStructure?.commonPatterns?.length > 0 && (
           <div className="mt-6">
             <h3 className="font-medium text-gray-900 mb-3">Code Organization</h3>
             <div className="flex flex-wrap gap-2">
-              {analysis.technicalStructure.architecture.fileOrganization.directoryStructure.commonPatterns.map((pattern: string, index: number) => (
+              {analysis.results.technicalStructure.architecture.fileOrganization.directoryStructure.commonPatterns.map((pattern: string, index: number) => (
                 <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
                   {pattern}
                 </span>
@@ -274,10 +274,10 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
             </div>
           </div>
 
-          {analysis.technicalStructure?.dependencies?.packageManagers?.length > 0 && (
+          {analysis.results?.technicalStructure?.dependencies?.packageManagers?.length > 0 && (
             <div className="mt-4">
               <span className="text-gray-600 text-sm">Package Managers: </span>
-              <span className="text-sm font-medium">{analysis.technicalStructure.dependencies.packageManagers.join(', ')}</span>
+              <span className="text-sm font-medium">{analysis.results.technicalStructure.dependencies.packageManagers.join(', ')}</span>
             </div>
           )}
         </div>
@@ -292,31 +292,31 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-gray-600">Security Score:</span>
-              <span className={`font-medium ${getScoreColor(analysis.riskAssessment?.securityRisks?.score || 100)}`}>
-                {analysis.riskAssessment?.securityRisks?.score || 100}/100
+              <span className={`font-medium ${getScoreColor(analysis.results?.riskAssessment?.securityRisks?.score || 100)}`}>
+                {analysis.results?.riskAssessment?.securityRisks?.score || 100}/100
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Critical Issues:</span>
-              <span className={`font-medium ${(analysis.riskAssessment?.securityRisks?.critical?.length || 0) > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                {analysis.riskAssessment?.securityRisks?.critical?.length || 0}
+              <span className={`font-medium ${(analysis.results?.riskAssessment?.securityRisks?.critical?.length || 0) > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                {analysis.results?.riskAssessment?.securityRisks?.critical?.length || 0}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">High Priority:</span>
-              <span className={`font-medium ${(analysis.riskAssessment?.securityRisks?.high?.length || 0) > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                {analysis.riskAssessment?.securityRisks?.high?.length || 0}
+              <span className={`font-medium ${(analysis.results?.riskAssessment?.securityRisks?.high?.length || 0) > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                {analysis.results?.riskAssessment?.securityRisks?.high?.length || 0}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Medium Priority:</span>
-              <span className={`font-medium ${(analysis.riskAssessment?.securityRisks?.medium?.length || 0) > 0 ? 'text-yellow-600' : 'text-green-600'}`}>
-                {analysis.riskAssessment?.securityRisks?.medium?.length || 0}
+              <span className={`font-medium ${(analysis.results?.riskAssessment?.securityRisks?.medium?.length || 0) > 0 ? 'text-yellow-600' : 'text-green-600'}`}>
+                {analysis.results?.riskAssessment?.securityRisks?.medium?.length || 0}
               </span>
             </div>
           </div>
 
-          {(analysis.riskAssessment?.securityRisks?.totalIssues || 0) === 0 && (
+          {(analysis.results?.riskAssessment?.securityRisks?.totalIssues || 0) === 0 && (
             <div className="mt-4 flex items-center text-green-600 text-sm">
               <CheckCircleIcon className="h-4 w-4 mr-1" />
               No security issues detected
@@ -446,9 +446,9 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
           </div>
         ) : 
         /* Fallback to basic recommendations */
-        analysis.ai_explanations?.recommendations?.length > 0 ? (
+        analysis.results?.aiExplanations?.recommendations?.length > 0 ? (
           <div className="space-y-3">
-            {analysis.ai_explanations.recommendations.map((recommendation: string, index: number) => (
+            {analysis.results.aiExplanations.recommendations.map((recommendation: string, index: number) => (
               <div key={index} className="flex items-start space-x-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <ExclamationTriangleIcon className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-gray-700">{recommendation}</div>
@@ -506,7 +506,7 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
                   <h4 className="font-semibold text-gray-900 mb-2">🎯 AI Assessment</h4>
                   <p className="text-sm">
                                          {analysis.results?.technicalStructure?.aiInsights?.codeQuality?.reasoning || 
-                     `Code quality assessment: ${analysis.code_quality_score >= 70 ? 'Excellent' : analysis.code_quality_score >= 50 ? 'Good' : 'Needs Improvement'} with a score of ${analysis.code_quality_score || 50}/100.`}
+                     `Code quality assessment: ${(analysis.results?.codeQualityScore || 0) >= 70 ? 'Excellent' : (analysis.results?.codeQualityScore || 0) >= 50 ? 'Good' : 'Needs Improvement'} with a score of ${analysis.results?.codeQualityScore || 50}/100.`}
                   </p>
                 </div>
               </div>
@@ -569,9 +569,9 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
                   <p className="text-sm text-gray-700 leading-relaxed">
                                          {analysis.results?.technicalStructure?.aiInsights?.architecture || 
                      `This application follows modern development patterns with ${analysis.results?.totalFiles >= 30 ? 'enterprise-grade' : 'standard'} architecture. 
-                     The codebase demonstrates ${analysis.code_quality_score >= 70 ? 'excellent' : analysis.code_quality_score >= 50 ? 'good' : 'basic'} 
-                     structural organization with ${analysis.technical_structure?.aiInsights?.codeQuality?.strengths?.length || 0} identified strengths 
-                     and ${analysis.technical_structure?.aiInsights?.codeQuality?.weaknesses?.length || 0} areas for improvement.`}
+                     The codebase demonstrates ${analysis.results?.codeQualityScore >= 70 ? 'excellent' : analysis.results?.codeQualityScore >= 50 ? 'good' : 'basic'} 
+                     structural organization with ${analysis.results?.technicalStructure?.aiInsights?.codeQuality?.strengths?.length || 0} identified strengths 
+                     and ${analysis.results?.technicalStructure?.aiInsights?.codeQuality?.weaknesses?.length || 0} areas for improvement.`}
                   </p>
                 </div>
               </div>
@@ -658,14 +658,14 @@ export function CodeAnalysisReport({ analysis }: CodeAnalysisReportProps) {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Test Coverage:</span>
-                    <span className={`font-medium ${(analysis.test_coverage_percentage || 0) >= 60 ? 'text-green-600' : 'text-red-600'}`}>
-                      {analysis.test_coverage_percentage || 0}%
+                    <span className={`font-medium ${(analysis.results?.testCoveragePercentage || 0) >= 60 ? 'text-green-600' : 'text-red-600'}`}>
+                      {analysis.results?.testCoveragePercentage || 0}%
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Quality Score:</span>
-                    <span className={`font-medium ${(analysis.code_quality_score || 0) >= 70 ? 'text-green-600' : 'text-yellow-600'}`}>
-                      {analysis.code_quality_score || 0}/100
+                    <span className={`font-medium ${(analysis.results?.codeQualityScore || 0) >= 70 ? 'text-green-600' : 'text-yellow-600'}`}>
+                      {analysis.results?.codeQualityScore || 0}/100
                     </span>
                   </div>
                 </div>
