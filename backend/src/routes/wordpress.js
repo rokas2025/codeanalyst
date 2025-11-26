@@ -436,7 +436,7 @@ router.post('/connections/:id/refresh', authMiddleware, async (req, res) => {
       api_key: conn.api_key
     })
 
-    // Update database with fresh data
+    // Update database with fresh data (plugin_version stored in site_info JSON)
     await db.query(
       `UPDATE wordpress_connections 
        SET 
@@ -444,16 +444,14 @@ router.post('/connections/:id/refresh', authMiddleware, async (req, res) => {
          php_version = COALESCE($2, php_version),
          wordpress_version = COALESCE($3, wordpress_version),
          active_theme = COALESCE($4, active_theme),
-         plugin_version = COALESCE($5, plugin_version),
          last_sync = CURRENT_TIMESTAMP,
          updated_at = CURRENT_TIMESTAMP
-       WHERE id = $6`,
+       WHERE id = $5`,
       [
         JSON.stringify(siteInfo),
         siteInfo.php_version || null,
         siteInfo.wp_version || null,
         siteInfo.theme || null,
-        siteInfo.plugin_version || null,
         connectionId
       ]
     )
