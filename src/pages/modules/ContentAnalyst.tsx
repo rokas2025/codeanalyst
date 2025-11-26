@@ -68,7 +68,7 @@ const uiLabels = {
 
 import { ModuleAccessGuard } from '../../components/ModuleAccessGuard'
 
-// Helper function to strip HTML tags and decode HTML entities
+// Helper function to strip HTML tags while preserving formatting
 function stripHtml(html: string): string {
   if (!html) return ''
   
@@ -76,11 +76,26 @@ function stripHtml(html: string): string {
   const tmp = document.createElement('div')
   tmp.innerHTML = html
   
+  // Add line breaks before block-level elements for proper formatting
+  const blockElements = tmp.querySelectorAll('p, div, br, h1, h2, h3, h4, h5, h6, li, tr, section, article, header, footer')
+  blockElements.forEach(el => {
+    el.insertAdjacentText('beforebegin', '\n')
+  })
+  
   // Get text content (automatically handles HTML entities)
   const text = tmp.textContent || tmp.innerText || ''
   
-  // Clean up extra whitespace
-  return text.trim().replace(/\s+/g, ' ')
+  // Clean up: collapse multiple spaces (but preserve newlines), trim lines
+  return text
+    .split('\n')
+    .map(line => line.trim().replace(/\s+/g, ' ')) // Clean each line
+    .filter((line, index, arr) => {
+      // Remove empty lines if there are too many consecutive ones
+      if (line === '' && index > 0 && arr[index - 1] === '') return false
+      return true
+    })
+    .join('\n')
+    .trim()
 }
 
 function ContentAnalystContent() {

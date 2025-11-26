@@ -374,22 +374,30 @@ function extractKeywords(content, improvedContent) {
 }
 
 /**
- * Extract clean text from HTML content
+ * Extract clean text from HTML content while preserving formatting
  */
 function extractTextFromHtml(htmlContent) {
   try {
     const $ = cheerio.load(htmlContent)
     
     // Remove script, style, and other non-content elements
-    $('script, style, nav, header, footer, aside, .advertisement, .ads, .social-share, .menu, .navigation').remove()
+    $('script, style, nav, aside, .advertisement, .ads, .social-share, .menu, .navigation, noscript, iframe').remove()
+    
+    // Add line breaks before/after block elements to preserve structure
+    $('p, div, br, h1, h2, h3, h4, h5, h6, li, tr, section, article, blockquote').each((i, el) => {
+      $(el).before('\n')
+      $(el).after('\n')
+    })
     
     // Get text content
     let textContent = $('body').length > 0 ? $('body').text() : $.text()
     
-    // Clean up the text
+    // Clean up the text while preserving formatting
     textContent = textContent
-      .replace(/\s+/g, ' ') // Replace multiple spaces/newlines with single space
-      .replace(/\n\s*\n/g, '\n\n') // Keep paragraph breaks
+      .split('\n')
+      .map(line => line.trim().replace(/\s+/g, ' ')) // Clean each line individually
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n') // Max 2 consecutive newlines (1 blank line)
       .trim()
     
     return textContent
